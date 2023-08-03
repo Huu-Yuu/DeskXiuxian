@@ -2,6 +2,9 @@
 #define MAINUI_H
 
 #include <QMainWindow>
+#include <QStyle>
+#include <QDesktopWidget>
+#include <QDate>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainUI; }

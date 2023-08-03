@@ -9,11 +9,19 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    cultivation/cultivationsystem.cpp \
+    game_progress/gameprogress.cpp \
     main.cpp \
-    mainui.cpp
+    mainctrl.cpp \
+    mainui.cpp \
+    role/rolesystem.cpp
 
 HEADERS += \
-    mainui.h
+    cultivation/cultivationsystem.h \
+    game_progress/gameprogress.h \
+    mainctrl.h \
+    mainui.h \
+    role/rolesystem.h
 
 FORMS += \
     mainui.ui

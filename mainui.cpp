@@ -6,8 +6,27 @@ MainUI::MainUI(QWidget *parent)
     , ui(new Ui::MainUI)
 {
     ui->setupUi(this);
-    //将主选项卡填充到窗口中
-    setCentralWidget(ui->tabWidget);
+    // 设置logo
+    setWindowIcon(QIcon(":/res/logo.jpg"));
+
+    // 设置窗口标题
+    setWindowTitle("桌面修仙");
+
+    // 固定窗口
+    setFixedSize(width(),height());
+
+    // 将窗口居中显示
+    setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
+
+    //外层widget布局
+    ui->centralwidget->setLayout(ui->outerLayout);
 
     //主角选项卡布局
     ui->role_page->setLayout(ui->role_Layout);
