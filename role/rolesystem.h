@@ -2,13 +2,17 @@
 #define ROLESYSTEM_H
 
 #include <QObject>
-#include <mutex>
-
+#include <QThread>
+#include <QMutex>
+#include <QMutexLocker>
+#include <QEventLoop>
 /**
  * @brief 角色系统类
  */
-class RoleSystem
+class RoleSystem : public QThread
 {
+    Q_OBJECT
+
 public:
 
     /**
@@ -244,12 +248,24 @@ public:
         */
     void SetEquipJewelry(const QString& jewelry);
 
+    /**
+        * @brief 停止线程
+        */
+    void stopThread();
+
+protected:
+    void run();
+
 private:
     RoleSystem();
 
     // 阻止拷贝构造函数和赋值运算符
     RoleSystem(const RoleSystem&) = delete;
     RoleSystem& operator=(const RoleSystem&) = delete;
+
+    static QMutex mutex;  // 互斥锁
+    static RoleSystem* instance;  // 单例对象指针
+    bool m_stopRequested = false;   // 线程停止
 
     /**
      * @brief 昵称

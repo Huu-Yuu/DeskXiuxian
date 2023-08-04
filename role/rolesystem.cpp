@@ -1,24 +1,38 @@
 #include "rolesystem.h"
 
+QMutex RoleSystem::mutex;  // 初始化互斥锁对象
+RoleSystem* RoleSystem::instance = nullptr;  // 初始化单例对象指针
+
 RoleSystem* RoleSystem:: GetInstance()
 {
-    static RoleSystem* instance = nullptr;
-    static std::mutex mutex;
-
     if (instance == nullptr)
     {
-        std::lock_guard<std::mutex> lock(mutex);
+        QMutexLocker locker(&mutex);  // 加锁
         if (instance == nullptr)
         {
             instance = new RoleSystem; // 静态局部变量确保只创建一个实例
         }
     }
-
     return instance;
 }
 RoleSystem::RoleSystem()
 {
 
+}
+
+void RoleSystem::run()
+{
+    // 创建一个事件循环对象
+    QEventLoop eventLoop;
+
+    // 在事件循环中执行线程逻辑
+    while (!m_stopRequested) {
+
+        eventLoop.exec();
+    }
+
+    // 线程停止后执行清理工作
+    // ...
 }
 
 QString RoleSystem::GetRoleName() const
@@ -211,3 +225,7 @@ void RoleSystem::SetEquipJewelry(const QString& jewelry)
     equip_jewelry_ = jewelry;
 }
 
+void RoleSystem::stopThread()
+{
+    m_stopRequested = true;
+}
