@@ -55,6 +55,16 @@ void RoleSystem::SetRoleLife(double life)
     role_life_ = life;
 }
 
+int RoleSystem::GetRolePrestige() const
+{
+    return role_prestige_;
+}
+
+void RoleSystem::SetRolePrestige(int prestige)
+{
+    role_prestige_ = prestige;
+}
+
 QString RoleSystem::GetRoleCultivation() const
 {
     return role_cultivation_;

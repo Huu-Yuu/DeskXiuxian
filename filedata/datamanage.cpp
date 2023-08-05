@@ -2,6 +2,25 @@
 
 DataManage::DataManage()
 {
+    QString configFilePath = QCoreApplication::applicationDirPath() + "/config.ini";
+
+    // 检查配置文件是否存在
+    QFileInfo configFile(configFilePath);
+    if (!configFile.exists())
+    {
+        // 配置文件不存在，创建一个空文件
+        QFile file(configFilePath);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            file.close();
+        }
+        else
+        {
+            // 文件创建失败，进行错误处理
+            // ...
+            qDebug() << "配置文件创建失败";
+        }
+    }
     file_setting_.setPath(QSettings::IniFormat, QSettings::UserScope,
                           QCoreApplication::applicationDirPath() + "/config.ini");
     file_setting_.setIniCodec("UTF-8");
@@ -58,4 +77,14 @@ void DataManage::CreateDatabase(QString path)
 
     // 在此处可以执行数据库表的初始化操作
     // ...
+}
+
+QString DataManage::GetRoleName()
+{
+    return file_setting_.value("RoleName").toString();
+}
+
+QString DataManage::GetLastGameTime()
+{
+    return file_setting_.value("Date").toString();
 }

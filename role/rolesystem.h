@@ -45,6 +45,18 @@ public:
     void SetRoleLife(double life);
 
     /**
+        * @brief 获取声望
+        * @return 声望
+        */
+    int GetRolePrestige() const;
+
+    /**
+        * @brief 设置声望
+        * @param name 声望
+        */
+    void SetRolePrestige(int prestige);
+
+    /**
         * @brief 获取修为
         * @return 修为
         */
@@ -276,6 +288,11 @@ private:
      * @brief 寿命
      */
     double role_life_;
+
+    /**
+     * @brief 声望
+     */
+    int role_prestige_;
 
     /**
      * @brief 修为

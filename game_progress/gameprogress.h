@@ -38,6 +38,7 @@ private:
 
     QTimer* jianghu_timer_; // 江湖定时器对象
     int anecdotes_time_ = 1000;    // 江湖轶事倒计时10秒
+
 };
 
 #endif // GAMEPROGRESS_H

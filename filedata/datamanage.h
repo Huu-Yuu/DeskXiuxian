@@ -16,7 +16,21 @@ class DataManage
 {
 public:
     DataManage();
+
+    /**
+     * @brief 保存配置
+     */
     void init();
+
+    /**
+     * @brief 获取角色名
+     */
+    QString GetRoleName();
+
+    /**
+     * @brief 获取上次游戏时间
+     */
+    QString GetLastGameTime();
 
 private:
     void OpenDatabase(QString path);

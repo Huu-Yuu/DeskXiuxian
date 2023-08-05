@@ -1,6 +1,6 @@
 #include "mainctrl.h"
 
-MainCtrl::MainCtrl()
+MainCtrl::MainCtrl(QObject *parent) : QObject(parent)
 {
 
 }

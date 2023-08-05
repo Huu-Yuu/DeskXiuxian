@@ -1,5 +1,18 @@
 #include "logger.h"
 
+QMutex Logger::mutex_;  // 初始化互斥锁对象
+Logger* Logger::instance = nullptr;  // 初始化单例对象指针
+
+Logger* Logger::GetInstance()
+{
+    if (!instance) {
+        QMutexLocker locker(&mutex_);  // 加锁
+        if (!instance) {
+            instance = new Logger();
+        }
+    }
+    return instance;
+}
 Logger::Logger(QObject *parent) : QObject(parent)
 {
     // 创建日志文件夹（如果不存在）
@@ -41,6 +54,7 @@ Logger::~Logger()
 
 void Logger::log(QtMsgType type, const QMessageLogContext& context, const QString& message)
 {
+//    QMutexLocker locker(&mutex_);
     // 获取当前时间戳
     QString timeStamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
 

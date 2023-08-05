@@ -1,5 +1,6 @@
 QT       += core gui
 QT += sql
+QT += core
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,6 +14,7 @@ SOURCES += \
     cultivation/cultivationsystem.cpp \
     filedata/datamanage.cpp \
     game_progress/gameprogress.cpp \
+    item/itemsystem.cpp \
     logger/logger.cpp \
     main.cpp \
     mainctrl.cpp \
@@ -23,6 +25,7 @@ HEADERS += \
     cultivation/cultivationsystem.h \
     filedata/datamanage.h \
     game_progress/gameprogress.h \
+    item/itemsystem.h \
     logger/logger.h \
     mainctrl.h \
     mainui.h \
