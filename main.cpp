@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
+#include "mainctrl.h"
 
 
 int main(int argc, char *argv[])
@@ -18,8 +19,11 @@ int main(int argc, char *argv[])
             break;
         }
     }
-    MainUI w;
-    w.show();
+    MainCtrl *main_ctrl = new MainCtrl;
+    main_ctrl->Init();
+    main_ctrl->ShowMainUi();
 
-    return a.exec();
+    a.exec();
+    delete main_ctrl;
+    return 0;
 }

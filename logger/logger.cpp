@@ -52,7 +52,7 @@ Logger::~Logger()
     logFile_.close();
 }
 
-void Logger::log(QtMsgType type, const QMessageLogContext& context, const QString& message)
+void Logger::SlotOutTolog(QtMsgType type, const QMessageLogContext& context, const QString& message)
 {
 //    QMutexLocker locker(&mutex_);
     // 获取当前时间戳

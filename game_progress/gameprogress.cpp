@@ -10,9 +10,9 @@ GameProgress::GameProgress()
 
 GameProgress* GameProgress::GetInstance()
 {
-    if (!instance) {
+    if (!instance)
+    {
         QMutexLocker locker(&mutex);  // 加锁
-
         if (!instance) {
             instance = new GameProgress();
         }

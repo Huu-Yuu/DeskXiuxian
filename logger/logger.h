@@ -24,7 +24,7 @@ public:
 signals:
 
 public slots:
-    void log(QtMsgType type, const QMessageLogContext& context, const QString& message);
+    void SlotOutTolog(QtMsgType type, const QMessageLogContext& context, const QString& message);
 
 private:
     explicit Logger(QObject *parent = nullptr);
