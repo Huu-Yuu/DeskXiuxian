@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
         }
     }
     MainCtrl *main_ctrl = new MainCtrl;
-    main_ctrl->Init();
+    main_ctrl->StartFishing();
     main_ctrl->ShowMainUi();
 
     a.exec();

@@ -15,9 +15,12 @@ RoleSystem* RoleSystem:: GetInstance()
     }
     return instance;
 }
+
 RoleSystem::RoleSystem()
 {
-
+    // 设置修仙资质
+    aptitude_ = 0;
+    need_epx_ = 300 * ( 1 - aptitude_);
 }
 
 void RoleSystem::run()
@@ -33,6 +36,56 @@ void RoleSystem::run()
 
     // 线程停止后执行清理工作
     // ...
+    m_stopRequested = false;
+}
+
+QVariant RoleSystem::GetRoleTargetProperties(RoleUI tar_name)
+{
+    switch (tar_name)
+    {
+    case kUnknown:
+        return "未知";
+    case kRoleName:          // 昵称
+        return role_name_;
+    case kRoleLife:          // 寿命
+        return role_life_;
+    case kRolePrestige:      // 声望
+        return role_prestige_;
+    case kRoleCultivation:   // 修为
+        return role_cultivation_;
+    case kRoleExp:           // 经验值
+        return role_exp_;
+    case kRoleAgg:           // 攻击力
+        return  role_agg_;
+    case kRoleDef:           // 防御力
+        return role_def_;
+    case kRoleHp:            // 血量
+        return role_hp_;
+    case kAttMetal:          // 金
+        return att_metal_;
+    case kAttWood:           // 木
+        return att_wood_;
+    case kAttWater:          // 水
+        return att_water_;
+    case kAttFire:           // 火
+        return att_fire_;
+    case kAttEarth:          // 土
+        return att_earth_;
+    case kEquipWeapon:       // 武器
+        return equip_weapon_;
+    case kEquipMagic:        // 法宝
+        return equip_magic_;
+    case kEquipHelmet:       // 头盔
+        return equip_helmet_;
+    case kEquipClothing:     // 上衣
+        return equip_clothing_;
+    case kEquipBritches:     // 裤子
+        return equip_britches_;
+    case kEquipShoe:         // 鞋子
+        return equip_shoe_;
+    case kEquipJewelrt:      // 首饰
+        return equip_jewelry_;
+    }
 }
 
 QString RoleSystem::GetRoleName() const
@@ -238,4 +291,282 @@ void RoleSystem::SetEquipJewelry(const QString& jewelry)
 void RoleSystem::stopThread()
 {
     m_stopRequested = true;
+}
+
+void RoleSystem::SetAptitude(int aptitude)
+{
+    aptitude_ = aptitude;
+    QString msg = "当前资质为：" + QString::number(aptitude_);
+    qDebug() << msg;
+    emit SignalShowMsgToUI(msg);
+}
+
+double RoleSystem::GetAptitude()
+{
+    return aptitude_;
+}
+
+QString RoleSystem::DebuffEvents(int rand, QString name, int money, int exp)
+{
+    QString buff_tip,msg;
+    if(money < 0)
+    {
+        buff_tip += "，灵石" + QString::number(money);
+    }
+    if(exp < 0)
+    {
+        buff_tip +="，经验值" + QString::number(exp);
+    }
+    switch (rand)
+    {
+    case 1:
+    {
+        msg = QString("%1惨遭恶人打劫%2").arg(name, buff_tip);
+        break;
+    }
+    case 2:
+    {
+        msg = QString("%1闭关时候走火入魔%2").arg(name, buff_tip);
+        break;
+    }
+    case 3:
+    {
+        msg = QString("%1探索秘境时遭遇了剧烈的毒雾%2").arg(name, buff_tip);
+        break;
+    }
+    case 4:
+    {
+        msg = QString("%1被仇家施加了诅咒%2").arg(name, buff_tip);
+        break;
+    }
+    case 5:
+    {
+        msg = QString("%1被恶劣天气影响，修炼出了岔子%2").arg(name, buff_tip);
+        break;
+    }
+    case 6:
+    {
+        msg = QString("%1被仇家埋伏%2").arg(name, buff_tip);
+        break;
+    }
+    case 7:
+    {
+        msg = QString("%1旁观道友渡劫时，被雷劫波及%2").arg(name, buff_tip);
+        break;
+    }
+    case 8:
+    {
+        msg = QString("%1炼丹时炸炉%2").arg(name, buff_tip);
+        break;
+    }
+    case 9:
+    {
+        msg = QString("%1被狐狸精吸走精气%2").arg(name, buff_tip);
+        break;
+    }
+    case 10:
+    {
+        msg = QString("%1每日多次泄欲，纵欲过度%2").arg(name, buff_tip);
+        break;
+    }
+    case 11:
+    {
+        msg = QString("%1购买丹药时遭遇诈骗%2").arg(name, buff_tip);
+        break;
+    }
+    default:
+    {
+        msg = QString("%1疑似被作者修改数值%2").arg(name, buff_tip);
+        break;
+    }
+    }
+    return msg;
+}
+
+QString RoleSystem::BuffEvents(int rand, QString name, int money, int exp)
+{
+    QString buff_tip,msg;
+    if(money > 0)
+    {
+        buff_tip += "，灵石+" + QString::number(money);
+    }
+    if(exp > 0)
+    {
+        buff_tip +="，经验值+" + QString::number(exp);
+    }
+    switch (rand)
+    {
+    case 1:
+    {
+        msg = QString("%1得到了一本珍贵的秘籍，修为大增%2").arg(name,buff_tip);
+        break;
+    }
+    case 2:
+    {
+        msg = QString("%1在山洞中发现了一块神秘的宝石，灵力大增%2").arg(name,buff_tip);
+        break;
+    }
+    case 3:
+    {
+        msg = QString("%1参加武林大会，获得第一名%2").arg(name,buff_tip);
+        break;
+    }
+    case 4:
+    {
+        msg = QString("%1参加武林大会，获得第一名%2").arg(name,buff_tip);
+        break;
+    }
+    case 5:
+    {
+        msg = QString("%1遇到了一位神秘的长者，得到了一本传世武功秘笈，修为大幅提升%2").arg(name,buff_tip);
+        break;
+    }
+    case 6:
+    {
+        msg = QString("%1在修炼中遇到了一位高人指点，修为突飞猛进%2").arg(name,buff_tip);
+        break;
+    }
+    case 7:
+    {
+        msg = QString("%1在探险中发现了一座宝藏%2").arg(name,buff_tip);
+        break;
+    }
+    case 8:
+    {
+        msg = QString("%1参与了一次激烈的战斗%2").arg(name,buff_tip);
+        break;
+    }
+    case 9:
+    {
+        msg = QString("%1意外得到了一件传世宝物，实力大增%2").arg(name,buff_tip);
+        break;
+    }
+    case 10:
+    {
+        msg = QString("%1遇到了仙人道场%2").arg(name,buff_tip);
+        break;
+    }
+    case 11:
+    {
+        msg = QString("%1购买丹药时遇到诈骗团伙，成功出手制裁诈骗团伙%2").arg(name,buff_tip);
+        break;
+    }
+    case 12:
+    {
+        msg = QString("%1购买丹药时遇到诈骗团伙，成功出手制裁诈骗团伙%2").arg(name,buff_tip);
+        break;
+    }
+    case 13:
+    {
+        msg = QString("%1探索秘境，击杀妖兽%2").arg(name,buff_tip);
+        break;
+    }
+    case 14:
+    {
+        msg = QString("%1完成悬赏任务%2").arg(name,buff_tip);
+        break;
+    }
+    default:
+    {
+        msg = QString("%1疑似被作者修改数值%2").arg(name,buff_tip);
+        break;
+    }
+    }
+    return msg;
+}
+
+QString RoleSystem::ExpToCulStage(int exp)
+{
+    need_epx_ = 300 * ( 1 - aptitude_);
+    if(exp < 0)
+    {
+        return "凡人";
+    }
+    else if(exp > 0 && exp <= need_epx_ / 3)
+    {
+        return "练气期";
+    }
+    else if(exp > need_epx_ / 3 && exp <= need_epx_)
+    {
+        return "筑基期";
+    }
+    else if(exp > need_epx_ && exp <= 3 * need_epx_)
+    {
+        return "结丹期";
+    }
+    else if(exp > 3 * need_epx_ && exp <= 9 * need_epx_)
+    {
+        return "结丹期";
+    }
+    else if(exp > 9 * need_epx_ && exp <= 27 * need_epx_)
+    {
+        return "元婴期";
+    }
+    else if(exp > 27 * need_epx_ && exp <= 81 * need_epx_)
+    {
+        return "化神期";
+    }
+    else if(exp > 81 * need_epx_ && exp <= 3 * 81 * need_epx_)
+    {
+        return "合体期";
+    }
+    else if(exp > 3 * 81 * need_epx_ && exp <= 9 * 81 * need_epx_)
+    {
+        return "大乘期";
+    }
+    else if(exp > 9 * 81 * need_epx_ && exp <= 27 * 81 * need_epx_)
+    {
+        return "大乘期";
+    }
+    else if(exp > 27 * 81 * need_epx_ && exp <= 81 * 81 * need_epx_)
+    {
+        return "悟道期";
+    }
+    else if(exp > 81 * 81 * need_epx_ && exp <= 3 * 81 * 81 * need_epx_)
+    {
+        return "羽化期";
+    }
+    else if(exp > 3 * 81 * 81 * need_epx_ )
+    {
+        return "仙人";
+    }
+    else
+    {
+        return "BUG";
+    }
+}
+
+void RoleSystem::SlotCyclicCultivation()
+{
+    int cur_event_probability = QRandomGenerator::global()->bounded(100);
+    int exp = 0;
+    QString msg ="";
+    if(cur_event_probability <= 30)
+    {
+        // 减益事件
+        exp = QRandomGenerator::global()->bounded(-10,-1);
+        msg = DebuffEvents(QRandomGenerator::global()->bounded(15), role_name_, 0, exp);
+    }
+    else if(cur_event_probability > 30 && cur_event_probability <= 100)
+    {
+        exp = QRandomGenerator::global()->bounded(1,10);
+        msg = BuffEvents(QRandomGenerator::global()->bounded(20), role_name_, 0, exp);
+    }
+    // 更新角色属性
+    role_exp_ += exp;
+
+    // 打包角色属性
+    QJsonObject role_data;
+    role_data.insert("roleName",role_name_);
+    role_data.insert("roleLife",role_life_);
+    role_data.insert("rolePrestige",role_prestige_);
+    role_data.insert("roleCultivation",role_cultivation_);
+    role_data.insert("roleExp",role_exp_);
+    role_data.insert("roleAgg",role_agg_);
+    role_data.insert("roleDef",role_def_);
+    role_data.insert("roleHp",role_hp_);
+
+    emit SignalShowMsgToUI(msg);
+    emit SignalUpdateRoleInfoDatabase(role_data);
+    emit SignalUpdateUI(kRoleExp, QString::number(role_exp_));
 }

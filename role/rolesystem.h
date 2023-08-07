@@ -6,6 +6,12 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QEventLoop>
+#include "public/public_type.h"
+#include <QVariant>
+#include <QRandomGenerator>
+#include <QJsonObject>
+#include <QDebug>
+
 /**
  * @brief 角色系统类
  */
@@ -19,6 +25,12 @@ public:
      * @brief 获取单例
      */
     static RoleSystem* GetInstance();
+
+    /**
+        * @brief 获取角色面板属性
+        * @return 通用类型 目标属性
+        */
+    QVariant GetRoleTargetProperties(RoleUI tar_name);
 
     /**
         * @brief 获取昵称
@@ -261,9 +273,57 @@ public:
     void SetEquipJewelry(const QString& jewelry);
 
     /**
-        * @brief 停止线程
+        * @brief 线程退出
         */
     void stopThread();
+
+    /**
+     * @brief 设置修仙资质
+     */
+    void SetAptitude(int aptitude);
+
+    /**
+     * @brief 获取修仙资质
+     */
+    double GetAptitude();
+
+    /**
+     * @brief 生成减益事件 当前12种
+     */
+    QString DebuffEvents(int rand, QString name, int money = 0, int exp = 0);
+
+    /**
+     * @brief 生成增益事件 当前15种
+     */
+    QString BuffEvents(int rand, QString name, int money = 0, int exp = 0);
+
+    /**
+     * @brief EXP对应修仙等级
+     */
+    QString ExpToCulStage(int exp);
+
+signals:
+
+    /**
+        * @brief 发生消息到UI
+        */
+    void SignalShowMsgToUI(QString msg);
+
+    /**
+        * @brief 更新UI
+        */
+    void SignalUpdateUI(RoleUI part, QString new_data);
+
+    /**
+        * @brief 更新角色信息数据库
+        */
+    void SignalUpdateRoleInfoDatabase(QJsonObject role_data);
+
+public slots:
+    /**
+        * @brief 循环修炼
+        */
+    void SlotCyclicCultivation();
 
 protected:
     void run();
@@ -278,107 +338,29 @@ private:
     static QMutex mutex;  // 互斥锁
     static RoleSystem* instance;  // 单例对象指针
     bool m_stopRequested = false;   // 线程停止
+    QString role_name_;         // 昵称
+    double role_life_;          // 寿命
+    int role_prestige_;         // 声望
+    QString role_cultivation_;  // 修为
+    int role_exp_;      // 经验值
+    int role_agg_;      // 攻击力
+    int role_def_;      // 防御力
+    int role_hp_;       // 血量
+    int att_metal_;             // 金
+    int att_wood_;              // 木
+    int att_water_;             // 水
+    int att_fire_;              // 火
+    int att_earth_;             // 土
+    QString equip_weapon_;      // 武器
+    QString equip_magic_;       // 法宝
+    QString equip_helmet_;      // 头盔
+    QString equip_clothing_;    // 上衣
+    QString equip_britches_;    // 裤子
+    QString equip_shoe_;        // 鞋子
+    QString equip_jewelry_;     // 首饰
 
-    /**
-     * @brief 昵称
-     */
-    QString role_name_;
-
-    /**
-     * @brief 寿命
-     */
-    double role_life_;
-
-    /**
-     * @brief 声望
-     */
-    int role_prestige_;
-
-    /**
-     * @brief 修为
-     */
-    QString role_cultivation_;
-
-    /**
-     * @brief 经验值
-     */
-    int role_exp_;
-
-    /**
-     * @brief 攻击力
-     */
-    int role_agg_;
-
-    /**
-     * @brief 防御力
-     */
-    int role_def_;
-
-    /**
-     * @brief 血量
-     */
-    int role_hp_;
-
-    /**
-     * @brief 金属性
-     */
-    int att_metal_;
-
-    /**
-     * @brief 木属性
-     */
-    int att_wood_;
-
-    /**
-     * @brief 水属性
-     */
-    int att_water_;
-
-    /**
-     * @brief 火属性
-     */
-    int att_fire_;
-
-    /**
-     * @brief 土属性
-     */
-    int att_earth_;
-
-    /**
-     * @brief 武器
-     */
-    QString equip_weapon_;
-
-    /**
-     * @brief 法宝
-     */
-    QString equip_magic_;
-
-    /**
-     * @brief 头盔
-     */
-    QString equip_helmet_;
-
-    /**
-     * @brief 上衣
-     */
-    QString equip_clothing_;
-
-    /**
-     * @brief 裤子
-     */
-    QString equip_britches_;
-
-    /**
-     * @brief 鞋子
-     */
-    QString equip_shoe_;
-
-    /**
-     * @brief 首饰
-     */
-    QString equip_jewelry_;
-
+    double aptitude_;   // 修仙资质 0.01 ~ 1
+    double need_epx_;   // 每次升级所需要的经验值
 
 };
 

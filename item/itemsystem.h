@@ -3,6 +3,10 @@
 
 #include <QObject>
 
+
+/**
+ * @brief 物品系统类
+ */
 class ItemSystem : public QObject
 {
     Q_OBJECT

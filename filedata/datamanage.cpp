@@ -267,6 +267,7 @@ bool DataManage::CheckTablesExist()
     if (!query.next())
     {
         QString createTableQuery = "CREATE TABLE RoleProp ("
+                                   "roleMoney INTEGER,"
                                    "RenamCard INTEGER"
                                    ")";
         if (!query.exec(createTableQuery))
@@ -276,9 +277,10 @@ bool DataManage::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleProp (RenamCard) "
-                              "VALUES (:RenamCard)";
+        QString insertQuery = "INSERT INTO RoleProp (roleMoney ,RenamCard) "
+                              "VALUES ( :roleMoney, :RenamCard)";
         query.prepare(insertQuery);
+        query.bindValue(":roleMoney",911);
         query.bindValue(":RenamCard", 2);
         if (!query.exec())
         {
@@ -324,4 +326,55 @@ QString DataManage::GetLastGameTime()
 void DataManage::DatabaseClose()
 {
     database_.close();
+}
+
+void DataManage::SlotSaveRoleInfoToDatabase(QJsonObject role_data)
+{
+    if(!database_.open())
+    {
+        qDebug() << "数据库打开失败";
+        return;
+    }
+    {
+        QString roleName = role_data.value("roleName").toString();
+
+        QSqlQuery query(database_);
+        query.prepare("SELECT COUNT(*) FROM RoleInfo WHERE roleName = :roleName");
+        query.bindValue(":roleName", roleName);
+
+        if (query.exec() && query.next())
+        {
+            int rowCount = query.value(0).toInt();
+            if (rowCount > 0)
+            {
+                // 执行更新操作
+                QString updateQuery = "UPDATE RoleInfo SET roleLife = :roleLife, rolePrestige = :rolePrestige, roleCultivation = :roleCultivation, "
+                                      "roleExp = :roleExp, roleAgg = :roleAgg, roleDef = :roleDef, roleHp = :roleHp WHERE roleName = :roleName";
+                query.prepare(updateQuery);
+            }
+            else
+            {
+                // 执行插入操作
+                QString insertQuery = "INSERT INTO RoleInfo (roleName, roleLife, rolePrestige, roleCultivation, roleExp, roleAgg, roleDef, roleHp) "
+                                      "VALUES (:roleName, :roleLife, :rolePrestige, :roleCultivation, :roleExp, :roleAgg, :roleDef, :roleHp)";
+                query.prepare(insertQuery);
+            }
+
+            query.bindValue(":roleName", roleName);
+            query.bindValue(":roleLife", role_data.value("roleLife").toInt());
+            query.bindValue(":rolePrestige", role_data.value("rolePrestige").toInt());
+            query.bindValue(":roleCultivation", role_data.value("roleCultivation").toString());
+            query.bindValue(":roleExp", role_data.value("roleExp").toInt());
+            query.bindValue(":roleAgg", role_data.value("roleAgg").toInt());
+            query.bindValue(":roleDef", role_data.value("roleDef").toInt());
+            query.bindValue(":roleHp", role_data.value("roleHp").toInt());
+
+            if (!query.exec())
+            {
+                qDebug() << "保存数据时出错:" << query.lastError().text();
+                return;
+            }
+        }
+        database_.close();
+    }
 }

@@ -12,38 +12,10 @@
 #include <QTextStream>
 #include "role/rolesystem.h"
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainUI; }
 QT_END_NAMESPACE
-
-/**
- * @brief 角色面板枚举，用于UI更新
- */
-enum RoleUI
-{
-    kUnknown = 0,       // 未知
-    kRoleName,          // 昵称
-    kRoleLife,          // 寿命
-    kRolePrestige,      // 声望
-    kRoleCultivation,   // 修为
-    kRoleExp,           // 经验值
-    kRoleAgg,           // 攻击力
-    kRoleDef,           // 防御力
-    kRoleHp,            // 血量
-    kAttMetal,          // 金
-    kAttWood,           // 木
-    kAttWater,          // 水
-    kAttFire,           // 火
-    kAttEarth,          // 土
-    kEquipWeapon,       // 武器
-    kEquipMagic,        // 法宝
-    kEquipHelmet,       // 头盔
-    kEquipClothing,     // 上衣
-    kEquipBritches,     // 裤子
-    kEquipShoe,         // 鞋子
-    kEquipJewelrt,      // 首饰
-    kPropRenameCard     // 改名卡
-};
 
 class MainUI : public QMainWindow
 {
@@ -84,14 +56,16 @@ signals:
     void SignalLogOut(QtMsgType type, const QMessageLogContext& context, const QString& message);
 
 public slots:
-    void SlotShowMsg()
-    {
-        QString msg = "登录成功" + QString::number(i);
-        i++;
-        AddMessage(msg);
-    }
 
-    void SlotUpdateUI(RoleUI part, QString new_name);
+    /**
+     * @brief 显示消息到窗口 槽函数
+     */
+    void SlotShowMsg(QString msg);
+
+    /**
+     * @brief 更新角色信息标签，UI控件，更新的信息
+     */
+    void SlotUpdateUI(RoleUI part, QString new_data);
 private:
     Ui::MainUI *ui;
     Logger* logger_;

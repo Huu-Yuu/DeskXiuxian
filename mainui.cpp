@@ -38,22 +38,9 @@ MainUI::MainUI(QWidget *parent)
     ui->bisic_Att_Box->setLayout(ui->bisic_Layout);
     ui->equipment_Box->setLayout(ui->equipment_Layout);
 
-    /////////////测试代码
-    QTimer *timer = new QTimer;
-    timer->setInterval(1000); // 设置定时器间隔为 1 秒
-    timer->setSingleShot(false); // 设置定时器为非单次触发
-
-    // 连接定时器的 timeout() 信号到槽函数
-    QObject::connect(timer, &QTimer::timeout, this,&MainUI::SlotShowMsg);
-    timer->start();
-
-    // 创建日志记录器
-
-
-    // 将日志记录器的 log() 槽连接到 Qt 的日志处理器
+    // 将日志记录器的槽连接到 Qt 的日志处理器
     QObject::connect(this, SIGNAL(SignalLogOut(QtMsgType, const QMessageLogContext&, const QString&)),
                      logger_, SLOT(SlotOutTolog(QtMsgType, const QMessageLogContext&, const QString&)));
-
 }
 
 MainUI::~MainUI()
@@ -99,9 +86,6 @@ void MainUI::UpdatePhysicalStrength(QString exp, QString agg, QString def, QStri
     ui->role_hp->setText(hp);
 }
 
-/**
- * @brief 更新角色装备,武器、法宝、头盔、上衣、腰带、鞋、首饰
- */
 void MainUI::UpdateEquip(QString weapon, QString magic, QString helmet, QString clothing, QString britches, QString shoe, QString jewelrt)
 {
     ui->equip_weapon->setText(weapon);
@@ -113,35 +97,35 @@ void MainUI::UpdateEquip(QString weapon, QString magic, QString helmet, QString 
     ui->equip_jewelry->setText(jewelrt);
 }
 
-void MainUI::SlotUpdateUI(RoleUI part, QString new_name)
+void MainUI::SlotUpdateUI(RoleUI part, QString new_data)
 {
     switch (part)
     {
         case kUnknown:
         break;
     case kRoleName:
-        ui->role_name->setText(new_name);
+        ui->role_name->setText(new_data);
         break;
     case kRoleLife:
-        ui->role_life->setText(new_name);
+        ui->role_life->setText(new_data);
         break;
     case kRolePrestige:
-        ui->role_prestige->setText(new_name);
+        ui->role_prestige->setText(new_data);
         break;
     case kRoleCultivation:
-        ui->role_cultivation->setText(new_name);
+        ui->role_cultivation->setText(new_data);
         break;
     case kRoleExp:
-        ui->role_exp->setText(new_name);
+        ui->role_exp->setText(new_data);
         break;
     case kRoleAgg:
-        ui->role_agg->setText(new_name);
+        ui->role_agg->setText(new_data);
         break;
     case kRoleDef:
-        ui->role_def->setText(new_name);
+        ui->role_def->setText(new_data);
         break;
     case kRoleHp:
-        ui->role_hp->setText(new_name);
+        ui->role_hp->setText(new_data);
         break;
     case kAttMetal:
     case kAttWood:
@@ -150,28 +134,30 @@ void MainUI::SlotUpdateUI(RoleUI part, QString new_name)
     case kAttEarth:
         break;
     case kEquipWeapon:
-        ui->equip_weapon->setText(new_name);
+        ui->equip_weapon->setText(new_data);
         break;
     case kEquipMagic:
-        ui->equip_magic->setText(new_name);
+        ui->equip_magic->setText(new_data);
         break;
     case kEquipHelmet:
-        ui->equip_helmet->setText(new_name);
+        ui->equip_helmet->setText(new_data);
         break;
     case kEquipClothing:
-        ui->equip_clothing->setText(new_name);
+        ui->equip_clothing->setText(new_data);
         break;
     case kEquipBritches:
-        ui->equip_britches->setText(new_name);
+        ui->equip_britches->setText(new_data);
         break;
     case kEquipShoe:
-        ui->equip_shoe->setText(new_name);
+        ui->equip_shoe->setText(new_data);
         break;
     case kEquipJewelrt:
-        ui->equip_jewelry->setText(new_name);
-        break;
-    case kPropRenameCard:
+        ui->equip_jewelry->setText(new_data);
         break;
     }
 }
 
+void MainUI::SlotShowMsg(QString msg)
+{
+     AddMessage(msg);
+}

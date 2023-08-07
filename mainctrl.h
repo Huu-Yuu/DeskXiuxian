@@ -3,10 +3,10 @@
 
 #include <QObject>
 #include "mainui.h"
-#include "cultivation/cultivationsystem.h"
 #include "role/rolesystem.h"
 #include "logger/logger.h"
 #include "filedata/datamanage.h"
+#include "game_progress/gameprogress.h"
 
 /**
  * @brief 主控程序
@@ -17,7 +17,7 @@ class MainCtrl : public QObject
 public:
     explicit MainCtrl(QObject *parent = nullptr);
 
-    void Init();
+    void StartFishing();
 
     ~MainCtrl();
 
@@ -35,15 +35,15 @@ signals:
 
 private:
     /**
-     * @brief 初始化角色信息
+     * @brief 初始化角色信息（角色属性和角色UI）
      */
     void InitRoleInfo();
 
-    MainUI * ui_obj_;
-    RoleSystem * role_obj_;
-    Logger * logger_obj_;
-    CultivationSystem * cul_obj_;
-    DataManage *data_file_;
+    MainUI * ui_obj_;   // 角色UI类
+    RoleSystem * role_obj_; // 角色系统对象
+    Logger * logger_obj_;   // 日志管理器对象
+    DataManage *data_file_;         // 文件管理对象
+    GameProgress *game_obj_;    // 游戏进度控制对象
 };
 
 #endif // MAINCTRL_H

@@ -11,11 +11,12 @@
 #include <QDate>
 #include <QSqlQuery>
 #include <QMutex>
+#include <QJsonObject>
 
 /**
  * @brief 文件管理类
  */
-class DataManage
+class DataManage : public QObject
 {
 public:
 
@@ -23,11 +24,6 @@ public:
      * @brief 获取单例
      */
     static DataManage* GetInstance();
-
-    /**
-     * @brief 保存配置
-     */
-    void init();
 
     /**
      * @brief 获取表单中对应的列数据
@@ -47,6 +43,13 @@ public:
 
 
     ~DataManage();
+
+public slots:
+
+    /**
+     * @brief 保存角色基本信息槽函数
+     */
+    void SlotSaveRoleInfoToDatabase(QJsonObject role_data);
 
 private:
     DataManage();
