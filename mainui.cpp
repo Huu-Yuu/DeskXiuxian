@@ -9,6 +9,7 @@ MainUI::MainUI(QWidget *parent)
     // 初始化成员变量
     role_obj_->RoleSystem::GetInstance();
     logger_ = Logger::GetInstance();
+    process = new QProcess;
 
     // 初始化UI设置
     // 设置logo
@@ -48,6 +49,21 @@ MainUI::~MainUI()
     delete ui;
 }
 
+void MainUI::closeEvent(QCloseEvent *event)
+{
+    qDebug() << "检测到手动关闭游戏，强制结束进程";
+    // 打印到日志
+    emit SignalLogOut( QtFatalMsg, QMessageLogContext(), "检测到手动关闭游戏，强制结束进程");
+
+    // 杀死所有进程
+    QString command = "taskkill /F /IM DeskXiuxian.exe";
+    process->start(command);
+    process->waitForFinished();
+
+
+    QMainWindow::closeEvent(event);
+}
+
 void MainUI::AddMessage(QString& msg)
 {
     QString time_stamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh-mm:ss");
@@ -56,13 +72,9 @@ void MainUI::AddMessage(QString& msg)
 
     ui->listWidget->addItem(display_text);
     // 滚动到底部
-    // 延迟滚动到底部
-    QTimer::singleShot(0, this, [this]() {
-        QScrollBar* scrollbar = ui->listWidget->verticalScrollBar();
-        scrollbar->setValue(scrollbar->maximum());
-    });
+    ui->listWidget->scrollToBottom();
     // 将消息记录到日志
-    emit SignalLogOut(QtDebugMsg, QMessageLogContext(), msg);
+    emit SignalLogOut(QtInfoMsg, QMessageLogContext(), msg);
 }
 
 Ui::MainUI* MainUI::GetUI()

@@ -13,6 +13,7 @@ Logger* Logger::GetInstance()
     }
     return instance;
 }
+
 Logger::Logger(QObject *parent) : QObject(parent)
 {
     // 创建日志文件夹（如果不存在）
@@ -63,21 +64,22 @@ void Logger::SlotOutTolog(QtMsgType type, const QMessageLogContext& context, con
     switch (type)
     {
         case QtDebugMsg:
-            prefix = "Debug";
+            prefix = "调试";
             break;
         case QtWarningMsg:
-            prefix = "Warning";
+            prefix = "告警";
             break;
         case QtCriticalMsg:
-            prefix = "Critical";
+            prefix = "关键";
             break;
         case QtFatalMsg:
-            prefix = "Fatal";
+            prefix = "致命";
             break;
         case QtInfoMsg:
-            prefix = "info";
+            prefix = "消息";
             break;
         default:
+            prefix = "其他";
             break;
     }
     // 获取文件名、函数名和行号等上下文信息

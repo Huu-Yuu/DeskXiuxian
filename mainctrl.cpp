@@ -7,6 +7,7 @@ MainCtrl::MainCtrl(QObject *parent) : QObject(parent)
     logger_obj_ = Logger::GetInstance();
     data_file_ = DataManage::GetInstance();
     game_obj_ = GameProgress::GetInstance();
+    role_item_ = ItemSystem::GetInstance();
 
     // 初始化UI和角色数据
     InitRoleInfo();
@@ -17,11 +18,14 @@ MainCtrl::MainCtrl(QObject *parent) : QObject(parent)
     connect(game_obj_, &GameProgress::SignalJianghuTimeOut, role_obj_, &RoleSystem::SlotCyclicCultivation);
     // 更新UI
     connect(role_obj_, &RoleSystem::SignalUpdateUI, ui_obj_, &MainUI::SlotUpdateUI);
+
     // 保存角色基本信息
     connect(role_obj_, &RoleSystem::SignalUpdateRoleInfoDatabase, data_file_, &DataManage::SlotSaveRoleInfoToDatabase);
+    connect(role_obj_, &RoleSystem::SignalUpdateRoleItemDatabase, data_file_, &DataManage::SlotSaveRoleItemToDatabase);
 
     // 消息发生到窗口
     connect(role_obj_, &RoleSystem::SignalShowMsgToUI, ui_obj_, &MainUI::SlotShowMsg);
+
 }
 
 MainCtrl::~MainCtrl()
@@ -48,6 +52,9 @@ MainCtrl::~MainCtrl()
     }
     if(game_obj_ != NULL)
     {
+        // 清理游戏进程类 ———————— 线程非安全退出-待处理
+        game_obj_->quit();
+        game_obj_->wait();
         delete game_obj_;
         game_obj_ = NULL;
     }
@@ -65,6 +72,7 @@ void MainCtrl::StartFishing()
     game_obj_->start();
 
 }
+
 void MainCtrl::ShowMainUi()
 {
     ui_obj_->show();
@@ -72,6 +80,7 @@ void MainCtrl::ShowMainUi()
 
 void MainCtrl::InitRoleInfo()
 {
+    // 从数据库获取角色基本信息
     QString last_game_time = "最近一次离线时间是：" + data_file_->GetLastGameTime();
     ui_obj_->AddMessage(last_game_time);
     QString name = data_file_->GetTableToInfo("RoleInfo","roleName");
@@ -84,6 +93,7 @@ void MainCtrl::InitRoleInfo()
     QString def = data_file_->GetTableToInfo("RoleInfo","roleDef");
     QString hp = data_file_->GetTableToInfo("RoleInfo","roleHp");
 
+    // 从数据库获取角色获取装备
     QString weapon = data_file_->GetTableToInfo("RoleEquip","equipWeapon");
     QString magic = data_file_->GetTableToInfo("RoleEquip","equipMagic");
     QString helmet = data_file_->GetTableToInfo("RoleEquip","equipHelmet");
@@ -92,6 +102,13 @@ void MainCtrl::InitRoleInfo()
     QString shoe = data_file_->GetTableToInfo("RoleEquip","equipShoe");
     QString jewelry = data_file_->GetTableToInfo("RoleEquip","equipJewelry");
 
+    // 从数据库获取角色获取物品、道具
+    QString money = data_file_->GetTableToInfo("RoleItem","roleMoney");
+    QString rename_card = data_file_->GetTableToInfo("RoleItem","renameCard");
+
+
+
+    // 将获取到的值赋值给对象
     role_obj_->SetRoleName(name);
     role_obj_->SetRoleLife(life.toUInt());
     role_obj_->SetRolePrestige(prestige.toInt());
@@ -108,6 +125,11 @@ void MainCtrl::InitRoleInfo()
     role_obj_->SetEquipShoe(shoe);
     role_obj_->SetEquipJewelry(jewelry);
 
+    // 更新角色道具
+    role_item_->SetItemMoney(money.toInt());
+    role_item_->SetItemRenameCard(rename_card.toInt());
+
+    // 更新UI显示
     ui_obj_->UpdateRoleInformation(name, life, prestige, cultivation);
     ui_obj_->UpdatePhysicalStrength(exp, agg, def, hp);
     ui_obj_->UpdateEquip(weapon, magic, helmet, clothing, britches, shoe, jewelry);

@@ -36,7 +36,7 @@ enum RoleUI
 /**
  * @brief 角色背包，道具
  */
-enum RoleProp
+enum RoleItem
 {
     kUnknownProp = 0,   // 未知
     kRoleMoney,         // 灵石

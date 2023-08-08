@@ -419,10 +419,19 @@
          <string> 历练</string>
         </attribute>
        </widget>
+       <widget class="QWidget" name="tab_3">
+        <attribute name="title">
+         <string>排行榜</string>
+        </attribute>
+       </widget>
       </widget>
      </item>
      <item>
-      <widget class="QListWidget" name="listWidget"/>
+      <widget class="QListWidget" name="listWidget">
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>

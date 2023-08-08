@@ -21,6 +21,8 @@ RoleSystem::RoleSystem()
     // 设置修仙资质
     aptitude_ = 0;
     need_epx_ = 300 * ( 1 - aptitude_);
+
+    role_item_ = ItemSystem::GetInstance();
 }
 
 void RoleSystem::run()
@@ -86,6 +88,7 @@ QVariant RoleSystem::GetRoleTargetProperties(RoleUI tar_name)
     case kEquipJewelrt:      // 首饰
         return equip_jewelry_;
     }
+    return 0;
 }
 
 QString RoleSystem::GetRoleName() const
@@ -539,34 +542,50 @@ QString RoleSystem::ExpToCulStage(int exp)
 void RoleSystem::SlotCyclicCultivation()
 {
     int cur_event_probability = QRandomGenerator::global()->bounded(100);
+
+    // 随机经验值，随机货币
+    int money = 0;
     int exp = 0;
     QString msg ="";
+
+    // 随机时间概率
     if(cur_event_probability <= 30)
     {
         // 减益事件
+        money = QRandomGenerator::global()->bounded(-99,-1);
         exp = QRandomGenerator::global()->bounded(-10,-1);
-        msg = DebuffEvents(QRandomGenerator::global()->bounded(15), role_name_, 0, exp);
+        msg = DebuffEvents(QRandomGenerator::global()->bounded(15), role_name_, money, exp);
     }
     else if(cur_event_probability > 30 && cur_event_probability <= 100)
     {
+        money = QRandomGenerator::global()->bounded(1,99);
         exp = QRandomGenerator::global()->bounded(1,10);
-        msg = BuffEvents(QRandomGenerator::global()->bounded(20), role_name_, 0, exp);
+        msg = BuffEvents(QRandomGenerator::global()->bounded(20), role_name_, money, exp);
     }
-    // 更新角色属性
+    // 更新角色 经验值，货币
     role_exp_ += exp;
+    role_item_->SetItemMoney(role_item_->GetItemMoney() + money);
 
-    // 打包角色属性
-    QJsonObject role_data;
-    role_data.insert("roleName",role_name_);
-    role_data.insert("roleLife",role_life_);
-    role_data.insert("rolePrestige",role_prestige_);
-    role_data.insert("roleCultivation",role_cultivation_);
-    role_data.insert("roleExp",role_exp_);
-    role_data.insert("roleAgg",role_agg_);
-    role_data.insert("roleDef",role_def_);
-    role_data.insert("roleHp",role_hp_);
+    // 打包角色基本属性
+    QJsonObject role_info_data;
+    role_info_data.insert("roleName",role_name_);
+    role_info_data.insert("roleLife",role_life_);
+    role_info_data.insert("rolePrestige",role_prestige_);
+    role_info_data.insert("roleCultivation",role_cultivation_);
+    role_info_data.insert("roleExp",role_exp_);
+    role_info_data.insert("roleAgg",role_agg_);
+    role_info_data.insert("roleDef",role_def_);
+    role_info_data.insert("roleHp",role_hp_);
 
+    // 打包角色道具
+    QJsonObject role_item_data;
+    role_item_data.insert("roleName",role_name_);
+    role_item_data.insert("roleMoney",role_item_->GetItemMoney());
+    role_item_data.insert("renameCard",role_item_->GetItemRenameCard());
+
+    // 发送信号，更新UI、数据库
     emit SignalShowMsgToUI(msg);
-    emit SignalUpdateRoleInfoDatabase(role_data);
+    emit SignalUpdateRoleInfoDatabase(role_info_data);
     emit SignalUpdateUI(kRoleExp, QString::number(role_exp_));
+    emit SignalUpdateRoleItemDatabase(role_item_data);
 }

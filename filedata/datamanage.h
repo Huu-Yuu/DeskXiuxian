@@ -47,9 +47,14 @@ public:
 public slots:
 
     /**
-     * @brief 保存角色基本信息槽函数
+     * @brief 保存角色基本信息数据 槽函数
      */
     void SlotSaveRoleInfoToDatabase(QJsonObject role_data);
+
+    /**
+     * @brief 保存角色物品数据 槽函数
+     */
+    void SlotSaveRoleItemToDatabase(QJsonObject role_item_data);
 
 private:
     DataManage();

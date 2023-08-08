@@ -183,6 +183,7 @@ bool DataManage::CheckTablesExist()
     if (!query.next())
     {
         QString createTableQuery = "CREATE TABLE RoleAtt ("
+                                   "roleName TEXT,"
                                    "attMetal INTEGER,"
                                    "attWood INTEGER,"
                                    "attWater INTEGER,"
@@ -196,9 +197,10 @@ bool DataManage::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleAtt (attMetal, attWood, attWater, attFire, attEarth) "
-                              "VALUES (:attMetal, :attWood, :attWater, :attFire, :attEarth)";
+        QString insertQuery = "INSERT INTO RoleAtt (roleName, attMetal, attWood, attWater, attFire, attEarth) "
+                              "VALUES (:roleName, :attMetal, :attWood, :attWater, :attFire, :attEarth)";
         query.prepare(insertQuery);
+        query.bindValue(":roleName", "GM姜子牙");
         query.bindValue(":attMetal", 0);
         query.bindValue(":attWood", 0);
         query.bindValue(":attWater", 0);
@@ -223,6 +225,7 @@ bool DataManage::CheckTablesExist()
     if (!query.next())
     {
         QString createTableQuery = "CREATE TABLE RoleEquip ("
+                                   "roleName TEXT,"
                                    "equipWeapon TEXT,"
                                    "equipMagic TEXT,"
                                    "equipHelmet TEXT,"
@@ -238,9 +241,10 @@ bool DataManage::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleEquip (equipWeapon, equipMagic, equipHelmet, equipClothing, equipBritches, equipShoe, equipJewelry) "
-                              "VALUES (:equipWeapon, :equipMagic, :equipHelmet, :equipClothing, :equipBritches, :equipShoe, :equipJewelry)";
+        QString insertQuery = "INSERT INTO RoleEquip (roleName, equipWeapon, equipMagic, equipHelmet, equipClothing, equipBritches, equipShoe, equipJewelry) "
+                              "VALUES (:roleName, :equipWeapon, :equipMagic, :equipHelmet, :equipClothing, :equipBritches, :equipShoe, :equipJewelry)";
         query.prepare(insertQuery);
+        query.bindValue(":roleName", "GM姜子牙");
         query.bindValue(":equipWeapon", "打神鞭");
         query.bindValue(":equipMagic", "封神榜");
         query.bindValue(":equipHelmet", "洪荒盔");
@@ -255,20 +259,21 @@ bool DataManage::CheckTablesExist()
         }
     }
 
-    // 检查 RoleProp 表是否存在
-    queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleProp'";
+    // 检查 RoleItem 表是否存在
+    queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleItem'";
     if (!query.exec(queryString))
     {
-        qDebug() << "执行查询 RoleProp 时出错:" << query.lastError().text();
+        qDebug() << "执行查询 RoleItem 时出错:" << query.lastError().text();
         return false;
     }
 
-    // 如果 RoleProp 表不存在，则创建表并初始化字段值
+    // 如果 RoleItem 表不存在，则创建表并初始化字段值
     if (!query.next())
     {
-        QString createTableQuery = "CREATE TABLE RoleProp ("
+        QString createTableQuery = "CREATE TABLE RoleItem ("
+                                   "roleName TEXT,"
                                    "roleMoney INTEGER,"
-                                   "RenamCard INTEGER"
+                                   "renameCard INTEGER"
                                    ")";
         if (!query.exec(createTableQuery))
         {
@@ -277,11 +282,12 @@ bool DataManage::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleProp (roleMoney ,RenamCard) "
-                              "VALUES ( :roleMoney, :RenamCard)";
+        QString insertQuery = "INSERT INTO RoleItem (roleName, roleMoney, renameCard) "
+                              "VALUES (:roleName, :roleMoney, :renameCard)";
         query.prepare(insertQuery);
+        query.bindValue(":roleName", "GM姜子牙");
         query.bindValue(":roleMoney",911);
-        query.bindValue(":RenamCard", 2);
+        query.bindValue(":renameCard", 2);
         if (!query.exec())
         {
             qDebug() << "插入初始值时出错:" << query.lastError().text();
@@ -369,6 +375,51 @@ void DataManage::SlotSaveRoleInfoToDatabase(QJsonObject role_data)
             query.bindValue(":roleDef", role_data.value("roleDef").toInt());
             query.bindValue(":roleHp", role_data.value("roleHp").toInt());
 
+            if (!query.exec())
+            {
+                qDebug() << "保存数据时出错:" << query.lastError().text();
+                database_.close();
+                return;
+            }
+        }
+        database_.close();
+    }
+}
+
+void DataManage::SlotSaveRoleItemToDatabase(QJsonObject role_item_data)
+{
+    if(!database_.open())
+    {
+        qDebug() << "数据库打开失败";
+        return;
+    }
+    {
+        QString roleName = role_item_data.value("roleName").toString();
+
+        QSqlQuery query(database_);
+        query.prepare("SELECT COUNT(*) FROM RoleInfo WHERE roleName = :roleName");
+        query.bindValue(":roleName", roleName);
+
+        if (query.exec() && query.next())
+        {
+            int rowCount = query.value(0).toInt();
+            if (rowCount > 0)
+            {
+                // 执行更新操作
+                QString updateQuery = "UPDATE RoleItem SET roleMoney = :roleMoney, renameCard = :renameCard WHERE roleName = :roleName";
+                query.prepare(updateQuery);
+            }
+            else
+            {
+                // 执行插入操作
+                QString insertQuery = "INSERT INTO RoleItem (roleName, roleMoney, renameCard) "
+                                      "VALUES (:roleName, :roleMoney, :renameCard)";
+                query.prepare(insertQuery);
+            }
+
+            query.bindValue(":roleName", roleName);
+            query.bindValue(":roleMoney", role_item_data.value("roleMoney").toInt());
+            query.bindValue(":renameCard", role_item_data.value("renameCard").toInt());
             if (!query.exec())
             {
                 qDebug() << "保存数据时出错:" << query.lastError().text();

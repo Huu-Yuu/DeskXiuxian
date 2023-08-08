@@ -11,6 +11,7 @@
 #include "logger/logger.h"
 #include <QTextStream>
 #include "role/rolesystem.h"
+#include <QProcess>
 
 
 QT_BEGIN_NAMESPACE
@@ -66,10 +67,13 @@ public slots:
      * @brief 更新角色信息标签，UI控件，更新的信息
      */
     void SlotUpdateUI(RoleUI part, QString new_data);
+
+protected:
+    void closeEvent(QCloseEvent *event);
 private:
+    QProcess* process;  // 用于关闭窗口时杀死所有进程
     Ui::MainUI *ui;
     Logger* logger_;
     RoleSystem * role_obj_;
-    int i = 0;
 };
 #endif // MAINUI_H

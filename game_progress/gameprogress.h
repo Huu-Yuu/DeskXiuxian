@@ -22,6 +22,8 @@ public:
      */
     static GameProgress* GetInstance();
 
+    ~GameProgress();
+
     /**
      * @brief 单例
      */

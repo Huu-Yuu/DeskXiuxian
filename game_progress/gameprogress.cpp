@@ -3,6 +3,13 @@
 QMutex GameProgress::mutex;  // 初始化互斥锁对象
 GameProgress* GameProgress::instance = nullptr;  // 初始化单例对象指针
 
+GameProgress::~GameProgress()
+{
+    jianghu_timer_->stop();
+    delete jianghu_timer_;
+    jianghu_timer_ = NULL;
+}
+
 GameProgress::GameProgress()
 {
     // 定时器开始
@@ -11,6 +18,8 @@ GameProgress::GameProgress()
     jianghu_timer_->setInterval(anecdotes_time_);
     jianghu_timer_->setSingleShot(false);
     jianghu_timer_->start();
+
+    qDebug() << "游戏进程控制类 线程ID：" << currentThreadId();
 
     // 将定时器信号与类信号链接
     connect(jianghu_timer_, SIGNAL(timeout()), this, SIGNAL(SignalJianghuTimeOut()));

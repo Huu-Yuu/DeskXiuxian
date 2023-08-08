@@ -11,6 +11,7 @@
 #include <QRandomGenerator>
 #include <QJsonObject>
 #include <QDebug>
+#include "item/itemsystem.h"
 
 /**
  * @brief 角色系统类
@@ -315,13 +316,18 @@ signals:
     void SignalUpdateUI(RoleUI part, QString new_data);
 
     /**
-        * @brief 更新角色信息数据库
+        * @brief 更新角色基本信息数据库
         */
     void SignalUpdateRoleInfoDatabase(QJsonObject role_data);
 
+    /**
+        * @brief 更新角色物品数据库
+        */
+    void SignalUpdateRoleItemDatabase(QJsonObject role_data);
+
 public slots:
     /**
-        * @brief 循环修炼
+        * @brief 循环修炼，随机经验值、随机货币
         */
     void SlotCyclicCultivation();
 
@@ -362,6 +368,7 @@ private:
     double aptitude_;   // 修仙资质 0.01 ~ 1
     double need_epx_;   // 每次升级所需要的经验值
 
+    ItemSystem* role_item_; // 角色道具
 };
 
 #endif // ROLESYSTEM_H
