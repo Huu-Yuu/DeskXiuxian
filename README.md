@@ -20,6 +20,8 @@ Qt菜鸡想做一个桌面类的小游戏，先从单机运行开始，学习的
 
 7、技能系统类 0 暂时搁置
 
+8、文件管理类 20%
+
 ![桌面修仙](https://github.com/HuYuAI/DeskXiuxian/assets/101235540/8a9760e4-e3cc-419c-9eee-c638139da018)
 ![游戏逻辑图](https://github.com/HuYuAI/DeskXiuxian/assets/101235540/d6542ede-c63f-4acd-9adf-26210a50ee14)
 
@@ -28,6 +30,7 @@ Qt菜鸡想做一个桌面类的小游戏，先从单机运行开始，学习的
 
 最新运行效果：
 
-![cur_ui](https://github.com/HuYuAI/DeskXiuxian/assets/101235540/cbffbaa1-733e-4904-91f3-eefa74e52ea5)
+
+![cur_ui](https://github.com/HuYuAI/DeskXiuxian/assets/101235540/77e1f651-9ae6-4aa7-86cb-617148660564)
 
 
