@@ -20,7 +20,7 @@ RoleSystem::RoleSystem()
 {
     // 设置修仙资质
     aptitude_ = 0;
-    need_epx_ = 300 * ( 1 - aptitude_);
+    next_need_epx_ = 300 * ( 1 - aptitude_);
 
     role_item_ = ItemSystem::GetInstance();
 }
@@ -54,7 +54,7 @@ QVariant RoleSystem::GetRoleTargetProperties(RoleUI tar_name)
     case kRolePrestige:      // 声望
         return role_prestige_;
     case kRoleCultivation:   // 修为
-        return role_cultivation_;
+        return role_LV_;
     case kRoleExp:           // 经验值
         return role_exp_;
     case kRoleAgg:           // 攻击力
@@ -121,14 +121,14 @@ void RoleSystem::SetRolePrestige(int prestige)
     role_prestige_ = prestige;
 }
 
-QString RoleSystem::GetRoleCultivation() const
+CultivationStage RoleSystem::GetRoleCultivation() const
 {
-    return role_cultivation_;
+    return role_LV_;
 }
 
-void RoleSystem::SetRoleCultivation(const QString& cultivation)
+void RoleSystem::SetRoleCultivation(CultivationStage cultivation)
 {
-    role_cultivation_ = cultivation;
+    role_LV_ = cultivation;
 }
 
 int RoleSystem::GetRoleExp() const
@@ -139,6 +139,16 @@ int RoleSystem::GetRoleExp() const
 void RoleSystem::SetRoleExp(int exp)
 {
     role_exp_ = exp;
+}
+
+int RoleSystem::GetCurRoleExp()
+{
+    return role_cur_exp_;
+}
+
+void RoleSystem::SetCurRoleExp(int exp)
+{
+    role_cur_exp_ = exp;
 }
 
 int RoleSystem::GetRoleAgg() const
@@ -478,69 +488,67 @@ QString RoleSystem::BuffEvents(int rand, QString name, int money, int exp)
     return msg;
 }
 
-QString RoleSystem::ExpToCulStage(int exp)
+QString RoleSystem::GetCultivationName(CultivationStage cur_lv)
 {
-    need_epx_ = 300 * ( 1 - aptitude_);
-    if(exp < 0)
+    switch (cur_lv)
     {
+    case FANREN:
         return "凡人";
+    case LIANQI:
+        return "练气";
+    case ZHUJI:
+        return "筑基";
+    case JIEDAN:
+        return "结丹";
+    case YUANYING:
+        return "元婴";
+    case HUASHEN:
+        return "化神";
+    case HETI:
+        return "合体";
+    case DACHENG:
+        return "大乘";
+    case WUDAO:
+        return "悟道";
+    case YUHUA:
+        return "羽化";
+    case XIAN:
+        return "仙";
     }
-    else if(exp > 0 && exp <= need_epx_ / 3)
+}
+
+void RoleSystem::UpdateEextGradeEXP()
+{
+    // 获取经验值基数
+    double exp_base = 3 * (static_cast<int>(role_LV_) + 1);
+    // 算入角色资质得出下一次升级所需经验
+    next_need_epx_ = exp_base * (1 - aptitude_) * 100;
+}
+
+void RoleSystem::CheckExpIsUpgrade()
+{
+    if(role_LV_ == XIAN)
     {
-        return "练气期";
+        emit SignalShowMsgToUI("仙界大能已到世间修为尽头，无法继续突破");
+        return;
     }
-    else if(exp > need_epx_ / 3 && exp <= need_epx_)
+    // 判断当前经验值是否满足下一级的条件
+    if( role_cur_exp_ >= next_need_epx_)
     {
-        return "筑基期";
-    }
-    else if(exp > need_epx_ && exp <= 3 * need_epx_)
-    {
-        return "结丹期";
-    }
-    else if(exp > 3 * need_epx_ && exp <= 9 * need_epx_)
-    {
-        return "结丹期";
-    }
-    else if(exp > 9 * need_epx_ && exp <= 27 * need_epx_)
-    {
-        return "元婴期";
-    }
-    else if(exp > 27 * need_epx_ && exp <= 81 * need_epx_)
-    {
-        return "化神期";
-    }
-    else if(exp > 81 * need_epx_ && exp <= 3 * 81 * need_epx_)
-    {
-        return "合体期";
-    }
-    else if(exp > 3 * 81 * need_epx_ && exp <= 9 * 81 * need_epx_)
-    {
-        return "大乘期";
-    }
-    else if(exp > 9 * 81 * need_epx_ && exp <= 27 * 81 * need_epx_)
-    {
-        return "大乘期";
-    }
-    else if(exp > 27 * 81 * need_epx_ && exp <= 81 * 81 * need_epx_)
-    {
-        return "悟道期";
-    }
-    else if(exp > 81 * 81 * need_epx_ && exp <= 3 * 81 * 81 * need_epx_)
-    {
-        return "羽化期";
-    }
-    else if(exp > 3 * 81 * 81 * need_epx_ )
-    {
-        return "仙人";
-    }
-    else
-    {
-        return "BUG";
+        int next_lv = static_cast<int>(role_LV_);
+        next_lv++;
+        role_LV_ = static_cast<CultivationStage>(next_lv);
+        role_cur_exp_ -= next_need_epx_;
+        QString msg ="恭喜" + role_name_ + "道友渡过雷劫，世间又多一位" + GetCultivationName(role_LV_) + "大能";
+        UpdateEextGradeEXP();
+        emit SignalUpdateUI(kRoleCultivation, GetCultivationName(role_LV_));
+        emit SignalShowMsgToUI(msg);
     }
 }
 
 void RoleSystem::SlotCyclicCultivation()
 {
+    // 当前事件随机数
     int cur_event_probability = QRandomGenerator::global()->bounded(100);
 
     // 随机经验值，随机货币
@@ -564,6 +572,8 @@ void RoleSystem::SlotCyclicCultivation()
     }
     // 更新角色 经验值，货币
     role_exp_ += exp;
+    role_cur_exp_ += exp;
+    CheckExpIsUpgrade();
     role_item_->SetItemMoney(role_item_->GetItemMoney() + money);
 
     // 打包角色基本属性
@@ -571,7 +581,8 @@ void RoleSystem::SlotCyclicCultivation()
     role_info_data.insert("roleName",role_name_);
     role_info_data.insert("roleLife",role_life_);
     role_info_data.insert("rolePrestige",role_prestige_);
-    role_info_data.insert("roleCultivation",role_cultivation_);
+    role_info_data.insert("roleLv",static_cast<int>(role_LV_));
+    role_info_data.insert("roleCurExp",role_cur_exp_);
     role_info_data.insert("roleExp",role_exp_);
     role_info_data.insert("roleAgg",role_agg_);
     role_info_data.insert("roleDef",role_def_);
@@ -583,9 +594,9 @@ void RoleSystem::SlotCyclicCultivation()
     role_item_data.insert("roleMoney",role_item_->GetItemMoney());
     role_item_data.insert("renameCard",role_item_->GetItemRenameCard());
 
-    // 发送信号，更新UI、数据库
+    // 发送信号，发送事件信息，更新UI、数据库
     emit SignalShowMsgToUI(msg);
     emit SignalUpdateRoleInfoDatabase(role_info_data);
-    emit SignalUpdateUI(kRoleExp, QString::number(role_exp_));
+    emit SignalUpdateUI(kRoleExp, QString::number(role_cur_exp_));
     emit SignalUpdateRoleItemDatabase(role_item_data);
 }

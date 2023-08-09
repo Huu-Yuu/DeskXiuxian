@@ -58,6 +58,16 @@ DataManage::DataManage()
 
 DataManage::~DataManage()
 {
+    SetGameLastPlayTime();
+    if(file_setting_ != NULL)
+    {
+        delete file_setting_;
+        file_setting_ = NULL;
+    }
+}
+
+void DataManage::SetGameLastPlayTime()
+{
     QDateTime currentTime = QDateTime::currentDateTime();
     QString formattedTime = currentTime.toString("yyyy-MM-dd hh:mm:ss");
 
@@ -66,11 +76,6 @@ DataManage::~DataManage()
     file_setting_->setValue("Date/LastGameDate", formattedTime);
     file_setting_->sync();
     qDebug() << "写入最后运行时间："<< formattedTime;
-    if(file_setting_ != NULL)
-    {
-        delete file_setting_;
-        file_setting_ = NULL;
-    }
 }
 
 void DataManage::OpenDatabase(QString path)
@@ -140,11 +145,12 @@ bool DataManage::CheckTablesExist()
                                    "roleName TEXT,"
                                    "roleLife INTEGER,"
                                    "rolePrestige INTEGER,"
-                                   "roleCultivation TEXT,"
                                    "roleExp INTEGER,"
                                    "roleAgg INTEGER,"
                                    "roleDef INTEGER,"
-                                   "roleHp INTEGER"
+                                   "roleHp INTEGER,"
+                                   "roleCurExp INTEGER,"
+                                   "roleLv INTEGER"
                                    ")";
         query.prepare(createTableQuery);
         if (!query.exec(createTableQuery))
@@ -153,17 +159,18 @@ bool DataManage::CheckTablesExist()
             return false;
         }
         // 插入初始值
-        QString insertQuery = "INSERT INTO RoleInfo (roleName, roleLife, rolePrestige, roleCultivation, roleExp, roleAgg, roleDef, roleHp) "
-                              "VALUES (:roleName, :roleLife, :rolePrestige, :roleCultivation, :roleExp, :roleAgg, :roleDef, :roleHp)";
+        QString insertQuery = "INSERT INTO RoleInfo (roleName, roleLife, rolePrestige, roleExp, roleAgg, roleDef, roleHp, roleCurExp, roleLv) "
+                              "VALUES (:roleName, :roleLife, :rolePrestige, :roleExp, :roleAgg, :roleDef, :roleHp, :roleCurExp, :roleLv)";
         query.prepare(insertQuery);
         query.bindValue(":roleName", "GM姜子牙");
         query.bindValue(":roleLife", 80);
         query.bindValue(":rolePrestige", 989);
-        query.bindValue(":roleCultivation", "凡人");
         query.bindValue(":roleExp", 8989);
         query.bindValue(":roleAgg", 99);
         query.bindValue(":roleDef", 40);
         query.bindValue(":roleHp", 20);
+        query.bindValue(":roleCurExp",0);
+        query.bindValue(":roleLv", 1);
 
         if (!query.exec())
         {
@@ -354,27 +361,27 @@ void DataManage::SlotSaveRoleInfoToDatabase(QJsonObject role_data)
             if (rowCount > 0)
             {
                 // 执行更新操作
-                QString updateQuery = "UPDATE RoleInfo SET roleLife = :roleLife, rolePrestige = :rolePrestige, roleCultivation = :roleCultivation, "
+                QString updateQuery = "UPDATE RoleInfo SET roleLife = :roleLife, rolePrestige = :rolePrestige, roleLv = :roleLv, roleCurExp = :roleCurExp,"
                                       "roleExp = :roleExp, roleAgg = :roleAgg, roleDef = :roleDef, roleHp = :roleHp WHERE roleName = :roleName";
                 query.prepare(updateQuery);
             }
             else
             {
                 // 执行插入操作
-                QString insertQuery = "INSERT INTO RoleInfo (roleName, roleLife, rolePrestige, roleCultivation, roleExp, roleAgg, roleDef, roleHp) "
-                                      "VALUES (:roleName, :roleLife, :rolePrestige, :roleCultivation, :roleExp, :roleAgg, :roleDef, :roleHp)";
+                QString insertQuery = "INSERT INTO RoleInfo (roleName, roleLife, rolePrestige, roleCultivation, roleExp, roleAgg, roleDef, roleHp, roleCurExp) "
+                                      "VALUES (:roleName, :roleLife, :rolePrestige, :roleCultivation, :roleExp, :roleAgg, :roleDef, :roleHp, :roleCurExp)";
                 query.prepare(insertQuery);
             }
 
             query.bindValue(":roleName", roleName);
             query.bindValue(":roleLife", role_data.value("roleLife").toInt());
             query.bindValue(":rolePrestige", role_data.value("rolePrestige").toInt());
-            query.bindValue(":roleCultivation", role_data.value("roleCultivation").toString());
+            query.bindValue(":roleLv", role_data.value("roleLv").toInt());
             query.bindValue(":roleExp", role_data.value("roleExp").toInt());
             query.bindValue(":roleAgg", role_data.value("roleAgg").toInt());
             query.bindValue(":roleDef", role_data.value("roleDef").toInt());
             query.bindValue(":roleHp", role_data.value("roleHp").toInt());
-
+            query.bindValue(":roleCurExp", role_data.value("roleCurExp").toInt());
             if (!query.exec())
             {
                 qDebug() << "保存数据时出错:" << query.lastError().text();

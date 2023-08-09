@@ -8,10 +8,11 @@
 #include <QScrollBar>
 #include <QTimer>
 #include <QDebug>
-#include "logger/logger.h"
-#include <QTextStream>
-#include "role/rolesystem.h"
 #include <QProcess>
+#include <QTextStream>
+#include "logger/logger.h"
+#include "role/rolesystem.h"
+#include "filedata/datamanage.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -73,7 +74,8 @@ protected:
 private:
     QProcess* process;  // 用于关闭窗口时杀死所有进程
     Ui::MainUI *ui;
-    Logger* logger_;
+    Logger* logger_obj_;
     RoleSystem * role_obj_;
+    DataManage* data_file_;
 };
 #endif // MAINUI_H

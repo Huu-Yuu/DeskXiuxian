@@ -70,28 +70,40 @@ public:
     void SetRolePrestige(int prestige);
 
     /**
-        * @brief 获取修为
-        * @return 修为
+        * @brief 获取当前修为枚举类型
+        * @return 修为枚举值
         */
-    QString GetRoleCultivation() const;
+    CultivationStage GetRoleCultivation() const;
 
     /**
-        * @brief 设置修为
-        * @param cultivation 修为
+        * @brief 设置当前修为枚举
+        * @param cultivation 修为枚举
         */
-    void SetRoleCultivation(const QString& cultivation);
+    void SetRoleCultivation(CultivationStage cultivation);
 
     /**
-        * @brief 获取经验值
+        * @brief 获取角色总经验值
         * @return 经验值
         */
     int GetRoleExp() const;
 
     /**
-        * @brief 设置经验值
+        * @brief 设置角色总经验值
         * @param exp 经验值
         */
     void SetRoleExp(int exp);
+
+    /**
+        * @brief 获取当前角色经验值
+        * @return 经验值
+        */
+    int GetCurRoleExp();
+
+    /**
+        * @brief 设置角色当前经验值
+        * @
+        * */
+    void SetCurRoleExp(int exp);
 
     /**
         * @brief 获取攻击力
@@ -299,9 +311,19 @@ public:
     QString BuffEvents(int rand, QString name, int money = 0, int exp = 0);
 
     /**
-     * @brief EXP对应修仙等级
+     * @brief 获取修为名称
      */
-    QString ExpToCulStage(int exp);
+    QString GetCultivationName(CultivationStage cur_lv);
+
+    /**
+     * @brief 更新下一等级需要的经验
+     */
+    void UpdateEextGradeEXP();
+
+    /**
+        * @brief 检查经验值是否可以升级
+        */
+    void CheckExpIsUpgrade();
 
 signals:
 
@@ -311,7 +333,7 @@ signals:
     void SignalShowMsgToUI(QString msg);
 
     /**
-        * @brief 更新UI
+        * @brief 更新角色面板数据
         */
     void SignalUpdateUI(RoleUI part, QString new_data);
 
@@ -325,11 +347,17 @@ signals:
         */
     void SignalUpdateRoleItemDatabase(QJsonObject role_data);
 
+    /**
+        * @brief 检查经验值是否可以升级信号
+        */
+    void SignalCheckExpIsUpgrade(int cur_exp);
+
 public slots:
     /**
         * @brief 循环修炼，随机经验值、随机货币
         */
     void SlotCyclicCultivation();
+
 
 protected:
     void run();
@@ -341,13 +369,16 @@ private:
     RoleSystem(const RoleSystem&) = delete;
     RoleSystem& operator=(const RoleSystem&) = delete;
 
+
+
     static QMutex mutex;  // 互斥锁
     static RoleSystem* instance;  // 单例对象指针
     bool m_stopRequested = false;   // 线程停止
     QString role_name_;         // 昵称
     double role_life_;          // 寿命
     int role_prestige_;         // 声望
-    QString role_cultivation_;  // 修为
+    CultivationStage role_LV_;    // 当前角色修为
+    int role_cur_exp_;  // 角色当前经验值
     int role_exp_;      // 经验值
     int role_agg_;      // 攻击力
     int role_def_;      // 防御力
@@ -366,7 +397,7 @@ private:
     QString equip_jewelry_;     // 首饰
 
     double aptitude_;   // 修仙资质 0.01 ~ 1
-    double need_epx_;   // 每次升级所需要的经验值
+    double next_need_epx_;   // 下次升级所需要的经验值
 
     ItemSystem* role_item_; // 角色道具
 };

@@ -41,6 +41,10 @@ public:
      */
     void DatabaseClose();
 
+    /**
+     * @brief 写入游戏最后运行时间
+     */
+    void SetGameLastPlayTime();
 
     ~DataManage();
 

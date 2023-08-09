@@ -8,7 +8,8 @@ MainUI::MainUI(QWidget *parent)
     ui->setupUi(this);
     // 初始化成员变量
     role_obj_->RoleSystem::GetInstance();
-    logger_ = Logger::GetInstance();
+    logger_obj_ = Logger::GetInstance();
+    data_file_ = DataManage::GetInstance();
     process = new QProcess;
 
     // 初始化UI设置
@@ -40,8 +41,8 @@ MainUI::MainUI(QWidget *parent)
     ui->equipment_Box->setLayout(ui->equipment_Layout);
 
     // 将日志记录器的槽连接到 Qt 的日志处理器
-    QObject::connect(this, SIGNAL(SignalLogOut(QtMsgType, const QMessageLogContext&, const QString&)),
-                     logger_, SLOT(SlotOutTolog(QtMsgType, const QMessageLogContext&, const QString&)));
+    connect(this, &MainUI::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
+
 }
 
 MainUI::~MainUI()
@@ -54,7 +55,7 @@ void MainUI::closeEvent(QCloseEvent *event)
     qDebug() << "检测到手动关闭游戏，强制结束进程";
     // 打印到日志
     emit SignalLogOut( QtFatalMsg, QMessageLogContext(), "检测到手动关闭游戏，强制结束进程");
-
+    data_file_->SetGameLastPlayTime();
     // 杀死所有进程
     QString command = "taskkill /F /IM DeskXiuxian.exe";
     process->start(command);

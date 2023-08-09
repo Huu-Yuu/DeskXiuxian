@@ -86,8 +86,10 @@ void MainCtrl::InitRoleInfo()
     QString name = data_file_->GetTableToInfo("RoleInfo","roleName");
     QString life = data_file_->GetTableToInfo("RoleInfo","roleLife");
     QString prestige = data_file_->GetTableToInfo("RoleInfo","rolePrestige");
-    QString cultivation = data_file_->GetTableToInfo("RoleInfo","roleCultivation");
+    QString LV = data_file_->GetTableToInfo("RoleInfo","roleLv");
+    CultivationStage cultivation = static_cast<CultivationStage>(LV.toInt());
 
+    QString cur_exp = data_file_->GetTableToInfo("RoleInfo","roleCurExp");
     QString exp = data_file_->GetTableToInfo("RoleInfo","roleExp");
     QString agg = data_file_->GetTableToInfo("RoleInfo","roleAgg");
     QString def = data_file_->GetTableToInfo("RoleInfo","roleDef");
@@ -113,6 +115,7 @@ void MainCtrl::InitRoleInfo()
     role_obj_->SetRoleLife(life.toUInt());
     role_obj_->SetRolePrestige(prestige.toInt());
     role_obj_->SetRoleCultivation(cultivation);
+    role_obj_->SetCurRoleExp(cur_exp.toInt());
     role_obj_->SetRoleExp(exp.toInt());
     role_obj_->SetRoleAgg(agg.toInt());
     role_obj_->SetRoleDef(def.toInt());
@@ -130,7 +133,7 @@ void MainCtrl::InitRoleInfo()
     role_item_->SetItemRenameCard(rename_card.toInt());
 
     // 更新UI显示
-    ui_obj_->UpdateRoleInformation(name, life, prestige, cultivation);
-    ui_obj_->UpdatePhysicalStrength(exp, agg, def, hp);
+    ui_obj_->UpdateRoleInformation(name, life, prestige, role_obj_->GetCultivationName(cultivation));
+    ui_obj_->UpdatePhysicalStrength(cur_exp, agg, def, hp);
     ui_obj_->UpdateEquip(weapon, magic, helmet, clothing, britches, shoe, jewelry);
 }

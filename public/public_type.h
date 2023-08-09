@@ -48,6 +48,7 @@ enum RoleItem
  * @brief 修为等级
  */
 enum CultivationStage {
+    FANREN = 0,
     LIANQI,
     ZHUJI,
     JIEDAN,
