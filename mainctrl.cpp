@@ -16,6 +16,7 @@ MainCtrl::MainCtrl(QObject *parent) : QObject(parent)
 
     // 绑定修炼
     connect(game_obj_, &GameProgress::SignalJianghuTimeOut, role_obj_, &RoleSystem::SlotCyclicCultivation);
+    connect(game_obj_, &GameProgress::SignaleBasicAttTimeOut, role_obj_, &RoleSystem::SlotCyclicEnhanceAtt);
     // 更新UI
     connect(role_obj_, &RoleSystem::SignalUpdateUI, ui_obj_, &MainUI::SlotUpdateUI);
 
@@ -127,6 +128,8 @@ void MainCtrl::InitRoleInfo()
     role_obj_->SetEquipBritches(britches);
     role_obj_->SetEquipShoe(shoe);
     role_obj_->SetEquipJewelry(jewelry);
+
+    role_obj_->UpdataMaxRoleLife();     // 更新最大寿命
 
     // 更新角色道具
     role_item_->SetItemMoney(money.toInt());

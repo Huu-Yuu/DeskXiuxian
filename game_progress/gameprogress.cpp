@@ -14,15 +14,21 @@ GameProgress::GameProgress()
 {
     // 定时器开始
     jianghu_timer_ = new QTimer;
+    basic_att_timer_ = new QTimer;
     // 写入江湖事件循环事件，非单次循环
     jianghu_timer_->setInterval(anecdotes_time_);
     jianghu_timer_->setSingleShot(false);
     jianghu_timer_->start();
+    // 写入基本属性事件循环事件，非单次循环
+    basic_att_timer_->setInterval(anecdotes_time_);
+    basic_att_timer_->setSingleShot(false);
+    basic_att_timer_->start();
 
     qDebug() << "游戏进程控制类 线程ID：" << currentThreadId();
 
     // 将定时器信号与类信号链接
     connect(jianghu_timer_, SIGNAL(timeout()), this, SIGNAL(SignalJianghuTimeOut()));
+    connect(basic_att_timer_, SIGNAL(timeout()), this, SIGNAL(SignaleBasicAttTimeOut()));
 }
 
 GameProgress* GameProgress::GetInstance()

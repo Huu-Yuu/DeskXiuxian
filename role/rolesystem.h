@@ -53,9 +53,20 @@ public:
 
     /**
         * @brief 设置寿命
-        * @param name 寿命
+        * @param life 寿命
         */
     void SetRoleLife(double life);
+
+    /**
+        * @brief 获取角色最大寿命
+        * @return 最大寿命
+        */
+    double GetMaxRoleLife() const;
+
+    /**
+        * @brief 更新角色最大寿命
+        */
+    void UpdataMaxRoleLife();
 
     /**
         * @brief 获取声望
@@ -301,14 +312,29 @@ public:
     double GetAptitude();
 
     /**
-     * @brief 生成减益事件 当前12种
+     * @brief 生成基础减益事件 当前12种 货币和经验值
      */
     QString DebuffEvents(int rand, QString name, int money = 0, int exp = 0);
 
     /**
-     * @brief 生成增益事件 当前15种
+     * @brief 生成基础增益事件 当前15种 货币和经验值
      */
     QString BuffEvents(int rand, QString name, int money = 0, int exp = 0);
+
+    /**
+     * @brief 生成3属性减益事件 攻击防御血量
+     */
+    QString DebuffEvents3Att(int rand, QString name, int agg = 0, int def = 0, int hp = 0);
+
+    /**
+     * @brief 生成3属性增益事件 攻击防御血量
+     */
+    QString BuffEvents3Att(int rand, QString name, int agg = 0, int def = 0, int hp = 0);
+
+    /**
+     * @brief 通用成长事件 3属性
+     */
+    QString GrowthEvents3Att(int rand, QString name, int agg = 0, int def = 0, int hp = 0);
 
     /**
      * @brief 获取修为名称
@@ -324,6 +350,11 @@ public:
         * @brief 检查经验值是否可以升级
         */
     void CheckExpIsUpgrade();
+
+    /**
+        * @brief 获取修为突破奖励
+        */
+    void GetBreakthroughReward();
 
 signals:
 
@@ -358,7 +389,10 @@ public slots:
         */
     void SlotCyclicCultivation();
 
-
+    /**
+        * @brief 循环提升 攻击力、防御力、HP
+        */
+    void SlotCyclicEnhanceAtt();
 protected:
     void run();
 
@@ -376,6 +410,7 @@ private:
     bool m_stopRequested = false;   // 线程停止
     QString role_name_;         // 昵称
     double role_life_;          // 寿命
+    double role_max_life_;      // 角色最大寿命
     int role_prestige_;         // 声望
     CultivationStage role_LV_;    // 当前角色修为
     int role_cur_exp_;  // 角色当前经验值

@@ -165,11 +165,11 @@ bool DataManage::CheckTablesExist()
         query.bindValue(":roleName", "GM姜子牙");
         query.bindValue(":roleLife", 80);
         query.bindValue(":rolePrestige", 989);
-        query.bindValue(":roleExp", 8989);
-        query.bindValue(":roleAgg", 99);
+        query.bindValue(":roleExp", 0);
+        query.bindValue(":roleAgg", 50);
         query.bindValue(":roleDef", 40);
-        query.bindValue(":roleHp", 20);
-        query.bindValue(":roleCurExp",0);
+        query.bindValue(":roleHp", 300);
+        query.bindValue(":roleCurExp",1000);
         query.bindValue(":roleLv", 1);
 
         if (!query.exec())
@@ -293,7 +293,7 @@ bool DataManage::CheckTablesExist()
                               "VALUES (:roleName, :roleMoney, :renameCard)";
         query.prepare(insertQuery);
         query.bindValue(":roleName", "GM姜子牙");
-        query.bindValue(":roleMoney",911);
+        query.bindValue(":roleMoney",100);
         query.bindValue(":renameCard", 2);
         if (!query.exec())
         {
