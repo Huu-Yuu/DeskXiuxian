@@ -12,19 +12,27 @@ MainCtrl::MainCtrl(QObject *parent) : QObject(parent)
     // 初始化UI和角色数据
     InitRoleInfo();
 
-    connect(this,&MainCtrl::SignalLogOut,logger_obj_,&Logger::SlotOutTolog);
+    // 日志输出
+    connect(this, &MainCtrl::SignalLogOut,logger_obj_,&Logger::SlotOutTolog);
+    connect(ui_obj_, &MainUI::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
 
     // 绑定修炼
+    connect(game_obj_, &GameProgress::SignaleLifeUpdataTimeOut, role_obj_, &RoleSystem::SlotLifeUpdata);
     connect(game_obj_, &GameProgress::SignalJianghuTimeOut, role_obj_, &RoleSystem::SlotCyclicCultivation);
-    connect(game_obj_, &GameProgress::SignaleBasicAttTimeOut, role_obj_, &RoleSystem::SlotCyclicEnhanceAtt);
+    connect(game_obj_, &GameProgress::SignalBasicAttTimeOut, role_obj_, &RoleSystem::SlotCyclicEnhanceAtt);
+    connect(ui_obj_, &MainUI::SignalUpgradeLevel, role_obj_, &RoleSystem::SlotUpgradeLevel);
+
     // 更新UI
     connect(role_obj_, &RoleSystem::SignalUpdateUI, ui_obj_, &MainUI::SlotUpdateUI);
+    connect(role_obj_, &RoleSystem::SignalActivateCultivaUpButton, ui_obj_, &MainUI::SlotActivateCultivaUpButton);
+    connect(role_obj_, &RoleSystem::SignalDisableCultivaUpButton, ui_obj_, &MainUI::SlotDisableCultivaUpButton);
 
     // 保存角色基本信息
     connect(role_obj_, &RoleSystem::SignalUpdateRoleInfoDatabase, data_file_, &DataManage::SlotSaveRoleInfoToDatabase);
     connect(role_obj_, &RoleSystem::SignalUpdateRoleItemDatabase, data_file_, &DataManage::SlotSaveRoleItemToDatabase);
+    connect(role_obj_, &RoleSystem::SignalUpdateRoleCoefficientDatabase, data_file_, &DataManage::SlotSaveRoleCoefficientToDatabase);
 
-    // 消息发生到窗口
+    // 消息发送到窗口
     connect(role_obj_, &RoleSystem::SignalShowMsgToUI, ui_obj_, &MainUI::SlotShowMsg);
 
 }
@@ -109,7 +117,8 @@ void MainCtrl::InitRoleInfo()
     QString money = data_file_->GetTableToInfo("RoleItem","roleMoney");
     QString rename_card = data_file_->GetTableToInfo("RoleItem","renameCard");
 
-
+    // 从数据库获取角色属性相关系数
+    QString life_Coefficient = data_file_->GetTableToInfo("RoleCoefficient","RCLife");
 
     // 将获取到的值赋值给对象
     role_obj_->SetRoleName(name);
@@ -134,6 +143,9 @@ void MainCtrl::InitRoleInfo()
     // 更新角色道具
     role_item_->SetItemMoney(money.toInt());
     role_item_->SetItemRenameCard(rename_card.toInt());
+
+    // 更新角各项属性系数
+    role_obj_->SetLifeCoefficient(life_Coefficient.toInt());
 
     // 更新UI显示
     ui_obj_->UpdateRoleInformation(name, life, prestige, role_obj_->GetCultivationName(cultivation));

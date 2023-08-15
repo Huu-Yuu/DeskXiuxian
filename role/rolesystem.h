@@ -312,6 +312,16 @@ public:
     double GetAptitude();
 
     /**
+     * @brief 设置角色寿命系数
+     */
+    void SetLifeCoefficient(int life_coefficient);
+
+    /**
+     * @brief 获取修仙资质
+     */
+    int GetLifeCoefficient();
+
+    /**
      * @brief 生成基础减益事件 当前12种 货币和经验值
      */
     QString DebuffEvents(int rand, QString name, int money = 0, int exp = 0);
@@ -348,13 +358,34 @@ public:
 
     /**
         * @brief 检查经验值是否可以升级
+        * @return t-可以升级  f-不可以升级
         */
-    void CheckExpIsUpgrade();
+    bool CheckExpIsUpgrade();
 
     /**
         * @brief 获取修为突破奖励
         */
     void GetBreakthroughReward();
+
+    /**
+        * @brief 更新角色全部面板数据
+        */
+    void UpdateAllUI();
+
+    /**
+        * @brief 保存角色基本信息数据
+        */
+    void SaveRoleInfo();
+
+    /**
+        * @brief 保存角色道具数据
+        */
+    void SaveRoleItem();
+
+    /**
+        * @brief 保存角色属性系数数据
+        */
+    void SaveCoefficient();
 
 signals:
 
@@ -364,7 +395,7 @@ signals:
     void SignalShowMsgToUI(QString msg);
 
     /**
-        * @brief 更新角色面板数据
+        * @brief 更新角色指定面板数据
         */
     void SignalUpdateUI(RoleUI part, QString new_data);
 
@@ -379,9 +410,19 @@ signals:
     void SignalUpdateRoleItemDatabase(QJsonObject role_data);
 
     /**
-        * @brief 检查经验值是否可以升级信号
+        * @brief 更新角色属性各项系数
         */
-    void SignalCheckExpIsUpgrade(int cur_exp);
+    void SignalUpdateRoleCoefficientDatabase(QJsonObject RC_data);
+
+    /**
+     * @brief 激活突破按钮信号
+     */
+    void SignalActivateCultivaUpButton();
+
+    /**
+     * @brief 禁用突破按钮信号
+     */
+    void SignalDisableCultivaUpButton();
 
 public slots:
     /**
@@ -393,6 +434,16 @@ public slots:
         * @brief 循环提升 攻击力、防御力、HP
         */
     void SlotCyclicEnhanceAtt();
+
+    /**
+        * @brief 寿命开始增加 槽函数
+        */
+    void SlotLifeUpdata();
+
+    /**
+        * @brief 修为突破 槽函数
+        */
+    void SlotUpgradeLevel();
 protected:
     void run();
 
@@ -433,7 +484,7 @@ private:
 
     double aptitude_;   // 修仙资质 0.01 ~ 1
     double next_need_epx_;   // 下次升级所需要的经验值
-
+    int RC_Life_;        // 角色寿命系数
     ItemSystem* role_item_; // 角色道具
 };
 

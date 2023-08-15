@@ -37,7 +37,17 @@ public:
     /**
      * @brief 停止线程
      */
-    void stopThread();
+    void StopThread();
+
+    /**
+     * @brief 开启修行事件定时器
+     */
+    void StarPractic();
+
+    /**
+     * @brief 暂停修行事件定时器
+     */
+    void StopPractic();
 
 signals:
     /**
@@ -48,7 +58,12 @@ signals:
     /**
      * @brief 基本属性定时器超时信号
      */
-    void SignaleBasicAttTimeOut();
+    void SignalBasicAttTimeOut();
+
+    /**
+     * @brief 角色寿命成长定时器超时信号
+     */
+    void SignaleLifeUpdataTimeOut();
 
 protected:
     void run();
@@ -69,6 +84,8 @@ private:
     QTimer* basic_att_timer_;       // 基本属性定时器 影响 攻击防御血量
     int att_time_ = 2000;           // 基本属性事件倒计时 200秒
     int att_time_factor_;           // 倒计时系数
+
+    QTimer* life_timer_;            // 角色寿命计时器
 };
 
 #endif // GAMEPROGRESS_H

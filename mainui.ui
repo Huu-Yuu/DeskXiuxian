@@ -48,7 +48,7 @@
            <height>351</height>
           </rect>
          </property>
-         <layout class="QHBoxLayout" name="role_Layout">
+         <layout class="QHBoxLayout" name="role_Layout" stretch="1,1,1">
           <property name="topMargin">
            <number>5</number>
           </property>
@@ -397,14 +397,71 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="characters">
-            <property name="styleSheet">
-             <string notr="true">image: url(:/res/user.png);</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
+           <layout class="QVBoxLayout" name="roleLogoLayout" stretch="3,2">
+            <item>
+             <widget class="QLabel" name="characters">
+              <property name="styleSheet">
+               <string notr="true">image: url(:/res/user.png);</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QFormLayout" name="formLayout">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="star_but">
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
+                <property name="text">
+                 <string>开始修炼</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QPushButton" name="end_but">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
+                <property name="text">
+                 <string>结束修炼</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QPushButton" name="cultiva_up_but">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
+                <property name="text">
+                 <string>修为突破</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QPushButton" name="cultiva_rest_but">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
+                <property name="text">
+                 <string>转世重修</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>

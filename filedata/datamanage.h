@@ -60,6 +60,11 @@ public slots:
      */
     void SlotSaveRoleItemToDatabase(QJsonObject role_item_data);
 
+    /**
+     * @brief 保存角色相关属性系数数据 槽函数
+     */
+    void SlotSaveRoleCoefficientToDatabase(QJsonObject RC_data);
+
 private:
     DataManage();
     // 阻止拷贝构造函数和赋值运算符

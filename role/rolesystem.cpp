@@ -329,6 +329,16 @@ double RoleSystem::GetAptitude()
     return aptitude_;
 }
 
+void RoleSystem::SetLifeCoefficient(int life_coefficient)
+{
+    RC_Life_ = life_coefficient;
+}
+
+int RoleSystem::GetLifeCoefficient()
+{
+    return RC_Life_;
+}
+
 QString RoleSystem::DebuffEvents(int rand, QString name, int money, int exp)
 {
     QString buff_tip,msg;
@@ -672,31 +682,23 @@ void RoleSystem::UpdateEextGradeEXP()
     // 获取经验值基数
     double exp_base = 3 * (static_cast<int>(role_LV_) + 1);
     // 算入角色资质得出下一次升级所需经验
-    next_need_epx_ = exp_base * (1 - aptitude_) * 100;
+    next_need_epx_ = exp_base * (1 - aptitude_) * 100 ;
 }
 
-void RoleSystem::CheckExpIsUpgrade()
+bool RoleSystem::CheckExpIsUpgrade()
 {
     if(role_LV_ == XIAN)
     {
         emit SignalShowMsgToUI("仙界大能已到世间修为尽头，无法继续突破");
-        return;
+        return false;
     }
     // 判断当前经验值是否满足下一级的条件
     if( role_cur_exp_ >= next_need_epx_)
     {
-        int next_lv = static_cast<int>(role_LV_);
-        next_lv++;
-        role_LV_ = static_cast<CultivationStage>(next_lv);
-        role_cur_exp_ -= next_need_epx_;
-
-        // 获得突破奖励
-        GetBreakthroughReward();
-        QString msg ="恭喜" + role_name_ + "道友渡过雷劫，世间又多一位" + GetCultivationName(role_LV_) + "大能";
-        UpdateEextGradeEXP();
-        emit SignalUpdateUI(kRoleCultivation, GetCultivationName(role_LV_));
-        emit SignalShowMsgToUI(msg);
+        emit SignalActivateCultivaUpButton();
+        return true;
     }
+    return false;
 }
 
 void RoleSystem::GetBreakthroughReward()
@@ -798,6 +800,111 @@ void RoleSystem::GetBreakthroughReward()
     QString msg = "，攻击力+" + QString::number(role_agg_ - agg) + "，防御力+" +
             QString::number(role_def_ - def) + "，血量+" + QString::number(role_hp_ - hp) + "，声望+" + QString::number(role_prestige_ - prestige);
     emit SignalShowMsgToUI("恭喜道友渡劫成功！属性获得大量提升" + msg);
+    emit SignalUpdateUI(kRoleAgg, QString::number(role_agg_));
+    emit SignalUpdateUI(kRoleDef, QString::number(role_def_));
+    emit SignalUpdateUI(kRoleHp, QString::number(role_hp_));
+    emit SignalUpdateUI(kRolePrestige, QString::number(role_prestige_));
+}
+
+void RoleSystem::UpdateAllUI()
+{
+    emit SignalUpdateUI(kRoleName, role_name_);
+    emit SignalUpdateUI(kRoleLife, QString::number(role_life_));
+    emit SignalUpdateUI(kRoleCultivation, GetCultivationName(role_LV_));
+    emit SignalUpdateUI(kRoleExp, QString::number(role_cur_exp_));
+    emit SignalUpdateUI(kRoleAgg, QString::number(role_agg_));
+    emit SignalUpdateUI(kRoleDef, QString::number(role_def_));
+    emit SignalUpdateUI(kRoleHp, QString::number(role_hp_));
+    emit SignalUpdateUI(kRolePrestige, QString::number(role_prestige_));
+}
+
+void RoleSystem::SaveRoleInfo()
+{
+    // 打包角色基本属性
+    QJsonObject role_info_data;
+    role_info_data.insert("roleName",role_name_);
+    role_info_data.insert("roleLife",role_life_);
+    role_info_data.insert("rolePrestige",role_prestige_);
+    role_info_data.insert("roleLv",static_cast<int>(role_LV_));
+    role_info_data.insert("roleCurExp",role_cur_exp_);
+    role_info_data.insert("roleExp",role_exp_);
+    role_info_data.insert("roleAgg",role_agg_);
+    role_info_data.insert("roleDef",role_def_);
+    role_info_data.insert("roleHp",role_hp_);
+    // 发送更新数据库信号
+    emit SignalUpdateRoleInfoDatabase(role_info_data);
+}
+
+void RoleSystem::SaveRoleItem()
+{
+    // 打包角色道具
+    QJsonObject role_item_data;
+    role_item_data.insert("roleName",role_name_);
+    role_item_data.insert("roleMoney",role_item_->GetItemMoney());
+    role_item_data.insert("renameCard",role_item_->GetItemRenameCard());
+    // 发送更新角色道具数据库信号
+    emit SignalUpdateRoleItemDatabase(role_item_data);
+}
+
+void RoleSystem::SaveCoefficient()
+{
+    // 打包角色属性系数
+    QJsonObject role_coefficient_data;
+    role_coefficient_data.insert("roleName",role_name_);
+    role_coefficient_data.insert("RCLife",RC_Life_);
+    role_coefficient_data.insert("RCBasicEvent",1);
+    role_coefficient_data.insert("RCAttEvent",1);
+    role_coefficient_data.insert("RCPrestigeEvent",1);
+    role_coefficient_data.insert("RCSpecialEvent",1);
+    role_coefficient_data.insert("roleAptitude",1);
+    // 发送更新角色属性系数数据库信号
+    emit SignalUpdateRoleCoefficientDatabase(role_coefficient_data);
+}
+
+void RoleSystem::SlotLifeUpdata()
+{
+    RC_Life_++;
+    if(RC_Life_ >= 7200)
+    {
+        RC_Life_ -= 7200;
+        role_life_ ++;
+        emit SignalUpdateUI(kRoleLife, QString::number(role_life_));
+        if(role_life_ >= role_max_life_ -5)
+        {
+            emit SignalShowMsgToUI(QString("%1道友大限将至，请抓紧突破以增加寿命！").arg(role_name_));
+            return;
+        }
+        if(role_life_ >= role_max_life_)
+        {
+            emit SignalShowMsgToUI(QString("%1道友大限已至享龄%2岁，让我们怀念与他共度的美好时光，他的存在将永远在我们心中闪耀！").arg(role_name_, role_life_));
+            return;
+        }
+    }
+}
+
+void RoleSystem::SlotUpgradeLevel()
+{
+    int next_lv = static_cast<int>(role_LV_);
+    next_lv++;
+    role_LV_ = static_cast<CultivationStage>(next_lv);
+    role_cur_exp_ -= next_need_epx_;
+
+    // 获得突破奖励
+    GetBreakthroughReward();
+    QString msg ="恭喜" + role_name_ + "道友渡过雷劫，世间又多一位" + GetCultivationName(role_LV_) + "大能";
+    UpdateEextGradeEXP();
+    UpdateAllUI();
+    SaveRoleInfo();
+    SaveRoleItem();
+    SaveCoefficient();
+    emit SignalShowMsgToUI(msg);
+    emit SignalDisableCultivaUpButton();
+
+    // 判断经验值是否还满足升级条件
+    if(!CheckExpIsUpgrade())
+    {
+        emit SignalDisableCultivaUpButton();
+    }
 }
 
 void RoleSystem::SlotCyclicCultivation()
@@ -837,29 +944,19 @@ void RoleSystem::SlotCyclicCultivation()
     // 更新角色道具
     role_item_->SetItemMoney(role_item_->GetItemMoney() + money);
 
-    // 打包角色基本属性
-    QJsonObject role_info_data;
-    role_info_data.insert("roleName",role_name_);
-    role_info_data.insert("roleLife",role_life_);
-    role_info_data.insert("rolePrestige",role_prestige_);
-    role_info_data.insert("roleLv",static_cast<int>(role_LV_));
-    role_info_data.insert("roleCurExp",role_cur_exp_);
-    role_info_data.insert("roleExp",role_exp_);
-    role_info_data.insert("roleAgg",role_agg_);
-    role_info_data.insert("roleDef",role_def_);
-    role_info_data.insert("roleHp",role_hp_);
+    // 更新角色基本信息数据库
+    SaveRoleInfo();
 
-    // 打包角色道具
-    QJsonObject role_item_data;
-    role_item_data.insert("roleName",role_name_);
-    role_item_data.insert("roleMoney",role_item_->GetItemMoney());
-    role_item_data.insert("renameCard",role_item_->GetItemRenameCard());
+    // 更新角色道具数据库
+    SaveRoleItem();
+
+    // 更新角色属性系数数据库
+    SaveCoefficient();
 
     // 发送信号，发送事件信息，更新UI、数据库
     emit SignalShowMsgToUI(msg);
-    emit SignalUpdateRoleInfoDatabase(role_info_data);
+
     emit SignalUpdateUI(kRoleExp, QString::number(role_cur_exp_));
-    emit SignalUpdateRoleItemDatabase(role_item_data);
 }
 
 void RoleSystem::SlotCyclicEnhanceAtt()
@@ -880,7 +977,7 @@ void RoleSystem::SlotCyclicEnhanceAtt()
         agg = QRandomGenerator::global()->bounded(-99,-2);
         def = QRandomGenerator::global()->bounded(-90,-2);
         hp = QRandomGenerator::global()->bounded(-200,-2);
-        msg = DebuffEvents3Att(QRandomGenerator::global()->bounded(15), role_name_, role_agg_, role_def_, role_hp_);
+        msg = DebuffEvents3Att(QRandomGenerator::global()->bounded(15), role_name_, agg, def, hp);
     }
     else if(cur_event_probability > 1 && cur_event_probability <= 3)
     {
@@ -888,7 +985,7 @@ void RoleSystem::SlotCyclicEnhanceAtt()
         agg = QRandomGenerator::global()->bounded(5,99);
         def = QRandomGenerator::global()->bounded(2,99);
         hp = QRandomGenerator::global()->bounded(30,200);
-        msg = BuffEvents3Att(QRandomGenerator::global()->bounded(15), role_name_, role_agg_, role_def_, role_hp_);
+        msg = BuffEvents3Att(QRandomGenerator::global()->bounded(15), role_name_, agg, def, hp);
     }
     else if(cur_event_probability > 3 && cur_event_probability <= 8)
     {
@@ -896,7 +993,7 @@ void RoleSystem::SlotCyclicEnhanceAtt()
         agg = QRandomGenerator::global()->bounded(-50,-10);
         def = QRandomGenerator::global()->bounded(-50,-10);
         hp = QRandomGenerator::global()->bounded(-100,-30);
-        msg = DebuffEvents3Att(QRandomGenerator::global()->bounded(15), role_name_, role_agg_, role_def_, role_hp_);
+        msg = DebuffEvents3Att(QRandomGenerator::global()->bounded(15), role_name_, agg, def, hp);
     }
     else if(cur_event_probability > 8 && cur_event_probability <= 15)
     {
@@ -904,7 +1001,7 @@ void RoleSystem::SlotCyclicEnhanceAtt()
         agg = QRandomGenerator::global()->bounded(15,60);
         def = QRandomGenerator::global()->bounded(15,60);
         hp = QRandomGenerator::global()->bounded(35,110);
-        msg = BuffEvents3Att(QRandomGenerator::global()->bounded(15), role_name_, role_agg_, role_def_, role_hp_);
+        msg = BuffEvents3Att(QRandomGenerator::global()->bounded(15), role_name_, agg, def, hp);
     }
     else if(cur_event_probability > 15 && cur_event_probability <= 60)
     {
@@ -912,7 +1009,7 @@ void RoleSystem::SlotCyclicEnhanceAtt()
         agg = QRandomGenerator::global()->bounded(-20,35);
         def = QRandomGenerator::global()->bounded(-20,35);
         hp = QRandomGenerator::global()->bounded(-40,70);
-        msg = GrowthEvents3Att(QRandomGenerator::global()->bounded(15), role_name_, role_agg_, role_def_, role_hp_);
+        msg = GrowthEvents3Att(QRandomGenerator::global()->bounded(15), role_name_, agg, def, hp);
     }
     else if(cur_event_probability > 60 && cur_event_probability <= 75)
     {
@@ -929,7 +1026,7 @@ void RoleSystem::SlotCyclicEnhanceAtt()
         {
             hp = QRandomGenerator::global()->bounded(-70,-10);
         }
-        msg = BuffEvents3Att(QRandomGenerator::global()->bounded(15), role_name_, role_agg_, role_def_, role_hp_);
+        msg = DebuffEvents3Att(QRandomGenerator::global()->bounded(15), role_name_, agg, def, hp);
     }
     else if(cur_event_probability > 75 && cur_event_probability <= 100)
     {
@@ -946,7 +1043,7 @@ void RoleSystem::SlotCyclicEnhanceAtt()
         {
             hp = QRandomGenerator::global()->bounded(20,80);
         }
-         msg = BuffEvents3Att(QRandomGenerator::global()->bounded(15), role_name_, role_agg_, role_def_, role_hp_);
+         msg = BuffEvents3Att(QRandomGenerator::global()->bounded(15), role_name_, agg, def, hp);
     }
 
     // 计算属性 防止属性变为负数
@@ -966,21 +1063,10 @@ void RoleSystem::SlotCyclicEnhanceAtt()
         role_hp_ = 0;
     }
 
-    // 打包角色基本属性
-    QJsonObject role_info_data;
-    role_info_data.insert("roleName",role_name_);
-    role_info_data.insert("roleLife",role_life_);
-    role_info_data.insert("rolePrestige",role_prestige_);
-    role_info_data.insert("roleLv",static_cast<int>(role_LV_));
-    role_info_data.insert("roleCurExp",role_cur_exp_);
-    role_info_data.insert("roleExp",role_exp_);
-    role_info_data.insert("roleAgg",role_agg_);
-    role_info_data.insert("roleDef",role_def_);
-    role_info_data.insert("roleHp",role_hp_);
-
-    // 发送信号，发送事件信息，更新UI、数据库
+    // 更新数据库
+    SaveRoleInfo();
+    // 发送信号，发送事件信息，更新UI
     emit SignalShowMsgToUI(msg);
-    emit SignalUpdateRoleInfoDatabase(role_info_data);
     emit SignalUpdateUI(kRoleAgg, QString::number(role_agg_));
     emit SignalUpdateUI(kRoleDef, QString::number(role_def_));
     emit SignalUpdateUI(kRoleHp, QString::number(role_hp_));

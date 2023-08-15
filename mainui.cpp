@@ -10,6 +10,7 @@ MainUI::MainUI(QWidget *parent)
     role_obj_->RoleSystem::GetInstance();
     logger_obj_ = Logger::GetInstance();
     data_file_ = DataManage::GetInstance();
+    game_obj_ = GameProgress::GetInstance();
     process = new QProcess;
 
     // 初始化UI设置
@@ -41,8 +42,6 @@ MainUI::MainUI(QWidget *parent)
     ui->equipment_Box->setLayout(ui->equipment_Layout);
 
     // 将日志记录器的槽连接到 Qt 的日志处理器
-    connect(this, &MainUI::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
-
 }
 
 MainUI::~MainUI()
@@ -170,7 +169,51 @@ void MainUI::SlotUpdateUI(RoleUI part, QString new_data)
     }
 }
 
+void MainUI::SlotActivateCultivaUpButton()
+{
+    if(!ui->cultiva_up_but->isEnabled())
+    {
+        ui->cultiva_up_but->setEnabled(true);
+        QString msg = "修为已到达瓶颈，请准备突破！";
+        AddMessage(msg);
+    }
+}
+
+void MainUI::SlotDisableCultivaUpButton()
+{
+    if(ui->cultiva_up_but->isEnabled())
+    {
+        ui->cultiva_up_but->setEnabled(false);
+    }
+}
+
 void MainUI::SlotShowMsg(QString msg)
 {
      AddMessage(msg);
 }
+
+void MainUI::on_star_but_clicked()
+{
+    ui->star_but->setEnabled(false);
+    ui->end_but->setEnabled(true);
+    QString msg = "一切准备就绪，开始修(mo)行(yu)！";
+    AddMessage(msg);
+    game_obj_->StarPractic();
+    role_obj_->CheckExpIsUpgrade();
+}
+
+
+void MainUI::on_end_but_clicked()
+{
+    ui->star_but->setEnabled(true);
+    ui->end_but->setEnabled(false);
+    QString msg = "修(mo)行(yu)暂时结束！";
+    AddMessage(msg);
+    game_obj_->StopPractic();
+}
+
+void MainUI::on_cultiva_up_but_clicked()
+{
+    emit SignalUpgradeLevel();
+}
+

@@ -13,6 +13,7 @@
 #include "logger/logger.h"
 #include "role/rolesystem.h"
 #include "filedata/datamanage.h"
+#include "game_progress/gameprogress.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -55,7 +56,15 @@ public:
     void UpdateEquip(QString weapon, QString magic, QString helmet, QString clothing, QString britches, QString shoe, QString jewelrt);
 
 signals:
+    /**
+        * @brief 输出日志信号
+        */
     void SignalLogOut(QtMsgType type, const QMessageLogContext& context, const QString& message);
+
+    /**
+        * @brief 修为突破信号
+        */
+    void SignalUpgradeLevel();
 
 public slots:
 
@@ -69,13 +78,31 @@ public slots:
      */
     void SlotUpdateUI(RoleUI part, QString new_data);
 
+    /**
+     * @brief 激活突破按钮 槽函数
+     */
+    void SlotActivateCultivaUpButton();
+
+    /**
+     * @brief 禁用突破按钮 槽函数
+     */
+    void SlotDisableCultivaUpButton();
+
 protected:
     void closeEvent(QCloseEvent *event);
+private slots:
+    void on_star_but_clicked();
+
+    void on_end_but_clicked();
+
+    void on_cultiva_up_but_clicked();
+
 private:
     QProcess* process;  // 用于关闭窗口时杀死所有进程
     Ui::MainUI *ui;
     Logger* logger_obj_;
     RoleSystem * role_obj_;
     DataManage* data_file_;
+    GameProgress* game_obj_;    // 游戏进度控制对象
 };
 #endif // MAINUI_H
