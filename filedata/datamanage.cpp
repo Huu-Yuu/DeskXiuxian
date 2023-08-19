@@ -163,8 +163,8 @@ bool DataManage::CheckTablesExist()
                               "VALUES (:roleName, :roleLife, :rolePrestige, :roleExp, :roleAgg, :roleDef, :roleHp, :roleCurExp, :roleLv)";
         query.prepare(insertQuery);
         query.bindValue(":roleName", "GM姜子牙");
-        query.bindValue(":roleLife", 1);
-        query.bindValue(":rolePrestige", 989);
+        query.bindValue(":roleLife", 25);
+        query.bindValue(":rolePrestige", 10);
         query.bindValue(":roleExp", 0);
         query.bindValue(":roleAgg", 50);
         query.bindValue(":roleDef", 40);
@@ -239,7 +239,8 @@ bool DataManage::CheckTablesExist()
                                    "equipClothing TEXT,"
                                    "equipBritches TEXT,"
                                    "equipShoe TEXT,"
-                                   "equipJewelry TEXT"
+                                   "equipJewelry TEXT,"
+                                   "equipMount TEXT"
                                    ")";
         if (!query.exec(createTableQuery))
         {
@@ -248,17 +249,18 @@ bool DataManage::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleEquip (roleName, equipWeapon, equipMagic, equipHelmet, equipClothing, equipBritches, equipShoe, equipJewelry) "
-                              "VALUES (:roleName, :equipWeapon, :equipMagic, :equipHelmet, :equipClothing, :equipBritches, :equipShoe, :equipJewelry)";
+        QString insertQuery = "INSERT INTO RoleEquip (roleName, equipWeapon, equipMagic, equipHelmet, equipClothing, equipBritches, equipShoe, equipJewelry, equipMount) "
+                              "VALUES (:roleName, :equipWeapon, :equipMagic, :equipHelmet, :equipClothing, :equipBritches, :equipShoe, :equipJewelry, :equipMount)";
         query.prepare(insertQuery);
         query.bindValue(":roleName", "GM姜子牙");
-        query.bindValue(":equipWeapon", "打神鞭");
-        query.bindValue(":equipMagic", "封神榜");
+        query.bindValue(":equipWeapon", "闪光机械键盘");
+        query.bindValue(":equipMagic", "陈年保温杯");
         query.bindValue(":equipHelmet", "洪荒盔");
         query.bindValue(":equipClothing", "洪荒甲");
         query.bindValue(":equipBritches", "洪荒腰带");
         query.bindValue(":equipShoe", "洪荒靴");
-        query.bindValue(":equipJewelry", "乾坤戒");
+        query.bindValue(":equipJewelry", "地摊项链");
+        query.bindValue(":equipMount", "哈士奇");
         if (!query.exec())
         {
             qDebug() << "插入初始值时出错:" << query.lastError().text();
@@ -318,6 +320,7 @@ bool DataManage::CheckTablesExist()
                                    "RCLife INTEGER,"
                                    "RCBasicEvent INTEGER,"
                                    "RCAttEvent INTEGER,"
+                                   "RCSurviveDisaster INTEGER,"
                                    "RCPrestigeEvent INTEGER,"
                                    "RCSpecialEvent INTEGER,"
                                    "roleAptitude INTEGER"
@@ -329,13 +332,14 @@ bool DataManage::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleCoefficient (roleName, RCLife, RCBasicEvent, RCAttEvent, RCPrestigeEvent, RCSpecialEvent, roleAptitude) "
-                              "VALUES (:roleName, :RCLife, :RCBasicEvent, :RCAttEvent, :RCPrestigeEvent, :RCSpecialEvent, :roleAptitude)";
+        QString insertQuery = "INSERT INTO RoleCoefficient (roleName, RCLife, RCBasicEvent, RCAttEvent, RCSurviveDisaster, RCPrestigeEvent, RCSpecialEvent, roleAptitude) "
+                              "VALUES (:roleName, :RCLife, :RCBasicEvent, :RCAttEvent, :RCSurviveDisaster, :RCPrestigeEvent, :RCSpecialEvent, :roleAptitude)";
         query.prepare(insertQuery);
         query.bindValue(":roleName", "GM姜子牙");
         query.bindValue(":RCLife",1);
         query.bindValue(":RCBasicEvent", 1);
         query.bindValue(":RCAttEvent", 1);
+        query.bindValue(":RCSurviveDisaster", 0);
         query.bindValue(":RCPrestigeEvent", 1);
         query.bindValue(":RCSpecialEvent", 1);
         query.bindValue(":roleAptitude", 1);
@@ -501,14 +505,14 @@ void DataManage::SlotSaveRoleCoefficientToDatabase(QJsonObject RC_data)
             if (rowCount > 0)
             {
                 // 执行更新操作
-                QString updateQuery = "UPDATE RoleCoefficient SET RCLife = :RCLife, RCBasicEvent = :RCBasicEvent, RCAttEvent = :RCAttEvent"
+                QString updateQuery = "UPDATE RoleCoefficient SET RCLife = :RCLife, RCBasicEvent = :RCBasicEvent, RCAttEvent = :RCAttEvent, RCSurviveDisaster = :RCSurviveDisaster"
                                       ", RCPrestigeEvent = :RCPrestigeEvent, RCSpecialEvent = :RCSpecialEvent, roleAptitude = :roleAptitude WHERE roleName = :roleName";
                 query.prepare(updateQuery);
             }
             else
             {
                 // 执行插入操作
-                QString insertQuery = "INSERT INTO RoleCoefficient (roleName,  RCLife, RCBasicEvent, RCAttEvent, RCPrestigeEvent, RCSpecialEvent, roleAptitude) "
+                QString insertQuery = "INSERT INTO RoleCoefficient (roleName,  RCLife, RCBasicEvent, RCAttEvent, RCSurviveDisaster, RCPrestigeEvent, RCSpecialEvent, roleAptitude) "
                                       "VALUES (:roleName, :RCLife, :RCBasicEvent, :RCAttEvent, :RCPrestigeEvent, :RCSpecialEvent, :roleAptitude)";
                 query.prepare(insertQuery);
             }
@@ -517,6 +521,7 @@ void DataManage::SlotSaveRoleCoefficientToDatabase(QJsonObject RC_data)
             query.bindValue(":RCLife", RC_data.value("RCLife").toInt());
             query.bindValue(":RCBasicEvent", RC_data.value("RCBasicEvent").toInt());
             query.bindValue(":RCAttEvent", RC_data.value("RCAttEvent").toInt());
+            query.bindValue(":RCSurviveDisaster", RC_data.value("RCSurviveDisaster").toInt());
             query.bindValue(":RCPrestigeEvent", RC_data.value("RCPrestigeEvent").toInt());
             query.bindValue(":RCSpecialEvent", RC_data.value("RCSpecialEvent").toInt());
             query.bindValue(":roleAptitude", RC_data.value("roleAptitude").toInt());

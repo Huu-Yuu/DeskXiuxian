@@ -32,6 +32,18 @@ public:
      */
     void ShowMainUi();
 
+public slots:
+
+    /**
+     * @brief 开始修仙
+     */
+    void SlotStartFishing();
+
+    /**
+     * @brief 结束修仙
+     */
+    void SlotStopFishing();
+
 signals:
     void SignalLogOut(QtMsgType type, const QMessageLogContext& context, const QString& message);
 

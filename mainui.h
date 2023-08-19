@@ -51,9 +51,10 @@ public:
     void UpdateFiveAtt(QString metal, QString wood, QString water, QString fire, QString earth);
 
     /**
-     * @brief 更新角色装备,武器、法宝、头盔、上衣、腰带、鞋、首饰
+     * @brief 更新角色装备,武器、法宝、头盔、上衣、腰带、鞋、首饰、坐骑
      */
-    void UpdateEquip(QString weapon, QString magic, QString helmet, QString clothing, QString britches, QString shoe, QString jewelrt);
+    void UpdateEquip(QString weapon, QString magic, QString helmet, QString clothing,
+                     QString britches, QString shoe, QString jewelrt, QString mount);
 
 signals:
     /**
@@ -65,6 +66,16 @@ signals:
         * @brief 修为突破信号
         */
     void SignalUpgradeLevel();
+
+    /**
+        * @brief 开始修行
+        */
+    void SignalStartFishing();
+
+    /**
+        * @brief 结束修行
+        */
+    void SignalStopFishing();
 
 public slots:
 
@@ -101,8 +112,6 @@ private:
     QProcess* process;  // 用于关闭窗口时杀死所有进程
     Ui::MainUI *ui;
     Logger* logger_obj_;
-    RoleSystem * role_obj_;
     DataManage* data_file_;
-    GameProgress* game_obj_;    // 游戏进度控制对象
 };
 #endif // MAINUI_H

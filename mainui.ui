@@ -268,8 +268,8 @@
               <rect>
                <x>0</x>
                <y>30</y>
-               <width>171</width>
-               <height>281</height>
+               <width>197</width>
+               <height>290</height>
               </rect>
              </property>
              <layout class="QFormLayout" name="equipment_Layout">
@@ -294,6 +294,34 @@
               <property name="bottomMargin">
                <number>10</number>
               </property>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_13">
+                <property name="text">
+                 <string>武器：</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLabel" name="equip_weapon">
+                <property name="text">
+                 <string>别云剑</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_23">
+                <property name="text">
+                 <string>法宝：</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLabel" name="equip_magic">
+                <property name="text">
+                 <string>乾坤镜</string>
+                </property>
+               </widget>
+              </item>
               <item row="2" column="0">
                <widget class="QLabel" name="label_6">
                 <property name="text">
@@ -343,20 +371,6 @@
                 </property>
                </widget>
               </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_13">
-                <property name="text">
-                 <string>武器：</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QLabel" name="equip_weapon">
-                <property name="text">
-                 <string>别云剑</string>
-                </property>
-               </widget>
-              </item>
               <item row="5" column="1">
                <widget class="QLabel" name="equip_shoe">
                 <property name="text">
@@ -371,24 +385,24 @@
                 </property>
                </widget>
               </item>
+              <item row="7" column="0">
+               <widget class="QLabel" name="label_3">
+                <property name="text">
+                 <string>坐骑：</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="QLabel" name="equip_mount">
+                <property name="text">
+                 <string>龟大和龟二</string>
+                </property>
+               </widget>
+              </item>
               <item row="6" column="1">
                <widget class="QLabel" name="equip_jewelry">
                 <property name="text">
                  <string>须弥戒</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_23">
-                <property name="text">
-                 <string>法宝：</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLabel" name="equip_magic">
-                <property name="text">
-                 <string>乾坤镜</string>
                 </property>
                </widget>
               </item>

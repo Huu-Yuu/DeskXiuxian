@@ -22,6 +22,8 @@ RoleSystem::RoleSystem()
     aptitude_ = 0;
     next_need_epx_ = 300 * ( 1 - aptitude_);
 
+    // 设置渡劫概率加成
+    RC_SurviveDisaster = 0;
     role_item_ = ItemSystem::GetInstance();
 }
 
@@ -87,6 +89,8 @@ QVariant RoleSystem::GetRoleTargetProperties(RoleUI tar_name)
         return equip_shoe_;
     case kEquipJewelrt:      // 首饰
         return equip_jewelry_;
+    case kEquipeMount:      // 坐骑
+        return equip_mount_;
     }
     return 0;
 }
@@ -118,7 +122,7 @@ double RoleSystem::GetMaxRoleLife() const
 
 void RoleSystem::UpdataMaxRoleLife()
 {
-    role_max_life_ = static_cast<int>(role_LV_) * 100 + (static_cast<int>(role_LV_) + 1) ^ 3 / 2;
+    role_max_life_ = static_cast<int>(role_LV_) * 100 + ((static_cast<int>(role_LV_) + 1) ^ 3 )/ 2;
 }
 
 int RoleSystem::GetRolePrestige() const
@@ -332,6 +336,11 @@ double RoleSystem::GetAptitude()
 void RoleSystem::SetLifeCoefficient(int life_coefficient)
 {
     RC_Life_ = life_coefficient;
+}
+
+void RoleSystem::SetSurviveDisaster(int rc_survive_disaster)
+{
+    RC_SurviveDisaster = rc_survive_disaster;
 }
 
 int RoleSystem::GetLifeCoefficient()
@@ -675,12 +684,13 @@ QString RoleSystem::GetCultivationName(CultivationStage cur_lv)
     case XIAN:
         return "仙";
     }
+    return "";
 }
 
 void RoleSystem::UpdateEextGradeEXP()
 {
     // 获取经验值基数
-    double exp_base = 3 * (static_cast<int>(role_LV_) + 1);
+    double exp_base = 3 * (static_cast<int>(role_LV_));
     // 算入角色资质得出下一次升级所需经验
     next_need_epx_ = exp_base * (1 - aptitude_) * 100 ;
 }
@@ -800,10 +810,207 @@ void RoleSystem::GetBreakthroughReward()
     QString msg = "，攻击力+" + QString::number(role_agg_ - agg) + "，防御力+" +
             QString::number(role_def_ - def) + "，血量+" + QString::number(role_hp_ - hp) + "，声望+" + QString::number(role_prestige_ - prestige);
     emit SignalShowMsgToUI("恭喜道友渡劫成功！属性获得大量提升" + msg);
+    // 更新角色相关UI面板
     emit SignalUpdateUI(kRoleAgg, QString::number(role_agg_));
     emit SignalUpdateUI(kRoleDef, QString::number(role_def_));
     emit SignalUpdateUI(kRoleHp, QString::number(role_hp_));
     emit SignalUpdateUI(kRolePrestige, QString::number(role_prestige_));
+}
+
+void RoleSystem::GetBreakthroughPenalty()
+{
+    // 损失的属性
+    int loss_agg = 0;
+    int loss_def = 0;
+    int loss_hp = 0;
+    int loss_exp = 0;
+    switch (role_LV_)
+    {
+    case FANREN:
+    {
+        loss_agg = QRandomGenerator::global()->bounded(10) + 1;
+        loss_def = QRandomGenerator::global()->bounded(10) + 1;
+        loss_hp = QRandomGenerator::global()->bounded(20) + 1;
+        loss_exp =QRandomGenerator::global()->bounded(static_cast<int>(next_need_epx_ / 6) , static_cast<int>(next_need_epx_ / 5)) + 1;
+        break;
+    }
+    case LIANQI:
+    {
+        loss_agg = QRandomGenerator::global()->bounded(20) + 1;
+        loss_def = QRandomGenerator::global()->bounded(20) + 1;
+        loss_hp = QRandomGenerator::global()->bounded(100) + 1;
+        loss_exp =QRandomGenerator::global()->bounded(static_cast<int>(next_need_epx_ / 5.5) , static_cast<int>(next_need_epx_ / 4)) + 1;
+        break;
+    }
+    case ZHUJI:
+    {
+        loss_agg = QRandomGenerator::global()->bounded(50) + 1;
+        loss_def = QRandomGenerator::global()->bounded(50) + 1;
+        loss_hp = QRandomGenerator::global()->bounded(400) + 1;
+        loss_exp =QRandomGenerator::global()->bounded(static_cast<int>(next_need_epx_ / 5) , static_cast<int>(next_need_epx_ / 4)) + 1;
+        break;
+    }
+    case JIEDAN:
+    {
+        loss_agg = QRandomGenerator::global()->bounded(110) + 1;
+        loss_def = QRandomGenerator::global()->bounded(110) + 1;
+        loss_hp = QRandomGenerator::global()->bounded(1000) + 1;
+        loss_exp =QRandomGenerator::global()->bounded(static_cast<int>(next_need_epx_ / 4.5) , static_cast<int>(next_need_epx_ / 3)) + 1;
+        break;
+    }
+    case YUANYING:
+    {
+        loss_agg = QRandomGenerator::global()->bounded(300) + 1;
+        loss_def = QRandomGenerator::global()->bounded(290) + 1;
+        loss_hp = QRandomGenerator::global()->bounded(1500) + 1;
+        loss_exp =QRandomGenerator::global()->bounded(static_cast<int>(next_need_epx_ / 4) , static_cast<int>(next_need_epx_ / 3)) + 1;
+        break;
+    }
+    case HUASHEN:
+    {
+        loss_agg = QRandomGenerator::global()->bounded(990) + 1;
+        loss_def = QRandomGenerator::global()->bounded(990) + 1;
+        loss_hp = QRandomGenerator::global()->bounded(2200) + 1;
+        loss_exp =QRandomGenerator::global()->bounded(static_cast<int>(next_need_epx_ / 4) , static_cast<int>(next_need_epx_ / 2.5)) + 1;
+        break;
+    }
+    case HETI:
+    {
+        loss_agg = QRandomGenerator::global()->bounded(2000) + 1;
+        loss_def = QRandomGenerator::global()->bounded(2000) + 1;
+        loss_hp = QRandomGenerator::global()->bounded(5500) + 1;
+        loss_exp =QRandomGenerator::global()->bounded(static_cast<int>(next_need_epx_ / 3.5) , static_cast<int>(next_need_epx_ / 2.5)) + 1;
+        break;
+    }
+    case DACHENG:
+    {
+        loss_agg = QRandomGenerator::global()->bounded(5000) + 1;
+        loss_def = QRandomGenerator::global()->bounded(5000) + 1;
+        loss_hp = QRandomGenerator::global()->bounded(8500) + 1;
+        loss_exp =QRandomGenerator::global()->bounded(static_cast<int>(next_need_epx_ / 3.2) , static_cast<int>(next_need_epx_ / 2.5)) + 1;
+        break;
+    }
+    case WUDAO:
+    {
+        loss_agg = QRandomGenerator::global()->bounded(9000) + 1;
+        loss_def = QRandomGenerator::global()->bounded(9000) + 1;
+        loss_hp = QRandomGenerator::global()->bounded(15500) + 1;
+        loss_exp =QRandomGenerator::global()->bounded(static_cast<int>(next_need_epx_ / 3) , static_cast<int>(next_need_epx_ / 2.5)) + 1;
+        break;
+    }
+    case YUHUA:
+    {
+        loss_agg = QRandomGenerator::global()->bounded(11000) + 1;
+        loss_def = QRandomGenerator::global()->bounded(11000) + 1;
+        loss_hp = QRandomGenerator::global()->bounded(25500) + 1;
+        loss_exp =QRandomGenerator::global()->bounded(static_cast<int>(next_need_epx_ / 2.5) , static_cast<int>(next_need_epx_ / 2)) + 1;
+        break;
+    }
+    case XIAN:
+    default:
+        emit SignalShowMsgToUI("突破出现错误，不改变属性值");
+        break;
+    }
+    role_agg_ -= loss_agg;
+    role_def_ -= loss_def;
+    role_hp_ -= loss_hp;
+    role_cur_exp_ -= loss_exp;
+    QString msg = "，攻击力-" + QString::number(loss_agg) + "，防御力-" +
+            QString::number(loss_def) + "，血量-" + QString::number(loss_hp) + "，经验值-"  +  QString::number(loss_exp);
+    emit SignalShowMsgToUI("道友渡劫失败，被雷劫击伤，身体被重创" + msg);
+    // 更新角色相关UI面板
+    emit SignalUpdateUI(kRoleAgg, QString::number(role_agg_));
+    emit SignalUpdateUI(kRoleDef, QString::number(role_def_));
+    emit SignalUpdateUI(kRoleHp, QString::number(role_hp_));
+}
+
+bool RoleSystem::SurviveDisaster()
+{
+    // 根据当前修为不同，突破成功率不同
+    int rc = QRandomGenerator::global()->bounded(100) + 1;
+    switch (role_LV_)
+    {
+    case FANREN:
+    {
+        if(rc <= 99 + RC_SurviveDisaster)
+            return true;
+        else
+            return false;
+    }
+    case LIANQI:
+    {
+        if(rc <= 95 + RC_SurviveDisaster)
+            return true;
+        else
+            return false;
+    }
+    case ZHUJI:
+    {
+        if(rc <= 85 + RC_SurviveDisaster)
+            return true;
+        else
+            return false;
+    }
+    case JIEDAN:
+    {
+        if(rc <= 80 + RC_SurviveDisaster)
+            return true;
+        else
+            return false;
+    }
+    case YUANYING:
+    {
+        if(rc <= 70 + RC_SurviveDisaster)
+            return true;
+        else
+            return false;
+    }
+    case HUASHEN:
+    {
+        if(rc <= 60 + RC_SurviveDisaster)
+            return true;
+        else
+            return false;
+    }
+    case HETI:
+    {
+        if(rc <= 50 + RC_SurviveDisaster)
+            return true;
+        else
+            return false;
+    }
+    case DACHENG:
+    {
+        if(rc <= 40 + RC_SurviveDisaster)
+            return true;
+        else
+            return false;
+    }
+    case WUDAO:
+    {
+        if(rc <= 30 + RC_SurviveDisaster)
+            return true;
+        else
+            return false;
+    }
+    case YUHUA:
+    {
+        if(rc <= 20 + RC_SurviveDisaster)
+            return true;
+        else
+            return false;
+    }
+    case XIAN:
+    {
+        if(rc <= 10 + RC_SurviveDisaster)
+            return true;
+        else
+            return false;
+    }
+    default:
+        return false;
+    }
+    return false;
 }
 
 void RoleSystem::UpdateAllUI()
@@ -850,13 +1057,14 @@ void RoleSystem::SaveCoefficient()
 {
     // 打包角色属性系数
     QJsonObject role_coefficient_data;
-    role_coefficient_data.insert("roleName",role_name_);
-    role_coefficient_data.insert("RCLife",RC_Life_);
-    role_coefficient_data.insert("RCBasicEvent",1);
-    role_coefficient_data.insert("RCAttEvent",1);
-    role_coefficient_data.insert("RCPrestigeEvent",1);
-    role_coefficient_data.insert("RCSpecialEvent",1);
-    role_coefficient_data.insert("roleAptitude",1);
+    role_coefficient_data.insert("roleName", role_name_);
+    role_coefficient_data.insert("RCLife", RC_Life_);
+    role_coefficient_data.insert("RCBasicEvent", 1);
+    role_coefficient_data.insert("RCAttEvent", 1);
+    role_coefficient_data.insert("RCSurviveDisaster", RC_SurviveDisaster);
+    role_coefficient_data.insert("RCPrestigeEvent", 1);
+    role_coefficient_data.insert("RCSpecialEvent", 1);
+    role_coefficient_data.insert("roleAptitude", 1);
     // 发送更新角色属性系数数据库信号
     emit SignalUpdateRoleCoefficientDatabase(role_coefficient_data);
 }
@@ -884,14 +1092,26 @@ void RoleSystem::SlotLifeUpdata()
 
 void RoleSystem::SlotUpgradeLevel()
 {
-    int next_lv = static_cast<int>(role_LV_);
-    next_lv++;
-    role_LV_ = static_cast<CultivationStage>(next_lv);
-    role_cur_exp_ -= next_need_epx_;
-
-    // 获得突破奖励
-    GetBreakthroughReward();
-    QString msg ="恭喜" + role_name_ + "道友渡过雷劫，世间又多一位" + GetCultivationName(role_LV_) + "大能";
+    QString msg;
+    if(!SurviveDisaster())
+    {
+        // 渡劫失败 处罚
+        GetBreakthroughPenalty();
+        RC_SurviveDisaster ++;
+        msg = "很遗憾，" + role_name_ + "道友渡劫失败，望道友厚积薄发再渡天劫！下次突破成功率加1";
+    }
+    else
+    {
+        // 渡劫成功
+        RC_SurviveDisaster = 0;
+        int next_lv = static_cast<int>(role_LV_);
+        next_lv++;
+        role_LV_ = static_cast<CultivationStage>(next_lv);
+        role_cur_exp_ -= next_need_epx_;
+        // 获得突破奖励
+        GetBreakthroughReward();
+        msg ="恭喜" + role_name_ + "道友渡过雷劫，世间又多一位" + GetCultivationName(role_LV_) + "大能";
+    }
     UpdateEextGradeEXP();
     UpdateAllUI();
     SaveRoleInfo();
@@ -962,7 +1182,7 @@ void RoleSystem::SlotCyclicCultivation()
 void RoleSystem::SlotCyclicEnhanceAtt()
 {
     // 当前事件随机数
-    int cur_event_probability = QRandomGenerator::global()->bounded(100);
+    int cur_event_probability = QRandomGenerator::global()->bounded(100) +1 ;
 
     // 随机攻击力、防御力、HP
     int agg = 0;

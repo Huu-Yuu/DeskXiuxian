@@ -21,6 +21,8 @@ MainCtrl::MainCtrl(QObject *parent) : QObject(parent)
     connect(game_obj_, &GameProgress::SignalJianghuTimeOut, role_obj_, &RoleSystem::SlotCyclicCultivation);
     connect(game_obj_, &GameProgress::SignalBasicAttTimeOut, role_obj_, &RoleSystem::SlotCyclicEnhanceAtt);
     connect(ui_obj_, &MainUI::SignalUpgradeLevel, role_obj_, &RoleSystem::SlotUpgradeLevel);
+    connect(ui_obj_, &MainUI::SignalStartFishing, this, &MainCtrl::SlotStartFishing);
+    connect(ui_obj_, &MainUI::SignalStopFishing, this, &MainCtrl::SlotStopFishing);
 
     // 更新UI
     connect(role_obj_, &RoleSystem::SignalUpdateUI, ui_obj_, &MainUI::SlotUpdateUI);
@@ -79,12 +81,22 @@ void MainCtrl::StartFishing()
 {
     // 开始倒计时：
     game_obj_->start();
-
 }
 
 void MainCtrl::ShowMainUi()
 {
     ui_obj_->show();
+}
+
+void MainCtrl::SlotStartFishing()
+{
+    game_obj_->StarPractic();
+    role_obj_->CheckExpIsUpgrade();
+}
+
+void MainCtrl::SlotStopFishing()
+{
+    game_obj_->StopPractic();
 }
 
 void MainCtrl::InitRoleInfo()
@@ -97,7 +109,6 @@ void MainCtrl::InitRoleInfo()
     QString prestige = data_file_->GetTableToInfo("RoleInfo","rolePrestige");
     QString LV = data_file_->GetTableToInfo("RoleInfo","roleLv");
     CultivationStage cultivation = static_cast<CultivationStage>(LV.toInt());
-
     QString cur_exp = data_file_->GetTableToInfo("RoleInfo","roleCurExp");
     QString exp = data_file_->GetTableToInfo("RoleInfo","roleExp");
     QString agg = data_file_->GetTableToInfo("RoleInfo","roleAgg");
@@ -112,6 +123,7 @@ void MainCtrl::InitRoleInfo()
     QString britches = data_file_->GetTableToInfo("RoleEquip","equipBritches");
     QString shoe = data_file_->GetTableToInfo("RoleEquip","equipShoe");
     QString jewelry = data_file_->GetTableToInfo("RoleEquip","equipJewelry");
+    QString mount = data_file_->GetTableToInfo("RoleEquip","equipMount");
 
     // 从数据库获取角色获取物品、道具
     QString money = data_file_->GetTableToInfo("RoleItem","roleMoney");
@@ -119,6 +131,7 @@ void MainCtrl::InitRoleInfo()
 
     // 从数据库获取角色属性相关系数
     QString life_Coefficient = data_file_->GetTableToInfo("RoleCoefficient","RCLife");
+    QString RC_SurviveDisaster = data_file_->GetTableToInfo("RoleCoefficient","RCSurviveDisaster");
 
     // 将获取到的值赋值给对象
     role_obj_->SetRoleName(name);
@@ -138,17 +151,20 @@ void MainCtrl::InitRoleInfo()
     role_obj_->SetEquipShoe(shoe);
     role_obj_->SetEquipJewelry(jewelry);
 
-    role_obj_->UpdataMaxRoleLife();     // 更新最大寿命
-
     // 更新角色道具
     role_item_->SetItemMoney(money.toInt());
     role_item_->SetItemRenameCard(rename_card.toInt());
 
     // 更新角各项属性系数
     role_obj_->SetLifeCoefficient(life_Coefficient.toInt());
+    role_obj_->SetSurviveDisaster(RC_SurviveDisaster.toInt());
+
+    role_obj_->UpdataMaxRoleLife();     // 更新最大寿命
+    role_obj_->UpdateEextGradeEXP();    // 更新升级需要的经验
+    role_obj_->CheckExpIsUpgrade();     // 更新是否可以升级
 
     // 更新UI显示
     ui_obj_->UpdateRoleInformation(name, life, prestige, role_obj_->GetCultivationName(cultivation));
     ui_obj_->UpdatePhysicalStrength(cur_exp, agg, def, hp);
-    ui_obj_->UpdateEquip(weapon, magic, helmet, clothing, britches, shoe, jewelry);
+    ui_obj_->UpdateEquip(weapon, magic, helmet, clothing, britches, shoe, jewelry, mount);
 }

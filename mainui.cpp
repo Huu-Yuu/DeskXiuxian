@@ -7,10 +7,8 @@ MainUI::MainUI(QWidget *parent)
 {
     ui->setupUi(this);
     // 初始化成员变量
-    role_obj_->RoleSystem::GetInstance();
     logger_obj_ = Logger::GetInstance();
     data_file_ = DataManage::GetInstance();
-    game_obj_ = GameProgress::GetInstance();
     process = new QProcess;
 
     // 初始化UI设置
@@ -98,7 +96,8 @@ void MainUI::UpdatePhysicalStrength(QString exp, QString agg, QString def, QStri
     ui->role_hp->setText(hp);
 }
 
-void MainUI::UpdateEquip(QString weapon, QString magic, QString helmet, QString clothing, QString britches, QString shoe, QString jewelrt)
+void MainUI::UpdateEquip(QString weapon, QString magic, QString helmet, QString clothing,
+                         QString britches, QString shoe, QString jewelrt, QString mount)
 {
     ui->equip_weapon->setText(weapon);
     ui->equip_magic->setText(magic);
@@ -107,6 +106,7 @@ void MainUI::UpdateEquip(QString weapon, QString magic, QString helmet, QString 
     ui->equip_britches->setText(britches);
     ui->equip_shoe->setText(shoe);
     ui->equip_jewelry->setText(jewelrt);
+    ui->equip_mount->setText(mount);
 }
 
 void MainUI::SlotUpdateUI(RoleUI part, QString new_data)
@@ -166,6 +166,9 @@ void MainUI::SlotUpdateUI(RoleUI part, QString new_data)
     case kEquipJewelrt:
         ui->equip_jewelry->setText(new_data);
         break;
+    case kEquipeMount:
+        ui->equip_mount->setText(new_data);
+        break;
     }
 }
 
@@ -198,8 +201,7 @@ void MainUI::on_star_but_clicked()
     ui->end_but->setEnabled(true);
     QString msg = "一切准备就绪，开始修(mo)行(yu)！";
     AddMessage(msg);
-    game_obj_->StarPractic();
-    role_obj_->CheckExpIsUpgrade();
+    emit SignalStartFishing();
 }
 
 
@@ -209,7 +211,7 @@ void MainUI::on_end_but_clicked()
     ui->end_but->setEnabled(false);
     QString msg = "修(mo)行(yu)暂时结束！";
     AddMessage(msg);
-    game_obj_->StopPractic();
+    emit SignalStopFishing();
 }
 
 void MainUI::on_cultiva_up_but_clicked()

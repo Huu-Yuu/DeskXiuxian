@@ -30,7 +30,8 @@ enum RoleUI
     kEquipClothing,     // 上衣
     kEquipBritches,     // 裤子
     kEquipShoe,         // 鞋子
-    kEquipJewelrt       // 首饰
+    kEquipJewelrt,      // 首饰
+    kEquipeMount        // 坐骑
 };
 
 /**

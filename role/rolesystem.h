@@ -317,6 +317,11 @@ public:
     void SetLifeCoefficient(int life_coefficient);
 
     /**
+     * @brief 设置角色突破概率加成
+     */
+    void SetSurviveDisaster(int rc_survive_disaster);
+
+    /**
      * @brief 获取修仙资质
      */
     int GetLifeCoefficient();
@@ -368,6 +373,11 @@ public:
     void GetBreakthroughReward();
 
     /**
+        * @brief 获取修为突破失败处罚
+        */
+    void GetBreakthroughPenalty();
+
+    /**
         * @brief 更新角色全部面板数据
         */
     void UpdateAllUI();
@@ -387,10 +397,15 @@ public:
         */
     void SaveCoefficient();
 
+    /**
+        * @brief 突破前进行渡劫 返回渡劫是否成功
+        */
+    bool SurviveDisaster();
+
 signals:
 
     /**
-        * @brief 发生消息到UI
+        * @brief 发送消息到UI
         */
     void SignalShowMsgToUI(QString msg);
 
@@ -481,10 +496,12 @@ private:
     QString equip_britches_;    // 裤子
     QString equip_shoe_;        // 鞋子
     QString equip_jewelry_;     // 首饰
+    QString equip_mount_;       // 坐骑
 
     double aptitude_;   // 修仙资质 0.01 ~ 1
     double next_need_epx_;   // 下次升级所需要的经验值
     int RC_Life_;        // 角色寿命系数
+    double RC_SurviveDisaster; //渡劫成功概率加成
     ItemSystem* role_item_; // 角色道具
 };
 
