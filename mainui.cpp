@@ -39,7 +39,9 @@ MainUI::MainUI(QWidget *parent)
     ui->bisic_Att_Box->setLayout(ui->bisic_Layout);
     ui->equipment_Box->setLayout(ui->equipment_Layout);
 
-    // 将日志记录器的槽连接到 Qt 的日志处理器
+    QString msg = "当前游戏版本为：";
+    QString game_vision = "v0.0.1 草稿版本";
+    AddMessage(msg + game_vision);
 }
 
 MainUI::~MainUI()
@@ -62,7 +64,7 @@ void MainUI::closeEvent(QCloseEvent *event)
     QMainWindow::closeEvent(event);
 }
 
-void MainUI::AddMessage(QString& msg)
+void MainUI::AddMessage(QString msg)
 {
     QString time_stamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh-mm:ss");
 

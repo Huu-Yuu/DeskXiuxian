@@ -13,6 +13,7 @@ CONFIG += c++11
 SOURCES += \
     filedata/datamanage.cpp \
     game_progress/gameprogress.cpp \
+    item/itembase.cpp \
     item/itemsystem.cpp \
     logger/logger.cpp \
     main.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
 HEADERS += \
     filedata/datamanage.h \
     game_progress/gameprogress.h \
+    item/itembase.h \
     item/itemsystem.h \
     logger/logger.h \
     mainctrl.h \

@@ -480,17 +480,22 @@
          </layout>
         </widget>
        </widget>
-       <widget class="QWidget" name="tab_2">
+       <widget class="QWidget" name="role_item">
         <attribute name="title">
          <string> 背包</string>
         </attribute>
        </widget>
-       <widget class="QWidget" name="tab">
+       <widget class="QWidget" name="role_skill">
+        <attribute name="title">
+         <string>道术</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="secret_realm">
         <attribute name="title">
          <string> 历练</string>
         </attribute>
        </widget>
-       <widget class="QWidget" name="tab_3">
+       <widget class="QWidget" name="rank">
         <attribute name="title">
          <string>排行榜</string>
         </attribute>

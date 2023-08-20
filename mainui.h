@@ -31,7 +31,7 @@ public:
     /**
      * @brief 添加消息到消息列表
      */
-    void AddMessage(QString& msg);
+    void AddMessage(QString msg);
 
     Ui::MainUI* GetUI();
 
