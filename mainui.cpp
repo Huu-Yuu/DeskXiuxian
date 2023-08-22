@@ -39,6 +39,9 @@ MainUI::MainUI(QWidget *parent)
     ui->bisic_Att_Box->setLayout(ui->bisic_Layout);
     ui->equipment_Box->setLayout(ui->equipment_Layout);
 
+    // 隐藏暂时不用的控件
+    ui->five_box->setVisible(false);
+
     QString msg = "当前游戏版本为：" ;
     AddMessage(msg + GAME_VISION);
 }

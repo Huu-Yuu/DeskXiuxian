@@ -11,13 +11,14 @@
 #include <QDate>
 #include <QSqlQuery>
 #include <QMutex>
+#include <QThread>
 #include <QJsonObject>
 #include "public/public_macro.h"
 
 /**
  * @brief 文件管理类
  */
-class DataManage : public QObject
+class DataManage : public QThread
 {
 public:
 
@@ -46,6 +47,8 @@ public:
      * @brief 写入游戏最后运行时间
      */
     void SetGameLastPlayTime();
+
+    void run();
 
     ~DataManage();
 
@@ -100,6 +103,15 @@ private:
      * @brief 数据库操作
      */
     QSqlDatabase database_;
+
+    bool is_SaveRoleInfo = false;
+    bool is_SaveRoleItem = false;
+    bool is_SaveRoleCoefficient = false;
+    bool is_GetDataBaseInfo = false;
+
+    QJsonObject role_data;
+    QJsonObject role_item_data;
+    QJsonObject RC_data;
 
 };
 
