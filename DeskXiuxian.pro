@@ -1,6 +1,7 @@
 QT       += core gui
 QT += sql
 QT += core
+LIBS += -L"D:/source code/DeskXiuxian/bin" -lmysql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -29,6 +30,7 @@ HEADERS += \
     logger/logger.h \
     mainctrl.h \
     mainui.h \
+    public/public_macro.h \
     public/public_type.h \
     role/rolesystem.h
 

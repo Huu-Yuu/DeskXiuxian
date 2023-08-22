@@ -39,6 +39,7 @@ DataManage::DataManage()
 
     file_setting_->setIniCodec("UTF-8");
 
+#if  LOCAL_DATABASE
     // 获取数据库文件路径
     QString databasePath = QCoreApplication::applicationDirPath() + "/database.db";
 
@@ -54,6 +55,10 @@ DataManage::DataManage()
         // 数据库文件已存在，读取现有数据库
         OpenDatabase(databasePath);
     }
+#else
+    OpenDatabase(REMOTE_DB_ADDRESS, REMOTE_DB_PORT, REMOTE_DB_USERNAME, REMOTE_DB_PASSWORD, REMOTE_DB_NAME);
+
+#endif
 }
 
 DataManage::~DataManage()
@@ -100,6 +105,33 @@ void DataManage::OpenDatabase(QString path)
     }
 }
 
+void DataManage::OpenDatabase(QString host, int port, QString username, QString password, QString databaseName)
+{
+    // 打开现有数据库连接
+    QCoreApplication::addLibraryPath("D:/source code/DeskXiuxian/bin");
+    database_ = QSqlDatabase::addDatabase("QMYSQL");
+    database_.setHostName(host);
+    database_.setPort(port);
+    database_.setUserName(username);
+    database_.setPassword(password);
+    database_.setDatabaseName(databaseName);
+
+    // 打开数据库连接
+    if (!database_.open())
+    {
+        qDebug() << "无法打开数据库:" << database_.lastError().text();
+    }
+    else
+    {
+        qDebug() << "数据库已经打开.";
+        if(!CheckTablesExist()) //检查并创建表单
+        {
+            qDebug()<<"检查表单时出现错误";
+            database_.close();
+        }
+    }
+}
+
 void DataManage::CreateDatabase(QString path)
 {
     // 创建数据库连接
@@ -132,7 +164,15 @@ bool DataManage::CheckTablesExist()
         return false;
     }
     QSqlQuery query(database_);
+
+    // 检查 RoleInfo 表是否存在
+#if LOCAL_DATABASE
     QString queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleInfo'";
+#else
+    QString queryString = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'xiuxian' AND table_name = 'RoleInfo'";
+
+#endif
+
     if (!query.exec(queryString))
     {
         qDebug() << "执行查询 RoleInfo 时出错:" << query.lastError().text();
@@ -179,7 +219,12 @@ bool DataManage::CheckTablesExist()
         }
     }
     // 检查 RoleAtt 表是否存在
+#if LOCAL_DATABASE
     queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleAtt'";
+#else
+    queryString = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'xiuxian' AND table_name = 'RoleAtt'";
+#endif
+
     if (!query.exec(queryString))
     {
         qDebug() << "执行查询 RoleAtt 时出错:" << query.lastError().text();
@@ -221,7 +266,12 @@ bool DataManage::CheckTablesExist()
     }
 
     // 检查 RoleEquip 表是否存在
+#if LOCAL_DATABASE
     queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleEquip'";
+#else
+    queryString = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'xiuxian' AND table_name = 'RoleEquip'";
+#endif
+
     if (!query.exec(queryString))
     {
         qDebug() << "执行查询 RoleEquip 时出错:" << query.lastError().text();
@@ -269,7 +319,11 @@ bool DataManage::CheckTablesExist()
     }
 
     // 检查 RoleItem 表是否存在
+#if LOCAL_DATABASE
     queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleItem'";
+#else
+    queryString = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'xiuxian' AND table_name = 'RoleItem'";
+#endif
     if (!query.exec(queryString))
     {
         qDebug() << "执行查询 RoleItem 时出错:" << query.lastError().text();
@@ -305,7 +359,11 @@ bool DataManage::CheckTablesExist()
     }
 
     // 检查 RoleCoefficient 表是否存在 角色各项系数
+#if LOCAL_DATABASE
     queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleCoefficient'";
+#else
+    queryString = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'xiuxian' AND table_name = 'RoleCoefficient'";
+#endif
     if (!query.exec(queryString))
     {
         qDebug() << "执行查询 RoleCoefficient 时出错:" << query.lastError().text();

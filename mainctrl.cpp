@@ -36,6 +36,7 @@ MainCtrl::MainCtrl(QObject *parent) : QObject(parent)
 
     // 消息发送到窗口
     connect(role_obj_, &RoleSystem::SignalShowMsgToUI, ui_obj_, &MainUI::SlotShowMsg);
+    connect(this, &MainCtrl::SignalShowMsgToUI, ui_obj_, &MainUI::SlotShowMsg);
 
 }
 
@@ -92,6 +93,11 @@ void MainCtrl::SlotStartFishing()
 {
     game_obj_->StarPractic();
     role_obj_->CheckExpIsUpgrade();
+    // 输出角色当前事件系数
+    int seconds_info = game_obj_->GetAnecdotesTime() / 1000;
+    int seconds_att = game_obj_->GetAttTime() / 1000;
+    emit SignalShowMsgToUI(QString("当前基本事件循环周期为：%1秒，属性事件循环周期为：%2秒").arg(seconds_info).arg(seconds_att));
+
 }
 
 void MainCtrl::SlotStopFishing()

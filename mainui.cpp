@@ -39,9 +39,8 @@ MainUI::MainUI(QWidget *parent)
     ui->bisic_Att_Box->setLayout(ui->bisic_Layout);
     ui->equipment_Box->setLayout(ui->equipment_Layout);
 
-    QString msg = "当前游戏版本为：";
-    QString game_vision = "v0.0.1 草稿版本";
-    AddMessage(msg + game_vision);
+    QString msg = "当前游戏版本为：" ;
+    AddMessage(msg + GAME_VISION);
 }
 
 MainUI::~MainUI()

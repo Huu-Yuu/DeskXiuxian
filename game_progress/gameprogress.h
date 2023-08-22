@@ -25,6 +25,16 @@ public:
     ~GameProgress();
 
     /**
+     * @brief 获取基本事件循环时间
+     */
+    int GetAnecdotesTime();
+
+    /**
+     * @brief 获取属性事件循环时间
+     */
+    int GetAttTime();
+
+    /**
      * @brief 单例
      */
     QTimer* GetJianghuTimer();
@@ -78,11 +88,11 @@ private:
     bool m_stopRequested = false;   // 线程停止
 
     QTimer* jianghu_timer_;         // 江湖定时器对象  影响 经验值和货币
-    int anecdotes_time_ = 1000;    // 江湖轶事倒计时100秒
+    int anecdotes_time_ = 10000;    // 江湖轶事倒计时10秒
     int anecdotes_time_factor_;          // 倒计时系数
 
     QTimer* basic_att_timer_;       // 基本属性定时器 影响 攻击防御血量
-    int att_time_ = 2000;           // 基本属性事件倒计时 200秒
+    int att_time_ = 20000;           // 基本属性事件倒计时 20秒
     int att_time_factor_;           // 倒计时系数
 
     QTimer* life_timer_;            // 角色寿命计时器

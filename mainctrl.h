@@ -45,7 +45,15 @@ public slots:
     void SlotStopFishing();
 
 signals:
+    /**
+     * @brief 发送日志输出信号
+     */
     void SignalLogOut(QtMsgType type, const QMessageLogContext& context, const QString& message);
+
+    /**
+     * @brief 发送消息到UI
+     */
+    void SignalShowMsgToUI(QString msg);
 
 private:
     /**

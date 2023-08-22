@@ -4,7 +4,6 @@
 #endif // PUBLIC_TYPE_H
 
 // 一些经常使用到的枚举
-
 /**
  * @brief 角色面板枚举
  */

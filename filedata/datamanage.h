@@ -12,6 +12,7 @@
 #include <QSqlQuery>
 #include <QMutex>
 #include <QJsonObject>
+#include "public/public_macro.h"
 
 /**
  * @brief 文件管理类
@@ -73,8 +74,21 @@ private:
     static QMutex mutex;  // 互斥锁
     static DataManage* instance;  // 单例对象指针
 
+    /**
+     * @brief 打开数据库
+     */
     void OpenDatabase(QString path);
+
+    void OpenDatabase(QString host, int port, QString username, QString password, QString databaseName);
+
+    /**
+     * @brief 创建数据库
+     */
     void CreateDatabase(QString path);
+
+    /**
+     * @brief 检查数据库
+     */
     bool CheckTablesExist();
 
     /**

@@ -37,7 +37,7 @@ GameProgress::GameProgress()
     jianghu_timer_->setSingleShot(false);
 
     // 写入基本属性事件循环事件，非单次循环，影响攻防血
-    basic_att_timer_->setInterval(anecdotes_time_);
+    basic_att_timer_->setInterval(att_time_);
     basic_att_timer_->setSingleShot(false);
 
     // 将定时器信号与类信号链接
@@ -58,6 +58,16 @@ GameProgress* GameProgress::GetInstance()
         }
     }
     return instance;
+}
+
+int GameProgress::GetAnecdotesTime()
+{
+    return anecdotes_time_;
+}
+
+int GameProgress::GetAttTime()
+{
+    return att_time_;
 }
 
 void GameProgress::StarPractic()
