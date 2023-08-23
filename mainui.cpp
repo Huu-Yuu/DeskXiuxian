@@ -56,7 +56,7 @@ void MainUI::closeEvent(QCloseEvent *event)
     qDebug() << "检测到手动关闭游戏，强制结束进程";
     // 打印到日志
     emit SignalLogOut( QtFatalMsg, QMessageLogContext(), "检测到手动关闭游戏，强制结束进程");
-    data_file_->SetGameLastPlayTime();
+    data_file_->SetGameConfigInfo();
     // 杀死所有进程
     QString command = "taskkill /F /IM DeskXiuxian.exe";
     process->start(command);

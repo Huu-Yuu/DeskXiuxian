@@ -63,7 +63,7 @@ DataManage::DataManage()
 
 DataManage::~DataManage()
 {
-    SetGameLastPlayTime();
+    SetGameConfigInfo();
     if(file_setting_ != NULL)
     {
         delete file_setting_;
@@ -71,7 +71,7 @@ DataManage::~DataManage()
     }
 }
 
-void DataManage::SetGameLastPlayTime()
+void DataManage::SetGameConfigInfo(QString user_name, QString pass_word)
 {
     QDateTime currentTime = QDateTime::currentDateTime();
     QString formattedTime = currentTime.toString("yyyy-MM-dd hh:mm:ss");
@@ -79,6 +79,8 @@ void DataManage::SetGameLastPlayTime()
     file_setting_->setPath(QSettings::IniFormat, QSettings::UserScope,
                            QCoreApplication::applicationDirPath() + "/config.ini");
     file_setting_->setValue("Date/LastGameDate", formattedTime);
+    file_setting_->setValue("UserInfo/UserName", user_name);
+    file_setting_->setValue("UserInfo/PassWord", pass_word);
     file_setting_->sync();
     qDebug() << "写入最后运行时间："<< formattedTime;
 }
@@ -177,6 +179,7 @@ bool DataManage::CheckTablesExist()
     if (!query.next())
     {
         QString createTableQuery = "CREATE TABLE RoleInfo ("
+                                   "roleUUID TEXT,"
                                    "roleName TEXT,"
                                    "roleLife INTEGER,"
                                    "rolePrestige INTEGER,"
@@ -194,9 +197,10 @@ bool DataManage::CheckTablesExist()
             return false;
         }
         // 插入初始值
-        QString insertQuery = "INSERT INTO RoleInfo (roleName, roleLife, rolePrestige, roleExp, roleAgg, roleDef, roleHp, roleCurExp, roleLv) "
-                              "VALUES (:roleName, :roleLife, :rolePrestige, :roleExp, :roleAgg, :roleDef, :roleHp, :roleCurExp, :roleLv)";
+        QString insertQuery = "INSERT INTO RoleInfo (roleUUID, roleName, roleLife, rolePrestige, roleExp, roleAgg, roleDef, roleHp, roleCurExp, roleLv) "
+                              "VALUES (:roleUUID, :roleName, :roleLife, :rolePrestige, :roleExp, :roleAgg, :roleDef, :roleHp, :roleCurExp, :roleLv)";
         query.prepare(insertQuery);
+        query.bindValue(":roleUUID", "UUID");
         query.bindValue(":roleName", "GM姜子牙");
         query.bindValue(":roleLife", 25);
         query.bindValue(":rolePrestige", 10);
@@ -230,6 +234,7 @@ bool DataManage::CheckTablesExist()
     if (!query.next())
     {
         QString createTableQuery = "CREATE TABLE RoleAtt ("
+                                   "roleUUID TEXT,"
                                    "roleName TEXT,"
                                    "attMetal INTEGER,"
                                    "attWood INTEGER,"
@@ -244,9 +249,10 @@ bool DataManage::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleAtt (roleName, attMetal, attWood, attWater, attFire, attEarth) "
-                              "VALUES (:roleName, :attMetal, :attWood, :attWater, :attFire, :attEarth)";
+        QString insertQuery = "INSERT INTO RoleAtt (roleUUID, roleName, attMetal, attWood, attWater, attFire, attEarth) "
+                              "VALUES (:roleUUID, :roleName, :attMetal, :attWood, :attWater, :attFire, :attEarth)";
         query.prepare(insertQuery);
+        query.bindValue(":roleUUID", "UUID");
         query.bindValue(":roleName", "GM姜子牙");
         query.bindValue(":attMetal", 0);
         query.bindValue(":attWood", 0);
@@ -277,6 +283,7 @@ bool DataManage::CheckTablesExist()
     if (!query.next())
     {
         QString createTableQuery = "CREATE TABLE RoleEquip ("
+                                   "roleUUID TEXT,"
                                    "roleName TEXT,"
                                    "equipWeapon TEXT,"
                                    "equipMagic TEXT,"
@@ -294,9 +301,10 @@ bool DataManage::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleEquip (roleName, equipWeapon, equipMagic, equipHelmet, equipClothing, equipBritches, equipShoe, equipJewelry, equipMount) "
-                              "VALUES (:roleName, :equipWeapon, :equipMagic, :equipHelmet, :equipClothing, :equipBritches, :equipShoe, :equipJewelry, :equipMount)";
+        QString insertQuery = "INSERT INTO RoleEquip (roleUUID, roleName, equipWeapon, equipMagic, equipHelmet, equipClothing, equipBritches, equipShoe, equipJewelry, equipMount) "
+                              "VALUES (:roleUUID, :roleName, :equipWeapon, :equipMagic, :equipHelmet, :equipClothing, :equipBritches, :equipShoe, :equipJewelry, :equipMount)";
         query.prepare(insertQuery);
+        query.bindValue(":roleUUID", "UUID");
         query.bindValue(":roleName", "GM姜子牙");
         query.bindValue(":equipWeapon", "闪光机械键盘");
         query.bindValue(":equipMagic", "陈年保温杯");
@@ -329,6 +337,7 @@ bool DataManage::CheckTablesExist()
     if (!query.next())
     {
         QString createTableQuery = "CREATE TABLE RoleItem ("
+                                   "roleUUID TEXT,"
                                    "roleName TEXT,"
                                    "roleMoney INTEGER,"
                                    "renameCard INTEGER"
@@ -340,9 +349,10 @@ bool DataManage::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleItem (roleName, roleMoney, renameCard) "
-                              "VALUES (:roleName, :roleMoney, :renameCard)";
+        QString insertQuery = "INSERT INTO RoleItem (roleUUID, roleName, roleMoney, renameCard) "
+                              "VALUES (:roleUUID, :roleName, :roleMoney, :renameCard)";
         query.prepare(insertQuery);
+        query.bindValue(":roleUUID", "UUID");
         query.bindValue(":roleName", "GM姜子牙");
         query.bindValue(":roleMoney",100);
         query.bindValue(":renameCard", 2);
@@ -369,6 +379,7 @@ bool DataManage::CheckTablesExist()
     if (!query.next())
     {
         QString createTableQuery = "CREATE TABLE RoleCoefficient ("
+                                   "roleUUID TEXT,"
                                    "roleName TEXT,"
                                    "RCLife INTEGER,"
                                    "RCBasicEvent INTEGER,"
@@ -385,9 +396,12 @@ bool DataManage::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleCoefficient (roleName, RCLife, RCBasicEvent, RCAttEvent, RCSurviveDisaster, RCPrestigeEvent, RCSpecialEvent, roleAptitude) "
-                              "VALUES (:roleName, :RCLife, :RCBasicEvent, :RCAttEvent, :RCSurviveDisaster, :RCPrestigeEvent, :RCSpecialEvent, :roleAptitude)";
+        QString insertQuery = "INSERT INTO RoleCoefficient (roleUUID, roleName, RCLife, RCBasicEvent, RCAttEvent, "
+                              "RCSurviveDisaster, RCPrestigeEvent, RCSpecialEvent, roleAptitude) "
+                              "VALUES (:roleUUID, :roleName, :RCLife, :RCBasicEvent, :RCAttEvent, :RCSurviveDisaster,"
+                              " :RCPrestigeEvent, :RCSpecialEvent, :roleAptitude)";
         query.prepare(insertQuery);
+        query.bindValue(":roleUUID", "UUID");
         query.bindValue(":roleName", "GM姜子牙");
         query.bindValue(":RCLife",1);
         query.bindValue(":RCBasicEvent", 1);
@@ -435,6 +449,16 @@ QString DataManage::GetTableToInfo(QString table_name, QString column_name)
 QString DataManage::GetLastGameTime()
 {
     return file_setting_->value("Date/LastGameDate").toString();
+}
+
+QString DataManage::GetUserName()
+{
+    return file_setting_->value("UserInfo/UserName").toString();
+}
+
+QString DataManage::GetPassWord()
+{
+    return file_setting_->value("UserInfo/PassWord").toString();
 }
 
 void DataManage::DatabaseClose()

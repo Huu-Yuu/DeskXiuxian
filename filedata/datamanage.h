@@ -39,14 +39,24 @@ public:
     QString GetLastGameTime();
 
     /**
+     * @brief 获取上次游戏账号
+     */
+    QString GetUserName();
+
+    /**
+     * @brief 获取上次游戏密码
+     */
+    QString GetPassWord();
+
+    /**
      * @brief 关闭数据库
      */
     void DatabaseClose();
 
     /**
-     * @brief 写入游戏最后运行时间
+     * @brief 写入游戏配置，最后登录时间、用户信息
      */
-    void SetGameLastPlayTime();
+    void SetGameConfigInfo(QString user_name = nullptr, QString pass_word = nullptr);
 
     void run();
 

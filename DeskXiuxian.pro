@@ -20,7 +20,8 @@ SOURCES += \
     main.cpp \
     mainctrl.cpp \
     mainui.cpp \
-    role/rolesystem.cpp
+    role/rolesystem.cpp \
+    ui/loginwindow.cpp
 
 HEADERS += \
     filedata/datamanage.h \
@@ -32,10 +33,12 @@ HEADERS += \
     mainui.h \
     public/public_macro.h \
     public/public_type.h \
-    role/rolesystem.h
+    role/rolesystem.h \
+    ui/loginwindow.h
 
 FORMS += \
-    mainui.ui
+    mainui.ui \
+    ui/loginwindow.ui
 
 TRANSLATIONS += \
     DeskXiuxian_zh_CN.ts
