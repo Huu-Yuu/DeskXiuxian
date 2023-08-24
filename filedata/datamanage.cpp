@@ -400,166 +400,22 @@ void DataManage::SlotSaveRoleInfoToDatabase(QJsonObject role_data)
     this->role_data = role_data;
     start();
     return;
-    if(database_.isOpen())
-    {
-        QString roleName = role_data.value("roleName").toString();
-
-        QSqlQuery query(database_);
-        query.prepare("SELECT COUNT(*) FROM RoleInfo WHERE roleName = :roleName");
-        query.bindValue(":roleName", roleName);
-
-        if (query.exec() && query.next())
-        {
-            int rowCount = query.value(0).toInt();
-            if (rowCount > 0)
-            {
-                // 执行更新操作
-                QString updateQuery = "UPDATE RoleInfo SET roleLife = :roleLife, rolePrestige = :rolePrestige, roleLv = :roleLv, roleCurExp = :roleCurExp,"
-                                      "roleExp = :roleExp, roleAgg = :roleAgg, roleDef = :roleDef, roleHp = :roleHp WHERE roleName = :roleName";
-                query.prepare(updateQuery);
-            }
-            else
-            {
-                // 执行插入操作
-                QString insertQuery = "INSERT INTO RoleInfo (roleName, roleLife, rolePrestige, roleCultivation, roleExp, roleAgg, roleDef, roleHp, roleCurExp) "
-                                      "VALUES (:roleName, :roleLife, :rolePrestige, :roleCultivation, :roleExp, :roleAgg, :roleDef, :roleHp, :roleCurExp)";
-                query.prepare(insertQuery);
-            }
-
-            query.bindValue(":roleName", roleName);
-            query.bindValue(":roleLife", role_data.value("roleLife").toInt());
-            query.bindValue(":rolePrestige", role_data.value("rolePrestige").toInt());
-            query.bindValue(":roleLv", role_data.value("roleLv").toInt());
-            query.bindValue(":roleExp", role_data.value("roleExp").toInt());
-            query.bindValue(":roleAgg", role_data.value("roleAgg").toInt());
-            query.bindValue(":roleDef", role_data.value("roleDef").toInt());
-            query.bindValue(":roleHp", role_data.value("roleHp").toInt());
-            query.bindValue(":roleCurExp", role_data.value("roleCurExp").toInt());
-            if (!query.exec())
-            {
-                qDebug() << "保存数据时出错:" << query.lastError().text();
-                database_.close();
-                return;
-            }
-        }
-//        database_.close();
-    }
-    else
-    {
-        qDebug() << "数据库未打开";
-    }
 }
 
 void DataManage::SlotSaveRoleItemToDatabase(QJsonObject role_item_data)
 {
-//    if(!database_.open())
-//    {
-//        qDebug() << "数据库打开失败";
-//        return;
-//    }
     is_SaveRoleItem = true;
     this->role_item_data = role_item_data;
     start();
     return;
-    if(database_.isOpen())
-    {
-        QString roleName = role_item_data.value("roleName").toString();
-
-        QSqlQuery query(database_);
-        query.prepare("SELECT COUNT(*) FROM RoleItem WHERE roleName = :roleName");
-        query.bindValue(":roleName", roleName);
-
-        if (query.exec() && query.next())
-        {
-            int rowCount = query.value(0).toInt();
-            if (rowCount > 0)
-            {
-                // 执行更新操作
-                QString updateQuery = "UPDATE RoleItem SET roleMoney = :roleMoney, renameCard = :renameCard WHERE roleName = :roleName";
-                query.prepare(updateQuery);
-            }
-            else
-            {
-                // 执行插入操作
-                QString insertQuery = "INSERT INTO RoleItem (roleName, roleMoney, renameCard) "
-                                      "VALUES (:roleName, :roleMoney, :renameCard)";
-                query.prepare(insertQuery);
-            }
-
-            query.bindValue(":roleName", roleName);
-            query.bindValue(":roleMoney", role_item_data.value("roleMoney").toInt());
-            query.bindValue(":renameCard", role_item_data.value("renameCard").toInt());
-            if (!query.exec())
-            {
-                qDebug() << "保存数据时出错:" << query.lastError().text();
-                return;
-            }
-        }
-//        database_.close();
-    }
-    else
-    {
-        qDebug() << "数据库未打开";
-    }
 }
 
 void DataManage::SlotSaveRoleCoefficientToDatabase(QJsonObject RC_data)
 {
-//    if(!database_.open())
-//    {
-//        qDebug() << "数据库打开失败";
-//        return;
-//    }
     is_SaveRoleCoefficient = true;
     this->RC_data = RC_data;
     start();
     return;
-    if(database_.isOpen())
-    {
-        QString roleName = RC_data.value("roleName").toString();
-
-        QSqlQuery query(database_);
-        query.prepare("SELECT COUNT(*) FROM RoleCoefficient WHERE roleName = :roleName");
-        query.bindValue(":roleName", roleName);
-
-        if (query.exec() && query.next())
-        {
-            int rowCount = query.value(0).toInt();
-            if (rowCount > 0)
-            {
-                // 执行更新操作
-                QString updateQuery = "UPDATE RoleCoefficient SET RCLife = :RCLife, RCBasicEvent = :RCBasicEvent, RCAttEvent = :RCAttEvent, RCSurviveDisaster = :RCSurviveDisaster"
-                                      ", RCPrestigeEvent = :RCPrestigeEvent, RCSpecialEvent = :RCSpecialEvent, roleAptitude = :roleAptitude WHERE roleName = :roleName";
-                query.prepare(updateQuery);
-            }
-            else
-            {
-                // 执行插入操作
-                QString insertQuery = "INSERT INTO RoleCoefficient (roleName,  RCLife, RCBasicEvent, RCAttEvent, RCSurviveDisaster, RCPrestigeEvent, RCSpecialEvent, roleAptitude) "
-                                      "VALUES (:roleName, :RCLife, :RCBasicEvent, :RCAttEvent, :RCPrestigeEvent, :RCSpecialEvent, :roleAptitude)";
-                query.prepare(insertQuery);
-            }
-
-            query.bindValue(":roleName", roleName);
-            query.bindValue(":RCLife", RC_data.value("RCLife").toInt());
-            query.bindValue(":RCBasicEvent", RC_data.value("RCBasicEvent").toInt());
-            query.bindValue(":RCAttEvent", RC_data.value("RCAttEvent").toInt());
-            query.bindValue(":RCSurviveDisaster", RC_data.value("RCSurviveDisaster").toInt());
-            query.bindValue(":RCPrestigeEvent", RC_data.value("RCPrestigeEvent").toInt());
-            query.bindValue(":RCSpecialEvent", RC_data.value("RCSpecialEvent").toInt());
-            query.bindValue(":roleAptitude", RC_data.value("roleAptitude").toInt());
-            if (!query.exec())
-            {
-                qDebug() << "保存数据时出错:" << query.lastError().text();
-                return;
-            }
-        }
-//        database_.close();
-    }
-    else
-    {
-        qDebug() << "数据库未打开";
-    }
 }
 
 void DataManage::WriteRoleInfoToLocalDatabase()

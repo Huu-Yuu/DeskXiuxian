@@ -8,6 +8,7 @@
 #include "filedata/datamanage.h"
 #include "game_progress/gameprogress.h"
 #include "item/itemsystem.h"
+#include "ui/loginwindow.h"
 
 /**
  * @brief 主控程序
@@ -31,6 +32,11 @@ public:
      * @brief 显示主界面
      */
     void ShowMainUi();
+
+    /**
+     * @brief 登录校验
+     */
+    bool LoginVerification(QString user_name, QString pass_word);
 
 public slots:
 
@@ -61,6 +67,7 @@ private:
      */
     void InitRoleInfo();
 
+    LoginWindow* login_obj_;    // 登录器
     MainUI* ui_obj_;   // 角色UI类
     RoleSystem* role_obj_; // 角色系统对象
     Logger* logger_obj_;   // 日志管理器对象

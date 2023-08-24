@@ -28,15 +28,15 @@ void DataManage::InitSettingFile()
 
 QString DataManage::GetLastGameTime()
 {
-    return file_setting_->value("Date/LastGameDate").toString();
+    return file_setting_->value("Date/LastGameDate", "").toString();
 }
 
-QString DataManage::GetUserName()
+QString DataManage::GetSettingUserName()
 {
-    return file_setting_->value("UserInfo/UserName").toString();
+    return file_setting_->value("UserInfo/UserName", "").toString();
 }
 
-QString DataManage::GetPassWord()
+QString DataManage::GetSettingPassWord()
 {
-    return file_setting_->value("UserInfo/PassWord").toString();
+    return file_setting_->value("UserInfo/PassWord", "").toString();
 }

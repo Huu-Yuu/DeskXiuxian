@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>300</width>
-    <height>500</height>
+    <height>450</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>300</width>
-    <height>500</height>
+    <height>450</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>300</width>
-    <height>500</height>
+    <height>450</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -57,7 +57,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>390</y>
+     <y>340</y>
      <width>251</width>
      <height>61</height>
     </rect>
@@ -76,7 +76,10 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="star_btn">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -89,7 +92,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="close_btn">
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -103,11 +106,11 @@
     </item>
    </layout>
   </widget>
-  <widget class="QLabel" name="label_5">
+  <widget class="QLabel" name="tip_text">
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>460</y>
+     <y>410</y>
      <width>191</width>
      <height>21</height>
     </rect>
@@ -116,7 +119,7 @@
     <string notr="true">color: rgb(239, 41, 41);</string>
    </property>
    <property name="text">
-    <string>提示：</string>
+    <string>提示：若未注册，请先注册</string>
    </property>
   </widget>
   <widget class="QWidget" name="horizontalLayoutWidget_2">
@@ -151,7 +154,7 @@
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>270</y>
+     <y>260</y>
      <width>201</width>
      <height>31</height>
     </rect>
@@ -183,7 +186,7 @@
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>320</y>
+     <y>300</y>
      <width>201</width>
      <height>31</height>
     </rect>

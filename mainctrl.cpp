@@ -2,16 +2,25 @@
 
 MainCtrl::MainCtrl(QObject *parent) : QObject(parent)
 {
+#if LOCAL_DATABASE
     ui_obj_ = new MainUI;
     role_obj_ = RoleSystem::GetInstance();
+    role_item_ = ItemSystem::GetInstance();
+#else
+    login_obj_ = new LoginWindow;
+    ui_obj_ = new MainUI;
+    role_obj_ = RoleSystem::GetInstance();
+    role_item_ = ItemSystem::GetInstance();
+#endif
     logger_obj_ = Logger::GetInstance();
     data_file_ = DataManage::GetInstance();
     game_obj_ = GameProgress::GetInstance();
-    role_item_ = ItemSystem::GetInstance();
 
+
+#if LOCAL_DATABASE
     // 初始化UI和角色数据
     InitRoleInfo();
-
+#endif
     // 日志输出
     connect(this, &MainCtrl::SignalLogOut,logger_obj_,&Logger::SlotOutTolog);
     connect(ui_obj_, &MainUI::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
@@ -37,6 +46,15 @@ MainCtrl::MainCtrl(QObject *parent) : QObject(parent)
     // 消息发送到窗口
     connect(role_obj_, &RoleSystem::SignalShowMsgToUI, ui_obj_, &MainUI::SlotShowMsg);
     connect(this, &MainCtrl::SignalShowMsgToUI, ui_obj_, &MainUI::SlotShowMsg);
+
+#if LOCAL_DATABASE == 0
+    // 获取本地登录记录，检查是否可以自动登录
+    if(!data_file_->AutomaticLogin())
+    {
+        // 进入登录、注册
+        login_obj_->show();
+    }
+#endif
 
 }
 

@@ -13,7 +13,9 @@
 #include <QMutex>
 #include <QThread>
 #include <QJsonObject>
+#include <QUuid>
 #include "public/public_macro.h"
+#include "logger/logger.h"
 
 /**
  * @brief 文件管理类
@@ -49,16 +51,6 @@ public:
     QString GetLastGameTime();
 
     /**
-     * @brief 获取上次游戏账号
-     */
-    QString GetUserName();
-
-    /**
-     * @brief 获取上次游戏密码
-     */
-    QString GetPassWord();
-
-    /**
      * @brief 关闭数据库
      */
     void DatabaseClose();
@@ -68,9 +60,40 @@ public:
      */
     void SetGameConfigInfo(QString user_name = nullptr, QString pass_word = nullptr);
 
+    /**
+     * @brief 登录校验
+     */
+    bool LoginVerification(QString user_name, QString pass_word);
+
+    /**
+     * @brief 账号注册
+     */
+    bool AccountRegistration(QString user_name, QString pass_word);
+
+    /**
+     * @brief 自动登录
+     */
+    bool AutomaticLogin();
+
+//    /**
+//     * @brief 获取用户UUID
+//     */
+//    bool GetUserUUID();
+
     void run();
 
     ~DataManage();
+
+    /**
+     * @brief 打印日志
+     */
+    void DebugOutToLog(QString msg);
+
+signals:
+    /**
+     * @brief 发送日志输出信号
+     */
+    void SignalLogOut(QtMsgType type, const QMessageLogContext& context, const QString& message);
 
 public slots:
 
@@ -143,6 +166,16 @@ private:
     void WriteRoleInfoToLocalDatabase();
 
     /**
+     * @brief 获取本地保存的账号
+     */
+    QString GetSettingUserName();
+
+    /**
+     * @brief 获取本地保存的密码
+     */
+    QString GetSettingPassWord();
+
+    /**
      * @brief 配置文件读取
      */
     QSettings* file_setting_;
@@ -160,6 +193,8 @@ private:
     QJsonObject role_data;      // 角色基本数据
     QJsonObject role_item_data; // 角色物品数据
     QJsonObject RC_data;        // 角色系数
+
+    QString user_UUID_;          // 账号UUID
 
 };
 
