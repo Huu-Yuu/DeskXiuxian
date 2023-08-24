@@ -23,29 +23,3 @@ void DataManage::InitRemoteData()
         // ...
     }
 }
-
-void DataManage::OpenDatabase(QString host, int port, QString username, QString password, QString databaseName)
-{
-    // 打开现有数据库连接
-    database_ = QSqlDatabase::addDatabase("QMYSQL");
-    database_.setHostName(host);
-    database_.setPort(port);
-    database_.setUserName(username);
-    database_.setPassword(password);
-    database_.setDatabaseName(databaseName);
-
-    // 打开数据库连接
-    if (!database_.open())
-    {
-        qDebug() << "无法打开数据库:" << database_.lastError().text();
-    }
-    else
-    {
-        qDebug() << "数据库已经打开.";
-        if(!CheckTablesExist()) //检查并创建表单
-        {
-            qDebug() << "检查表单时出现错误";
-            database_.close();
-        }
-    }
-}
