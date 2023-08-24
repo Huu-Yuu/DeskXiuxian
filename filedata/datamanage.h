@@ -28,6 +28,16 @@ public:
     static DataManage* GetInstance();
 
     /**
+     * @brief 初始化配置文件
+     */
+    void InitSettingFile();
+
+    /**
+     * @brief 初始化远程数据库
+     */
+    void InitRemoteData();
+
+    /**
      * @brief 获取表单中对应的列数据
      * @return 查询不到则返回空，否则返回查询值
      */
@@ -92,8 +102,6 @@ private:
      */
     void OpenDatabase(QString path);
 
-    void OpenDatabase(QString host, int port, QString username, QString password, QString databaseName);
-
     /**
      * @brief 创建数据库
      */
@@ -105,9 +113,39 @@ private:
     bool CheckTablesExist();
 
     /**
+     * @brief 写入角色基本信息到     远程数据库
+     */
+    void WriteRoleInfoToRemoteDatabase();
+
+    /**
+     * @brief 写入角色物品信息到     远程数据库
+     */
+    void WriteRoleItemsToRemoteDatabase();
+
+    /**
+     * @brief 写入角色计算系数信息到   远程数据库
+     */
+    void WriteRoleCoefficientToRemoteDatabase();
+
+    /**
+     * @brief 写入角色物品信息到     本地数据库
+     */
+    void WriteRoleItemsToLocalDatabase();
+
+    /**
+     * @brief 写入角色计算系数信息到   本地数据库
+     */
+    void WriteRoleCoefficientToLocalDatabase();
+
+    /**
+     * @brief 写入角色基本信息到     本地数据库
+     */
+    void WriteRoleInfoToLocalDatabase();
+
+    /**
      * @brief 配置文件读取
      */
-    QSettings *file_setting_;
+    QSettings* file_setting_;
 
     /**
      * @brief 数据库操作
@@ -119,9 +157,9 @@ private:
     bool is_SaveRoleCoefficient = false;
     bool is_GetDataBaseInfo = false;
 
-    QJsonObject role_data;
-    QJsonObject role_item_data;
-    QJsonObject RC_data;
+    QJsonObject role_data;      // 角色基本数据
+    QJsonObject role_item_data; // 角色物品数据
+    QJsonObject RC_data;        // 角色系数
 
 };
 

@@ -21,7 +21,9 @@ SOURCES += \
     mainctrl.cpp \
     mainui.cpp \
     role/rolesystem.cpp \
-    ui/loginwindow.cpp
+    ui/loginwindow.cpp \
+    filedata/datamanage_settings.cpp \
+    filedata/datamanage_remote_data.cpp
 
 HEADERS += \
     filedata/datamanage.h \
