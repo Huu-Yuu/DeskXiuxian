@@ -23,7 +23,9 @@ SOURCES += \
     role/rolesystem.cpp \
     ui/loginwindow.cpp \
     filedata/datamanage_settings.cpp \
-    filedata/datamanage_remote_data.cpp
+    filedata/datamanage_remote_data.cpp \
+    ui/modifyrolename.cpp \
+    public/public_func.cpp
 
 HEADERS += \
     filedata/datamanage.h \
@@ -36,11 +38,15 @@ HEADERS += \
     public/public_macro.h \
     public/public_type.h \
     role/rolesystem.h \
-    ui/loginwindow.h
+    ui/loginwindow.h \
+    ui/modifyrolename.h \
+    public/public_func.h \
+    public/error_code.h
 
 FORMS += \
     mainui.ui \
-    ui/loginwindow.ui
+    ui/loginwindow.ui \
+    ui/modifyrolename.ui
 
 TRANSLATIONS += \
     DeskXiuxian_zh_CN.ts

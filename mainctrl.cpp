@@ -1,7 +1,11 @@
 #include "mainctrl.h"
 
-MainCtrl::MainCtrl(QObject *parent) : QObject(parent)
+MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
 {
+
+    //注册MessageHandler(注意要有日志文件夹)
+    qInstallMessageHandler(Logger::OutputMessageHandler);
+
 #if LOCAL_DATABASE
     ui_obj_ = new MainUI;
     role_obj_ = RoleSystem::GetInstance();
@@ -22,7 +26,7 @@ MainCtrl::MainCtrl(QObject *parent) : QObject(parent)
     InitRoleInfo();
 #endif
     // 日志输出
-    connect(this, &MainCtrl::SignalLogOut,logger_obj_,&Logger::SlotOutTolog);
+    connect(this, &MainCtrl::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
     connect(ui_obj_, &MainUI::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
 
     // 绑定修炼
@@ -70,7 +74,7 @@ MainCtrl::~MainCtrl()
         delete ui_obj_;
         ui_obj_ = NULL;
     }
-    if(role_obj_ !=NULL)
+    if(role_obj_ != NULL)
     {
         delete role_obj_;
         role_obj_ = NULL;
@@ -128,34 +132,34 @@ void MainCtrl::InitRoleInfo()
     // 从数据库获取角色基本信息
     QString last_game_time = "最近一次离线时间是：" + data_file_->GetLastGameTime();
     ui_obj_->AddMessage(last_game_time);
-    QString name = data_file_->GetTableToInfo("RoleInfo","roleName");
-    QString life = data_file_->GetTableToInfo("RoleInfo","roleLife");
-    QString prestige = data_file_->GetTableToInfo("RoleInfo","rolePrestige");
-    QString LV = data_file_->GetTableToInfo("RoleInfo","roleLv");
+    QString name = data_file_->GetTableToInfo("RoleInfo", "roleName");
+    QString life = data_file_->GetTableToInfo("RoleInfo", "roleLife");
+    QString prestige = data_file_->GetTableToInfo("RoleInfo", "rolePrestige");
+    QString LV = data_file_->GetTableToInfo("RoleInfo", "roleLv");
     CultivationStage cultivation = static_cast<CultivationStage>(LV.toInt());
-    QString cur_exp = data_file_->GetTableToInfo("RoleInfo","roleCurExp");
-    QString exp = data_file_->GetTableToInfo("RoleInfo","roleExp");
-    QString agg = data_file_->GetTableToInfo("RoleInfo","roleAgg");
-    QString def = data_file_->GetTableToInfo("RoleInfo","roleDef");
-    QString hp = data_file_->GetTableToInfo("RoleInfo","roleHp");
+    QString cur_exp = data_file_->GetTableToInfo("RoleInfo", "roleCurExp");
+    QString exp = data_file_->GetTableToInfo("RoleInfo", "roleExp");
+    QString agg = data_file_->GetTableToInfo("RoleInfo", "roleAgg");
+    QString def = data_file_->GetTableToInfo("RoleInfo", "roleDef");
+    QString hp = data_file_->GetTableToInfo("RoleInfo", "roleHp");
 
     // 从数据库获取角色获取装备
-    QString weapon = data_file_->GetTableToInfo("RoleEquip","equipWeapon");
-    QString magic = data_file_->GetTableToInfo("RoleEquip","equipMagic");
-    QString helmet = data_file_->GetTableToInfo("RoleEquip","equipHelmet");
-    QString clothing = data_file_->GetTableToInfo("RoleEquip","equipClothing");
-    QString britches = data_file_->GetTableToInfo("RoleEquip","equipBritches");
-    QString shoe = data_file_->GetTableToInfo("RoleEquip","equipShoe");
-    QString jewelry = data_file_->GetTableToInfo("RoleEquip","equipJewelry");
-    QString mount = data_file_->GetTableToInfo("RoleEquip","equipMount");
+    QString weapon = data_file_->GetTableToInfo("RoleEquip", "equipWeapon");
+    QString magic = data_file_->GetTableToInfo("RoleEquip", "equipMagic");
+    QString helmet = data_file_->GetTableToInfo("RoleEquip", "equipHelmet");
+    QString clothing = data_file_->GetTableToInfo("RoleEquip", "equipClothing");
+    QString britches = data_file_->GetTableToInfo("RoleEquip", "equipBritches");
+    QString shoe = data_file_->GetTableToInfo("RoleEquip", "equipShoe");
+    QString jewelry = data_file_->GetTableToInfo("RoleEquip", "equipJewelry");
+    QString mount = data_file_->GetTableToInfo("RoleEquip", "equipMount");
 
     // 从数据库获取角色获取物品、道具
-    QString money = data_file_->GetTableToInfo("RoleItem","roleMoney");
-    QString rename_card = data_file_->GetTableToInfo("RoleItem","renameCard");
+    QString money = data_file_->GetTableToInfo("RoleItem", "roleMoney");
+    QString rename_card = data_file_->GetTableToInfo("RoleItem", "renameCard");
 
     // 从数据库获取角色属性相关系数
-    QString life_Coefficient = data_file_->GetTableToInfo("RoleCoefficient","RCLife");
-    QString RC_SurviveDisaster = data_file_->GetTableToInfo("RoleCoefficient","RCSurviveDisaster");
+    QString life_Coefficient = data_file_->GetTableToInfo("RoleCoefficient", "RCLife");
+    QString RC_SurviveDisaster = data_file_->GetTableToInfo("RoleCoefficient", "RCSurviveDisaster");
 
     // 将获取到的值赋值给对象
     role_obj_->SetRoleName(name);

@@ -17,7 +17,7 @@ class MainCtrl : public QObject
 {
     Q_OBJECT
 public:
-    explicit MainCtrl(QObject *parent = nullptr);
+    explicit MainCtrl(QObject* parent = nullptr);
 
     void StartFishing();
 
@@ -37,6 +37,11 @@ public:
      * @brief 登录校验
      */
     bool LoginVerification(QString user_name, QString pass_word);
+
+    /**
+     * @brief 初始化角色网络数据
+     */
+    void InitRoleNetworkData();
 
 public slots:
 
