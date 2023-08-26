@@ -78,7 +78,7 @@
     <item>
      <widget class="QPushButton" name="star_btn">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="minimumSize">
        <size>
@@ -86,21 +86,33 @@
         <height>30</height>
        </size>
       </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
       <property name="text">
-       <string>登录/注册</string>
+       <string>登录</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="close_btn">
+     <widget class="QPushButton" name="reg_btn">
       <property name="minimumSize">
        <size>
         <width>0</width>
         <height>30</height>
        </size>
       </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
       <property name="text">
-       <string>关闭</string>
+       <string>注册</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
@@ -109,17 +121,32 @@
   <widget class="QLabel" name="tip_text">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>410</y>
-     <width>191</width>
-     <height>21</height>
+     <x>0</x>
+     <y>405</y>
+     <width>300</width>
+     <height>25</height>
     </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>300</width>
+     <height>25</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>300</width>
+     <height>25</height>
+    </size>
    </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(239, 41, 41);</string>
    </property>
    <property name="text">
     <string>提示：若未注册，请先注册</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QWidget" name="horizontalLayoutWidget_2">
@@ -146,7 +173,11 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="username_text"/>
+     <widget class="QLineEdit" name="username_text">
+      <property name="maxLength">
+       <number>16</number>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -175,8 +206,11 @@
     </item>
     <item>
      <widget class="QLineEdit" name="password_text">
+      <property name="maxLength">
+       <number>16</number>
+      </property>
       <property name="echoMode">
-       <enum>QLineEdit::Password</enum>
+       <enum>QLineEdit::Normal</enum>
       </property>
      </widget>
     </item>

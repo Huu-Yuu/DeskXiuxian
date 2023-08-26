@@ -44,6 +44,7 @@ public:
      * @return 查询不到则返回空，否则返回查询值
      */
     QString GetTableToInfo(QString table_name, QString column_name);
+    QString GetTableToInfo(const QString leach_name, QString table_name, QString column_name);
 
     /**
      * @brief 获取上次游戏时间
@@ -62,23 +63,47 @@ public:
 
     /**
      * @brief 登录校验
+     * @return 1-登录成功 0-账号或密码错误 -1-数据库连接失败
      */
-    bool LoginVerification(QString user_name, QString pass_word);
+    int LoginVerification(const QString user_name, const QString pass_word);
 
     /**
      * @brief 账号注册
+     * @return 1-注册成功 0-注册失败 -2-数据库连接失败 -1-账号已存在
      */
-    bool AccountRegistration(QString user_name, QString pass_word);
+    int AccountRegistration(const QString user_name, const QString pass_word, const QString email);
+
+    /**
+     * @brief 检查角色昵称是否可用
+     */
+    bool CheckRoleNameIsOk(const QString role_name);
+
+    /**
+     * @brief 修改角色名
+     * @return 1-修改成功 0-修改失败 -1-数据库操作失败
+     */
+    int ModifyRoleName(const QString new_name);
 
     /**
      * @brief 自动登录
      */
     bool AutomaticLogin();
 
-//    /**
-//     * @brief 获取用户UUID
-//     */
-//    bool GetUserUUID();
+    /**
+     * @brief 获取用户UUID
+     */
+    QString GetUserUUID(const QString user_name,const QString pass_word);
+
+    /**
+     * @brief 检查用户是否首次登录
+     * @return 1-首次登录 0-非首次登录 -1-数据库查询失败
+     */
+    int CheckUserLogginIsFist(const QString user_name,const QString pass_word);
+
+    /**
+     * @brief 初始化角色信息
+     */
+    int InitRoleData();
 
     void run();
 
@@ -181,14 +206,19 @@ private:
     QSettings* file_setting_;
 
     /**
-     * @brief 数据库操作
+     * @brief 数据库链接
      */
     QSqlDatabase database_;
+    /**
+     * @brief 数据库查询语句
+     */
+    QSqlQuery sql_query_;
 
-    bool is_SaveRoleInfo = false;
-    bool is_SaveRoleItem = false;
-    bool is_SaveRoleCoefficient = false;
-    bool is_GetDataBaseInfo = false;
+    bool is_SaveRoleInfo = false;           // 保存角色信息开关
+    bool is_SaveRoleItem = false;           // 保存角色物品开关
+    bool is_SaveRoleCoefficient = false;    // 保存角色系数开关
+    bool is_GetDataBaseInfo = false;        // 获取数据库信息开关
+    bool is_FirstCreation = false;          // 是否首次创建，用于命名角色
 
     QJsonObject role_data;      // 角色基本数据
     QJsonObject role_item_data; // 角色物品数据

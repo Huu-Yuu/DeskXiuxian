@@ -22,19 +22,6 @@ LoginWindow::LoginWindow(QWidget *parent) :
                     )
                 );
 
-
-    // 写入正则限制
-    QRegularExpression user_name_Regex("^[A-Za-z0-9]{6,16}$");
-    QRegularExpressionValidator userNamelValidator(user_name_Regex);
-    ui->username_text->setValidator(&userNamelValidator);
-
-    QRegularExpression pass_word_Regex("^[A-Za-z0-9]{6,16}$");
-    QRegularExpressionValidator passWordlValidator(pass_word_Regex);
-    ui->password_text->setValidator(&passWordlValidator);
-
-    QRegularExpression emailRegex("\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\\b");
-    QRegularExpressionValidator emailValidator(emailRegex);
-    ui->email_text->setValidator(&emailValidator);
 }
 
 LoginWindow::~LoginWindow()
@@ -54,87 +41,132 @@ QJsonObject LoginWindow::GetUserInputInfo()
     return user_obj;
 }
 
-void LoginWindow::on_email_text_textChanged(const QString &arg1)
+void LoginWindow::on_username_text_editingFinished()
 {
-    if (ui->email_text->hasAcceptableInput()) {
-        ui->email_text->setStyleSheet("");
-        email_ok = true;
-        CheckLoginIsPossible();
-    } else {
-        ui->email_text->setStyleSheet("QLineEdit { background-color: red; }");
-        email_ok = false;
-    }
-    qDebug() << "获取到输入的邮箱为：" << arg1;
-}
-
-
-void LoginWindow::on_username_text_textChanged(const QString &arg1)
-{
-    if (ui->username_text->hasAcceptableInput()) {
+    userName_ = ui->username_text->text();
+    QRegularExpression regex("^[A-Za-z0-9]{6,16}$"); // 正则表达式规则
+    QRegularExpressionMatch match = regex.match(userName_); // 进行匹配
+    if (match.hasMatch() && match.capturedStart() == 0 && match.capturedEnd() == userName_.length())
+    {
         ui->username_text->setStyleSheet("");
         user_name_ok = true;
-        CheckLoginIsPossible();
-    } else {
-        ui->username_text->setStyleSheet("QLineEdit { background-color: red; }");
-        user_name_ok = false;
-    }
-    qDebug() << "获取到输入的账号为：" << arg1;
-}
-
-
-void LoginWindow::on_password_text_textChanged(const QString &arg1)
-{
-    if (ui->password_text->hasAcceptableInput()) {
-        ui->password_text->setStyleSheet("");
-        pass_word_ok = true;
-        CheckLoginIsPossible();
-    } else {
-        ui->password_text->setStyleSheet("QLineEdit { background-color: red; }");
-        pass_word_ok = false;
-    }
-    qDebug() << "获取到输入的密码为：" << arg1;
-}
-
-void LoginWindow::CheckLoginIsPossible()
-{
-    if(user_name_ok && pass_word_ok && email_ok)
-    {
-        ui->star_btn->setEnabled(true);
+        qDebug() <<"匹配完成，获取到输入的账号为：" + userName_;
     }
     else
     {
-        ui->star_btn->setEnabled(false);
+        ui->username_text->setStyleSheet("QLineEdit { color: red; }");
+        userName_.clear();
+        user_name_ok = false;
+        qDebug() <<"匹配失败";
     }
 }
 
-void LoginWindow::on_close_btn_clicked()
+void LoginWindow::on_password_text_editingFinished()
 {
-    close();
+    passWord_ = ui->password_text->text();
+    QRegularExpression regex("^[A-Za-z0-9]{6,16}$"); // 正则表达式规则
+    QRegularExpressionMatch match = regex.match(passWord_); // 进行匹配
+    if (match.hasMatch() && match.capturedStart() == 0 && match.capturedEnd() == passWord_.length())
+    {
+        ui->password_text->setStyleSheet("");
+        pass_word_ok = true;
+        qDebug() <<"匹配完成，获取到输入的密码为：" + passWord_;
+    }
+    else
+    {
+        ui->password_text->setStyleSheet("QLineEdit { color: red; }");
+        passWord_.clear();
+        pass_word_ok = false;
+        qDebug() <<"匹配失败";
+    }
+}
+
+void LoginWindow::on_email_text_editingFinished()
+{
+    eMail_ = ui->email_text->text();
+    QRegularExpression regex("^[A-Za-z0-9_.]{3,18}@[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*\\.[A-Za-z]{2,}$"); // 正则表达式规则
+    QRegularExpressionMatch match = regex.match(eMail_); // 进行匹配
+
+    if (match.hasMatch())
+    {
+        ui->email_text->setStyleSheet("");
+        email_ok = true;
+        qDebug() << "匹配成功，获取到输入的邮箱为：" << eMail_;
+    }
+    else
+    {
+        ui->email_text->setStyleSheet("QLineEdit { color: red; }");
+        eMail_.clear();
+        qDebug() << "匹配失败";
+    }
+}
+
+
+void LoginWindow::on_reg_btn_clicked()
+{
+    QString msg = "填入信息格式不正确，请修改后重试";
+    // 检查格式是否正常
+    if(user_name_ok && pass_word_ok && email_ok)
+    {
+        // 注册 1-注册成功 0-注册失败 -2-数据库连接失败 -1-账号已存在
+        int result = data_file_->AccountRegistration(userName_, passWord_, eMail_);
+        switch (result)
+        {
+            case -2:
+            {
+                msg = "与服务器网络连接异常";
+            }
+            case -1:
+            {
+                msg = "账号已存在";
+                return;
+            }
+            case 0:
+            {
+                msg = "网络连接异常";
+                return;
+            }
+            case 1:
+            {
+                msg = "注册成功，请登录";
+            }
+            default:
+                msg = "注册时出现未知错误";
+        }
+    }
+    ui->tip_text->setText(msg);
 }
 
 void LoginWindow::on_star_btn_clicked()
 {
-    // 登录验证
-    QString userName = ui->username_text->text();
-    QString passWord = ui->password_text->text();
-    bool result = data_file_->LoginVerification(userName, passWord);
-    if(result)
+    QString msg = "填入信息格式不正确，请修改后重试";
+    // 检查格式是否正常
+    if(user_name_ok && pass_word_ok)
     {
-        // 登录成功
-        QMessageBox::information(nullptr, "提示", "登录成功");
-        close();
+        // 登录验证 1-登录成功 0-账号或密码错误 -1-数据库连接失败
+        int result = data_file_->LoginVerification(userName_, passWord_);
+        switch (result)
+        {
+            case -1:
+            {
+                msg = "与服务器网络连接异常";
+                return;
+            }
+            case 0:
+            {
+                msg = "账号或密码错误";
+            }
+            case 1:
+            {
+                // 登录成功
+                msg = "登录成功";
+                QMessageBox::information(nullptr, "提示", "登录成功");
+            }
+            default:
+            {
+                msg = "登录时出现未知错误";
+            }
+        }
     }
-    // 注册
-    result = data_file_->AccountRegistration(userName, passWord);
-    if(result)
-    {
-        // 注册成功
-        QMessageBox::information(nullptr, "提示", "注册成功");
-    }
-    else
-    {
-        // 注册成功
-        QMessageBox::information(nullptr, "提示", "注册失败，用户名已存在或网络异常");
-    }
+    ui->tip_text->setText(msg);
 }
-

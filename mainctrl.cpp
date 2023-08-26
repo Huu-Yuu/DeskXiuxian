@@ -4,7 +4,7 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
 {
 
     //注册MessageHandler(注意要有日志文件夹)
-    qInstallMessageHandler(Logger::OutputMessageHandler);
+//    qInstallMessageHandler(Logger::OutputMessageHandler);
 
 #if LOCAL_DATABASE
     ui_obj_ = new MainUI;
@@ -12,6 +12,7 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     role_item_ = ItemSystem::GetInstance();
 #else
     login_obj_ = new LoginWindow;
+    modify_obj_ = new ModifyRoleName;
     ui_obj_ = new MainUI;
     role_obj_ = RoleSystem::GetInstance();
     role_item_ = ItemSystem::GetInstance();
@@ -56,7 +57,8 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     if(!data_file_->AutomaticLogin())
     {
         // 进入登录、注册
-        login_obj_->show();
+//        login_obj_->show();
+        modify_obj_->show();
     }
 #endif
 

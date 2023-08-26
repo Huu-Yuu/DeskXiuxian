@@ -108,7 +108,7 @@ void Logger::OutputMessageHandler(QtMsgType type, const QMessageLogContext& cont
     QString message;
     QString log_file_path;
     //程序可能会24小时运行不间断，日志需要按日期分开
-    QString log_dir_path = "/log/";
+    QString log_dir_path = "log/";
     log_file_path = log_dir_path + current_date + "_upper.log";
 
     switch (type)
@@ -161,7 +161,7 @@ void Logger::OutputMessageHandler(QtMsgType type, const QMessageLogContext& cont
     }
     else
     {
-        qDebug() << "Create Log File Failed！";
+        qDebug() << "创建日志文件失败！";
     }
     std_log_mutex.unlock();
 }

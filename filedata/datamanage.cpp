@@ -36,6 +36,7 @@ DataManage::DataManage()
         // 数据库文件已存在，读取现有数据库
         OpenDatabase(databasePath);
     }
+    sql_query_ = QSqlQuery(database_);
 #else
     InitRemoteData();
 
@@ -112,7 +113,7 @@ void DataManage::CreateDatabase(QString path)
 
 bool DataManage::CheckTablesExist()
 {
-    QSqlQuery query(database_);
+    sql_query_.finish();
 
     // 检查 RoleInfo 表是否存在
 
@@ -120,13 +121,13 @@ bool DataManage::CheckTablesExist()
 //    QString queryString = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'xiuxian' AND table_name = 'RoleInfo'";
 
 
-    if (!query.exec(queryString))
+    if (!sql_query_.exec(queryString))
     {
-        qDebug() << "执行查询 RoleInfo 时出错:" << query.lastError().text();
+        qDebug() << "执行查询 RoleInfo 时出错:" << sql_query_.lastError().text();
         return false;
     }
     // 如果 RoleInfo 表不存在，则创建表
-    if (!query.next())
+    if (!sql_query_.next())
     {
         QString createTableQuery = "CREATE TABLE RoleInfo ("
                                    "roleUUID TEXT,"
@@ -140,30 +141,30 @@ bool DataManage::CheckTablesExist()
                                    "roleCurExp INTEGER,"
                                    "roleLv INTEGER"
                                    ")";
-        query.prepare(createTableQuery);
-        if (!query.exec(createTableQuery))
+        sql_query_.prepare(createTableQuery);
+        if (!sql_query_.exec(createTableQuery))
         {
-            qDebug() << "创建表时出错:" << query.lastError().text();
+            qDebug() << "创建表时出错:" << sql_query_.lastError().text();
             return false;
         }
         // 插入初始值
         QString insertQuery = "INSERT INTO RoleInfo (roleUUID, roleName, roleLife, rolePrestige, roleExp, roleAgg, roleDef, roleHp, roleCurExp, roleLv) "
                               "VALUES (:roleUUID, :roleName, :roleLife, :rolePrestige, :roleExp, :roleAgg, :roleDef, :roleHp, :roleCurExp, :roleLv)";
-        query.prepare(insertQuery);
-        query.bindValue(":roleUUID", "UUID");
-        query.bindValue(":roleName", "GM姜子牙");
-        query.bindValue(":roleLife", 25);
-        query.bindValue(":rolePrestige", 10);
-        query.bindValue(":roleExp", 0);
-        query.bindValue(":roleAgg", 50);
-        query.bindValue(":roleDef", 40);
-        query.bindValue(":roleHp", 300);
-        query.bindValue(":roleCurExp", 1000);
-        query.bindValue(":roleLv", 1);
+        sql_query_.prepare(insertQuery);
+        sql_query_.bindValue(":roleUUID", "UUID");
+        sql_query_.bindValue(":roleName", "GM姜子牙");
+        sql_query_.bindValue(":roleLife", 25);
+        sql_query_.bindValue(":rolePrestige", 10);
+        sql_query_.bindValue(":roleExp", 0);
+        sql_query_.bindValue(":roleAgg", 50);
+        sql_query_.bindValue(":roleDef", 40);
+        sql_query_.bindValue(":roleHp", 300);
+        sql_query_.bindValue(":roleCurExp", 1000);
+        sql_query_.bindValue(":roleLv", 1);
 
-        if (!query.exec())
+        if (!sql_query_.exec())
         {
-            qDebug() << "插入初始值时出错:" << query.lastError().text();
+            qDebug() << "插入初始值时出错:" << sql_query_.lastError().text();
             return false;
         }
     }
@@ -171,14 +172,14 @@ bool DataManage::CheckTablesExist()
     queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleAtt'";
 //    queryString = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'xiuxian' AND table_name = 'RoleAtt'";
 
-    if (!query.exec(queryString))
+    if (!sql_query_.exec(queryString))
     {
-        qDebug() << "执行查询 RoleAtt 时出错:" << query.lastError().text();
+        qDebug() << "执行查询 RoleAtt 时出错:" << sql_query_.lastError().text();
         return false;
     }
 
     // 如果 RoleAtt 表不存在，则创建表并初始化字段值
-    if (!query.next())
+    if (!sql_query_.next())
     {
         QString createTableQuery = "CREATE TABLE RoleAtt ("
                                    "roleUUID TEXT,"
@@ -189,26 +190,26 @@ bool DataManage::CheckTablesExist()
                                    "attFire INTEGER,"
                                    "attEarth INTEGER"
                                    ")";
-        if (!query.exec(createTableQuery))
+        if (!sql_query_.exec(createTableQuery))
         {
-            qDebug() << "创建表时出错:" << query.lastError().text();
+            qDebug() << "创建表时出错:" << sql_query_.lastError().text();
             return false;
         }
 
         // 初始化字段值
         QString insertQuery = "INSERT INTO RoleAtt (roleUUID, roleName, attMetal, attWood, attWater, attFire, attEarth) "
                               "VALUES (:roleUUID, :roleName, :attMetal, :attWood, :attWater, :attFire, :attEarth)";
-        query.prepare(insertQuery);
-        query.bindValue(":roleUUID", "UUID");
-        query.bindValue(":roleName", "GM姜子牙");
-        query.bindValue(":attMetal", 0);
-        query.bindValue(":attWood", 0);
-        query.bindValue(":attWater", 0);
-        query.bindValue(":attFire", 0);
-        query.bindValue(":attEarth", 0);
-        if (!query.exec())
+        sql_query_.prepare(insertQuery);
+        sql_query_.bindValue(":roleUUID", "UUID");
+        sql_query_.bindValue(":roleName", "GM姜子牙");
+        sql_query_.bindValue(":attMetal", 0);
+        sql_query_.bindValue(":attWood", 0);
+        sql_query_.bindValue(":attWater", 0);
+        sql_query_.bindValue(":attFire", 0);
+        sql_query_.bindValue(":attEarth", 0);
+        if (!sql_query_.exec())
         {
-            qDebug() << "插入初始值时出错:" << query.lastError().text();
+            qDebug() << "插入初始值时出错:" << sql_query_.lastError().text();
             return false;
         }
     }
@@ -217,14 +218,14 @@ bool DataManage::CheckTablesExist()
     queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleEquip'";
 //    queryString = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'xiuxian' AND table_name = 'RoleEquip'";
 
-    if (!query.exec(queryString))
+    if (!sql_query_.exec(queryString))
     {
-        qDebug() << "执行查询 RoleEquip 时出错:" << query.lastError().text();
+        qDebug() << "执行查询 RoleEquip 时出错:" << sql_query_.lastError().text();
         return false;
     }
 
     // 如果 RoleEquip 表不存在，则创建表并初始化字段值
-    if (!query.next())
+    if (!sql_query_.next())
     {
         QString createTableQuery = "CREATE TABLE RoleEquip ("
                                    "roleUUID TEXT,"
@@ -238,29 +239,29 @@ bool DataManage::CheckTablesExist()
                                    "equipJewelry TEXT,"
                                    "equipMount TEXT"
                                    ")";
-        if (!query.exec(createTableQuery))
+        if (!sql_query_.exec(createTableQuery))
         {
-            qDebug() << "创建表时出错:" << query.lastError().text();
+            qDebug() << "创建表时出错:" << sql_query_.lastError().text();
             return false;
         }
 
         // 初始化字段值
         QString insertQuery = "INSERT INTO RoleEquip (roleUUID, roleName, equipWeapon, equipMagic, equipHelmet, equipClothing, equipBritches, equipShoe, equipJewelry, equipMount) "
                               "VALUES (:roleUUID, :roleName, :equipWeapon, :equipMagic, :equipHelmet, :equipClothing, :equipBritches, :equipShoe, :equipJewelry, :equipMount)";
-        query.prepare(insertQuery);
-        query.bindValue(":roleUUID", "UUID");
-        query.bindValue(":roleName", "GM姜子牙");
-        query.bindValue(":equipWeapon", "闪光机械键盘");
-        query.bindValue(":equipMagic", "陈年保温杯");
-        query.bindValue(":equipHelmet", "洪荒盔");
-        query.bindValue(":equipClothing", "洪荒甲");
-        query.bindValue(":equipBritches", "洪荒腰带");
-        query.bindValue(":equipShoe", "洪荒靴");
-        query.bindValue(":equipJewelry", "地摊项链");
-        query.bindValue(":equipMount", "哈士奇");
-        if (!query.exec())
+        sql_query_.prepare(insertQuery);
+        sql_query_.bindValue(":roleUUID", "UUID");
+        sql_query_.bindValue(":roleName", "GM姜子牙");
+        sql_query_.bindValue(":equipWeapon", "闪光机械键盘");
+        sql_query_.bindValue(":equipMagic", "陈年保温杯");
+        sql_query_.bindValue(":equipHelmet", "洪荒盔");
+        sql_query_.bindValue(":equipClothing", "洪荒甲");
+        sql_query_.bindValue(":equipBritches", "洪荒腰带");
+        sql_query_.bindValue(":equipShoe", "洪荒靴");
+        sql_query_.bindValue(":equipJewelry", "地摊项链");
+        sql_query_.bindValue(":equipMount", "哈士奇");
+        if (!sql_query_.exec())
         {
-            qDebug() << "插入初始值时出错:" << query.lastError().text();
+            qDebug() << "插入初始值时出错:" << sql_query_.lastError().text();
             return false;
         }
     }
@@ -269,14 +270,14 @@ bool DataManage::CheckTablesExist()
     queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleItem'";
 //    queryString = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'xiuxian' AND table_name = 'RoleItem'";
 
-    if (!query.exec(queryString))
+    if (!sql_query_.exec(queryString))
     {
-        qDebug() << "执行查询 RoleItem 时出错:" << query.lastError().text();
+        qDebug() << "执行查询 RoleItem 时出错:" << sql_query_.lastError().text();
         return false;
     }
 
     // 如果 RoleItem 表不存在，则创建表并初始化字段值
-    if (!query.next())
+    if (!sql_query_.next())
     {
         QString createTableQuery = "CREATE TABLE RoleItem ("
                                    "roleUUID TEXT,"
@@ -284,23 +285,23 @@ bool DataManage::CheckTablesExist()
                                    "roleMoney INTEGER,"
                                    "renameCard INTEGER"
                                    ")";
-        if (!query.exec(createTableQuery))
+        if (!sql_query_.exec(createTableQuery))
         {
-            qDebug() << "创建表时出错:" << query.lastError().text();
+            qDebug() << "创建表时出错:" << sql_query_.lastError().text();
             return false;
         }
 
         // 初始化字段值
         QString insertQuery = "INSERT INTO RoleItem (roleUUID, roleName, roleMoney, renameCard) "
                               "VALUES (:roleUUID, :roleName, :roleMoney, :renameCard)";
-        query.prepare(insertQuery);
-        query.bindValue(":roleUUID", "UUID");
-        query.bindValue(":roleName", "GM姜子牙");
-        query.bindValue(":roleMoney", 100);
-        query.bindValue(":renameCard", 2);
-        if (!query.exec())
+        sql_query_.prepare(insertQuery);
+        sql_query_.bindValue(":roleUUID", "UUID");
+        sql_query_.bindValue(":roleName", "GM姜子牙");
+        sql_query_.bindValue(":roleMoney", 100);
+        sql_query_.bindValue(":renameCard", 2);
+        if (!sql_query_.exec())
         {
-            qDebug() << "插入初始值时出错:" << query.lastError().text();
+            qDebug() << "插入初始值时出错:" << sql_query_.lastError().text();
             return false;
         }
     }
@@ -309,14 +310,14 @@ bool DataManage::CheckTablesExist()
     queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleCoefficient'";
 //    queryString = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'xiuxian' AND table_name = 'RoleCoefficient'";
 
-    if (!query.exec(queryString))
+    if (!sql_query_.exec(queryString))
     {
-        qDebug() << "执行查询 RoleCoefficient 时出错:" << query.lastError().text();
+        qDebug() << "执行查询 RoleCoefficient 时出错:" << sql_query_.lastError().text();
         return false;
     }
 
     // 如果 RoleCoefficient 表不存在，则创建表并初始化字段值
-    if (!query.next())
+    if (!sql_query_.next())
     {
         QString createTableQuery = "CREATE TABLE RoleCoefficient ("
                                    "roleUUID TEXT,"
@@ -329,9 +330,9 @@ bool DataManage::CheckTablesExist()
                                    "RCSpecialEvent INTEGER,"
                                    "roleAptitude INTEGER"
                                    ")";
-        if (!query.exec(createTableQuery))
+        if (!sql_query_.exec(createTableQuery))
         {
-            qDebug() << "创建表时出错:" << query.lastError().text();
+            qDebug() << "创建表时出错:" << sql_query_.lastError().text();
             return false;
         }
 
@@ -340,19 +341,19 @@ bool DataManage::CheckTablesExist()
                               "RCSurviveDisaster, RCPrestigeEvent, RCSpecialEvent, roleAptitude) "
                               "VALUES (:roleUUID, :roleName, :RCLife, :RCBasicEvent, :RCAttEvent, :RCSurviveDisaster,"
                               " :RCPrestigeEvent, :RCSpecialEvent, :roleAptitude)";
-        query.prepare(insertQuery);
-        query.bindValue(":roleUUID", "UUID");
-        query.bindValue(":roleName", "GM姜子牙");
-        query.bindValue(":RCLife", 1);
-        query.bindValue(":RCBasicEvent", 1);
-        query.bindValue(":RCAttEvent", 1);
-        query.bindValue(":RCSurviveDisaster", 0);
-        query.bindValue(":RCPrestigeEvent", 1);
-        query.bindValue(":RCSpecialEvent", 1);
-        query.bindValue(":roleAptitude", 1);
-        if (!query.exec())
+        sql_query_.prepare(insertQuery);
+        sql_query_.bindValue(":roleUUID", "UUID");
+        sql_query_.bindValue(":roleName", "GM姜子牙");
+        sql_query_.bindValue(":RCLife", 1);
+        sql_query_.bindValue(":RCBasicEvent", 1);
+        sql_query_.bindValue(":RCAttEvent", 1);
+        sql_query_.bindValue(":RCSurviveDisaster", 0);
+        sql_query_.bindValue(":RCPrestigeEvent", 1);
+        sql_query_.bindValue(":RCSpecialEvent", 1);
+        sql_query_.bindValue(":roleAptitude", 1);
+        if (!sql_query_.exec())
         {
-            qDebug() << "插入初始值时出错:" << query.lastError().text();
+            qDebug() << "插入初始值时出错:" << sql_query_.lastError().text();
             return false;
         }
     }
@@ -362,30 +363,33 @@ bool DataManage::CheckTablesExist()
 
 QString DataManage::GetTableToInfo(QString table_name, QString column_name)
 {
+    QString result = "";
     if(!database_.open())
     {
         qDebug() << "数据库打开失败";
-        return QString();
+        return result;
     }
     else
     {
-        QSqlQuery query(database_);
+        sql_query_.finish();
         QString queryString = QString("SELECT %1 FROM %2").arg(column_name, table_name);
-        if (!query.exec(queryString))
+        if (!sql_query_.exec(queryString))
         {
             qDebug() << queryString;
-            qDebug() << "执行查询时出错:" << query.lastError().text();
+            qDebug() << "执行查询时出错:" << sql_query_.lastError().text();
             database_.close();
-            return QString();
         }
-        if (query.next())
+        else
         {
-            qDebug() << table_name << " 查询数据为：" << column_name << " ：" << query.value(0).toString();
-            database_.close();
-            return query.value(0).toString();
+            if (sql_query_.next())
+            {
+                qDebug() << table_name << " 查询数据为：" << column_name << " ：" << sql_query_.value(0).toString();
+                database_.close();
+                result = sql_query_.value(0).toString();
+            }
         }
         database_.close();
-        return QString();
+        return result;
     }
 }
 
@@ -424,40 +428,40 @@ void DataManage::WriteRoleInfoToLocalDatabase()
     {
         QString roleName = role_data.value("roleName").toString();
 
-        QSqlQuery query(database_);
-        query.prepare("SELECT COUNT(*) FROM RoleInfo WHERE roleName = :roleName");
-        query.bindValue(":roleName", roleName);
+        sql_query_.finish();;
+        sql_query_.prepare("SELECT COUNT(*) FROM RoleInfo WHERE roleName = :roleName");
+        sql_query_.bindValue(":roleName", roleName);
 
-        if (query.exec() && query.next())
+        if (sql_query_.exec() && sql_query_.next())
         {
-            int rowCount = query.value(0).toInt();
+            int rowCount = sql_query_.value(0).toInt();
             if (rowCount > 0)
             {
                 // 执行更新操作
                 QString updateQuery = "UPDATE RoleInfo SET roleLife = :roleLife, rolePrestige = :rolePrestige, roleLv = :roleLv, roleCurExp = :roleCurExp,"
                                       "roleExp = :roleExp, roleAgg = :roleAgg, roleDef = :roleDef, roleHp = :roleHp WHERE roleName = :roleName";
-                query.prepare(updateQuery);
+                sql_query_.prepare(updateQuery);
             }
             else
             {
                 // 执行插入操作
                 QString insertQuery = "INSERT INTO RoleInfo (roleName, roleLife, rolePrestige, roleCultivation, roleExp, roleAgg, roleDef, roleHp, roleCurExp) "
                                       "VALUES (:roleName, :roleLife, :rolePrestige, :roleCultivation, :roleExp, :roleAgg, :roleDef, :roleHp, :roleCurExp)";
-                query.prepare(insertQuery);
+                sql_query_.prepare(insertQuery);
             }
 
-            query.bindValue(":roleName", roleName);
-            query.bindValue(":roleLife", role_data.value("roleLife").toInt());
-            query.bindValue(":rolePrestige", role_data.value("rolePrestige").toInt());
-            query.bindValue(":roleLv", role_data.value("roleLv").toInt());
-            query.bindValue(":roleExp", role_data.value("roleExp").toInt());
-            query.bindValue(":roleAgg", role_data.value("roleAgg").toInt());
-            query.bindValue(":roleDef", role_data.value("roleDef").toInt());
-            query.bindValue(":roleHp", role_data.value("roleHp").toInt());
-            query.bindValue(":roleCurExp", role_data.value("roleCurExp").toInt());
-            if (!query.exec())
+            sql_query_.bindValue(":roleName", roleName);
+            sql_query_.bindValue(":roleLife", role_data.value("roleLife").toInt());
+            sql_query_.bindValue(":rolePrestige", role_data.value("rolePrestige").toInt());
+            sql_query_.bindValue(":roleLv", role_data.value("roleLv").toInt());
+            sql_query_.bindValue(":roleExp", role_data.value("roleExp").toInt());
+            sql_query_.bindValue(":roleAgg", role_data.value("roleAgg").toInt());
+            sql_query_.bindValue(":roleDef", role_data.value("roleDef").toInt());
+            sql_query_.bindValue(":roleHp", role_data.value("roleHp").toInt());
+            sql_query_.bindValue(":roleCurExp", role_data.value("roleCurExp").toInt());
+            if (!sql_query_.exec())
             {
-                qDebug() << "保存数据时出错:" << query.lastError().text();
+                qDebug() << "保存数据时出错:" << sql_query_.lastError().text();
                 database_.close();
                 return;
             }
@@ -475,33 +479,33 @@ void DataManage::WriteRoleItemsToLocalDatabase()
     {
         QString roleName = role_item_data.value("roleName").toString();
 
-        QSqlQuery query(database_);
-        query.prepare("SELECT COUNT(*) FROM RoleItem WHERE roleName = :roleName");
-        query.bindValue(":roleName", roleName);
+        sql_query_.finish();
+        sql_query_.prepare("SELECT COUNT(*) FROM RoleItem WHERE roleName = :roleName");
+        sql_query_.bindValue(":roleName", roleName);
 
-        if (query.exec() && query.next())
+        if (sql_query_.exec() && sql_query_.next())
         {
-            int rowCount = query.value(0).toInt();
+            int rowCount = sql_query_.value(0).toInt();
             if (rowCount > 0)
             {
                 // 执行更新操作
                 QString updateQuery = "UPDATE RoleItem SET roleMoney = :roleMoney, renameCard = :renameCard WHERE roleName = :roleName";
-                query.prepare(updateQuery);
+                sql_query_.prepare(updateQuery);
             }
             else
             {
                 // 执行插入操作
                 QString insertQuery = "INSERT INTO RoleItem (roleName, roleMoney, renameCard) "
                                       "VALUES (:roleName, :roleMoney, :renameCard)";
-                query.prepare(insertQuery);
+                sql_query_.prepare(insertQuery);
             }
 
-            query.bindValue(":roleName", roleName);
-            query.bindValue(":roleMoney", role_item_data.value("roleMoney").toInt());
-            query.bindValue(":renameCard", role_item_data.value("renameCard").toInt());
-            if (!query.exec())
+            sql_query_.bindValue(":roleName", roleName);
+            sql_query_.bindValue(":roleMoney", role_item_data.value("roleMoney").toInt());
+            sql_query_.bindValue(":renameCard", role_item_data.value("renameCard").toInt());
+            if (!sql_query_.exec())
             {
-                qDebug() << "保存数据时出错:" << query.lastError().text();
+                qDebug() << "保存数据时出错:" << sql_query_.lastError().text();
                 return;
             }
         }
@@ -518,39 +522,39 @@ void DataManage::WriteRoleCoefficientToLocalDatabase()
     {
         QString roleName = RC_data.value("roleName").toString();
 
-        QSqlQuery query(database_);
-        query.prepare("SELECT COUNT(*) FROM RoleCoefficient WHERE roleName = :roleName");
-        query.bindValue(":roleName", roleName);
+        sql_query_.finish();
+        sql_query_.prepare("SELECT COUNT(*) FROM RoleCoefficient WHERE roleName = :roleName");
+        sql_query_.bindValue(":roleName", roleName);
 
-        if (query.exec() && query.next())
+        if (sql_query_.exec() && sql_query_.next())
         {
-            int rowCount = query.value(0).toInt();
+            int rowCount = sql_query_.value(0).toInt();
             if (rowCount > 0)
             {
                 // 执行更新操作
                 QString updateQuery = "UPDATE RoleCoefficient SET RCLife = :RCLife, RCBasicEvent = :RCBasicEvent, RCAttEvent = :RCAttEvent, RCSurviveDisaster = :RCSurviveDisaster"
                                       ", RCPrestigeEvent = :RCPrestigeEvent, RCSpecialEvent = :RCSpecialEvent, roleAptitude = :roleAptitude WHERE roleName = :roleName";
-                query.prepare(updateQuery);
+                sql_query_.prepare(updateQuery);
             }
             else
             {
                 // 执行插入操作
                 QString insertQuery = "INSERT INTO RoleCoefficient (roleName,  RCLife, RCBasicEvent, RCAttEvent, RCSurviveDisaster, RCPrestigeEvent, RCSpecialEvent, roleAptitude) "
                                       "VALUES (:roleName, :RCLife, :RCBasicEvent, :RCAttEvent, :RCPrestigeEvent, :RCSpecialEvent, :roleAptitude)";
-                query.prepare(insertQuery);
+                sql_query_.prepare(insertQuery);
             }
 
-            query.bindValue(":roleName", roleName);
-            query.bindValue(":RCLife", RC_data.value("RCLife").toInt());
-            query.bindValue(":RCBasicEvent", RC_data.value("RCBasicEvent").toInt());
-            query.bindValue(":RCAttEvent", RC_data.value("RCAttEvent").toInt());
-            query.bindValue(":RCSurviveDisaster", RC_data.value("RCSurviveDisaster").toInt());
-            query.bindValue(":RCPrestigeEvent", RC_data.value("RCPrestigeEvent").toInt());
-            query.bindValue(":RCSpecialEvent", RC_data.value("RCSpecialEvent").toInt());
-            query.bindValue(":roleAptitude", RC_data.value("roleAptitude").toInt());
-            if (!query.exec())
+            sql_query_.bindValue(":roleName", roleName);
+            sql_query_.bindValue(":RCLife", RC_data.value("RCLife").toInt());
+            sql_query_.bindValue(":RCBasicEvent", RC_data.value("RCBasicEvent").toInt());
+            sql_query_.bindValue(":RCAttEvent", RC_data.value("RCAttEvent").toInt());
+            sql_query_.bindValue(":RCSurviveDisaster", RC_data.value("RCSurviveDisaster").toInt());
+            sql_query_.bindValue(":RCPrestigeEvent", RC_data.value("RCPrestigeEvent").toInt());
+            sql_query_.bindValue(":RCSpecialEvent", RC_data.value("RCSpecialEvent").toInt());
+            sql_query_.bindValue(":roleAptitude", RC_data.value("roleAptitude").toInt());
+            if (!sql_query_.exec())
             {
-                qDebug() << "保存数据时出错:" << query.lastError().text();
+                qDebug() << "保存数据时出错:" << sql_query_.lastError().text();
                 return;
             }
         }

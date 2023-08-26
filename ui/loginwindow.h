@@ -14,6 +14,9 @@ namespace Ui {
 class LoginWindow;
 }
 
+/**
+ * @brief 登录界面
+ */
 class LoginWindow : public QDialog
 {
     Q_OBJECT
@@ -29,17 +32,15 @@ signals:
 
 private slots:
 
-    void CheckLoginIsPossible();
-
-    void on_email_text_textChanged(const QString &arg1);
-
-    void on_username_text_textChanged(const QString &arg1);
-
-    void on_password_text_textChanged(const QString &arg1);
-
-    void on_close_btn_clicked();
-
     void on_star_btn_clicked();
+
+    void on_username_text_editingFinished();
+
+    void on_password_text_editingFinished();
+
+    void on_email_text_editingFinished();
+
+    void on_reg_btn_clicked();
 
 private:
     Ui::LoginWindow *ui;
@@ -48,10 +49,9 @@ private:
     bool user_name_ok = false;      // 检查输入格式是否正常
     bool pass_word_ok = false;
     bool email_ok = false;
-//    QString userName_;
-//    QString passWord_;
-//    QString eMail_;
-//    QString uuid;
+    QString userName_;
+    QString passWord_;
+    QString eMail_;
 };
 
 #endif // LOGINWINDOW_H

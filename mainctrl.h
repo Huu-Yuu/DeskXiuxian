@@ -9,6 +9,7 @@
 #include "game_progress/gameprogress.h"
 #include "item/itemsystem.h"
 #include "ui/loginwindow.h"
+#include "ui/modifyrolename.h"
 
 /**
  * @brief 主控程序
@@ -73,6 +74,7 @@ private:
     void InitRoleInfo();
 
     LoginWindow* login_obj_;    // 登录器
+    ModifyRoleName* modify_obj_;    // 角色名修改窗口
     MainUI* ui_obj_;   // 角色UI类
     RoleSystem* role_obj_; // 角色系统对象
     Logger* logger_obj_;   // 日志管理器对象

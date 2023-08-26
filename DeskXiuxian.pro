@@ -1,6 +1,7 @@
 QT       += core gui
 QT += sql
 QT += core
+
 LIBS += -L"D:/source code/DeskXiuxian/bin" -lmysql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
