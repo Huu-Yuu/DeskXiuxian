@@ -47,12 +47,8 @@ void ModifyRoleName::on_check_btn_clicked()
 {
     QString msg;
     roleName_ = ui->name_text->text();
-    QRegularExpression regex("^[a-zA-Z0-9\\u4e00-\\u9fa5]{2,6}$");
-    if (!regex.isValid()) {
-        qDebug() << "正则表达式对象无效，处理错误情况";
-    }
-    QRegularExpressionMatch match = regex.match(roleName_);
-    if (match.hasMatch() && match.captured(0) == roleName_)
+    QRegExp regExp("^[a-zA-Z0-9\\u4e00-\\u9fa5]{2,6}$");
+    if (regExp.exactMatch(roleName_))
     {
         // 字符串完全匹配，符合要求
         if(data_file_->CheckRoleNameIsOk(roleName_))

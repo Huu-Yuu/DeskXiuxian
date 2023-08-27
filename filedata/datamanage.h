@@ -44,7 +44,7 @@ public:
      * @return 查询不到则返回空，否则返回查询值
      */
     QString GetTableToInfo(QString table_name, QString column_name);
-    QString GetTableToInfo(const QString leach_name, QString table_name, QString column_name);
+    QString GetTableToInfo(const QString table_name, const QString column_name,const QString leach_column, QString leach_value);
 
     /**
      * @brief 获取上次游戏时间
@@ -98,7 +98,7 @@ public:
      * @brief 检查用户是否首次登录
      * @return 1-首次登录 0-非首次登录 -1-数据库查询失败
      */
-    int CheckUserLogginIsFist(const QString user_name,const QString pass_word);
+    int CheckUserLogginIsFist();
 
     /**
      * @brief 初始化角色信息
@@ -162,18 +162,21 @@ private:
 
     /**
      * @brief 写入角色基本信息到     远程数据库
+     * @return 1-写入正常 0-更新失败 -1-更新查询失败 -2-不存在这一行 -3-计数查询失败
      */
-    void WriteRoleInfoToRemoteDatabase();
+    int WriteRoleInfoToRemoteDatabase();
 
     /**
      * @brief 写入角色物品信息到     远程数据库
+     * @return 1-写入正常 0-更新失败 -1-更新查询失败 -2-不存在这一行 -3-计数查询失败
      */
-    void WriteRoleItemsToRemoteDatabase();
+    int WriteRoleItemsToRemoteDatabase();
 
     /**
      * @brief 写入角色计算系数信息到   远程数据库
+     * @return 1-写入正常 0-更新失败 -1-更新查询失败 -2-不存在这一行 -3-计数查询失败
      */
-    void WriteRoleCoefficientToRemoteDatabase();
+    int WriteRoleCoefficientToRemoteDatabase();
 
     /**
      * @brief 写入角色物品信息到     本地数据库
@@ -209,10 +212,11 @@ private:
      * @brief 数据库链接
      */
     QSqlDatabase database_;
-    /**
-     * @brief 数据库查询语句
-     */
-    QSqlQuery sql_query_;
+
+//    /**
+//     * @brief 数据库查询语句
+//     */
+//    QSqlQuery* sql_query_;
 
     bool is_SaveRoleInfo = false;           // 保存角色信息开关
     bool is_SaveRoleItem = false;           // 保存角色物品开关
@@ -224,7 +228,7 @@ private:
     QJsonObject role_item_data; // 角色物品数据
     QJsonObject RC_data;        // 角色系数
 
-    QString user_UUID_;          // 账号UUID
+    static QString user_uuid_ ;          // 账号UUID
 
 };
 

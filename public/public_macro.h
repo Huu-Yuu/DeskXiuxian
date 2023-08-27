@@ -8,6 +8,9 @@
 // 是否使用本地数据库
 #define LOCAL_DATABASE          0
 
+// 远程数据库链接名
+#define REMOTE_DB_LINKNAME      "GAMEDATA"
+
 // 远程数据库地址
 #define REMOTE_DB_ADDRESS       "119.91.155.56"
 

@@ -6,6 +6,8 @@
 #include <QDesktopWidget>
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
+#include <regex>
+#include <iostream>
 #include <QMessageBox>
 #include <QDebug>
 #include "filedata/datamanage.h"

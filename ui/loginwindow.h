@@ -42,6 +42,12 @@ private slots:
 
     void on_reg_btn_clicked();
 
+    void on_username_text_textChanged(const QString &arg1);
+
+    void on_password_text_textChanged(const QString &arg1);
+
+    void on_email_text_textChanged(const QString &arg1);
+
 private:
     Ui::LoginWindow *ui;
 

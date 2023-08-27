@@ -6,6 +6,9 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     //注册MessageHandler(注意要有日志文件夹)
 //    qInstallMessageHandler(Logger::OutputMessageHandler);
 
+    logger_obj_ = Logger::GetInstance();
+    data_file_ = DataManage::GetInstance();
+    game_obj_ = GameProgress::GetInstance();
 #if LOCAL_DATABASE
     ui_obj_ = new MainUI;
     role_obj_ = RoleSystem::GetInstance();
@@ -17,9 +20,7 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     role_obj_ = RoleSystem::GetInstance();
     role_item_ = ItemSystem::GetInstance();
 #endif
-    logger_obj_ = Logger::GetInstance();
-    data_file_ = DataManage::GetInstance();
-    game_obj_ = GameProgress::GetInstance();
+
 
 
 #if LOCAL_DATABASE
@@ -57,11 +58,10 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     if(!data_file_->AutomaticLogin())
     {
         // 进入登录、注册
-//        login_obj_->show();
-        modify_obj_->show();
+        login_obj_->show();
+//        modify_obj_->show();
     }
 #endif
-
 }
 
 MainCtrl::~MainCtrl()
