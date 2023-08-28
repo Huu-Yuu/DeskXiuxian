@@ -1,9 +1,35 @@
 #ifndef PUBLIC_TYPE_H
-#define PUBLIC_TYPE_H
+    #define PUBLIC_TYPE_H
 
 #endif // PUBLIC_TYPE_H
 
 // 一些经常使用到的枚举
+
+/**
+ * @brief 通信协议指令枚举列表
+ */
+enum TcpCmadType
+{
+    kTcpUnknown                   = -1, //保留错误类型
+    kTcpRequestConnect            = 1,  //与服务器建立通信
+    kTcpHeartBeats                = 2,  //获取修仙状态（心跳包）
+    kTcpCreateAccount             = 3,  //创建账号
+    kTcpCreateRole                = 4,  //创建角色
+    kTcpRoleInit                  = 5,  //角色初始化
+    kTcpRoleInfo                  = 6,  //角色基本信息
+    kTcpRoleItem                  = 7,  //角色物品信息
+    kTcpRoleEquip                 = 8,  //角色装备信息
+    kTcpRoleRC                    = 9,  //角色成长系数
+    kTcpRoleStatus                = 10, //角色状态  在线，离线，死亡
+};
+
+enum TcpOptCode
+{
+    kTcpOptUnknown          = -1,   // 保留错误类型
+    KTcpOptQuery            = 1,    // 查询数据
+    KTcpOptModify           = 2,    // 修改数据
+};
+
 /**
  * @brief 角色面板枚举
  */
@@ -47,7 +73,8 @@ enum RoleItem
 /**
  * @brief 修为等级
  */
-enum CultivationStage {
+enum CultivationStage
+{
     FANREN = 0,
     LIANQI,
     ZHUJI,

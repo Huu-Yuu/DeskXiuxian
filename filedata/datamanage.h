@@ -44,7 +44,7 @@ public:
      * @return 查询不到则返回空，否则返回查询值
      */
     QString GetTableToInfo(QString table_name, QString column_name);
-    QString GetTableToInfo(const QString table_name, const QString column_name,const QString leach_column, QString leach_value);
+    QString GetTableToInfo(const QString table_name, const QString column_name, const QString leach_column, QString leach_value);
 
     /**
      * @brief 获取上次游戏时间
@@ -92,7 +92,7 @@ public:
     /**
      * @brief 获取用户UUID
      */
-    QString GetUserUUID(const QString user_name,const QString pass_word);
+    QString GetUserUUID(const QString user_name, const QString pass_word);
 
     /**
      * @brief 检查用户是否首次登录
@@ -213,10 +213,6 @@ private:
      */
     QSqlDatabase database_;
 
-//    /**
-//     * @brief 数据库查询语句
-//     */
-//    QSqlQuery* sql_query_;
 
     bool is_SaveRoleInfo = false;           // 保存角色信息开关
     bool is_SaveRoleItem = false;           // 保存角色物品开关

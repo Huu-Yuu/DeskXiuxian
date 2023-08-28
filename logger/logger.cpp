@@ -342,3 +342,65 @@ QString Logger::GetErrorDescription(int error_code)
             return tr("ERROR_UNKNOWN_DESCRIPTION");
     }
 }
+
+QString Logger::GetErrorCodeString(int error_code)
+{
+    if (error_code == NO_ERROR)
+    {
+        return "0";
+    }
+
+    QString temp = QString("%1").arg(error_code, 0, 16, QChar('0')).toUpper();
+    QString section = temp.section("EE", 1);
+    if (section.isEmpty())
+    {
+        qDebug() << "未知错误码:" + temp;
+        section = "???";
+    }
+    return "0xEE" + section;
+}
+
+QString Logger::GetErrorInfo(int error_code, int display_mode)
+{
+    QString text;
+    QString error_desp = GetErrorDescription(error_code);
+    QString error_type = GetErrorTypeName(error_code);
+    QString error_code_str = GetErrorCodeString(error_code);
+    switch (display_mode)
+    {
+        case 0:
+        {
+            //tr:%1：错误码：%2
+            text = QString(tr("%1: error code: %2")).arg(error_type, error_code_str);
+            break;
+        }
+        case 1:
+        {
+            //tr:%1：错误描述：%2
+            text = QString(tr("%1: error description: %2"))
+                   .arg(error_type, error_desp);
+            break;
+        }
+        case 2:
+        {
+            //tr:%1：错误码：%2，错误描述：%3
+            text = QString(tr("%1: error code: %2, error description: %3"))
+                   .arg(error_type, error_code_str, error_desp);
+            break;
+        }
+        case 3:
+        {
+            //tr:错误码：%1，错误描述：%2
+            text = QString(tr("error code: %1, error description: %2"))
+                   .arg(error_code_str, error_desp);
+            break;
+        }
+        case 4:
+        {
+            //只返回错误描述信息
+            text = error_desp;
+            break;
+        }
+    }
+    return text;
+}

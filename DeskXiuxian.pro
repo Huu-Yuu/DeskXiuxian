@@ -26,7 +26,8 @@ SOURCES += \
     filedata/datamanage_settings.cpp \
     filedata/datamanage_remote_data.cpp \
     ui/modifyrolename.cpp \
-    public/public_func.cpp
+    public/public_func.cpp \
+    server/tcp_client.cpp
 
 HEADERS += \
     filedata/datamanage.h \
@@ -42,7 +43,8 @@ HEADERS += \
     ui/loginwindow.h \
     ui/modifyrolename.h \
     public/public_func.h \
-    public/error_code.h
+    public/error_code.h \
+    server/tcp_client.h
 
 FORMS += \
     mainui.ui \

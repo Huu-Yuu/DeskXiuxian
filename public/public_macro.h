@@ -1,5 +1,5 @@
 #ifndef PUBLIC_MACRO_H
-#define PUBLIC_MACRO_H
+    #define PUBLIC_MACRO_H
 
 #endif // PUBLIC_MACRO_H
 
@@ -25,3 +25,11 @@
 
 // 远程数据库名称
 #define REMOTE_DB_NAME          "xiuxian"
+
+// 网络通信IP地址
+#define MAIN_SERVER_IP          "119.91.155.56"
+
+// 网络通信端口
+#define MAIN_SERVER_PORT        12345
+
+
