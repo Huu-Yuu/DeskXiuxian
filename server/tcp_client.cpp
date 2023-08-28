@@ -7,23 +7,28 @@ TcpClient::TcpClient(QObject* parent) : QObject(parent)
         tcp_socket_ = new QTcpSocket();
         qRegisterMetaType<QAbstractSocket::SocketError>
         ("QAbstractSocket::SocketError");
-        connect(tcp_socket_, SIGNAL(error(QAbstractSocket::SocketError)),
-                this, SLOT(SlotSocketErrorDeal(QAbstractSocket::SocketError)),
-                Qt::QueuedConnection);
+//        connect(tcp_socket_, SIGNAL(error(QAbstractSocket::SocketError)),
+//                this, SLOT(SlotSocketErrorDeal(QAbstractSocket::SocketError)),
+//                Qt::QueuedConnection);
         connect(tcp_socket_, SIGNAL(readyRead()),
                 this, SLOT(SlotTcpRead()), Qt::QueuedConnection);
         connect(tcp_socket_, SIGNAL(connected()),
                 this, SLOT(SlotConnected()), Qt::QueuedConnection);
-        connect(tcp_socket_, SIGNAL(disconnected()),
-                this, SLOT(SlotDisconnected()), Qt::QueuedConnection);
+//        connect(tcp_socket_, SIGNAL(disconnected()),
+//                this, SLOT(SlotDisconnected()), Qt::QueuedConnection);
     }
+    if (reconnect_timer_ == nullptr)
+    {
+        reconnect_timer_ = new QTimer;
+    }
+    SlotTcpConnect();
 }
 
 void TcpClient::SlotTcpConnect()
 {
     tcp_socket_->abort();
     tcp_socket_->connectToHost(MAIN_SERVER_IP, MAIN_SERVER_PORT);
-//    reconnect_timer_->start(kTcpReconnectTimeoutVal_);
+    reconnect_timer_->start(kTcpReconnectTimeoutVal_);
     qDebug() << "执行端口重连操作完成";
 }
 
@@ -37,13 +42,18 @@ void TcpClient::SlotConnected()
     connect_ok_ = true;
     qDebug() << "网络已连接，开始请求访问服务器";
     QJsonObject json_obj; //发送客户端信息
-    json_obj.insert("SENDER", kClientName_);
-    json_obj.insert("RECEIVER", kServerName_);
-    json_obj.insert("TYPE", QString("%1").arg(kTcpRequestConnect));
-    json_obj.insert("STATUS", "00");
-    json_obj.insert("USERUUID", user_uuid_);
-    json_obj.insert("USERIP", user_ip_);
-    json_obj.insert("CURRENTTIME", GenerateTimeStamp());
+//    json_obj.insert("SENDER", kClientName_);
+//    json_obj.insert("RECEIVER", kServerName_);
+//    json_obj.insert("TYPE", QString("%1").arg(kTcpRequestConnect));
+//    json_obj.insert("STATUS", "00");
+//    json_obj.insert("USERUUID", user_uuid_);
+//    json_obj.insert("USERIP", user_ip_);
+//    json_obj.insert("CURRENTTIME", GenerateTimeStamp());
+
+//    json_obj.insert("uuid", "789456");
+//    json_obj.insert("roleMoney", 2023);
+//    json_obj.insert("reNameCard", 1998);
+    json_obj.insert("ddd", "789456");
     TcpWrite(json_obj);
 }
 
@@ -351,6 +361,5 @@ QString TcpClient::GetLocalIpAddress()
             }
         }
     }
-
     return ipAddress;
 }

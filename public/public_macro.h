@@ -5,8 +5,8 @@
 
 #define GAME_VISION             "v0.0.2 草稿版"
 
-// 是否使用本地数据库
-#define LOCAL_DATABASE          0
+// 数据库类型    0-远程数据库 1-本地数据库 2-服务器传递
+#define DATABASE_TYPE          2
 
 // 远程数据库链接名
 #define REMOTE_DB_LINKNAME      "GAMEDATA"
@@ -27,9 +27,7 @@
 #define REMOTE_DB_NAME          "xiuxian"
 
 // 网络通信IP地址
-#define MAIN_SERVER_IP          "119.91.155.56"
+#define MAIN_SERVER_IP          "119.122.88.124"
 
 // 网络通信端口
-#define MAIN_SERVER_PORT        12345
-
-
+#define MAIN_SERVER_PORT        8989

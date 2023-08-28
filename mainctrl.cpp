@@ -5,44 +5,34 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
 
     //注册MessageHandler(注意要有日志文件夹)
 //    qInstallMessageHandler(Logger::OutputMessageHandler);
-
-    logger_obj_ = Logger::GetInstance();
     data_file_ = DataManage::GetInstance();
+    tcp_client_ = new TcpClient;
+    main_ui_obj_ = new MainUI;
+    logger_obj_ = Logger::GetInstance();
     game_obj_ = GameProgress::GetInstance();
-#if LOCAL_DATABASE
-    ui_obj_ = new MainUI;
     role_obj_ = RoleSystem::GetInstance();
     role_item_ = ItemSystem::GetInstance();
-#else
-    login_obj_ = new LoginWindow;
-    modify_obj_ = new ModifyRoleName;
-    ui_obj_ = new MainUI;
-    role_obj_ = RoleSystem::GetInstance();
-    role_item_ = ItemSystem::GetInstance();
-#endif
 
-
-
-#if LOCAL_DATABASE
+#if DATABASE_TYPE == 0
     // 初始化UI和角色数据
     InitRoleInfo();
 #endif
     // 日志输出
     connect(this, &MainCtrl::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
-    connect(ui_obj_, &MainUI::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
+    connect(main_ui_obj_, &MainUI::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
 
     // 绑定修炼
     connect(game_obj_, &GameProgress::SignaleLifeUpdataTimeOut, role_obj_, &RoleSystem::SlotLifeUpdata);
     connect(game_obj_, &GameProgress::SignalJianghuTimeOut, role_obj_, &RoleSystem::SlotCyclicCultivation);
     connect(game_obj_, &GameProgress::SignalBasicAttTimeOut, role_obj_, &RoleSystem::SlotCyclicEnhanceAtt);
-    connect(ui_obj_, &MainUI::SignalUpgradeLevel, role_obj_, &RoleSystem::SlotUpgradeLevel);
-    connect(ui_obj_, &MainUI::SignalStartFishing, this, &MainCtrl::SlotStartFishing);
-    connect(ui_obj_, &MainUI::SignalStopFishing, this, &MainCtrl::SlotStopFishing);
+    connect(main_ui_obj_, &MainUI::SignalUpgradeLevel, role_obj_, &RoleSystem::SlotUpgradeLevel);
+    connect(main_ui_obj_, &MainUI::SignalStartFishing, this, &MainCtrl::SlotStartFishing);
+    connect(main_ui_obj_, &MainUI::SignalStopFishing, this, &MainCtrl::SlotStopFishing);
 
     // 更新UI
-    connect(role_obj_, &RoleSystem::SignalUpdateUI, ui_obj_, &MainUI::SlotUpdateUI);
-    connect(role_obj_, &RoleSystem::SignalActivateCultivaUpButton, ui_obj_, &MainUI::SlotActivateCultivaUpButton);
-    connect(role_obj_, &RoleSystem::SignalDisableCultivaUpButton, ui_obj_, &MainUI::SlotDisableCultivaUpButton);
+    connect(role_obj_, &RoleSystem::SignalUpdateUI, main_ui_obj_, &MainUI::SlotUpdateUI);
+    connect(role_obj_, &RoleSystem::SignalActivateCultivaUpButton, main_ui_obj_, &MainUI::SlotActivateCultivaUpButton);
+    connect(role_obj_, &RoleSystem::SignalDisableCultivaUpButton, main_ui_obj_, &MainUI::SlotDisableCultivaUpButton);
 
     // 保存角色基本信息
     connect(role_obj_, &RoleSystem::SignalUpdateRoleInfoDatabase, data_file_, &DataManage::SlotSaveRoleInfoToDatabase);
@@ -50,10 +40,10 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     connect(role_obj_, &RoleSystem::SignalUpdateRoleCoefficientDatabase, data_file_, &DataManage::SlotSaveRoleCoefficientToDatabase);
 
     // 消息发送到窗口
-    connect(role_obj_, &RoleSystem::SignalShowMsgToUI, ui_obj_, &MainUI::SlotShowMsg);
-    connect(this, &MainCtrl::SignalShowMsgToUI, ui_obj_, &MainUI::SlotShowMsg);
+    connect(role_obj_, &RoleSystem::SignalShowMsgToUI, main_ui_obj_, &MainUI::SlotShowMsg);
+    connect(this, &MainCtrl::SignalShowMsgToUI, main_ui_obj_, &MainUI::SlotShowMsg);
 
-#if LOCAL_DATABASE == 0
+#if DATABASE_TYPE == 0
     // 获取本地登录记录，检查是否可以自动登录
     if(!data_file_->AutomaticLogin())
     {
@@ -61,38 +51,41 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
         login_obj_->show();
 //        modify_obj_->show();
     }
+#elif DATABASE_TYPE == 2
+    // 初始化角色网络资料
+    InitRoleNetworkData();
 #endif
 }
 
 MainCtrl::~MainCtrl()
 {
-    if(data_file_ != NULL)
+    if(data_file_ != nullptr)
     {
         delete data_file_;
-        data_file_ = NULL;
+        data_file_ = nullptr;
     }
-    if(ui_obj_ != NULL)
+    if(main_ui_obj_ != nullptr)
     {
-        delete ui_obj_;
-        ui_obj_ = NULL;
+        delete main_ui_obj_;
+        main_ui_obj_ = nullptr;
     }
-    if(role_obj_ != NULL)
+    if(role_obj_ != nullptr)
     {
         delete role_obj_;
-        role_obj_ = NULL;
+        role_obj_ = nullptr;
     }
-    if(logger_obj_ != NULL)
+    if(logger_obj_ != nullptr)
     {
         delete logger_obj_;
-        logger_obj_ = NULL;
+        logger_obj_ = nullptr;
     }
-    if(game_obj_ != NULL)
+    if(game_obj_ != nullptr)
     {
         // 清理游戏进程类 ———————— 线程非安全退出-待处理
         game_obj_->quit();
         game_obj_->wait();
         delete game_obj_;
-        game_obj_ = NULL;
+        game_obj_ = nullptr;
     }
 
 }
@@ -110,7 +103,7 @@ void MainCtrl::StartFishing()
 
 void MainCtrl::ShowMainUi()
 {
-    ui_obj_->show();
+    main_ui_obj_->show();
 }
 
 void MainCtrl::SlotStartFishing()
@@ -133,7 +126,7 @@ void MainCtrl::InitRoleInfo()
 {
     // 从数据库获取角色基本信息
     QString last_game_time = "最近一次离线时间是：" + data_file_->GetLastGameTime();
-    ui_obj_->AddMessage(last_game_time);
+    emit SignalShowMsgToUI(last_game_time);
     QString name = data_file_->GetTableToInfo("RoleInfo", "roleName");
     QString life = data_file_->GetTableToInfo("RoleInfo", "roleLife");
     QString prestige = data_file_->GetTableToInfo("RoleInfo", "rolePrestige");
@@ -194,7 +187,15 @@ void MainCtrl::InitRoleInfo()
     role_obj_->CheckExpIsUpgrade();     // 更新是否可以升级
 
     // 更新UI显示
-    ui_obj_->UpdateRoleInformation(name, life, prestige, role_obj_->GetCultivationName(cultivation));
-    ui_obj_->UpdatePhysicalStrength(cur_exp, agg, def, hp);
-    ui_obj_->UpdateEquip(weapon, magic, helmet, clothing, britches, shoe, jewelry, mount);
+    main_ui_obj_->UpdateRoleInformation(name, life, prestige, role_obj_->GetCultivationName(cultivation));
+    main_ui_obj_->UpdatePhysicalStrength(cur_exp, agg, def, hp);
+    main_ui_obj_->UpdateEquip(weapon, magic, helmet, clothing, britches, shoe, jewelry, mount);
+}
+
+void MainCtrl::InitRoleNetworkData()
+{
+    // 账号校验不通过，显示注册页面
+    main_ui_obj_->ShowLoginWidget();
+    // 账号校验通过，显示运行界面
+//    main_ui_obj_->ShowModifyNameWidget();
 }

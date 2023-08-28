@@ -9,6 +9,8 @@ MainUI::MainUI(QWidget *parent)
     // 初始化成员变量
     logger_obj_ = Logger::GetInstance();
     data_file_ = DataManage::GetInstance();
+    login_obj_ = new LoginWindow;
+    modify_obj_ = new ModifyRoleName;
     process = new QProcess;
 
     // 初始化UI设置
@@ -223,3 +225,24 @@ void MainUI::on_cultiva_up_but_clicked()
     emit SignalUpgradeLevel();
 }
 
+void MainUI::ShowLoginWidget()
+{
+    login_obj_->show();
+}
+
+void MainUI::ShowModifyNameWidget()
+{
+    modify_obj_->show();
+}
+
+void MainUI::CloseLoginWidget()
+{
+    login_obj_->close();
+    emit SignalLogOut(QtInfoMsg, QMessageLogContext(), "关闭登录窗口");
+}
+
+void MainUI::CloseModifyNameWidget()
+{
+    modify_obj_->close();
+    emit SignalLogOut(QtInfoMsg, QMessageLogContext(), "关闭命名窗口");
+}

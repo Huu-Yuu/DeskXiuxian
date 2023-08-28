@@ -8,8 +8,7 @@
 #include "filedata/datamanage.h"
 #include "game_progress/gameprogress.h"
 #include "item/itemsystem.h"
-#include "ui/loginwindow.h"
-#include "ui/modifyrolename.h"
+#include "server/tcp_client.h"
 
 /**
  * @brief 主控程序
@@ -38,11 +37,6 @@ public:
      * @brief 登录校验
      */
     bool LoginVerification(QString user_name, QString pass_word);
-
-    /**
-     * @brief 初始化角色网络数据
-     */
-    void InitRoleNetworkData();
 
 public slots:
 
@@ -73,14 +67,19 @@ private:
      */
     void InitRoleInfo();
 
-    LoginWindow* login_obj_;    // 登录器
-    ModifyRoleName* modify_obj_;    // 角色名修改窗口
-    MainUI* ui_obj_;   // 角色UI类
+    /**
+     * @brief 初始化角色网络资料
+     */
+    void InitRoleNetworkData();
+
+    MainUI* main_ui_obj_;   // 角色UI类
     RoleSystem* role_obj_; // 角色系统对象
     Logger* logger_obj_;   // 日志管理器对象
     DataManage* data_file_;         // 文件管理对象
     GameProgress* game_obj_;    // 游戏进度控制对象
     ItemSystem* role_item_;     // 角色道具
+    TcpClient* tcp_client_;
+
 };
 
 #endif // MAINCTRL_H

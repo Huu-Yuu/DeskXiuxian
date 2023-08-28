@@ -1,6 +1,7 @@
 QT       += core gui
 QT += sql
 QT += core
+QT += network
 
 LIBS += -L"D:/source code/DeskXiuxian/bin" -lmysql
 

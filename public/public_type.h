@@ -1,7 +1,5 @@
 #ifndef PUBLIC_TYPE_H
-    #define PUBLIC_TYPE_H
-
-#endif // PUBLIC_TYPE_H
+#define PUBLIC_TYPE_H
 
 // 一些经常使用到的枚举
 
@@ -26,8 +24,9 @@ enum TcpCmadType
 enum TcpOptCode
 {
     kTcpOptUnknown          = -1,   // 保留错误类型
-    KTcpOptQuery            = 1,    // 查询数据
-    KTcpOptModify           = 2,    // 修改数据
+    kTcpOptQuery            = 1,    // 查询数据
+    kTcpOptModify           = 2,    // 修改数据
+    kTcpOptKickOffLine      = 3,    // 踢下线
 };
 
 /**
@@ -87,3 +86,5 @@ enum CultivationStage
     YUHUA,
     XIAN
 };
+
+#endif // PUBLIC_TYPE_H

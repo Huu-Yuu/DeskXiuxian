@@ -52,6 +52,10 @@ public slots:
      */
     void SlotTcpRead();
 
+//    void SlotDisconnected();
+
+//    void SlotSocketErrorDeal();
+
 private:
     /**
      * @brief 是否连接成功
@@ -93,47 +97,42 @@ private:
      */
     QString GetLocalIpAddress();
 
-    // 网络标记刷新定时器
-    QTimer* net_status_timer_ = nullptr;
 
-    //TCP断网后重连超时值，单位毫秒(ms)
-    const int kTcpReconnectTimeoutVal_ = 6000;
-    //TCP断网后重连超时值(短)，单位毫秒(ms)
-    const int kTcpReconnectTimeoutValShort_ = 5000;
-    //TCP重连报错阈值，单位次，每kTcpReconnectTimeoutVal_秒一次。
-    const int kTcpReconnectWarnVal_ = 10;
-    //最大接收的Json数据，超过的将丢弃。单位字节(byte)
-    const int kTcpMaxJsonDataSize_ = 102400;
-    //最大备份网络数据包数目（不包括心跳包和连接请求包）
-    const int kTcpMaxJsonBackupNum = 50;
-    //服务器名称（接收方字段值）
-    const QString kServerName_ = "TIANGONG";
-    //客户端名称（发送方字段值）
-    const QString kClientName_ = "XIANREN";
-    //允许连接控制（由连接请求指令的返回状态获得，如果不为“00”认定服务器拒绝通信，不再重连）
-    QString connect_ctrl_ = "00";
-    //对于不完整的数据保留，直到组成完整的数据
-    QByteArray data_keeper_;
-    //心跳包输出打印计数
-    uint heart_beat_count_ = 0;
+    QTimer* net_status_timer_ = nullptr;        // 网络标记刷新定时器
 
-    //发数据锁
-    QMutex send_data_mutex_;
+    const int kTcpReconnectTimeoutVal_ = 6000;  //TCP断网后重连超时值，单位毫秒(ms)
 
-    //UUID保存（相同ID字段值不进行处理）
-    QString user_uuid_;
+    const int kTcpReconnectTimeoutValShort_ = 5000;     //TCP断网后重连超时值(短)，单位毫秒(ms)
 
-    //用户IP地址
-    QString user_ip_;
+    const int kTcpReconnectWarnVal_ = 10;       //TCP重连报错阈值，单位次，每kTcpReconnectTimeoutVal_秒一次。
 
-    //连接成功标志位
-    bool connect_ok_ = false;
+    QTimer* reconnect_timer_ = nullptr;                    // 网络重连定时器
 
-    //服务器通信端口
-    int server_port_ = MAIN_SERVER_PORT;
+    const int kTcpMaxJsonDataSize_ = 102400;    //最大接收的Json数据，超过的将丢弃。单位字节(byte)
 
-    //网络通信套接字
-    QTcpSocket* tcp_socket_ = nullptr;
+    const int kTcpMaxJsonBackupNum = 50;        //最大备份网络数据包数目（不包括心跳包和连接请求包）
+
+    const QString kServerName_ = "TIANGONG";    //服务器名称（接收方字段值）
+
+    const QString kClientName_ = "XIANREN";     //客户端名称（发送方字段值）
+
+    QString connect_ctrl_ = "00";       //允许连接控制（由连接请求指令的返回状态获得，如果不为“00”认定服务器拒绝通信，不再重连）
+
+    QByteArray data_keeper_;            //对于不完整的数据保留，直到组成完整的数据
+
+    uint heart_beat_count_ = 0;         //心跳包输出打印计数
+
+    QMutex send_data_mutex_;            //发数据锁
+
+    QString user_uuid_ = "";                 //UUID保存（相同ID字段值不进行处理）
+
+    QString user_ip_ = "";                   //用户IP地址
+
+    bool connect_ok_ = false;           //连接成功标志位
+
+    int server_port_ = MAIN_SERVER_PORT;    //服务器通信端口
+
+    QTcpSocket* tcp_socket_ = nullptr;      //网络通信套接字
 };
 
 #endif // TCP_CLIENT_H

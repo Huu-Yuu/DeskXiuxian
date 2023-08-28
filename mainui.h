@@ -14,6 +14,8 @@
 #include "role/rolesystem.h"
 #include "filedata/datamanage.h"
 #include "game_progress/gameprogress.h"
+#include "ui/loginwindow.h"
+#include "ui/modifyrolename.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -27,11 +29,6 @@ class MainUI : public QMainWindow
 public:
     MainUI(QWidget *parent = nullptr);
     ~MainUI();
-
-    /**
-     * @brief 添加消息到消息列表
-     */
-    void AddMessage(QString msg);
 
     Ui::MainUI* GetUI();
 
@@ -55,6 +52,26 @@ public:
      */
     void UpdateEquip(QString weapon, QString magic, QString helmet, QString clothing,
                      QString britches, QString shoe, QString jewelrt, QString mount);
+
+    /**
+     * @brief 显示登录窗口
+     */
+    void ShowLoginWidget();
+
+    /**
+     * @brief 显示改名窗口
+     */
+    void ShowModifyNameWidget();
+
+    /**
+     * @brief 关闭登录窗口
+     */
+    void CloseLoginWidget();
+
+    /**
+     * @brief 关闭改名窗口
+     */
+    void CloseModifyNameWidget();
 
 signals:
     /**
@@ -101,6 +118,7 @@ public slots:
 
 protected:
     void closeEvent(QCloseEvent *event);
+
 private slots:
     void on_star_but_clicked();
 
@@ -109,9 +127,16 @@ private slots:
     void on_cultiva_up_but_clicked();
 
 private:
+    /**
+     * @brief 添加消息到消息列表
+     */
+    void AddMessage(QString msg);
+
     QProcess* process;  // 用于关闭窗口时杀死所有进程
     Ui::MainUI *ui;
     Logger* logger_obj_;
     DataManage* data_file_;
+    LoginWindow* login_obj_;    // 登录器
+    ModifyRoleName* modify_obj_;    // 角色名修改窗口
 };
 #endif // MAINUI_H

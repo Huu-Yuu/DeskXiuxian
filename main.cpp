@@ -6,7 +6,6 @@
 #include <QLockFile>
 #include "mainctrl.h"
 
-
 int main(int argc, char* argv[])
 {
     //防止程序重复启动
@@ -29,10 +28,11 @@ int main(int argc, char* argv[])
         }
     }
     MainCtrl* main_ctrl = new MainCtrl;
-#if LOCAL_DATABASE
+#if DATABASE_TYPE == 1
     main_ctrl->ShowMainUi();
-#else
+#elif DATABASE_TYPE == 0
 
+#elif DATABASE_TYPE == 2
 
 #endif
 

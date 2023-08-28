@@ -22,7 +22,7 @@ DataManage::DataManage()
     user_uuid_ = "";
     InitSettingFile();
 
-#if  LOCAL_DATABASE
+#if  DATABASE_TYPE == 1
     // 获取数据库文件路径
     QString databasePath = QCoreApplication::applicationDirPath() + "/database.db";
 
@@ -38,8 +38,9 @@ DataManage::DataManage()
         // 数据库文件已存在，读取现有数据库
         OpenDatabase(databasePath);
     }
-#else
+#elif DATABASE_TYPE == 0
     InitRemoteData();
+#elif DATABASE_TYPE == 2
 
 #endif
 }
@@ -552,7 +553,7 @@ void DataManage::WriteRoleCoefficientToLocalDatabase()
 void DataManage::run()
 {
     QMutexLocker locker(&mutex);
-#if LOCAL_DATABASE
+#if DATABASE_TYPE == 0
     if(is_SaveRoleInfo)
     {
         is_SaveRoleInfo = false;
@@ -568,7 +569,7 @@ void DataManage::run()
         is_SaveRoleCoefficient = false;
         WriteRoleCoefficientToLocalDatabase();
     }
-#else
+#elif DATABASE_TYPE == 1
     if(is_SaveRoleInfo)
     {
         is_SaveRoleInfo = false;
@@ -588,5 +589,6 @@ void DataManage::run()
     {
 
     }
+#elif DATABASE_TYPE == 2
 #endif
 }
