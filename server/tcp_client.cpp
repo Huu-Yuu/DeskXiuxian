@@ -231,7 +231,7 @@ void TcpClient::SlotTcpRead()
 {
     QByteArray data_buff = tcp_socket_->readAll();
 
-    //DebugOutput("raw json data:"<<data_buff;
+    qDebug() << "读取到的内容 json data:" << data_buff;
 
     if (data_buff.isEmpty())
     {
