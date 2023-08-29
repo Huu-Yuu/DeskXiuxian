@@ -7,21 +7,35 @@ TcpClient::TcpClient(QObject* parent) : QObject(parent)
         tcp_socket_ = new QTcpSocket();
         qRegisterMetaType<QAbstractSocket::SocketError>
         ("QAbstractSocket::SocketError");
-//        connect(tcp_socket_, SIGNAL(error(QAbstractSocket::SocketError)),
-//                this, SLOT(SlotSocketErrorDeal(QAbstractSocket::SocketError)),
-//                Qt::QueuedConnection);
+        connect(tcp_socket_, SIGNAL(error(QAbstractSocket::SocketError)),
+                this, SLOT(SlotSocketErrorDeal(QAbstractSocket::SocketError)),
+                Qt::QueuedConnection);
         connect(tcp_socket_, SIGNAL(readyRead()),
                 this, SLOT(SlotTcpRead()), Qt::QueuedConnection);
         connect(tcp_socket_, SIGNAL(connected()),
                 this, SLOT(SlotConnected()), Qt::QueuedConnection);
-//        connect(tcp_socket_, SIGNAL(disconnected()),
-//                this, SLOT(SlotDisconnected()), Qt::QueuedConnection);
+        connect(tcp_socket_, SIGNAL(disconnected()),
+                this, SLOT(SlotDisconnected()), Qt::QueuedConnection);
     }
     if (reconnect_timer_ == nullptr)
     {
         reconnect_timer_ = new QTimer;
+        connect(reconnect_timer_, SIGNAL(timeout()),
+                this, SLOT(SlotReconnectTimeout()), Qt::QueuedConnection);
     }
+    user_ip_ = GetLocalIpAddress();
     SlotTcpConnect();
+}
+
+TcpClient::~TcpClient()
+{
+    if (tcp_socket_ != nullptr)
+    {
+        //先断开，最后再释放
+        tcp_socket_->disconnectFromHost();
+        delete tcp_socket_;
+        tcp_socket_ = nullptr;
+    }
 }
 
 void TcpClient::SlotTcpConnect()
@@ -42,18 +56,13 @@ void TcpClient::SlotConnected()
     connect_ok_ = true;
     qDebug() << "网络已连接，开始请求访问服务器";
     QJsonObject json_obj; //发送客户端信息
-//    json_obj.insert("SENDER", kClientName_);
-//    json_obj.insert("RECEIVER", kServerName_);
-//    json_obj.insert("TYPE", QString("%1").arg(kTcpRequestConnect));
-//    json_obj.insert("STATUS", "00");
-//    json_obj.insert("USERUUID", user_uuid_);
-//    json_obj.insert("USERIP", user_ip_);
-//    json_obj.insert("CURRENTTIME", GenerateTimeStamp());
-
-//    json_obj.insert("uuid", "789456");
-//    json_obj.insert("roleMoney", 2023);
-//    json_obj.insert("reNameCard", 1998);
-    json_obj.insert("ddd", "789456");
+    json_obj.insert("SENDER", kClientName_);
+    json_obj.insert("RECEIVER", kServerName_);
+    json_obj.insert("TYPE", QString("%1").arg(kTcpRequestConnect));
+    json_obj.insert("STATUS", "00");
+    json_obj.insert("USERUUID", user_uuid_);
+    json_obj.insert("USERIP", user_ip_);
+    json_obj.insert("CURRENTTIME", GenerateTimeStamp());
     TcpWrite(json_obj);
 }
 
@@ -80,6 +89,23 @@ qint64 TcpClient::TcpWrite(QJsonObject& json_data)
                 }
             }
             return result;
+        }
+    }
+    else
+    {
+        if (qsocket_error_fliter_ != ERROR_NETWORK_COMMU_REFUSE)
+        {
+            qsocket_error_fliter_ = ERROR_NETWORK_COMMU_REFUSE;
+            qDebug() << QString("TcpWrite -> connect_ctrl_(%1) != 0.")
+                     .arg(connect_ctrl_);
+            reconnect_timer_->stop();
+        }
+        //拒绝连接还是输出计划发送的数据
+        int type = json_data.value("TYPE").toString().toInt();
+        if (type != 2)
+        {
+            //tr:机器人端网络数据：
+            qDebug() << "Robot Json:" << json_data;
         }
     }
     return NO_ERROR;
@@ -119,8 +145,13 @@ void TcpClient::JsonDataDeal(const QByteArray& json_data)
             //type检测, 语句后带break是要发送回复的，带return是已经有回复可以返回的
             if (connect_ctrl_ != "00")
             {
-                qDebug() << "通信标志为被标记为拒绝";
-                return;
+                if (qsocket_error_fliter_ != ERROR_NETWORK_COMMU_REFUSE)
+                {
+                    qsocket_error_fliter_ = ERROR_NETWORK_COMMU_REFUSE;
+                    qDebug() << "通信标志为被标记为拒绝";
+                    reconnect_timer_->stop();
+                    return;
+                }
             }
             else
             {
@@ -132,9 +163,7 @@ void TcpClient::JsonDataDeal(const QByteArray& json_data)
                         if (status == kNegative)
                         {
                             qDebug() << (QString("服务器拒绝通信：(TYPE == %1 && STATUS == %2)").arg(type).arg(status));
-//                            emit SignalTcpResult(ERROR_NETWORK_COMMU_REFUSE);
-//                            SlotRobotRequestDeal(kTcpUploadErrorData,
-//                                                 ERROR_NETWORK_COMMU_REFUSE);
+                            emit SignalTcpErrorResult(ERROR_NETWORK_COMMU_REFUSE);
                             //主机指令状态不为0且处于非获取状态指令，不做动作直接返回。
                             return;
                         }
@@ -142,9 +171,7 @@ void TcpClient::JsonDataDeal(const QByteArray& json_data)
                         {
                             qDebug() << QString("TCP未知错误。(TYPE == %1 && STATUS == %2)")
                                      .arg(type).arg(status);
-//                            emit SignalTcpResult(ERROR_NETWORK_UNKNOW_CMAD);
-//                            SlotRobotRequestDeal(kTcpUploadErrorData,
-//                                                 ERROR_NETWORK_CONNECT_UNKNOWN);
+                            emit SignalTcpErrorResult(ERROR_NETWORK_UNKNOW_CMAD);
                             return;
                         }
                         connect_ok_ = true;
@@ -154,13 +181,18 @@ void TcpClient::JsonDataDeal(const QByteArray& json_data)
                         //此处增加服务器连接超时解除
                         QJsonObject extra;
                         extra.insert("faultReason", 2);
-//                        emit SignalTcpResult(ERROR_NETWORK_RECONNECT_OVERTIMES, extra);
                         return;
                     }
 
                     case kTcpHeartBeats:   //获取修仙状态（心跳包）
                     {
                         ++heart_beat_count_;
+                        if (connect_ok_)
+                        {
+                            qDebug() << "收到心跳包，重置网络重连定时器．";
+                            reconnect_timer_->stop();
+                            reconnect_timer_->start(kTcpReconnectTimeoutVal_);
+                        }
                         break;
                     }
                     default:   //无效指令
@@ -362,4 +394,37 @@ QString TcpClient::GetLocalIpAddress()
         }
     }
     return ipAddress;
+}
+
+void TcpClient::SlotDisconnected()
+{
+    qDebug() << "收到TCP网络连接已断开信号。";
+    // 发送消息到界面
+
+}
+
+void TcpClient::SlotSocketErrorDeal(QAbstractSocket::SocketError socket_error)
+{
+    int error_num = socket_error;
+    if (error_num == -1)
+    {
+        error_num = 0x99;
+    }
+    else if (error_num == 0)
+    {
+        error_num = 0x17;
+    }
+    int result = ERROR_QSOCKET_BASE | error_num;
+    if (qsocket_error_fliter_ != result)
+    {
+        qsocket_error_fliter_ = result;
+        emit SignalTcpErrorResult(result);
+    }
+}
+
+void TcpClient::SlotReconnectTimeout()
+{
+    connect_ok_ = false;
+    SlotTcpConnect();
+    return;
 }

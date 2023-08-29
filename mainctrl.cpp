@@ -199,3 +199,39 @@ void MainCtrl::InitRoleNetworkData()
     // 账号校验通过，显示运行界面
 //    main_ui_obj_->ShowModifyNameWidget();
 }
+
+void MainCtrl::SlotDeviceResultDeal(int result, QJsonObject extra)
+{
+    int error_base = result & ERROR_BASE_MASK;
+    switch (error_base)
+    {
+        case ERROR_NETWORK_BASE:
+        {
+            switch (result)
+            {
+                case ERROR_NETWORK_DISCONNECTED:
+                {
+                    qDebug() << "网络连接断开";
+                    break;
+                }
+                case ERROR_NETWORK_COMMU_REFUSE:
+                {
+
+                    break;
+                }
+                case ERROR_NETWORK_REQUEST_REJECT:
+                {
+                    break;
+                }
+            }
+            break;
+        }
+        default:
+        {
+            if (result != NO_ERROR)
+            {
+                qDebug() << Logger::GetErrorInfo(result, 2);
+            }
+        }
+    }
+}

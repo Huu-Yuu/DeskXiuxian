@@ -52,9 +52,15 @@ public slots:
      */
     void SlotTcpRead();
 
-//    void SlotDisconnected();
+    /**
+     * @brief 断开连接处理槽函数
+     */
+    void SlotDisconnected();
 
-//    void SlotSocketErrorDeal();
+    /**
+     * @brief 错误码处理和转发控制
+     */
+    void SlotSocketErrorDeal(QAbstractSocket::SocketError socket_error);
 
 private:
     /**
