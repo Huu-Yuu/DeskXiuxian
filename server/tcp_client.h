@@ -31,7 +31,16 @@ class TcpClient : public QObject
 public:
     explicit TcpClient(QObject* parent = nullptr);
 
+    ~TcpClient();
+
 signals:
+    /**
+     * @brief 发送网络错误码信号
+     * @param result：错误码
+     * @return 无
+     * @note 1.在网络控制类出错时发出
+     */
+    void SignalTcpErrorResult(int result, QJsonObject extra = QJsonObject());
 
 public slots:
     /**
@@ -51,6 +60,13 @@ public slots:
      *       2.此函数是网络数据的入口
      */
     void SlotTcpRead();
+
+    /**
+     * @brief 服务器超时重连处理
+     * @return 无
+     * @note 1.进行超时重连包括包括开关WIFI等操作。
+     */
+    void SlotReconnectTimeout();
 
     /**
      * @brief 断开连接处理槽函数
@@ -103,8 +119,7 @@ private:
      */
     QString GetLocalIpAddress();
 
-
-    QTimer* net_status_timer_ = nullptr;        // 网络标记刷新定时器
+    int qsocket_error_fliter_ = NO_ERROR;       //错误输出过滤器（记录最后报错的类型，防止重复报错）
 
     const int kTcpReconnectTimeoutVal_ = 6000;  //TCP断网后重连超时值，单位毫秒(ms)
 

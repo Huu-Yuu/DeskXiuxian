@@ -216,11 +216,12 @@ void MainCtrl::SlotDeviceResultDeal(int result, QJsonObject extra)
                 }
                 case ERROR_NETWORK_COMMU_REFUSE:
                 {
-
+                    qDebug() << "服务器拒绝通信";
                     break;
                 }
                 case ERROR_NETWORK_REQUEST_REJECT:
                 {
+                    qDebug() << "服务器拒绝请求";
                     break;
                 }
             }
