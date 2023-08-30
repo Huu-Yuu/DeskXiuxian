@@ -1,7 +1,7 @@
 #include "loginwindow.h"
 #include "ui_loginwindow.h"
 
-LoginWindow::LoginWindow(QWidget *parent) :
+LoginWindow::LoginWindow(QWidget* parent) :
     QDialog(parent),
     ui(new Ui::LoginWindow)
 {
@@ -14,13 +14,13 @@ LoginWindow::LoginWindow(QWidget *parent) :
 
     // 将窗口居中显示
     setGeometry(
-                QStyle::alignedRect(
-                    Qt::LeftToRight,
-                    Qt::AlignCenter,
-                    size(),
-                    qApp->desktop()->availableGeometry()
-                    )
-                );
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
 
 }
 
@@ -35,27 +35,11 @@ QJsonObject LoginWindow::GetUserInputInfo()
     QString pass_word = ui->password_text->text();
     QString e_mail = ui->email_text->text();
     QJsonObject user_obj;
-    user_obj.insert("UserName",user_name);
-    user_obj.insert("PassWord",pass_word);
-    user_obj.insert("EMail",e_mail);
+    user_obj.insert("UserName", user_name);
+    user_obj.insert("PassWord", pass_word);
+    user_obj.insert("EMail", e_mail);
     return user_obj;
 }
-
-void LoginWindow::on_username_text_editingFinished()
-{
-
-}
-
-void LoginWindow::on_password_text_editingFinished()
-{
-
-}
-
-void LoginWindow::on_email_text_editingFinished()
-{
-
-}
-
 
 void LoginWindow::on_reg_btn_clicked()
 {
@@ -85,6 +69,7 @@ void LoginWindow::on_reg_btn_clicked()
             case 1:
             {
                 msg = "注册成功，请登录";
+                ui->reg_btn->setEnabled(false);
                 break;
             }
             default:
@@ -119,7 +104,7 @@ void LoginWindow::on_star_btn_clicked()
             {
                 // 登录成功
                 msg = "登录成功";
-//                QMessageBox::information(nullptr, "提示", "登录成功");
+                data_file_->SetUserInfoToConfig(userName_, passWord_, eMail_);
                 break;
             }
             default:
@@ -132,7 +117,7 @@ void LoginWindow::on_star_btn_clicked()
     ui->tip_text->setText(msg);
 }
 
-void LoginWindow::on_username_text_textChanged(const QString &arg1)
+void LoginWindow::on_username_text_textChanged(const QString& arg1)
 {
     userName_ = arg1;
     QRegularExpression regex("^[A-Za-z0-9]{6,16}$"); // 正则表达式规则
@@ -141,19 +126,19 @@ void LoginWindow::on_username_text_textChanged(const QString &arg1)
     {
         ui->username_text->setStyleSheet("");
         user_name_ok = true;
-        qDebug() <<"匹配完成，获取到输入的账号为：" + userName_;
+        qDebug() << "匹配完成，获取到输入的账号为：" + userName_;
     }
     else
     {
         ui->username_text->setStyleSheet("QLineEdit { color: red; }");
         userName_.clear();
         user_name_ok = false;
-        qDebug() <<"匹配失败";
+        qDebug() << "匹配失败";
     }
 }
 
 
-void LoginWindow::on_password_text_textChanged(const QString &arg1)
+void LoginWindow::on_password_text_textChanged(const QString& arg1)
 {
     passWord_ = arg1;
     QRegularExpression regex("^[A-Za-z0-9]{6,16}$"); // 正则表达式规则
@@ -162,19 +147,19 @@ void LoginWindow::on_password_text_textChanged(const QString &arg1)
     {
         ui->password_text->setStyleSheet("");
         pass_word_ok = true;
-        qDebug() <<"匹配完成，获取到输入的密码为：" + passWord_;
+        qDebug() << "匹配完成，获取到输入的密码为：" + passWord_;
     }
     else
     {
         ui->password_text->setStyleSheet("QLineEdit { color: red; }");
         passWord_.clear();
         pass_word_ok = false;
-        qDebug() <<"匹配失败";
+        qDebug() << "匹配失败";
     }
 }
 
 
-void LoginWindow::on_email_text_textChanged(const QString &arg1)
+void LoginWindow::on_email_text_textChanged(const QString& arg1)
 {
     eMail_ = arg1;
     QRegularExpression regex("^[A-Za-z0-9_.]{3,18}@[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*\\.[A-Za-z]{2,}$"); // 正则表达式规则

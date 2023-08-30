@@ -5,20 +5,29 @@ GameProgress* GameProgress::instance = nullptr;  // 初始化单例对象指针
 
 GameProgress::~GameProgress()
 {
-    jianghu_timer_->stop();
-    if (jianghu_timer_ != NULL)
+    if (jianghu_timer_ != nullptr)
+    {
+        jianghu_timer_->stop();
+        jianghu_timer_->disconnect();
         delete jianghu_timer_;
-    jianghu_timer_ = NULL;
+        jianghu_timer_ = nullptr;
+    }
 
-    basic_att_timer_->stop();
-    if(basic_att_timer_ != NULL)
+    if(basic_att_timer_ != nullptr)
+    {
+        basic_att_timer_->stop();
+        basic_att_timer_->disconnect();
         delete basic_att_timer_;
-    basic_att_timer_ = NULL;
+        basic_att_timer_ = nullptr;
+    }
 
-    life_timer_->stop();
-    if(life_timer_ != NULL)
+    if(life_timer_ != nullptr)
+    {
+        life_timer_->stop();
+        life_timer_->disconnect();
         delete life_timer_;
-    life_timer_ = NULL;
+        life_timer_ = nullptr;
+    }
 }
 
 GameProgress::GameProgress()
@@ -53,7 +62,8 @@ GameProgress* GameProgress::GetInstance()
     if (!instance)
     {
         QMutexLocker locker(&mutex);  // 加锁
-        if (!instance) {
+        if (!instance)
+        {
             instance = new GameProgress();
         }
     }
@@ -94,7 +104,8 @@ void GameProgress::run()
     // 创建一个事件循环对象
     QEventLoop eventLoop;
     // 在事件循环中执行线程逻辑
-    while (!m_stopRequested) {
+    while (!m_stopRequested)
+    {
 
 //        eventLoop.exec();
     }

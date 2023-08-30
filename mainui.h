@@ -19,7 +19,10 @@
 
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainUI; }
+namespace Ui
+{
+    class MainUI;
+}
 QT_END_NAMESPACE
 
 class MainUI : public QMainWindow
@@ -27,7 +30,7 @@ class MainUI : public QMainWindow
     Q_OBJECT
 
 public:
-    MainUI(QWidget *parent = nullptr);
+    MainUI(QWidget* parent = nullptr);
     ~MainUI();
 
     Ui::MainUI* GetUI();
@@ -116,8 +119,13 @@ public slots:
      */
     void SlotDisableCultivaUpButton();
 
+    /**
+     * @brief 登录成功处理 槽函数
+     */
+    void SlotLoginSuccessful();
+
 protected:
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent* event);
 
 private slots:
     void on_star_but_clicked();
@@ -133,7 +141,7 @@ private:
     void AddMessage(QString msg);
 
     QProcess* process;  // 用于关闭窗口时杀死所有进程
-    Ui::MainUI *ui;
+    Ui::MainUI* ui;
     Logger* logger_obj_;
     DataManage* data_file_;
     LoginWindow* login_obj_;    // 登录器

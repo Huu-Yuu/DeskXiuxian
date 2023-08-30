@@ -23,7 +23,7 @@ TcpClient::TcpClient(QObject* parent) : QObject(parent)
         connect(reconnect_timer_, SIGNAL(timeout()),
                 this, SLOT(SlotReconnectTimeout()), Qt::QueuedConnection);
     }
-    user_ip_ = GetLocalIpAddress();
+    user_ip_ = PublicFunc::GetLocalIpAddress();
     SlotTcpConnect();
 }
 
@@ -369,31 +369,6 @@ QList<QByteArray> TcpClient::DividePackage(QByteArray& package_data)
         data_list.append(package_data);
     }
     return data_list;
-}
-
-QString TcpClient::GetLocalIpAddress()
-{
-    QString ipAddress;
-
-    QList<QNetworkInterface> interfaceList = QNetworkInterface::allInterfaces();
-    foreach (QNetworkInterface interface, interfaceList)
-    {
-        // 过滤回环接口和无效接口
-        if (interface.flags().testFlag(QNetworkInterface::IsLoopBack) || !interface.isValid())
-            continue;
-
-        QList<QNetworkAddressEntry> addressEntryList = interface.addressEntries();
-        foreach (QNetworkAddressEntry addressEntry, addressEntryList)
-        {
-            // 获取 IPv4 地址
-            if (addressEntry.ip().protocol() == QAbstractSocket::IPv4Protocol)
-            {
-                ipAddress = addressEntry.ip().toString();
-                break;
-            }
-        }
-    }
-    return ipAddress;
 }
 
 void TcpClient::SlotDisconnected()

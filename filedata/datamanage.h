@@ -15,6 +15,7 @@
 #include <QJsonObject>
 #include <QUuid>
 #include "public/public_macro.h"
+#include "public/public_func.h"
 #include "logger/logger.h"
 
 /**
@@ -57,9 +58,14 @@ public:
     void DatabaseClose();
 
     /**
-     * @brief 写入游戏配置，最后登录时间、用户信息
+     * @brief 写入游戏配置，最后登录时间
      */
-    void SetGameConfigInfo(QString user_name = nullptr, QString pass_word = nullptr);
+    void SetGameConfigInfo();
+
+    /**
+     * @brief 写入用户信息到配置文件
+     */
+    void SetUserInfoToConfig(QString user_name, QString pass_word, QString email);
 
     /**
      * @brief 登录校验
@@ -217,7 +223,7 @@ private:
     bool is_SaveRoleInfo = false;           // 保存角色信息开关
     bool is_SaveRoleItem = false;           // 保存角色物品开关
     bool is_SaveRoleCoefficient = false;    // 保存角色系数开关
-    bool is_GetDataBaseInfo = false;        // 获取数据库信息开关
+    bool is_GetDataBaseRoleInfo = false;        // 获取数据库信息开关
     bool is_FirstCreation = false;          // 是否首次创建，用于命名角色
 
     QJsonObject role_data;      // 角色基本数据
@@ -225,6 +231,7 @@ private:
     QJsonObject RC_data;        // 角色系数
 
     static QString user_uuid_ ;          // 账号UUID
+    static QString user_ip_ ;      // 用户IP
 
 };
 

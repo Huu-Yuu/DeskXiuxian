@@ -51,10 +51,10 @@ public slots:
     void SlotStopFishing();
 
     /**
-     * @brief 机器人信号错误处理函数
+     * @brief 客户端信号错误处理函数
      * @param result：错误码
      * @return 无
-     * @note：此函数用于综合处理各外设部件通过信号发送的错误码。
+     * @note：此函数用于综合处理通过信号发送的错误码。
      */
     void SlotDeviceResultDeal(int result, QJsonObject extra = QJsonObject());
 
@@ -86,7 +86,7 @@ private:
     DataManage* data_file_;         // 文件管理对象
     GameProgress* game_obj_;    // 游戏进度控制对象
     ItemSystem* role_item_;     // 角色道具
-    TcpClient* tcp_client_;
+//    TcpClient* tcp_client_;
 
 };
 

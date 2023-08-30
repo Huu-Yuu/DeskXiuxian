@@ -7,10 +7,10 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QAbstractSocket>
-#include <QNetworkInterface>
 #include <QMutex>
 #include "public/public_macro.h"
 #include "public/public_type.h"
+#include "public/public_func.h"
 #include "logger/logger.h"
 
 
@@ -113,11 +113,6 @@ private:
      * @note 1.该函数能缓解网络收发数据时多个Json包首尾连在一起的问题。
      */
     QList<QByteArray> DividePackage(QByteArray& package_data);
-
-    /**
-     * @brief 获取本地IP地址
-     */
-    QString GetLocalIpAddress();
 
     int qsocket_error_fliter_ = NO_ERROR;       //错误输出过滤器（记录最后报错的类型，防止重复报错）
 

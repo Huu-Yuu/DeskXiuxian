@@ -26,6 +26,27 @@ void DataManage::InitSettingFile()
     file_setting_->setIniCodec("UTF-8");
 }
 
+void DataManage::SetGameConfigInfo()
+{
+    QDateTime currentTime = QDateTime::currentDateTime();
+    QString formattedTime = currentTime.toString("yyyy-MM-dd hh:mm:ss");
+
+    file_setting_->setPath(QSettings::IniFormat, QSettings::UserScope,
+                           QCoreApplication::applicationDirPath() + "/config.ini");
+    file_setting_->setValue("Date/LastGameDate", formattedTime);
+    file_setting_->sync();
+    qDebug() << "写入最后运行时间：" << formattedTime;
+}
+
+void DataManage::SetUserInfoToConfig(QString user_name, QString pass_word, QString email)
+{
+    file_setting_->setValue("UserInfo/UserName", user_name);
+    file_setting_->setValue("UserInfo/PassWord", pass_word);
+    file_setting_->setValue("UserInfo/Email", email);
+    file_setting_->sync();
+    qDebug() << "记录用户信息到配置文件";
+}
+
 QString DataManage::GetLastGameTime()
 {
     return file_setting_->value("Date/LastGameDate", "").toString();

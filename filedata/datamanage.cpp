@@ -3,6 +3,7 @@
 QMutex DataManage::mutex;  // 初始化互斥锁对象
 DataManage* DataManage::instance = nullptr;  // 初始化单例对象指针
 QString DataManage::user_uuid_ = "";
+QString DataManage::user_ip_  = "";
 
 DataManage* DataManage::GetInstance()
 {
@@ -55,24 +56,10 @@ DataManage::~DataManage()
     }
 }
 
-void DataManage::SetGameConfigInfo(QString user_name, QString pass_word)
-{
-    QDateTime currentTime = QDateTime::currentDateTime();
-    QString formattedTime = currentTime.toString("yyyy-MM-dd hh:mm:ss");
-
-    file_setting_->setPath(QSettings::IniFormat, QSettings::UserScope,
-                           QCoreApplication::applicationDirPath() + "/config.ini");
-    file_setting_->setValue("Date/LastGameDate", formattedTime);
-    file_setting_->setValue("UserInfo/UserName", user_name);
-    file_setting_->setValue("UserInfo/PassWord", pass_word);
-    file_setting_->sync();
-    qDebug() << "写入最后运行时间：" << formattedTime;
-}
-
 void DataManage::OpenDatabase(QString path)
 {
     // 打开现有数据库连接
-    database_ =QSqlDatabase::addDatabase("QSQLITE");
+    database_ = QSqlDatabase::addDatabase("QSQLITE");
     database_.setDatabaseName(path);
     database_.exec("PRAGMA encoding = \"UTF-8\";");
 
@@ -557,37 +544,36 @@ void DataManage::run()
     if(is_SaveRoleInfo)
     {
         is_SaveRoleInfo = false;
-        WriteRoleInfoToLocalDatabase();
+        WriteRoleInfoToRemoteDatabase();
+
     }
     if(is_SaveRoleItem)
     {
         is_SaveRoleItem = false;
-        WriteRoleItemsToLocalDatabase();
+        WriteRoleItemsToRemoteDatabase();
     }
     if(is_SaveRoleCoefficient)
     {
         is_SaveRoleCoefficient = false;
-        WriteRoleCoefficientToLocalDatabase();
+        WriteRoleCoefficientToRemoteDatabase();
     }
 #elif DATABASE_TYPE == 1
     if(is_SaveRoleInfo)
     {
         is_SaveRoleInfo = false;
+        WriteRoleInfoToLocalDatabase();
 
     }
     if(is_SaveRoleItem)
     {
         is_SaveRoleItem = false;
+        WriteRoleItemsToLocalDatabase();
 
     }
     if(is_SaveRoleCoefficient)
     {
         is_SaveRoleCoefficient = false;
-
-    }
-    if(is_GetDataBaseInfo)
-    {
-
+        WriteRoleCoefficientToLocalDatabase();
     }
 #elif DATABASE_TYPE == 2
 #endif

@@ -27,6 +27,23 @@
 #define ERROR_AIUI_LOCAL_NO_INIT                  int(0xEE01010E)  //本地引擎未初始化(22001)
 #define ERROR_AIUI_UNKNOWN                        int(0xEE01010F)  //未知错误(20999)
 
+// 数据库操作错误宏定义
+#define DB_ERROR_INVALID_QUERY          int(0xEE020101)  // 无效的查询语句
+#define DB_ERROR_CONNECTION_FAILED      int(0xEE020102)  // 连接数据库失败
+#define DB_ERROR_EXECUTION_FAILED       int(0xEE020103)  // 执行数据库操作失败
+#define DB_ERROR_RECORD_NOT_FOUND       int(0xEE020104)  // 未找到记录
+#define DB_ERROR_DUPLICATE_KEY          int(0xEE020105)  // 主键重复
+#define DB_ERROR_ACCESS_DENIED          int(0xEE020106)  // 访问被拒绝
+#define DB_ERROR_TIMEOUT                int(0xEE020107)  // 操作超时
+#define DB_ERROR_CONNECTION_LOST        int(0xEE020108)  // 与数据库的连接丢失
+#define DB_ERROR_INVALID_TABLE          int(0xEE020109)  // 无效的表名
+#define DB_ERROR_INVALID_COLUMN         int(0xEE02010A)  // 无效的列名
+#define DB_ERROR_TRANSACTION_FAILED     int(0xEE02010B)  // 事务执行失败
+#define DB_ERROR_LOCK_TIMEOUT           int(0xEE02010C)  // 获取锁超时
+#define DB_ERROR_CONSTRAINT_VIOLATION   int(0xEE02010D)  // 违反约束条件
+#define DB_ERROR_INVALID_DATA           int(0xEE02010E)  // 无效的数据
+#define DB_ERROR_DISK_FULL              int(0xEE02010F)  // 磁盘空间已满
+
 //网络通信错误码(模块代号022, 名称:NETWORK)
 #define ERROR_NETWORK_BASE                        int(0xEE022000)  //网络通信错误
 #define ERROR_NETWORK_DISCONNECTED                int(0xEE022001)  //网络连接断开

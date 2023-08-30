@@ -6,7 +6,6 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     //注册MessageHandler(注意要有日志文件夹)
 //    qInstallMessageHandler(Logger::OutputMessageHandler);
     data_file_ = DataManage::GetInstance();
-    tcp_client_ = new TcpClient;
     main_ui_obj_ = new MainUI;
     logger_obj_ = Logger::GetInstance();
     game_obj_ = GameProgress::GetInstance();
@@ -45,11 +44,14 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
 
 #if DATABASE_TYPE == 0
     // 获取本地登录记录，检查是否可以自动登录
-    if(!data_file_->AutomaticLogin())
+    if(data_file_->AutomaticLogin())
     {
-        // 进入登录、注册
-        login_obj_->show();
-//        modify_obj_->show();
+        main_ui_obj_->show();
+    }
+    else
+    {
+        // 进入登录、注册界面
+        main_ui_obj_->ShowLoginWidget();
     }
 #elif DATABASE_TYPE == 2
     // 初始化角色网络资料
@@ -202,6 +204,7 @@ void MainCtrl::InitRoleNetworkData()
 
 void MainCtrl::SlotDeviceResultDeal(int result, QJsonObject extra)
 {
+    qDebug() << "客户端信号错误处理函数，附加信息为：" << extra;
     int error_base = result & ERROR_BASE_MASK;
     switch (error_base)
     {

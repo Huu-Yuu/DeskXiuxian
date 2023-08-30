@@ -3,7 +3,7 @@
 void DataManage::InitRemoteData()
 {
     QSqlDatabase database_;
-    database_ = QSqlDatabase::addDatabase("QMYSQL",REMOTE_DB_LINKNAME);
+    database_ = QSqlDatabase::addDatabase("QMYSQL", REMOTE_DB_LINKNAME);
     database_.setHostName(REMOTE_DB_ADDRESS);
     database_.setPort(REMOTE_DB_PORT);
     database_.setUserName(REMOTE_DB_USERNAME);
@@ -23,6 +23,8 @@ void DataManage::InitRemoteData()
         // 处理连接失败的情况
         // ...
     }
+    user_ip_ = PublicFunc::GetLocalIpAddress();
+    qDebug() << "获取到当前IP地址为：" << user_ip_;
 }
 
 int DataManage::LoginVerification(QString user_name, QString pass_word)
@@ -71,12 +73,14 @@ int DataManage::AccountRegistration(QString user_name, QString pass_word, QStrin
     query.prepare("SELECT user_name FROM user_data_info WHERE user_name = :userName");
     query.bindValue(":userName", user_name);
 
-    if (!query.exec()) {
+    if (!query.exec())
+    {
         qDebug() << "查询失败：" << query.lastError().text();
         return 0;
     }
 
-    if (query.next()) {
+    if (query.next())
+    {
         qDebug() << "用户名已存在";
         return -1;
     }
@@ -91,8 +95,8 @@ int DataManage::AccountRegistration(QString user_name, QString pass_word, QStrin
     {
         int rowCount = query.value(0).toInt();
         query.prepare("INSERT INTO user_data_info (id, uuid, user_name, pass_word, email, "
-                      "registration_time, role_name, last_login_time, level) "
-                      "VALUES (:id, :UUID, :UserName, :PassWord,:EMail, :RegistrationTime, :RoleName, :LastLoginTime, :Level)");
+                      "registration_time, role_name, last_login_time, level, ip) "
+                      "VALUES (:id, :UUID, :UserName, :PassWord,:EMail, :RegistrationTime, :RoleName, :LastLoginTime, :Level, :Ip)");
         query.bindValue(":UUID", uuid);
         query.bindValue(":UserName", user_name);
         query.bindValue(":PassWord", pass_word);
@@ -102,6 +106,7 @@ int DataManage::AccountRegistration(QString user_name, QString pass_word, QStrin
         query.bindValue(":LastLoginTime", reg_time);
         query.bindValue(":Level", 1);
         query.bindValue(":id", rowCount + 1);
+        query.bindValue(":Ip", user_ip_);
         if (query.exec())
         {
             result = 1;  // 插入成功
@@ -152,7 +157,8 @@ bool DataManage::CheckRoleNameIsOk(const QString role_name)
     QSqlQuery query(db);
     QString queryString = QString("SELECT RoleName FROM user_data_info WHERE RoleName = '%1'").arg(role_name);
 
-    if (query.exec(queryString) && query.next()) {
+    if (query.exec(queryString) && query.next())
+    {
         // 查询成功且有结果，表示存在
         result = false;
     }
@@ -163,7 +169,7 @@ bool DataManage::CheckRoleNameIsOk(const QString role_name)
     return result;
 }
 
-QString DataManage::GetUserUUID(const QString user_name,const QString pass_word)
+QString DataManage::GetUserUUID(const QString user_name, const QString pass_word)
 {
     QString uuid = "";
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
@@ -175,14 +181,15 @@ QString DataManage::GetUserUUID(const QString user_name,const QString pass_word)
     query.bindValue(":password", pass_word);
 
     // 执行查询
-    if (query.exec() && query.next()) {
+    if (query.exec() && query.next())
+    {
         // 获取查询结果
         uuid = query.value("UUID").toString();
-        qDebug() <<"成功获取UUID：" << uuid;
+        qDebug() << "成功获取UUID：" << uuid;
     }
     else
     {
-        qDebug() <<"获取UUID失败 返回空值";
+        qDebug() << "获取UUID失败 返回空值";
     }
     return uuid;
 }
@@ -200,7 +207,8 @@ int DataManage::CheckUserLogginIsFist()
     query.bindValue(":uuid", user_uuid_);
 
     // 执行查询
-    if (query.exec() && query.next()) {
+    if (query.exec() && query.next())
+    {
         // 获取查询结果
         reg_time = query.value("registration_time").toString();
         last_time = query.value("last_login_time").toString();
@@ -278,7 +286,8 @@ int DataManage::InitRoleData()
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
     QSqlQuery query(db);
     QString role_name = GetTableToInfo("user_data_info", "role_name", "UUID", user_uuid_);
-    if (role_name.isEmpty()) {
+    if (role_name.isEmpty())
+    {
         // 查询角色名失败
         return result;
     }
@@ -329,7 +338,8 @@ QString DataManage::GetTableToInfo(const QString table_name, const QString colum
     query.prepare(queryString);
     query.bindValue(":leach", leach_value);
     // 执行查询
-    if (query.exec() && query.next()) {
+    if (query.exec() && query.next())
+    {
         // 获取查询结果
         result = query.value(column_name).toString();
     }

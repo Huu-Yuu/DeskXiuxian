@@ -56,3 +56,28 @@ int PublicFunc::GetDataString(char* ouput_data, size_t* ouput_size)
     *ouput_size = strlen(ouput_data);
     return NO_ERROR;
 }
+
+QString PublicFunc::GetLocalIpAddress()
+{
+    QString ipAddress;
+
+    QList<QNetworkInterface> interfaceList = QNetworkInterface::allInterfaces();
+    foreach (QNetworkInterface interface, interfaceList)
+    {
+        // 过滤回环接口和无效接口
+        if (interface.flags().testFlag(QNetworkInterface::IsLoopBack) || !interface.isValid())
+            continue;
+
+        QList<QNetworkAddressEntry> addressEntryList = interface.addressEntries();
+        foreach (QNetworkAddressEntry addressEntry, addressEntryList)
+        {
+            // 获取 IPv4 地址
+            if (addressEntry.ip().protocol() == QAbstractSocket::IPv4Protocol)
+            {
+                ipAddress = addressEntry.ip().toString();
+                break;
+            }
+        }
+    }
+    return ipAddress;
+}

@@ -2,6 +2,7 @@
 #define PUBLICFUNC_H
 
 #include <QObject>
+#include <QNetworkInterface>
 #include "public/error_code.h"
 
 /**
@@ -31,6 +32,10 @@ public:
      */
     static int GetDataString(char* ouput_data, size_t* ouput_size);
 
+    /**
+     * @brief 获取本地IP地址
+     */
+    static QString GetLocalIpAddress();
 };
 
 #endif // PUBLICFUNC_H
