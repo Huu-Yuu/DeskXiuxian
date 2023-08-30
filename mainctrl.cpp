@@ -12,7 +12,7 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     role_obj_ = RoleSystem::GetInstance();
     role_item_ = ItemSystem::GetInstance();
 
-#if DATABASE_TYPE == 0
+#if DATABASE_TYPE == 1
     // 初始化UI和角色数据
     InitRoleInfo();
 #endif

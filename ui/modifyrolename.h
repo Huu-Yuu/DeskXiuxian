@@ -25,6 +25,12 @@ public:
     explicit ModifyRoleName(QWidget* parent = nullptr);
     ~ModifyRoleName();
 
+signals:
+    /**
+     * @brief 重命名成功 信号
+     */
+    void SignalRenameSuccessful();
+
 private slots:
 
     void on_star_btn_clicked();

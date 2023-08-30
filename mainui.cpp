@@ -14,6 +14,7 @@ MainUI::MainUI(QWidget* parent)
     process = new QProcess;
 
     connect(login_obj_, &LoginWindow::SignalLoginSuccessful, this, &MainUI::SlotLoginSuccessful);
+    connect(modify_obj_, &ModifyRoleName::SignalRenameSuccessful, this, &MainUI::SlotRenameSuccessful);
 
     // 初始化UI设置
     // 设置logo
@@ -223,6 +224,13 @@ void MainUI::SlotLoginSuccessful()
         default:
             break;
     }
+}
+
+void MainUI::SlotRenameSuccessful()
+{
+    CloseModifyNameWidget();
+    // 初始化远程数据库
+    show();
 }
 
 void MainUI::on_star_but_clicked()

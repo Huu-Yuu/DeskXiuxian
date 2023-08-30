@@ -12,7 +12,7 @@
 #define REMOTE_DB_LINKNAME      "GAMEDATA"
 
 // 远程数据库地址
-#define REMOTE_DB_ADDRESS       "mysql.sqlpub.com"
+#define REMOTE_DB_ADDRESS       "8.136.191.17"
 
 // 远程数据库端口号
 #define REMOTE_DB_PORT          3306
@@ -24,7 +24,7 @@
 #define REMOTE_DB_PASSWORD      "ef8ead2a1a2704c4"
 
 // 远程数据库名称
-#define REMOTE_DB_NAME          "xiuxian"
+#define REMOTE_DB_NAME          "desk_xiuxian"
 
 // 网络通信IP地址
 #define MAIN_SERVER_IP          "127.0.0.1"

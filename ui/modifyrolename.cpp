@@ -30,17 +30,35 @@ ModifyRoleName::~ModifyRoleName()
 void ModifyRoleName::on_star_btn_clicked()
 {
     on_check_btn_clicked();
+    QString msg;
     if(role_name_ok)
     {
-        if(data_file_->ModifyRoleName(roleName_) == 1)
+        int result = data_file_->ModifyRoleName(roleName_);
+        switch (result)
         {
-            qDebug() << "修改成功！";
+            case 0:
+            {
+                msg = "修改失败，请重试";
+                qDebug() << msg;
+                break;
+            }
+            case 1:
+            {
+                msg = "修改成功";
+                qDebug() << msg;
+                emit SignalRenameSuccessful();
+                break;
+            }
+            default:
+            {
+                msg = "修改失败，请检查网络连接";
+                qDebug() << msg;
+                break;
+            }
         }
-        else
-        {
-            ui->tip_text->setText("修改失败，请检查网络连接");
-        }
+
     }
+    ui->tip_text->setText(msg);
 }
 
 void ModifyRoleName::on_check_btn_clicked()

@@ -124,6 +124,31 @@ public slots:
      */
     void SlotLoginSuccessful();
 
+    /**
+     * @brief 重命名成功处理 槽函数
+     */
+    void SlotRenameSuccessful();
+
+//    /**
+//     * @brief UI初始化角色基本信息
+//     */
+//    void SlotRemoteRoleInfo(QJsonObject role_info_data);
+
+//    /**
+//     * @brief UI初始化角色装备信息
+//     */
+//    void SlotRemoteRoleEquip(QJsonObject role_info_data);
+
+//    /**
+//     * @brief UI初始化角色物品信息
+//     */
+//    void SlotRemoteRoleItem(QJsonObject role_info_data);
+
+//    /**
+//     * @brief UI初始化角色成长系数
+//     */
+//    void SlotRemoteRoleRC(QJsonObject role_info_data);
+
 protected:
     void closeEvent(QCloseEvent* event);
 
