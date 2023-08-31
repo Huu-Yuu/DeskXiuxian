@@ -77,7 +77,6 @@ public:
      */
     void CloseModifyNameWidget();
 
-
     /**
      * @brief 初始化角色UI信息
      */

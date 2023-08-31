@@ -105,6 +105,7 @@ void LoginWindow::on_star_btn_clicked()
                 // 登录成功
                 msg = "登录成功";
                 data_file_->SetUserInfoToConfig(userName_, passWord_, eMail_);
+                emit SignalLoginSuccessful();
                 break;
             }
             default:
