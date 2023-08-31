@@ -3,7 +3,7 @@ QT += sql
 QT += core
 QT += network
 
-LIBS += -L"D:/source code/DeskXiuxian/bin" -lmysql
+#LIBS += -L"D:/source code/DeskXiuxian/bin" -lmysql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

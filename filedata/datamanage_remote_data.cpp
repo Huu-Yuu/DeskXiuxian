@@ -282,6 +282,11 @@ int DataManage::ModifyRoleName(const QString new_name)
 
 int DataManage::InitRoleData()
 {
+    if(IsRoleDataInited() == 1)
+    {
+        qDebug() << "检测到角色已经初始化，将跳过本次初始化";
+        return 1;
+    }
     int result = -1;
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
     QSqlQuery query(db);
@@ -291,36 +296,65 @@ int DataManage::InitRoleData()
         // 查询角色名失败
         return result;
     }
-    // 获取 user_role_info 表的总行数
-    QString countQuery = "SELECT COUNT(*) FROM user_role_info";
-    query.prepare(countQuery);
-    if (query.exec() && query.next())
+    query.prepare("INSERT INTO user_role_info (uuid, role_name, role_life, role_prestige, role_aptitude, role_exp,"
+                  " role_agg, role_def, role_hp, role_cur_exp, role_lv) "
+                  "VALUES (:uuid, :roleName, 20, 0, 0, 0, 20, 10, 100, 0, 1)");
+    query.bindValue(":uuid", user_uuid_);
+    query.bindValue(":roleName", role_name);
+    if (query.exec())
     {
-        int rowCount = query.value(0).toInt();
-        query.prepare("INSERT INTO user_role_info (id, uuid, role_name, role_life, role_prestige, role_aptitude, role_exp,"
-                      " role_agg, role_def, role_hp, role_cur_exp, role_lv,"
-                      " equip_weapon, equip_magic, equip_helmet, equip_clothing, equip_britches, equip_shoe, equip_jewelry, equip_mount,"
-                      " rc_life, rc_basic_event, rc_att_event, rc_survive_disaster, rc_prestige_event, rc_special_event) "
-                      "VALUES (:id, :uuid, :roleName, 20, 0, 0, 0, 20, 10, 100, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
-        query.bindValue(":id", rowCount + 1);
-        query.bindValue(":uuid", user_uuid_);
-        query.bindValue(":roleName", role_name);
-        if (query.exec())
-        {
-            qDebug() << "新建角色初始化完成";
-            result = 1;  // 插入成功
-        }
-        else
-        {
-            qDebug() << "插入操作失败，错误码：" << query.lastError().number();
-            qDebug() << "新建角色初始化失败：" << query.lastError().text();
-            result = -1;
-        }
+        qDebug() << "新建角色基本信息初始化完成";
+        result = 1;  // 插入成功
     }
     else
     {
-        // 获取总行数失败
-        qDebug() << "获取总行数失败";
+        qDebug() << "插入操作失败，错误码：" << query.lastError().text();
+        qDebug() << "新建角色基本信息初始化失败：" << query.lastError().text();
+        result = -1;
+    }
+    query.prepare("INSERT INTO user_role_equip (uuid, equip_weapon, equip_magic, equip_helmet,"
+                  " equip_clothing, equip_britches, equip_shoe, equip_jewelry, equip_mount) "
+                  "VALUES (:uuid, 0, 0, 0, 0, 0, 0, 0, 0)");
+    query.bindValue(":uuid", user_uuid_);
+    if (query.exec())
+    {
+        qDebug() << "新建角色装备信息初始化完成";
+        result = 1;  // 插入成功
+    }
+    else
+    {
+        qDebug() << "插入操作失败，错误码：" << query.lastError().text();
+        qDebug() << "新建角色装备信息初始化失败：" << query.lastError().text();
+        result = -1;
+    }
+    query.prepare("INSERT INTO user_role_rc (uuid, rc_life, rc_basic_event, rc_att_event,"
+                  " rc_survive_disaster, rc_prestige_event, rc_special_event) "
+                  "VALUES (:uuid, 0, 0, 0, 0, 0, 0)");
+    query.bindValue(":uuid", user_uuid_);
+    if (query.exec())
+    {
+        qDebug() << "新建角色成长系数初始化完成";
+        result = 1;  // 插入成功
+    }
+    else
+    {
+        qDebug() << "插入操作失败，错误码：" << query.lastError().text();
+        qDebug() << "新建角色成长系数初始化失败：" << query.lastError().text();
+        result = -1;
+    }
+    query.prepare("INSERT INTO user_role_item (uuid, role_money, rename_card) "
+                  "VALUES (:uuid, 100, 1)");
+    query.bindValue(":uuid", user_uuid_);
+    if (query.exec())
+    {
+        qDebug() << "新建角色物品初始化完成";
+        result = 1;  // 插入成功
+    }
+    else
+    {
+        qDebug() << "插入操作失败，错误码：" << query.lastError().text();
+        qDebug() << "新建角色物品初始化失败：" << query.lastError().text();
+        result = -1;
     }
     return result;
 }
@@ -661,4 +695,89 @@ QJsonObject DataManage::GetRemoteRoleItem()
     }
     qDebug() << msg;
     return role_item_data;
+}
+
+int DataManage::IsRoleDataInited()
+{
+    int roleInfoCount = 0;
+    int roleItemCount = 0;
+    int roleRcCount = 0;
+    int roleEquipCount = 0;
+    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
+    QSqlQuery query(db);
+    // 检查user_role_info表
+    QString roleInfoQuery = QString("SELECT COUNT(*) FROM user_role_info WHERE uuid = '%1'").arg(user_uuid_);
+    query.prepare(roleInfoQuery);
+    query.exec(); // 执行查询语句
+    if (query.next())
+    {
+        roleInfoCount = query.value(0).toInt();
+        if (roleInfoCount > 0)
+        {
+            qDebug() << "检测到角色信息已经初始化";
+        }
+    }
+    else
+    {
+        qDebug() << "未能获取角色信息查询结果";
+    }
+
+    // 检查user_role_item表
+    QString roleItemQuery = QString("SELECT COUNT(*) FROM user_role_item WHERE uuid = '%1'").arg(user_uuid_);
+    query.prepare(roleItemQuery);
+    query.exec(); // 执行查询语句
+    if (query.next())
+    {
+        roleItemCount = query.value(0).toInt();
+        if (roleItemCount > 0)
+        {
+            qDebug() << "检测到角色物品已经初始化";
+        }
+    }
+    else
+    {
+        qDebug() << "未能获取查询结果";
+    }
+
+    // 检查user_role_rc表
+    QString roleRcQuery = QString("SELECT COUNT(*) FROM user_role_rc WHERE uuid = '%1'").arg(user_uuid_);
+    query.prepare(roleRcQuery);
+    query.exec(); // 执行查询语句
+    if (query.next())
+    {
+        roleRcCount = query.value(0).toInt();
+        if (roleRcCount > 0)
+        {
+            qDebug() << "检测到角色成长信息已经初始化";
+        }
+    }
+    else
+    {
+        qDebug() << "未能获取查询结果";
+    }
+
+    // 检查user_role_equip表
+    QString roleEquipQuery = QString("SELECT COUNT(*) FROM user_role_equip WHERE uuid = '%1'").arg(user_uuid_);
+    query.prepare(roleEquipQuery);
+    query.exec(); // 执行查询语句
+    if (query.next())
+    {
+        roleEquipCount = query.value(0).toInt();
+        if (roleEquipCount > 0)
+        {
+            qDebug() << "检测到角色装备已经初始化";
+        }
+    }
+    else
+    {
+        qDebug() << "未能获取查询结果";
+    }
+    if(roleInfoCount > 0 && roleItemCount > 0 && roleRcCount > 0 && roleEquipCount > 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }

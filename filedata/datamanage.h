@@ -231,6 +231,13 @@ private:
      */
     QString GetSettingPassWord();
 
+
+    /**
+     * @brief 角色是否已经初始化
+     * @return 1-是 非1-否或遇到错误
+     */
+    int IsRoleDataInited();
+
     /**
      * @brief 配置文件读取
      */
