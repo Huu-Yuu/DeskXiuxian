@@ -39,6 +39,10 @@ public:
     bool LoginVerification(QString user_name, QString pass_word);
 
 public slots:
+    /**
+     * @brief 初始化角色信息
+     */
+    void SlotInitRoleData();
 
     /**
      * @brief 开始修仙

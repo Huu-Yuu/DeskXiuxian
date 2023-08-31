@@ -3,7 +3,7 @@
 
 #endif // PUBLIC_MACRO_H
 
-#define GAME_VISION             "v0.0.2 草稿版"
+#define GAME_VISION             "v0.2.2 草稿版"
 
 // 数据库类型    0-远程数据库 1-本地数据库 2-服务器传递
 #define DATABASE_TYPE          0

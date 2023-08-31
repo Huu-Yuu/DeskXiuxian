@@ -112,7 +112,32 @@ public:
      * @return 1-初始化成功 非1-初始化失败
      */
     int InitRoleData();
-    int InitRoleRemoteData();
+    int InitRoleRemoteData();       // 暂时没使用
+
+
+    /**
+     * @brief 获取远程数据库 角色信息
+     * @return 1-获取成功 非1-获取失败
+     */
+    QJsonObject GetRemoteRoleInfo();
+
+    /**
+     * @brief 获取远程数据库 角色装备
+     * @return 1-获取成功 非1-获取失败
+     */
+    QJsonObject GetRemoteRoleEquip();
+
+    /**
+     * @brief 获取远程数据库 角色物品
+     * @return 1-获取成功 非1-获取失败
+     */
+    QJsonObject GetRemoteRoleItem();
+
+    /**
+     * @brief 获取远程数据库 角色成长系数
+     * @return 1-获取成功 非1-获取失败
+     */
+    QJsonObject GetRemoteRoleRC();
 
     void run();
 
@@ -122,12 +147,6 @@ public:
      * @brief 打印日志
      */
     void DebugOutToLog(QString msg);
-
-signals:
-    /**
-     * @brief 发送日志输出信号
-     */
-//    void SignalLogOut(QtMsgType type, const QMessageLogContext& context, const QString& message);
 
 public slots:
 
@@ -201,30 +220,6 @@ private:
      * @brief 写入角色基本信息到     本地数据库
      */
     void WriteRoleInfoToLocalDatabase();
-
-    /**
-     * @brief 获取远程数据库 角色信息
-     * @return 1-获取成功 非1-获取失败
-     */
-    QJsonObject GetRemoteRoleInfo();
-
-    /**
-     * @brief 获取远程数据库 角色装备
-     * @return 1-获取成功 非1-获取失败
-     */
-    QJsonObject GetRemoteRoleEquip();
-
-    /**
-     * @brief 获取远程数据库 角色物品
-     * @return 1-获取成功 非1-获取失败
-     */
-    QJsonObject GetRemoteRoleItem();
-
-    /**
-     * @brief 获取远程数据库 角色成长系数
-     * @return 1-获取成功 非1-获取失败
-     */
-    QJsonObject GetRemoteRoleRC();
 
     /**
      * @brief 获取本地保存的账号

@@ -12,6 +12,7 @@
 #include <QTextStream>
 #include "logger/logger.h"
 #include "role/rolesystem.h"
+#include "item/itemsystem.h"
 #include "filedata/datamanage.h"
 #include "game_progress/gameprogress.h"
 #include "ui/loginwindow.h"
@@ -33,7 +34,7 @@ public:
     MainUI(QWidget* parent = nullptr);
     ~MainUI();
 
-    Ui::MainUI* GetUI();
+//    Ui::MainUI* GetUI();
 
     /**
      * @brief 更新角色基本信息，昵称、寿命、声望、修为
@@ -76,11 +77,22 @@ public:
      */
     void CloseModifyNameWidget();
 
+
+    /**
+     * @brief 初始化角色UI信息
+     */
+    void InitRoleUI(QJsonObject role_info_data, QJsonObject role_item_data, QJsonObject role_rc_data, QJsonObject role_equic_data = QJsonObject());
+
 signals:
     /**
         * @brief 输出日志信号
         */
     void SignalLogOut(QtMsgType type, const QMessageLogContext& context, const QString& message);
+
+    /**
+        * @brief 初始化角色数据信号
+        */
+    void SignalInitRoleData();
 
     /**
         * @brief 修为突破信号
@@ -169,6 +181,7 @@ private:
     Ui::MainUI* ui;
     Logger* logger_obj_;
     DataManage* data_file_;
+    ItemSystem* role_item_; // 角色道具
     LoginWindow* login_obj_;    // 登录器
     ModifyRoleName* modify_obj_;    // 角色名修改窗口
 };

@@ -4,19 +4,11 @@ void DataManage::InitRemoteData()
 {
     QSqlDatabase database_;
     database_ = QSqlDatabase::addDatabase("QMYSQL", REMOTE_DB_LINKNAME);
-    database_.setHostName("8.136.191.17");
+    database_.setHostName(REMOTE_DB_ADDRESS);
     database_.setPort(REMOTE_DB_PORT);
-    database_.setUserName("xiuxian");
-    database_.setPassword("ef8ead2a1a2704c4");
-    database_.setDatabaseName("desk_xiuxian");
-
-//    QSqlDatabase database_;
-//    database_ = QSqlDatabase::addDatabase("QMYSQL", REMOTE_DB_LINKNAME);
-//    database_.setHostName(REMOTE_DB_ADDRESS);
-//    database_.setPort(REMOTE_DB_PORT);
-//    database_.setUserName(REMOTE_DB_USERNAME);
-//    database_.setPassword(REMOTE_DB_PASSWORD);
-//    database_.setDatabaseName(REMOTE_DB_NAME);
+    database_.setUserName(REMOTE_DB_USERNAME);
+    database_.setPassword(REMOTE_DB_PASSWORD);
+    database_.setDatabaseName(REMOTE_DB_NAME);
     // 初始化数据库查询语句
     if (database_.open())
     {
@@ -556,7 +548,6 @@ int DataManage::InitRoleRemoteData()
 {
     int result = -1;
 
-
     return result;
 }
 
@@ -571,31 +562,31 @@ QJsonObject DataManage::GetRemoteRoleInfo()
     query.prepare(query_str);
     query.bindValue(":UUID", user_uuid_);
     if (query.exec())
-       {
-           if (query.next())
-           {
+    {
+        if (query.next())
+        {
 
-               role_info_data["role_name"] = query.value("role_name").toString();
-               role_info_data["role_life"] = query.value("role_life").toInt();
-               role_info_data["role_prestige"] = query.value("role_prestige").toInt();
-               role_info_data["role_aptitude"] = query.value("role_aptitude").toInt();
-               role_info_data["role_exp"] = query.value("role_exp").toInt();
-               role_info_data["role_agg"] = query.value("role_agg").toInt();
-               role_info_data["role_def"] = query.value("role_def").toInt();
-               role_info_data["role_hp"] = query.value("role_hp").toInt();
-               role_info_data["role_cur_exp"] = query.value("role_cur_exp").toInt();
-               role_info_data["role_lv"] = query.value("role_lv").toInt();
-               msg = "成功获取到角色基本信息";
-           }
-           else
-           {
-               msg = "角色基本信息不存在这一行";
-           }
-       }
-       else
-       {
-           msg = "角色基本信息查询失败";
-       }
+            role_info_data["role_name"] = query.value("role_name").toString();
+            role_info_data["role_life"] = query.value("role_life").toInt();
+            role_info_data["role_prestige"] = query.value("role_prestige").toInt();
+            role_info_data["role_aptitude"] = query.value("role_aptitude").toInt();
+            role_info_data["role_exp"] = query.value("role_exp").toInt();
+            role_info_data["role_agg"] = query.value("role_agg").toInt();
+            role_info_data["role_def"] = query.value("role_def").toInt();
+            role_info_data["role_hp"] = query.value("role_hp").toInt();
+            role_info_data["role_cur_exp"] = query.value("role_cur_exp").toInt();
+            role_info_data["role_lv"] = query.value("role_lv").toInt();
+            msg = "成功获取到角色基本信息";
+        }
+        else
+        {
+            msg = "角色基本信息不存在这一行";
+        }
+    }
+    else
+    {
+        msg = "角色基本信息查询失败";
+    }
     qDebug() << msg;
     return role_info_data;
 }
@@ -644,5 +635,30 @@ QJsonObject DataManage::GetRemoteRoleRC()
 QJsonObject DataManage::GetRemoteRoleItem()
 {
     QJsonObject role_item_data;
+    QString msg;
+    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
+    QSqlQuery query(db);
+    QString query_str = "SELECT rc_life, rc_basic_event, rc_att_event, rc_survive_disaster, rc_prestige_event, rc_special_event "
+                        "FROM user_role_rc WHERE uuid = :UUID";
+    query.prepare(query_str);
+    query.bindValue(":UUID", user_uuid_);
+    if (query.exec())
+    {
+        if (query.next())
+        {
+            role_item_data["role_money"] = query.value("role_money").toInt();
+            role_item_data["rename_card"] = query.value("rename_card").toInt();
+            msg = "成功获取到角色物品信息";
+        }
+        else
+        {
+            msg = "角色物品信息不存在这一行";
+        }
+    }
+    else
+    {
+        msg = "角色物品信息查询失败";
+    }
+    qDebug() << msg;
     return role_item_data;
 }

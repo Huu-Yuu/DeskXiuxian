@@ -9,6 +9,7 @@ MainUI::MainUI(QWidget* parent)
     // 初始化成员变量
     logger_obj_ = Logger::GetInstance();
     data_file_ = DataManage::GetInstance();
+    role_item_ = ItemSystem::GetInstance();
     login_obj_ = new LoginWindow;
     modify_obj_ = new ModifyRoleName;
     process = new QProcess;
@@ -67,7 +68,6 @@ void MainUI::closeEvent(QCloseEvent* event)
     process->start(command);
     process->waitForFinished();
 
-
     QMainWindow::closeEvent(event);
 }
 
@@ -84,9 +84,28 @@ void MainUI::AddMessage(QString msg)
     emit SignalLogOut(QtInfoMsg, QMessageLogContext(), msg);
 }
 
-Ui::MainUI* MainUI::GetUI()
+//Ui::MainUI* MainUI::GetUI()
+//{
+//    return ui;
+//}
+
+void MainUI::InitRoleUI(QJsonObject role_info_data, QJsonObject role_item_data, QJsonObject role_rc_data, QJsonObject role_equic_data)
 {
-    return ui;
+    // 显示角色基本信息
+    ui->role_name->setText(role_info_data.value("role_name").toString());
+    ui->role_life->setText(role_info_data.value("role_life").toString());
+    ui->role_prestige->setText(role_info_data.value("role_prestige").toString());
+    ui->role_cultivation->setText(role_info_data.value("role_lv").toString());
+    ui->role_exp->setText(role_info_data.value("role_cur_exp").toString());
+    ui->role_agg->setText(role_info_data.value("role_agg").toString());
+    ui->role_def->setText(role_info_data.value("role_def").toString());
+    ui->role_hp->setText(role_info_data.value("role_hp ").toString());
+    // 显示角色物品
+    role_item_data = QJsonObject();
+    // 显示角色成长系数
+    role_rc_data = QJsonObject();
+    // 显示角色装备
+    role_equic_data = QJsonObject();
 }
 
 void MainUI::UpdateRoleInformation(QString name, QString life, QString prestige, QString cultivation)
@@ -199,7 +218,6 @@ void MainUI::SlotDisableCultivaUpButton()
     }
 }
 
-
 void MainUI::SlotShowMsg(QString msg)
 {
     AddMessage(msg);
@@ -213,6 +231,7 @@ void MainUI::SlotLoginSuccessful()
     {
         case 0: // 非首次登录
         {
+            emit SignalInitRoleData();
             show();
             break;
         }
@@ -230,6 +249,7 @@ void MainUI::SlotRenameSuccessful()
 {
     CloseModifyNameWidget();
     // 初始化远程数据库
+    emit SignalInitRoleData();
     show();
 }
 

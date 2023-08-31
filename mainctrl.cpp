@@ -32,6 +32,7 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     connect(role_obj_, &RoleSystem::SignalUpdateUI, main_ui_obj_, &MainUI::SlotUpdateUI);
     connect(role_obj_, &RoleSystem::SignalActivateCultivaUpButton, main_ui_obj_, &MainUI::SlotActivateCultivaUpButton);
     connect(role_obj_, &RoleSystem::SignalDisableCultivaUpButton, main_ui_obj_, &MainUI::SlotDisableCultivaUpButton);
+    connect(main_ui_obj_, &MainUI::SignalInitRoleData, this, &MainCtrl::SlotInitRoleData);
 
     // 保存角色基本信息
     connect(role_obj_, &RoleSystem::SignalUpdateRoleInfoDatabase, data_file_, &DataManage::SlotSaveRoleInfoToDatabase);
@@ -117,6 +118,46 @@ void MainCtrl::SlotStartFishing()
     int seconds_att = game_obj_->GetAttTime() / 1000;
     emit SignalShowMsgToUI(QString("当前基本事件循环周期为：%1秒，属性事件循环周期为：%2秒").arg(seconds_info).arg(seconds_att));
 
+}
+
+void MainCtrl::SlotInitRoleData()
+{
+    QJsonObject role_info_data = data_file_->GetRemoteRoleInfo();
+    QJsonObject role_rc_data = data_file_->GetRemoteRoleRC();
+    QJsonObject role_equip_data = data_file_->GetRemoteRoleEquip();
+    QJsonObject role_item_data = data_file_->GetRemoteRoleItem();
+    // 更新UI
+    main_ui_obj_->InitRoleUI(role_info_data, role_item_data, role_rc_data, role_equip_data);
+    // 更新角色基本信息
+    CultivationStage cultivation = static_cast<CultivationStage>(role_info_data.value("role_lv").toString().toInt());
+    role_obj_->SetRoleName(role_info_data.value("role_name").toString());
+    role_obj_->SetRoleLife(role_info_data.value("role_life").toString().toInt());
+    role_obj_->SetRolePrestige(role_info_data.value("role_prestige").toString().toInt());
+    role_obj_->SetRoleCultivation(cultivation);
+    role_obj_->SetCurRoleExp(role_info_data.value("role_cur_exp").toString().toInt());
+    role_obj_->SetRoleExp(role_info_data.value("role_exp").toString().toInt());
+    role_obj_->SetRoleAgg(role_info_data.value("role_agg").toString().toInt());
+    role_obj_->SetRoleDef(role_info_data.value("role_def").toString().toInt());
+    role_obj_->SetRoleHp(role_info_data.value("role_hp").toString().toInt());
+    // 更新装备
+//    role_obj_->SetEquipWeapon();
+//    role_obj_->SetEquipMagic();
+//    role_obj_->SetEquipHelmet();
+//    role_obj_->SetEquipClothing();
+//    role_obj_->SetEquipBritches();
+//    role_obj_->SetEquipShoe();
+//    role_obj_->SetEquipJewelry();
+    // 更新角色道具
+    role_item_->SetItemMoney(role_item_data.value("role_money").toString().toInt());
+    role_item_->SetItemRenameCard(role_item_data.value("role_money").toString().toInt());
+
+    // 更新角各项属性系数
+    role_obj_->SetLifeCoefficient(role_rc_data.value("rc_life").toString().toInt());
+    role_obj_->SetSurviveDisaster(role_rc_data.value("rc_survive_disaster").toString().toInt());
+
+    role_obj_->UpdataMaxRoleLife();     // 更新最大寿命
+    role_obj_->UpdateEextGradeEXP();    // 更新升级需要的经验
+    role_obj_->CheckExpIsUpgrade();     // 更新是否可以升级
 }
 
 void MainCtrl::SlotStopFishing()
