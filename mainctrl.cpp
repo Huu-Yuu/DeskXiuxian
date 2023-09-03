@@ -47,6 +47,8 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     // 获取本地登录记录，检查是否可以自动登录
     if(data_file_->AutomaticLogin())
     {
+        qDebug() << "自动登录，获取角色数据";
+        SlotInitRoleData();
         main_ui_obj_->show();
     }
     else

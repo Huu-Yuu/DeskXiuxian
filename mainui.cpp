@@ -93,13 +93,14 @@ void MainUI::InitRoleUI(QJsonObject role_info_data, QJsonObject role_item_data, 
 {
     // 显示角色基本信息
     ui->role_name->setText(role_info_data.value("role_name").toString());
-    ui->role_life->setText(role_info_data.value("role_life").toString());
-    ui->role_prestige->setText(role_info_data.value("role_prestige").toString());
-    ui->role_cultivation->setText(role_info_data.value("role_lv").toString());
-    ui->role_exp->setText(role_info_data.value("role_cur_exp").toString());
-    ui->role_agg->setText(role_info_data.value("role_agg").toString());
-    ui->role_def->setText(role_info_data.value("role_def").toString());
-    ui->role_hp->setText(role_info_data.value("role_hp ").toString());
+    ui->role_life->setText(role_info_data.value("role_life").toVariant().toString());
+    ui->role_prestige->setText(role_info_data.value("role_prestige").toVariant().toString());
+    QString lv_name = RoleSystem::GetCultivationName(role_info_data.value("role_lv").toVariant().toInt());
+    ui->role_cultivation->setText(lv_name);
+    ui->role_exp->setText(role_info_data.value("role_cur_exp").toVariant().toString());
+    ui->role_agg->setText(role_info_data.value("role_agg").toVariant().toString());
+    ui->role_def->setText(role_info_data.value("role_def").toVariant().toString());
+    ui->role_hp->setText(role_info_data.value("role_hp").toVariant().toString());
     // 显示角色物品
     role_item_data = QJsonObject();
     // 显示角色成长系数

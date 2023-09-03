@@ -354,8 +354,8 @@ public:
     /**
      * @brief 获取修为名称
      */
-    QString GetCultivationName(CultivationStage cur_lv);
-
+    static QString GetCultivationName(CultivationStage cur_lv);
+    static QString GetCultivationName(int cur_lv);
     /**
      * @brief 更新下一等级需要的经验
      */

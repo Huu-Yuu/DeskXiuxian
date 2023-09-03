@@ -672,8 +672,8 @@ QJsonObject DataManage::GetRemoteRoleItem()
     QString msg;
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
     QSqlQuery query(db);
-    QString query_str = "SELECT rc_life, rc_basic_event, rc_att_event, rc_survive_disaster, rc_prestige_event, rc_special_event "
-                        "FROM user_role_rc WHERE uuid = :UUID";
+    QString query_str = "SELECT role_money, rename_card "
+                        "FROM user_role_item WHERE uuid = :UUID";
     query.prepare(query_str);
     query.bindValue(":UUID", user_uuid_);
     if (query.exec())

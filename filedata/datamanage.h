@@ -241,7 +241,7 @@ private:
     /**
      * @brief 配置文件读取
      */
-    QSettings* file_setting_;
+    static QSettings* file_setting_;
 
     /**
      * @brief 数据库链接

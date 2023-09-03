@@ -4,6 +4,7 @@ QMutex DataManage::mutex;  // 初始化互斥锁对象
 DataManage* DataManage::instance = nullptr;  // 初始化单例对象指针
 QString DataManage::user_uuid_ = "";
 QString DataManage::user_ip_  = "";
+QSettings* DataManage::file_setting_ = nullptr;
 
 DataManage* DataManage::GetInstance()
 {

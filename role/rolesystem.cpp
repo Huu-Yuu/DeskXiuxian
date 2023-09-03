@@ -688,6 +688,12 @@ QString RoleSystem::GetCultivationName(CultivationStage cur_lv)
     return "";
 }
 
+QString RoleSystem::GetCultivationName(int cur_lv)
+{
+    CultivationStage lv = static_cast<CultivationStage>(cur_lv);
+    return  GetCultivationName(lv);
+}
+
 void RoleSystem::UpdateEextGradeEXP()
 {
     // 获取经验值基数
@@ -1078,7 +1084,7 @@ void RoleSystem::SlotLifeUpdata()
         RC_Life_ -= 7200;
         role_life_ ++;
         emit SignalUpdateUI(kRoleLife, QString::number(role_life_));
-        if(role_life_ >= role_max_life_ - 5)
+        if(role_life_ >= role_max_life_ - 4)
         {
             emit SignalShowMsgToUI(QString("%1道友大限将至，请抓紧突破以增加寿命！").arg(role_name_));
             return;

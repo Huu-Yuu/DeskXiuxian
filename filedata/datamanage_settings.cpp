@@ -22,7 +22,7 @@ void DataManage::InitSettingFile()
         }
     }
     file_setting_ = new QSettings(configFilePath, QSettings::IniFormat);
-
+    file_setting_->setValue("123456",456456);
     file_setting_->setIniCodec("UTF-8");
 }
 
