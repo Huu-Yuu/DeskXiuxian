@@ -49,6 +49,13 @@ public:
     QString GetTableToInfo(const QString table_name, const QString column_name, const QString leach_column, QString leach_value);
 
     /**
+     * @brief 写入表单中对应的列数据
+     * @return 1-写入成功 非1-写入错误
+     */
+    int SetTableToInfo(const QString table_name, const QString column_name, const QString leach_column,
+                       QString leach_value, QString new_value);
+
+    /**
      * @brief 获取上次游戏时间
      */
     QString GetLastGameTime();
@@ -165,6 +172,10 @@ public slots:
      */
     void SlotSaveRoleCoefficientToDatabase(QJsonObject RC_data);
 
+    /**
+     * @brief 更新登录日志 槽函数
+     */
+    void SlotUpdataLoginLog();
 private:
     DataManage();
     // 阻止拷贝构造函数和赋值运算符
@@ -205,6 +216,12 @@ private:
      * @return 1-写入正常 0-更新失败 -1-更新查询失败 -2-不存在这一行 -3-计数查询失败
      */
     int WriteRoleCoefficientToRemoteDatabase();
+
+    /**
+     * @brief 写入账号登录日志到   远程数据库
+     * @return 1-写入正常 0-更新失败 -1-更新查询失败 -2-不存在这一行 -3-计数查询失败
+     */
+    int WriteUserLoginLogToRemoteDatabase();
 
     /**
      * @brief 写入角色物品信息到     本地数据库
@@ -252,8 +269,8 @@ private:
     bool is_SaveRoleInfo = false;           // 保存角色信息开关
     bool is_SaveRoleItem = false;           // 保存角色物品开关
     bool is_SaveRoleCoefficient = false;    // 保存角色系数开关
-    bool is_GetDataBaseRoleInfo = false;        // 获取数据库信息开关
     bool is_FirstCreation = false;          // 是否首次创建，用于命名角色
+    bool is_SaveLoginLog = false;           // 上传登录日志开关 登录时间 IP UUID 角色名 等级
 
     QJsonObject role_data;      // 角色基本数据
     QJsonObject role_item_data; // 角色物品数据

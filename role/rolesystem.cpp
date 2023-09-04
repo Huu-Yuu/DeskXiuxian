@@ -1045,6 +1045,7 @@ void RoleSystem::SaveRoleInfo()
     role_info_data.insert("roleAgg", role_agg_);
     role_info_data.insert("roleDef", role_def_);
     role_info_data.insert("roleHp", role_hp_);
+    role_info_data.insert("roleAptitude", aptitude_);
     // 发送更新数据库信号
     emit SignalUpdateRoleInfoDatabase(role_info_data);
 }
@@ -1071,7 +1072,6 @@ void RoleSystem::SaveCoefficient()
     role_coefficient_data.insert("RCSurviveDisaster", RC_SurviveDisaster);
     role_coefficient_data.insert("RCPrestigeEvent", 1);
     role_coefficient_data.insert("RCSpecialEvent", 1);
-    role_coefficient_data.insert("roleAptitude", 1);
     // 发送更新角色属性系数数据库信号
     emit SignalUpdateRoleCoefficientDatabase(role_coefficient_data);
 }

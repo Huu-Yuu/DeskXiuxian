@@ -50,7 +50,7 @@ int DataManage::LoginVerification(QString user_name, QString pass_word)
         user_uuid_ = GetUserUUID(user_name, pass_word);
         if(CheckUserLogginIsFist() == 1)
         {
-            if(InitRoleData() == 1)
+            if(InitRoleData() >= 1)
             {
                 result = 1;
             }
@@ -87,7 +87,7 @@ int DataManage::AccountRegistration(QString user_name, QString pass_word, QStrin
 
     // 执行插入语句
     QString uuid = QUuid::createUuid().toString();
-    QDate reg_time = QDate::currentDate();
+    QDateTime reg_time = QDateTime::currentDateTime();
     QString role_name = user_name.right(4);
     QString countQuery = "SELECT COUNT(*) FROM user_role_info";
     query.prepare(countQuery);
@@ -287,7 +287,7 @@ int DataManage::InitRoleData()
         qDebug() << "检测到角色已经初始化，将跳过本次初始化";
         return 1;
     }
-    int result = -1;
+    int result = 0;
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
     QSqlQuery query(db);
     QString role_name = GetTableToInfo("user_data_info", "role_name", "UUID", user_uuid_);
@@ -304,13 +304,13 @@ int DataManage::InitRoleData()
     if (query.exec())
     {
         qDebug() << "新建角色基本信息初始化完成";
-        result = 1;  // 插入成功
+        result ++;  // 插入成功
     }
     else
     {
         qDebug() << "插入操作失败，错误码：" << query.lastError().text();
         qDebug() << "新建角色基本信息初始化失败：" << query.lastError().text();
-        result = -1;
+        result --;
     }
     query.prepare("INSERT INTO user_role_equip (uuid, equip_weapon, equip_magic, equip_helmet,"
                   " equip_clothing, equip_britches, equip_shoe, equip_jewelry, equip_mount) "
@@ -319,13 +319,13 @@ int DataManage::InitRoleData()
     if (query.exec())
     {
         qDebug() << "新建角色装备信息初始化完成";
-        result = 1;  // 插入成功
+        result ++;  // 插入成功
     }
     else
     {
         qDebug() << "插入操作失败，错误码：" << query.lastError().text();
         qDebug() << "新建角色装备信息初始化失败：" << query.lastError().text();
-        result = -1;
+        result --;
     }
     query.prepare("INSERT INTO user_role_rc (uuid, rc_life, rc_basic_event, rc_att_event,"
                   " rc_survive_disaster, rc_prestige_event, rc_special_event) "
@@ -334,13 +334,13 @@ int DataManage::InitRoleData()
     if (query.exec())
     {
         qDebug() << "新建角色成长系数初始化完成";
-        result = 1;  // 插入成功
+        result ++;  // 插入成功
     }
     else
     {
         qDebug() << "插入操作失败，错误码：" << query.lastError().text();
         qDebug() << "新建角色成长系数初始化失败：" << query.lastError().text();
-        result = -1;
+        result --;
     }
     query.prepare("INSERT INTO user_role_item (uuid, role_money, rename_card) "
                   "VALUES (:uuid, 100, 1)");
@@ -348,13 +348,13 @@ int DataManage::InitRoleData()
     if (query.exec())
     {
         qDebug() << "新建角色物品初始化完成";
-        result = 1;  // 插入成功
+        result ++;  // 插入成功
     }
     else
     {
         qDebug() << "插入操作失败，错误码：" << query.lastError().text();
         qDebug() << "新建角色物品初始化失败：" << query.lastError().text();
-        result = -1;
+        result --;
     }
     return result;
 }
@@ -380,6 +380,46 @@ QString DataManage::GetTableToInfo(const QString table_name, const QString colum
     return result;
 }
 
+int DataManage::SetTableToInfo(const QString table_name, const QString column_name, const QString leach_column,
+                               QString leach_value, QString new_value)
+{
+    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
+    QSqlQuery query(db);
+    int result = -1;
+
+    // 准备更新语句
+    QString updateQuery = QString("UPDATE %1 SET %2 = :new_value WHERE %3 = :leach").arg(table_name, column_name, leach_column);
+
+    // 创建查询对象
+    query.prepare(updateQuery);
+    query.bindValue(":new_value", new_value);
+    query.bindValue(":leach", leach_value);
+
+    // 执行更新查询
+    if (query.exec())
+    {
+        int numRowsAffected = query.numRowsAffected();
+        if (numRowsAffected == 1)
+        {
+            // 成功更新了一行数据
+            result = 1;
+        }
+        else
+        {
+            // 更新行数不为1，可能出现多行或一行都没有的情况
+            result = 0;
+        }
+    }
+    else
+    {
+        // 更新查询执行失败，输出错误信息
+        qDebug() << "Update query failed:" << query.lastError().text();
+        result = -1;
+    }
+
+    return result;
+}
+
 int DataManage::WriteRoleInfoToRemoteDatabase()
 {
     int result = -3;
@@ -398,6 +438,7 @@ int DataManage::WriteRoleInfoToRemoteDatabase()
                                   "role_name = :roleName, "
                                   "role_life = :roleLife, "
                                   "role_prestige = :rolePrestige, "
+                                  "role_aptitude = :roleAptitude, "
                                   "role_lv = :roleLv, "
                                   "role_exp = :roleExp, "
                                   "role_agg = :roleAgg, "
@@ -409,6 +450,7 @@ int DataManage::WriteRoleInfoToRemoteDatabase()
             query.bindValue(":roleName", role_data.value("roleName").toString());
             query.bindValue(":roleLife", role_data.value("roleLife").toInt());
             query.bindValue(":rolePrestige", role_data.value("rolePrestige").toInt());
+            query.bindValue(":roleAptitude", role_data.value("roleAptitude").toInt());
             query.bindValue(":roleLv", role_data.value("roleLv").toInt());
             query.bindValue(":roleExp", role_data.value("roleExp").toInt());
             query.bindValue(":roleAgg", role_data.value("roleAgg").toInt());
@@ -524,14 +566,13 @@ int DataManage::WriteRoleCoefficientToRemoteDatabase()
         if (rowCount == 1)
         {
             // 执行更新操作
-            QString updateQuery = "UPDATE user_role_info SET "
+            QString updateQuery = "UPDATE user_role_rc SET "
                                   "rc_life = :RCLife, "
                                   "rc_basic_event = :RCBasicEvent, "
                                   "rc_att_event = :RCAttEvent, "
                                   "rc_survive_disaster = :RCSurviveDisaster, "
                                   "rc_prestige_event = :RCPrestigeEvent, "
-                                  "rc_special_event = :RCSpecialEvent, "
-                                  "role_aptitude = :RoleAptitude "
+                                  "rc_special_event = :RCSpecialEvent "
                                   "WHERE uuid = :UUID";
             query.prepare(updateQuery);
             query.bindValue(":RCLife", RC_data.value("RCLife").toInt());
@@ -540,7 +581,6 @@ int DataManage::WriteRoleCoefficientToRemoteDatabase()
             query.bindValue(":RCSurviveDisaster", RC_data.value("RCSurviveDisaster").toInt());
             query.bindValue(":RCPrestigeEvent", RC_data.value("RCPrestigeEvent").toInt());
             query.bindValue(":RCSpecialEvent", RC_data.value("RCSpecialEvent").toInt());
-            query.bindValue(":RoleAptitude", RC_data.value("roleAptitude").toInt());
             query.bindValue(":UUID", user_uuid_);
             if (query.exec())
             {
@@ -575,6 +615,74 @@ int DataManage::WriteRoleCoefficientToRemoteDatabase()
         // 查询执行失败，输出错误信息
         qDebug() << "计数查询失败:" << query.lastError().text();
     }
+    return result;
+}
+
+int DataManage::WriteUserLoginLogToRemoteDatabase()
+{
+    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
+    QSqlQuery query(db);
+    int result = 0;
+    QDateTime login_time = QDateTime::currentDateTime();
+    // 更新登录时间
+    QString updateQuery = QString("UPDATE user_data_info SET last_login_time = :new_value WHERE uuid = :uuid");
+    // 创建查询对象
+    query.prepare(updateQuery);
+    query.bindValue(":new_value", login_time);
+    query.bindValue(":leach", user_uuid_);
+    // 执行更新查询
+    if (query.exec())
+    {
+        int numRowsAffected = query.numRowsAffected();
+        if (numRowsAffected == 1)
+        {
+            // 成功更新了一行数据
+            result ++;
+        }
+        else
+        {
+            // 更新行数不为1，可能出现多行或一行都没有的情况
+            result --;
+        }
+    }
+    else
+    {
+        // 更新查询执行失败，输出错误信息
+        qDebug() << "Update query failed:" << query.lastError().text();
+        result --;
+    }
+    // 更新登录日志
+    QString insertQuery = QString("INSERT INTO %1 (login_time, ip, uuid, role_name, level) "
+                          "VALUES (:login_time, :ip, :uuid, :role_name, :level)");
+    // 创建查询对象
+    query.prepare(insertQuery);
+    query.bindValue(":login_time", login_time);
+    query.bindValue(":ip", user_ip_);
+    query.bindValue(":uuid", user_uuid_);
+    query.bindValue(":roleName", role_data.value("roleName").toString());
+    query.bindValue(":level", role_data.value("roleLv").toInt());
+    // 执行插入查询
+    if (query.exec())
+    {
+        int numRowsAffected = query.numRowsAffected();
+        if (numRowsAffected == 1)
+        {
+            // 成功插入了一行数据
+            result ++;
+        }
+        else
+        {
+            // 插入行数不为1，可能出现多行或一行都没有的情况
+            result --;
+        }
+    }
+    else
+    {
+        // 插入查询执行失败，输出错误信息
+        qDebug() << "Insert query failed:" << query.lastError().text();
+        result --;
+    }
+
     return result;
 }
 

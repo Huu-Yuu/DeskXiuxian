@@ -9,7 +9,7 @@
 int main(int argc, char* argv[])
 {
     //防止程序重复启动
-    QLockFile lockFile("./Saite_RIDS_V5.lock");
+    QLockFile lockFile("./DeskXiuxian.lock");
     if(!lockFile.tryLock(2000))       //上锁失败，不能启动
     {
         printf("请不要重复启动程序... \n");

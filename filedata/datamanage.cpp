@@ -395,6 +395,13 @@ void DataManage::SlotSaveRoleCoefficientToDatabase(QJsonObject RC_data)
     start();
 }
 
+void DataManage::SlotUpdataLoginLog()
+{
+    // 账号信息 登录时间 IP UUID 角色名 等级
+    is_SaveLoginLog = true;
+    start();
+}
+
 void DataManage::WriteRoleInfoToLocalDatabase()
 {
     if(database_.isOpen())
@@ -541,12 +548,12 @@ void DataManage::WriteRoleCoefficientToLocalDatabase()
 void DataManage::run()
 {
     QMutexLocker locker(&mutex);
+    InitRemoteData();
 #if DATABASE_TYPE == 0
     if(is_SaveRoleInfo)
     {
         is_SaveRoleInfo = false;
         WriteRoleInfoToRemoteDatabase();
-
     }
     if(is_SaveRoleItem)
     {
@@ -558,6 +565,12 @@ void DataManage::run()
         is_SaveRoleCoefficient = false;
         WriteRoleCoefficientToRemoteDatabase();
     }
+    if(is_SaveLoginLog)
+    {
+        is_SaveLoginLog = false;
+        WriteUserLoginLogToRemoteDatabase();
+    }
+
 #elif DATABASE_TYPE == 1
     if(is_SaveRoleInfo)
     {
