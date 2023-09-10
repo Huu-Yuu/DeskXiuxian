@@ -1,4 +1,4 @@
-QT       += core gui
+QT += core gui
 QT += sql
 QT += core
 QT += network

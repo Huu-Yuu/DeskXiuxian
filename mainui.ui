@@ -69,10 +69,10 @@
                <x>0</x>
                <y>20</y>
                <width>182</width>
-               <height>470</height>
+               <height>321</height>
               </rect>
              </property>
-             <layout class="QVBoxLayout" name="bisic_Layout" stretch="3,2">
+             <layout class="QVBoxLayout" name="bisic_Layout" stretch="3">
               <property name="spacing">
                <number>10</number>
               </property>
@@ -227,32 +227,6 @@
                  </widget>
                 </item>
                </layout>
-              </item>
-              <item>
-               <widget class="QGroupBox" name="five_box">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="title">
-                 <string>五行属性</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-                <widget class="QLabel" name="five_label">
-                 <property name="geometry">
-                  <rect>
-                   <x>30</x>
-                   <y>20</y>
-                   <width>101</width>
-                   <height>16</height>
-                  </rect>
-                 </property>
-                 <property name="text">
-                  <string>展示五边形</string>
-                 </property>
-                </widget>
-               </widget>
               </item>
              </layout>
             </widget>
