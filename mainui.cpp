@@ -28,12 +28,13 @@ MainUI::MainUI(QWidget* parent)
     setFixedSize(width(), height());
 
     // 将窗口居中显示
+    QRect availableGeometry = QGuiApplication::screens().at(0)->availableGeometry();
     setGeometry(
         QStyle::alignedRect(
             Qt::LeftToRight,
             Qt::AlignCenter,
             size(),
-            qApp->desktop()->availableGeometry()
+            availableGeometry
         )
     );
 

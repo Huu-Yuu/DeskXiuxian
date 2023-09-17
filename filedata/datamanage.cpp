@@ -62,8 +62,6 @@ void DataManage::OpenDatabase(QString path)
     // 打开现有数据库连接
     database_ = QSqlDatabase::addDatabase("QSQLITE");
     database_.setDatabaseName(path);
-    database_.exec("PRAGMA encoding = \"UTF-8\";");
-
     // 打开数据库连接
     if (!database_.open())
     {
@@ -71,6 +69,7 @@ void DataManage::OpenDatabase(QString path)
     }
     else
     {
+        database_.exec("PRAGMA encoding = \"UTF-8\";");
         qDebug() << "数据库已经打开.";
         if(!CheckTablesExist()) //检查并创建表单
         {

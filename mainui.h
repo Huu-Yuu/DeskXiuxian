@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QStyle>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QDate>
 #include <QScrollBar>
 #include <QTimer>
