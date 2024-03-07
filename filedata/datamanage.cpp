@@ -25,21 +25,7 @@ DataManage::DataManage()
     InitSettingFile();
 
 #if  DATABASE_TYPE == 1
-    // 获取数据库文件路径
-    QString databasePath = QCoreApplication::applicationDirPath() + "/database.db";
-
-    // 检查数据库文件是否存在
-    QFileInfo databaseFile(databasePath);
-    if (!databaseFile.exists())
-    {
-        // 数据库文件不存在，创建新的数据库
-        CreateDatabase(databasePath);
-    }
-    else
-    {
-        // 数据库文件已存在，读取现有数据库
-        OpenDatabase(databasePath);
-    }
+    InitLocalData();
 #elif DATABASE_TYPE == 0
     InitRemoteData();
 #elif DATABASE_TYPE == 2
@@ -581,7 +567,6 @@ void DataManage::run()
     {
         is_SaveRoleItem = false;
         WriteRoleItemsToLocalDatabase();
-
     }
     if(is_SaveRoleCoefficient)
     {

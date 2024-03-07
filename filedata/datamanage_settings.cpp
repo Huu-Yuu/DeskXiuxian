@@ -17,7 +17,6 @@ void DataManage::InitSettingFile()
         else
         {
             // 文件创建失败，进行错误处理
-            // ...
             qDebug() << "配置文件创建失败";
         }
     }

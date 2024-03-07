@@ -31,15 +31,11 @@ public:
      */
     static DataManage* GetInstance();
 
-    /**
-     * @brief 初始化配置文件
-     */
-    void InitSettingFile();
+    void InitSettingFile(); ///< 初始化配置文件
 
-    /**
-     * @brief 初始化远程数据库
-     */
-    void InitRemoteData();
+    void InitRemoteData();  ///< 初始化远程数据库
+
+    void InitLocalData();   ///< 初始化本地数据库
 
     /**
      * @brief 获取表单中对应的列数据
@@ -55,25 +51,13 @@ public:
     int SetTableToInfo(const QString table_name, const QString column_name, const QString leach_column,
                        QString leach_value, QString new_value);
 
-    /**
-     * @brief 获取上次游戏时间
-     */
-    QString GetLastGameTime();
+    QString GetLastGameTime();  ///< 获取上次游戏时间
 
-    /**
-     * @brief 关闭数据库
-     */
-    void DatabaseClose();
+    void DatabaseClose();   ///< 关闭数据库
 
-    /**
-     * @brief 写入游戏配置，最后登录时间
-     */
-    void SetGameConfigInfo();
+    void SetGameConfigInfo();   ///< 写入游戏配置，最后登录时间
 
-    /**
-     * @brief 写入用户信息到配置文件
-     */
-    void SetUserInfoToConfig(QString user_name, QString pass_word, QString email);
+    void SetUserInfoToConfig(QString user_name, QString pass_word, QString email);  ///< 写入用户信息到配置文件
 
     /**
      * @brief 登录校验
@@ -87,10 +71,7 @@ public:
      */
     int AccountRegistration(const QString user_name, const QString pass_word, const QString email);
 
-    /**
-     * @brief 检查角色昵称是否可用
-     */
-    bool CheckRoleNameIsOk(const QString role_name);
+    bool CheckRoleNameIsOk(const QString role_name);    ///< 检查角色昵称是否可用
 
     /**
      * @brief 修改角色名
@@ -98,15 +79,9 @@ public:
      */
     int ModifyRoleName(const QString new_name);
 
-    /**
-     * @brief 自动登录
-     */
-    bool AutomaticLogin();
+    bool AutomaticLogin();  ///< 自动登录
 
-    /**
-     * @brief 获取用户UUID
-     */
-    QString GetUserUUID(const QString user_name, const QString pass_word);
+    QString GetUserUUID(const QString user_name, const QString pass_word);  ///< 获取用户UUID
 
     /**
      * @brief 检查用户是否首次登录
@@ -184,20 +159,11 @@ private:
     static QMutex mutex;  // 互斥锁
     static DataManage* instance;  // 单例对象指针
 
-    /**
-     * @brief 打开数据库
-     */
-    void OpenDatabase(QString path);
+    void OpenDatabase(QString path);    ///< 打开数据库
 
-    /**
-     * @brief 创建数据库
-     */
-    void CreateDatabase(QString path);
+    void CreateDatabase(QString path);  ///< 创建数据库
 
-    /**
-     * @brief 检查数据库
-     */
-    bool CheckTablesExist();
+    bool CheckTablesExist();    ///< 检查数据库
 
     /**
      * @brief 写入角色基本信息到     远程数据库
@@ -223,31 +189,15 @@ private:
      */
     int WriteUserLoginLogToRemoteDatabase();
 
-    /**
-     * @brief 写入角色物品信息到     本地数据库
-     */
-    void WriteRoleItemsToLocalDatabase();
+    void WriteRoleItemsToLocalDatabase();   ///< 写入角色物品信息到     本地数据库
 
-    /**
-     * @brief 写入角色计算系数信息到   本地数据库
-     */
-    void WriteRoleCoefficientToLocalDatabase();
+    void WriteRoleCoefficientToLocalDatabase(); ///< 写入角色计算系数信息到   本地数据库
 
-    /**
-     * @brief 写入角色基本信息到     本地数据库
-     */
-    void WriteRoleInfoToLocalDatabase();
+    void WriteRoleInfoToLocalDatabase();    ///< 写入角色基本信息到     本地数据库
 
-    /**
-     * @brief 获取本地保存的账号
-     */
-    QString GetSettingUserName();
+    QString GetSettingUserName();   ///< 获取本地保存的账号
 
-    /**
-     * @brief 获取本地保存的密码
-     */
-    QString GetSettingPassWord();
-
+    QString GetSettingPassWord();   ///< 获取本地保存的密码
 
     /**
      * @brief 角色是否已经初始化
@@ -255,29 +205,23 @@ private:
      */
     int IsRoleDataInited();
 
-    /**
-     * @brief 配置文件读取
-     */
-    static QSettings* file_setting_;
+    static QSettings* file_setting_;    ///< 配置文件读取
 
-    /**
-     * @brief 数据库链接
-     */
-    QSqlDatabase database_;
+    QSqlDatabase database_;     ///< 数据库链接
 
 
-    bool is_SaveRoleInfo = false;           // 保存角色信息开关
-    bool is_SaveRoleItem = false;           // 保存角色物品开关
-    bool is_SaveRoleCoefficient = false;    // 保存角色系数开关
-    bool is_FirstCreation = false;          // 是否首次创建，用于命名角色
-    bool is_SaveLoginLog = false;           // 上传登录日志开关 登录时间 IP UUID 角色名 等级
+    bool is_SaveRoleInfo = false;           ///< 保存角色信息开关
+    bool is_SaveRoleItem = false;           ///< 保存角色物品开关
+    bool is_SaveRoleCoefficient = false;    ///< 保存角色系数开关
+    bool is_FirstCreation = false;          ///< 是否首次创建，用于命名角色
+    bool is_SaveLoginLog = false;           ///< 上传登录日志开关 登录时间 IP UUID 角色名 等级
 
-    QJsonObject role_data;      // 角色基本数据
-    QJsonObject role_item_data; // 角色物品数据
-    QJsonObject RC_data;        // 角色系数
+    QJsonObject role_data;      ///< 角色基本数据
+    QJsonObject role_item_data; ///< 角色物品数据
+    QJsonObject RC_data;        ///< 角色系数
 
-    static QString user_uuid_ ;          // 账号UUID
-    static QString user_ip_ ;      // 用户IP
+    static QString user_uuid_ ;          ///< 账号UUID
+    static QString user_ip_ ;      ///< 用户IP
 
 };
 

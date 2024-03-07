@@ -20,11 +20,28 @@ void DataManage::InitRemoteData()
     else
     {
         qDebug() << "远程数据服务连接失败";
-        // 处理连接失败的情况
-        // ...
     }
     user_ip_ = PublicFunc::GetLocalIpAddress();
     qDebug() << "获取到当前IP地址为：" << user_ip_;
+}
+
+void DataManage::InitLocalData()
+{
+    // 获取数据库文件路径
+    QString databasePath = QCoreApplication::applicationDirPath() + "/database.db";
+
+    // 检查数据库文件是否存在
+    QFileInfo databaseFile(databasePath);
+    if (!databaseFile.exists())
+    {
+        // 数据库文件不存在，创建新的数据库
+        CreateDatabase(databasePath);
+    }
+    else
+    {
+        // 数据库文件已存在，读取现有数据库
+        OpenDatabase(databasePath);
+    }
 }
 
 int DataManage::LoginVerification(QString user_name, QString pass_word)
