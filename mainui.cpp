@@ -136,7 +136,7 @@ void MainUI::UpdateEquip(QString weapon, QString magic, QString helmet, QString 
     ui->equip_mount->setText(mount);
 }
 
-void MainUI::SlotUpdateUI(RoleUI part, QString new_data)
+void MainUI::SlotUpdateUI(RoleUIEnum part, QString new_data)
 {
     switch (part)
     {

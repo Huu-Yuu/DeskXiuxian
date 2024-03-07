@@ -118,7 +118,7 @@ public slots:
     /**
      * @brief 更新角色信息标签，UI控件，更新的信息
      */
-    void SlotUpdateUI(RoleUI part, QString new_data);
+    void SlotUpdateUI(RoleUIEnum part, QString new_data);
 
     /**
      * @brief 激活突破按钮 槽函数

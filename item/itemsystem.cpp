@@ -1,7 +1,6 @@
 #include "itemsystem.h"
 
 QMutex ItemSystem::mutex_;  // 初始化互斥锁对象
-ItemSystem* ItemSystem::instance = nullptr;  // 初始化单例对象指针
 
 ItemSystem::ItemSystem(QObject *parent) : QObject(parent)
 {
@@ -12,17 +11,6 @@ ItemSystem::ItemSystem(QObject *parent) : QObject(parent)
 ItemSystem::~ItemSystem()
 {
 
-}
-
-ItemSystem* ItemSystem::GetInstance()
-{
-    if (!instance) {
-        QMutexLocker locker(&mutex_);  // 加锁
-        if (!instance) {
-            instance = new ItemSystem();
-        }
-    }
-    return instance;
 }
 
 int ItemSystem::GetItemMoney()

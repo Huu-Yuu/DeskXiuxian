@@ -2,6 +2,8 @@
 #define ITEMBASE_H
 
 #include <QObject>
+#include <QMap>
+#include "public/public_type.h"
 
 /**
  * @brief 物品基类
@@ -9,61 +11,44 @@
 class ItemBase : public QObject
 {
     Q_OBJECT
+    typedef void (ItemBase::*Function_Action)(const QJsonObject&);
 public:
     explicit ItemBase(QObject *parent = nullptr);
 
-    /**
-     * @brief 获取物品数量
-     */
-    int GetItemNum() const;
+    int GetItemIndex();     ///< 获取物品索引
 
-    /**
-     * @brief 设置物品数量
-     */
-    void SetItemNum(int num);
+    int GetItemNum() const;     ///< 获取物品数量
 
-    /**
-     * @brief 获取物品数量
-     */
-    QString GetItemName() const;
+    void SetItemNum(int num);       ///< 设置物品数量
 
-    /**
-     * @brief 获取物品数量
-     */
-    void SetItemName(const QString& name);
+    QString GetItemName() const;            ///< 获取物品名称
 
-    /**
-     * @brief 获取物品价格
-     */
-    int GetItemPrice() const;
+    void SetItemName(const QString& name);  ///< 写入物品名称
 
-    /**
-     * @brief 设置物品价格
-     */
-    void SetItemPrice(int price);
+    int GetItemPrice() const;       ///< 获取物品价格
 
-    /**
-     * @brief 获取物品描述
-     */
-    QString GetItemExplain() const;
+    void SetItemPrice(int price);   ///< 设置物品价格
 
-    /**
-     * @brief 写入物品描述
-     */
-    void SetItemExplain(const QString& explain);
+    QString GetItemExplain() const; ///< 获取物品描述
+
+    void SetItemExplain(const QString& explain);    ///< 写入物品描述
 
     /**
      * @brief 出售物品
+     * @param quantity 出售数量
+     * @return 总售价
      */
-    virtual int SellItem(int quantity) const = 0;
+    int SellItem(int quantity) const;
 
 signals:
 
-private:
-    QString item_name;      // 名称
-    QString item_explain;   // 描述
-    int item_num_;          // 数量
-    int item_price_;        // 价格
+protected:
+    RoleItemEnum item_index_ = kUnknownProp;    ///< 物品索引
+    QString item_name_ = "unknown";             ///< 名称
+    QString item_explain_ = "unknown";          ///< 描述
+    int item_num_ = 0;                          ///< 数量
+    int item_price_ = 0;                        ///< 价格
+    QMap<QString, Function_Action> m_function_action_;
 };
 
 #endif // ITEMBASE_H

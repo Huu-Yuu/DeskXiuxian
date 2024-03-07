@@ -31,7 +31,7 @@ public:
         * @brief 获取角色面板属性
         * @return 通用类型 目标属性
         */
-    QVariant GetRoleTargetProperties(RoleUI tar_name);
+    QVariant GetRoleTargetProperties(RoleUIEnum tar_name);
 
     /**
         * @brief 获取昵称
@@ -412,7 +412,7 @@ signals:
     /**
         * @brief 更新角色指定面板数据
         */
-    void SignalUpdateUI(RoleUI part, QString new_data);
+    void SignalUpdateUI(RoleUIEnum part, QString new_data);
 
     /**
         * @brief 更新角色基本信息数据库

@@ -44,7 +44,7 @@ void RoleSystem::run()
     m_stopRequested = false;
 }
 
-QVariant RoleSystem::GetRoleTargetProperties(RoleUI tar_name)
+QVariant RoleSystem::GetRoleTargetProperties(RoleUIEnum tar_name)
 {
     switch (tar_name)
     {

@@ -25,7 +25,7 @@ find_package(Qt5 COMPONENTS Core Gui Sql Network Widgets REQUIRED)
 #cpp h
 set(SRC_DIR ${CMAKE_SOURCE_DIR})
 file(GLOB_RECURSE SRC_SOURCE_FILES ${SRC_DIR}/*.cpp)
-file(GLOB_RECURSE SRC_HEADER_FILES "${SRC_DIR}/*.h")
+file(GLOB_RECURSE SRC_HEADER_FILES ${SRC_DIR}/*.h)
 FILE(GLOB_RECURSE QRC_SOURCE_FILES ${SRC_DIR}/*.qrc)
 
 add_executable(DeskXiuxina

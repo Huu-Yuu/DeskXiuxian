@@ -194,8 +194,8 @@ void MainCtrl::InitRoleInfo()
     QString mount = data_file_->GetTableToInfo("RoleEquip", "equipMount");
 
     // 从数据库获取角色获取物品、道具
-    QString money = data_file_->GetTableToInfo("RoleItem", "roleMoney");
-    QString rename_card = data_file_->GetTableToInfo("RoleItem", "renameCard");
+    QString money = data_file_->GetTableToInfo("RoleItemEnum", "roleMoney");
+    QString rename_card = data_file_->GetTableToInfo("RoleItemEnum", "renameCard");
 
     // 从数据库获取角色属性相关系数
     QString life_Coefficient = data_file_->GetTableToInfo("RoleCoefficient", "RCLife");

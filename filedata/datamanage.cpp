@@ -246,18 +246,18 @@ bool DataManage::CheckTablesExist()
         }
     }
 
-    // 检查 RoleItem 表是否存在
-    queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleItem'";
+    // 检查 RoleItemEnum 表是否存在
+    queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleItemEnum'";
     if (!query.exec(queryString))
     {
-        qDebug() << "执行查询 RoleItem 时出错:" << query.lastError().text();
+        qDebug() << "执行查询 RoleItemEnum 时出错:" << query.lastError().text();
         return false;
     }
 
-    // 如果 RoleItem 表不存在，则创建表并初始化字段值
+    // 如果 RoleItemEnum 表不存在，则创建表并初始化字段值
     if (!query.next())
     {
-        QString createTableQuery = "CREATE TABLE RoleItem ("
+        QString createTableQuery = "CREATE TABLE RoleItemEnum ("
                                    "roleUUID TEXT,"
                                    "roleName TEXT,"
                                    "roleMoney INTEGER,"
@@ -270,7 +270,7 @@ bool DataManage::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleItem (roleUUID, roleName, roleMoney, renameCard) "
+        QString insertQuery = "INSERT INTO RoleItemEnum (roleUUID, roleName, roleMoney, renameCard) "
                               "VALUES (:roleUUID, :roleName, :roleMoney, :renameCard)";
         query.prepare(insertQuery);
         query.bindValue(":roleUUID", "UUID");
@@ -459,7 +459,7 @@ void DataManage::WriteRoleItemsToLocalDatabase()
         QString roleName = role_item_data.value("roleName").toString();
 
         QSqlQuery query;
-        query.prepare("SELECT COUNT(*) FROM RoleItem WHERE roleName = :roleName");
+        query.prepare("SELECT COUNT(*) FROM RoleItemEnum WHERE roleName = :roleName");
         query.bindValue(":roleName", roleName);
 
         if (query.exec() && query.next())
@@ -468,13 +468,13 @@ void DataManage::WriteRoleItemsToLocalDatabase()
             if (rowCount > 0)
             {
                 // 执行更新操作
-                QString updateQuery = "UPDATE RoleItem SET roleMoney = :roleMoney, renameCard = :renameCard WHERE roleName = :roleName";
+                QString updateQuery = "UPDATE RoleItemEnum SET roleMoney = :roleMoney, renameCard = :renameCard WHERE roleName = :roleName";
                 query.prepare(updateQuery);
             }
             else
             {
                 // 执行插入操作
-                QString insertQuery = "INSERT INTO RoleItem (roleName, roleMoney, renameCard) "
+                QString insertQuery = "INSERT INTO RoleItemEnum (roleName, roleMoney, renameCard) "
                                       "VALUES (:roleName, :roleMoney, :renameCard)";
                 query.prepare(insertQuery);
             }
