@@ -23,36 +23,17 @@ public:
 
     ~MainCtrl();
 
-    /**
-     * @brief 打印日志
-     */
-    void DebugOutToLog(QString msg);
+    void DebugOutToLog(QString msg);    ///< 打印日志
 
-    /**
-     * @brief 显示主界面
-     */
-    void ShowMainUi();
+    void ShowMainUi();  ///< 显示主界面
 
-    /**
-     * @brief 登录校验
-     */
-    bool LoginVerification(QString user_name, QString pass_word);
+    bool LoginVerification(QString user_name, QString pass_word);   ///< 登录校验
 
 public slots:
-    /**
-     * @brief 初始化角色信息
-     */
-    void SlotInitRoleData();
 
-    /**
-     * @brief 开始修仙
-     */
-    void SlotStartFishing();
-
-    /**
-     * @brief 结束修仙
-     */
-    void SlotStopFishing();
+    void SlotInitRoleData();    ///< 初始化角色信息
+    void SlotStartFishing();    ///< 开始修仙
+    void SlotStopFishing();     ///< 结束修仙
 
     /**
      * @brief 客户端信号错误处理函数
@@ -63,33 +44,21 @@ public slots:
     void SlotDeviceResultDeal(int result, QJsonObject extra = QJsonObject());
 
 signals:
-    /**
-     * @brief 发送日志输出信号
-     */
-    void SignalLogOut(QtMsgType type, const QMessageLogContext& context, const QString& message);
 
-    /**
-     * @brief 发送消息到UI
-     */
-    void SignalShowMsgToUI(QString msg);
+    void SignalLogOut(QtMsgType type, const QMessageLogContext& context, const QString& message);   ///< 发送日志输出信号
+    void SignalShowMsgToUI(QString msg);    ///< 发送消息到UI
 
 private:
-    /**
-     * @brief 初始化角色信息（角色属性和角色UI），游戏上线后进行处理
-     */
-    void InitRoleInfo();
 
-    /**
-     * @brief 初始化角色网络资料
-     */
-    void InitRoleNetworkData();
+    void InitRoleInfo();    ///< 初始化角色信息（角色属性和角色UI），游戏上线后进行处理
+    void InitRoleNetworkData(); ///< 初始化角色网络资料
 
-    MainUI* main_ui_obj_;   // 角色UI类
-    RoleSystem* role_obj_; // 角色系统对象
-    Logger* logger_obj_;   // 日志管理器对象
-    DataManage* data_file_;         // 文件管理对象
-    GameProgress* game_obj_;    // 游戏进度控制对象
-    ItemSystem* role_item_;     // 角色道具
+    MainUI* main_ui_obj_;   ///< 角色UI类
+    RoleSystem* role_obj_; ///< 角色系统对象
+    Logger* logger_obj_;   ///< 日志管理器对象
+    DataManage* data_file_;         ///< 文件管理对象
+    GameProgress* game_obj_;    ///< 游戏进度控制对象
+    ItemSystem* role_item_;     ///< 角色道具
 //    TcpClient* tcp_client_;
 
 };
