@@ -1,7 +1,6 @@
 #include "gameprogress.h"
 
 QMutex GameProgress::mutex;  // 初始化互斥锁对象
-GameProgress* GameProgress::instance = nullptr;  // 初始化单例对象指针
 
 GameProgress::~GameProgress()
 {
@@ -55,19 +54,6 @@ GameProgress::GameProgress()
     connect(life_timer_, SIGNAL(timeout()), this, SIGNAL(SignaleLifeUpdataTimeOut()));
 
     qDebug() << "游戏进程控制类 线程ID：" << currentThreadId();
-}
-
-GameProgress* GameProgress::GetInstance()
-{
-    if (!instance)
-    {
-        QMutexLocker locker(&mutex);  // 加锁
-        if (!instance)
-        {
-            instance = new GameProgress();
-        }
-    }
-    return instance;
 }
 
 int GameProgress::GetAnecdotesTime()

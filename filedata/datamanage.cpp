@@ -1,23 +1,9 @@
 #include "datamanage.h"
 
 QMutex DataManage::mutex;  // 初始化互斥锁对象
-DataManage* DataManage::instance = nullptr;  // 初始化单例对象指针
 QString DataManage::user_uuid_ = "";
 QString DataManage::user_ip_  = "";
 QSettings* DataManage::file_setting_ = nullptr;
-
-DataManage* DataManage::GetInstance()
-{
-    if (instance == nullptr)
-    {
-        QMutexLocker locker(&mutex);  // 加锁
-        if (instance == nullptr)
-        {
-            instance = new DataManage();
-        }
-    }
-    return instance;
-}
 
 DataManage::DataManage()
 {

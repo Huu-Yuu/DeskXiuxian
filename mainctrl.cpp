@@ -5,12 +5,12 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
 
     //注册MessageHandler(注意要有日志文件夹)
 //    qInstallMessageHandler(Logger::OutputMessageHandler);
-    data_file_ = DataManage::GetInstance();
+    data_file_ = DataManage::getInstance();
     main_ui_obj_ = new MainUI;
-    logger_obj_ = Logger::GetInstance();
-    game_obj_ = GameProgress::GetInstance();
-    role_obj_ = RoleSystem::GetInstance();
-    role_item_ = ItemSystem::GetInstance();
+    logger_obj_ = Logger::getInstance();
+    game_obj_ = GameProgress::getInstance();
+    role_obj_ = RoleSystem::getInstance();
+    role_item_ = ItemSystem::getInstance();
 
 #if DATABASE_TYPE == 1
     // 初始化UI和角色数据
@@ -131,16 +131,16 @@ void MainCtrl::SlotInitRoleData()
     // 更新UI
     main_ui_obj_->InitRoleUI(role_info_data, role_item_data, role_rc_data, role_equip_data);
     // 更新角色基本信息
-    CultivationStage cultivation = static_cast<CultivationStage>(role_info_data.value("role_lv").toString().toInt());
+    int cultivation = role_info_data.value("role_lv").toString().toInt();
     role_obj_->SetRoleName(role_info_data.value("role_name").toString());
     role_obj_->SetRoleLife(role_info_data.value("role_life").toString().toInt());
-    role_obj_->SetRolePrestige(role_info_data.value("role_prestige").toString().toInt());
-    role_obj_->SetRoleCultivation(cultivation);
-    role_obj_->SetCurRoleExp(role_info_data.value("role_cur_exp").toString().toInt());
-    role_obj_->SetRoleExp(role_info_data.value("role_exp").toString().toInt());
-    role_obj_->SetRoleAgg(role_info_data.value("role_agg").toString().toInt());
-    role_obj_->SetRoleDef(role_info_data.value("role_def").toString().toInt());
-    role_obj_->SetRoleHp(role_info_data.value("role_hp").toString().toInt());
+    role_obj_->SetRoleBaseAtt(kRolePrestigeAtt, role_info_data.value("role_prestige").toString().toInt());
+    role_obj_->SetRoleBaseAtt(kRoleLvAtt, cultivation);
+    role_obj_->SetRoleBaseAtt(kRoleExpAtt, role_info_data.value("role_cur_exp").toString().toInt());
+    role_obj_->SetRoleBaseAtt(kkRoleMaxExpAtt, role_info_data.value("role_exp").toString().toInt());
+    role_obj_->SetRoleBaseAtt(kRoleAggAtt, role_info_data.value("role_agg").toString().toInt());
+    role_obj_->SetRoleBaseAtt(kRoleDefAtt, role_info_data.value("role_def").toString().toInt());
+    role_obj_->SetRoleBaseAtt(kRoleHpAtt, role_info_data.value("role_hp").toString().toInt());
     // 更新装备
 //    role_obj_->SetEquipWeapon();
 //    role_obj_->SetEquipMagic();
@@ -151,7 +151,7 @@ void MainCtrl::SlotInitRoleData()
 //    role_obj_->SetEquipJewelry();
     // 更新角色道具
     role_item_->SetItemMoney(role_item_data.value("role_money").toString().toInt());
-    role_item_->SetItemRenameCard(role_item_data.value("role_money").toString().toInt());
+//    role_item_->SetItemRenameCard(role_item_data.value("role_money").toString().toInt());
 
     // 更新角各项属性系数
     role_obj_->SetLifeCoefficient(role_rc_data.value("rc_life").toString().toInt());
@@ -176,7 +176,7 @@ void MainCtrl::InitRoleInfo()
     QString life = data_file_->GetTableToInfo("RoleInfo", "roleLife");
     QString prestige = data_file_->GetTableToInfo("RoleInfo", "rolePrestige");
     QString LV = data_file_->GetTableToInfo("RoleInfo", "roleLv");
-    CultivationStage cultivation = static_cast<CultivationStage>(LV.toInt());
+    int cultivation = static_cast<CultivationStage>(LV.toInt());
     QString cur_exp = data_file_->GetTableToInfo("RoleInfo", "roleCurExp");
     QString exp = data_file_->GetTableToInfo("RoleInfo", "roleExp");
     QString agg = data_file_->GetTableToInfo("RoleInfo", "roleAgg");
@@ -204,24 +204,24 @@ void MainCtrl::InitRoleInfo()
     // 将获取到的值赋值给对象
     role_obj_->SetRoleName(name);
     role_obj_->SetRoleLife(life.toUInt());
-    role_obj_->SetRolePrestige(prestige.toInt());
-    role_obj_->SetRoleCultivation(cultivation);
-    role_obj_->SetCurRoleExp(cur_exp.toInt());
-    role_obj_->SetRoleExp(exp.toInt());
-    role_obj_->SetRoleAgg(agg.toInt());
-    role_obj_->SetRoleDef(def.toInt());
-    role_obj_->SetRoleHp(hp.toInt());
-    role_obj_->SetEquipWeapon(weapon);
-    role_obj_->SetEquipMagic(magic);
-    role_obj_->SetEquipHelmet(helmet);
-    role_obj_->SetEquipClothing(clothing);
-    role_obj_->SetEquipBritches(britches);
-    role_obj_->SetEquipShoe(shoe);
-    role_obj_->SetEquipJewelry(jewelry);
+    role_obj_->SetRoleBaseAtt(kRolePrestigeAtt, prestige.toInt());
+    role_obj_->SetRoleBaseAtt(kRoleLvAtt, cultivation);
+    role_obj_->SetRoleBaseAtt(kRoleExpAtt, cur_exp.toInt());
+    role_obj_->SetRoleBaseAtt(kkRoleMaxExpAtt, exp.toInt());
+    role_obj_->SetRoleBaseAtt(kRoleAggAtt, agg.toInt());
+    role_obj_->SetRoleBaseAtt(kRoleDefAtt, def.toInt());
+    role_obj_->SetRoleBaseAtt(kRoleHpAtt, hp.toInt());
+    role_obj_->SetEquipAreaName(kWeaponArea, weapon);
+    role_obj_->SetEquipAreaName(kMagicArea, magic);
+    role_obj_->SetEquipAreaName(kHelmetArea, helmet);
+    role_obj_->SetEquipAreaName(kClothingArea, clothing);
+    role_obj_->SetEquipAreaName(kBritchesArea, britches);
+    role_obj_->SetEquipAreaName(kShoeArea, shoe);
+    role_obj_->SetEquipAreaName(kJewelrtArea, jewelry);
 
     // 更新角色道具
     role_item_->SetItemMoney(money.toInt());
-    role_item_->SetItemRenameCard(rename_card.toInt());
+//    role_item_->SetItemRenameCard(rename_card.toInt());
 
     // 更新角各项属性系数
     role_obj_->SetLifeCoefficient(life_Coefficient.toInt());

@@ -1,21 +1,8 @@
 #include "logger.h"
 
 QMutex Logger::mutex_;  // 初始化互斥锁对象
-Logger* Logger::instance = nullptr;  // 初始化单例对象指针
 QMutex Logger::std_log_mutex;
 
-Logger* Logger::GetInstance()
-{
-    if (!instance)
-    {
-        QMutexLocker locker(&mutex_);  // 加锁
-        if (!instance)
-        {
-            instance = new Logger();
-        }
-    }
-    return instance;
-}
 
 Logger::Logger(QObject* parent) : QObject(parent)
 {

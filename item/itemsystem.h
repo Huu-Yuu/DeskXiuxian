@@ -7,42 +7,37 @@
 #include "filedata/datamanage.h"
 #include "itembase.h"
 
-
 /**
  * @brief 物品系统类
  */
 class ItemSystem : public QObject
 {
     Q_OBJECT
+
+    ItemSystem(QObject *parent);
+
 public:
     SINGLETON(ItemSystem);
     ~ItemSystem();
 
-    /**
-     * @brief 获取灵石数量
-     */
-    int GetItemMoney();
+    int GetItemMoney(); ///< 获取灵石数量
 
-    /**
-     * @brief 写入灵石数量
-     */
-    void SetItemMoney(int money);
+    void SetItemMoney(int money);   ///< 写入灵石数量
 
-    /**
-     * @brief 获取改名卡数量
-     */
-    int GetItemRenameCard();
-
-    /**
-     * @brief 写入改名卡数量
-     */
-    void SetItemRenameCard(int item_rename_card);
 
 signals:
+
+public slots:
+    /**
+     * @brief 灵石业务，用于增加或减少
+     * @param money 增加或减少的灵石
+     * **/
+    void ItemMoneyBusiness(int money);
 
 private:
     static QMutex mutex_; ///< 互斥锁，用于线程同步
     QMap<int, ItemBase*> m_action_strategy; ///< 物品索引 和 类绑定
+    int item_money_;     ///< 货币灵石
 };
 
 #endif // ITEMSYSTEM_H

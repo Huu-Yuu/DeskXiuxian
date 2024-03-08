@@ -40,7 +40,20 @@ public:
      */
     int SellItem(int quantity) const;
 
+    /**
+     * @brief 使用道具
+     * @param sum 使用数量，默认为1
+     * @return 返回错误码 正在为 NO_ERROR
+     * **/
+    int UseItem(int sum = 1);
+
 signals:
+    /**
+     * @brief 数量被改变信号
+     * @param sum 改变后的数量
+     * **/
+    void SignalQuantityChanged(int sum); ///< 数量被改变
+
 
 protected:
     RoleItemEnum item_index_ = kUnknownProp;    ///< 物品索引

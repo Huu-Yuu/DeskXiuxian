@@ -10,6 +10,7 @@
 #include <QThread>
 #include <QMutex>
 #include "public/error_code.h"
+#include "common/singleton.h"
 
 /**
  * @brief 日志记录器
@@ -18,7 +19,8 @@ class Logger : public QObject
 {
     Q_OBJECT
 public:
-    static Logger* GetInstance();
+    SINGLETON(Logger);
+    explicit Logger(QObject* parent = nullptr);
 
     ~Logger();
 
@@ -87,16 +89,10 @@ public:
 signals:
 
 public slots:
-    /**
-     * @brief 打印日志槽函数
-     */
-    void SlotOutTolog(QtMsgType type, const QMessageLogContext& context, const QString& message);
+
+    void SlotOutTolog(QtMsgType type, const QMessageLogContext& context, const QString& message);   ///< 打印日志槽函数
 
 private:
-    explicit Logger(QObject* parent = nullptr);
-    Logger(const Logger&) = delete;
-    Logger& operator=(const Logger&) = delete;
-    static Logger* instance;  // 单例对象指针
     QFile logFile_;
     QTextStream logStream_;
     QThread thread_;

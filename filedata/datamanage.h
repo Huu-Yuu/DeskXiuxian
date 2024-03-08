@@ -17,6 +17,7 @@
 #include "public/public_macro.h"
 #include "public/public_func.h"
 #include "logger/logger.h"
+#include "common/singleton.h"
 
 /**
  * @brief 文件管理类
@@ -25,16 +26,11 @@ class DataManage : public QThread
 {
 
 public:
-
-    /**
-     * @brief 获取单例
-     */
-    static DataManage* GetInstance();
+    SINGLETON(DataManage);
+    DataManage();
 
     void InitSettingFile(); ///< 初始化配置文件
-
     void InitRemoteData();  ///< 初始化远程数据库
-
     void InitLocalData();   ///< 初始化本地数据库
 
     /**
@@ -50,13 +46,9 @@ public:
      */
     int SetTableToInfo(const QString table_name, const QString column_name, const QString leach_column,
                        QString leach_value, QString new_value);
-
     QString GetLastGameTime();  ///< 获取上次游戏时间
-
     void DatabaseClose();   ///< 关闭数据库
-
     void SetGameConfigInfo();   ///< 写入游戏配置，最后登录时间
-
     void SetUserInfoToConfig(QString user_name, QString pass_word, QString email);  ///< 写入用户信息到配置文件
 
     /**
@@ -78,9 +70,7 @@ public:
      * @return 1-修改成功 0-修改失败 -1-数据库操作失败
      */
     int ModifyRoleName(const QString new_name);
-
     bool AutomaticLogin();  ///< 自动登录
-
     QString GetUserUUID(const QString user_name, const QString pass_word);  ///< 获取用户UUID
 
     /**
@@ -132,37 +122,15 @@ public:
 
 public slots:
 
-    /**
-     * @brief 保存角色基本信息数据 槽函数
-     */
-    void SlotSaveRoleInfoToDatabase(QJsonObject role_data);
-
-    /**
-     * @brief 保存角色物品数据 槽函数
-     */
-    void SlotSaveRoleItemToDatabase(QJsonObject role_item_data);
-
-    /**
-     * @brief 保存角色相关属性系数数据 槽函数
-     */
-    void SlotSaveRoleCoefficientToDatabase(QJsonObject RC_data);
-
-    /**
-     * @brief 更新登录日志 槽函数
-     */
-    void SlotUpdataLoginLog();
+    void SlotSaveRoleInfoToDatabase(QJsonObject role_data); ///< 保存角色基本信息数据 槽函数
+    void SlotSaveRoleItemToDatabase(QJsonObject role_item_data);    ///< 保存角色物品数据 槽函数
+    void SlotSaveRoleCoefficientToDatabase(QJsonObject RC_data);    ///< 保存角色相关属性系数数据 槽函数
+    void SlotUpdataLoginLog();  ///< 更新登录日志 槽函数
 private:
-    DataManage();
-    // 阻止拷贝构造函数和赋值运算符
-    DataManage(const DataManage&) = delete;
-    DataManage& operator=(const DataManage&) = delete;
     static QMutex mutex;  // 互斥锁
-    static DataManage* instance;  // 单例对象指针
 
     void OpenDatabase(QString path);    ///< 打开数据库
-
     void CreateDatabase(QString path);  ///< 创建数据库
-
     bool CheckTablesExist();    ///< 检查数据库
 
     /**
@@ -188,15 +156,10 @@ private:
      * @return 1-写入正常 0-更新失败 -1-更新查询失败 -2-不存在这一行 -3-计数查询失败
      */
     int WriteUserLoginLogToRemoteDatabase();
-
     void WriteRoleItemsToLocalDatabase();   ///< 写入角色物品信息到     本地数据库
-
     void WriteRoleCoefficientToLocalDatabase(); ///< 写入角色计算系数信息到   本地数据库
-
     void WriteRoleInfoToLocalDatabase();    ///< 写入角色基本信息到     本地数据库
-
     QString GetSettingUserName();   ///< 获取本地保存的账号
-
     QString GetSettingPassWord();   ///< 获取本地保存的密码
 
     /**

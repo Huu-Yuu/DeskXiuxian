@@ -8,6 +8,7 @@
 #include <QEventLoop>
 #include <QTimer>
 #include "role/rolesystem.h"
+#include "common/singleton.h"
 
 /**
  * @brief 游戏进程控制类
@@ -17,74 +18,32 @@ class GameProgress : public QThread
     Q_OBJECT
 
 public:
-    /**
-     * @brief 单例
-     */
-    static GameProgress* GetInstance();
-
+    SINGLETON(GameProgress);
+    GameProgress();
     ~GameProgress();
 
-    /**
-     * @brief 获取基本事件循环时间
-     */
-    int GetAnecdotesTime();
+    int GetAnecdotesTime(); ///< 获取基本事件循环时间
 
-    /**
-     * @brief 获取属性事件循环时间
-     */
-    int GetAttTime();
+    int GetAttTime();   ///< 获取属性事件循环时间
 
-    /**
-     * @brief 单例
-     */
-    QTimer* GetJianghuTimer();
 
-    /**
-     * @brief 写入江湖轶事倒计时
-     */
-    void SetAnecdotesTime_(int time);
-
-    /**
-     * @brief 停止线程
-     */
-    void StopThread();
-
-    /**
-     * @brief 开启修行事件定时器
-     */
-    void StarPractic();
-
-    /**
-     * @brief 暂停修行事件定时器
-     */
-    void StopPractic();
+    QTimer* GetJianghuTimer();  ///< 获取江湖定时器
+    void SetAnecdotesTime_(int time);   ///< 写入江湖轶事倒计时
+    void StopThread();  ///< 停止线程
+    void StarPractic();     ///< 开启修行事件定时器
+    void StopPractic();     ///< 暂停修行事件定时器
 
 signals:
-    /**
-     * @brief 江湖定时器超时信号
-     */
-    void SignalJianghuTimeOut();
 
-    /**
-     * @brief 基本属性定时器超时信号
-     */
-    void SignalBasicAttTimeOut();
-
-    /**
-     * @brief 角色寿命成长定时器超时信号
-     */
-    void SignaleLifeUpdataTimeOut();
+    void SignalJianghuTimeOut();    ///< 江湖定时器超时信号
+    void SignalBasicAttTimeOut();   ///< 基本属性定时器超时信号
+    void SignaleLifeUpdataTimeOut();    ///< 角色寿命成长定时器超时信号
 
 protected:
     void run();
 
 private:
-    GameProgress();
-    GameProgress(const GameProgress&) = delete;  // 禁用拷贝构造函数
-    GameProgress& operator=(const GameProgress&) = delete;  // 禁用赋值运算符
     static QMutex mutex;  // 互斥锁
-
-    static GameProgress* instance;  // 单例对象指针
     bool m_stopRequested = false;   // 线程停止
 
     QTimer* jianghu_timer_;         // 江湖定时器对象  影响 经验值和货币

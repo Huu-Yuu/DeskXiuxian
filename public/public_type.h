@@ -21,6 +21,9 @@ enum TcpCmadType
     kTcpRoleStatus                = 10, ///<角色状态  在线，离线，死亡
 };
 
+/**
+ * @brief 远程操作枚举
+ * **/
 enum TcpOptCode
 {
     kTcpOptUnknown          = -1,   ///< 保留错误类型
@@ -59,6 +62,33 @@ enum RoleUIEnum
 };
 
 /**
+ * @brief 元素属性枚举
+ * **/
+enum ElementAttEnum
+{
+    kElementMetal,          ///< 金
+    kElementWood,           ///< 木
+    kElementWater,          ///< 水
+    kElementFire,           ///< 火
+    ElementEarth            ///< 土
+};
+
+/**
+ * @brief 角色装备部位枚举
+ * **/
+enum RoleEquipAreaEnum
+{
+    kWeaponArea,            ///< 武器
+    kMagicArea,            ///< 法宝
+    kHelmetArea,           ///< 头盔
+    kClothingArea,         ///< 上衣
+    kBritchesArea,         ///< 裤子
+    kShoeArea,             ///< 鞋子
+    kJewelrtArea,          ///< 首饰
+    kMountArea            ///< 坐骑
+};
+
+/**
  * @brief 角色背包，道具
  */
 enum RoleItemEnum
@@ -67,6 +97,23 @@ enum RoleItemEnum
     kRoleMoney,         ///< 灵石
     kPropRenameCard     ///< 改名卡
 
+};
+
+/**
+ * @brief 角色基本属性枚举
+ * **/
+ enum RoleBaseAttEnum
+{
+     kRoleNameAtt,          ///< 昵称
+     kRoleLifeAtt,          ///< 寿命
+     kRolePrestigeAtt,      ///< 声望
+     kRoleLvAtt,            ///< 修为
+     kRoleExpAtt,           ///< 经验值
+     kRoleAggAtt,           ///< 攻击力
+     kRoleDefAtt,           ///< 防御力
+     kRoleHpAtt,            ///< 血量
+     kRoleMaxLifeAtt,       ///< 最大寿命
+     kkRoleMaxExpAtt        ///< 总经验
 };
 
 /**
@@ -84,7 +131,8 @@ enum CultivationStage
     DACHENG,
     WUDAO,
     YUHUA,
-    XIAN
+    XIAN,
+    MAXLV
 };
 
 #endif // PUBLIC_TYPE_H

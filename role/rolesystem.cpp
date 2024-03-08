@@ -196,126 +196,6 @@ void RoleSystem::SetRoleHp(int hp)
     role_hp_ = hp;
 }
 
-int RoleSystem::GetAttMetal() const
-{
-    return att_metal_;
-}
-
-void RoleSystem::SetAttMetal(int metal)
-{
-    att_metal_ = metal;
-}
-
-int RoleSystem::GetAttWood() const
-{
-    return att_wood_;
-}
-
-void RoleSystem::SetAttWood(int wood)
-{
-    att_wood_ = wood;
-}
-
-int RoleSystem::GetAttWater() const
-{
-    return att_water_;
-}
-
-void RoleSystem::SetAttWater(int water)
-{
-    att_water_ = water;
-}
-
-int RoleSystem::GetAttFire() const
-{
-    return att_fire_;
-}
-
-void RoleSystem::SetAttFire(int fire)
-{
-    att_fire_ = fire;
-}
-
-int RoleSystem::GetAttEarth() const
-{
-    return att_earth_;
-}
-
-void RoleSystem::SetAttEarth(int earth)
-{
-    att_earth_ = earth;
-}
-
-QString RoleSystem::GetEquipWeapon() const
-{
-    return equip_weapon_;
-}
-
-void RoleSystem::SetEquipWeapon(const QString& weapon)
-{
-    equip_weapon_ = weapon;
-}
-
-QString RoleSystem::GetEquipMagic() const
-{
-    return equip_magic_;
-}
-
-void RoleSystem::SetEquipMagic(const QString& magic)
-{
-    equip_magic_ = magic;
-}
-
-QString RoleSystem::GetEquipHelmet() const
-{
-    return equip_helmet_;
-}
-
-void RoleSystem::SetEquipHelmet(const QString& helmet)
-{
-    equip_helmet_ = helmet;
-}
-
-QString RoleSystem::GetEquipClothing() const
-{
-    return equip_clothing_;
-}
-
-void RoleSystem::SetEquipClothing(const QString& clothing)
-{
-    equip_clothing_ = clothing;
-}
-
-QString RoleSystem::GetEquipBritches() const
-{
-    return equip_britches_;
-}
-
-void RoleSystem::SetEquipBritches(const QString& britches)
-{
-    equip_britches_ = britches;
-}
-
-QString RoleSystem::GetEquipShoe() const
-{
-    return equip_shoe_;
-}
-
-void RoleSystem::SetEquipShoe(const QString& shoe)
-{
-    equip_shoe_ = shoe;
-}
-
-QString RoleSystem::GetEquipJewelry() const
-{
-    return equip_jewelry_;
-}
-
-void RoleSystem::SetEquipJewelry(const QString& jewelry)
-{
-    equip_jewelry_ = jewelry;
-}
-
 void RoleSystem::stopThread()
 {
     m_stopRequested = true;
@@ -1056,7 +936,7 @@ void RoleSystem::SaveRoleItem()
     QJsonObject role_item_data;
     role_item_data.insert("roleName", role_name_);
     role_item_data.insert("roleMoney", role_item_->GetItemMoney());
-    role_item_data.insert("renameCard", role_item_->GetItemRenameCard());
+    role_item_data.insert("renameCard", 0);
     // 发送更新角色道具数据库信号
     emit SignalUpdateRoleItemDatabase(role_item_data);
 }
@@ -1297,4 +1177,149 @@ void RoleSystem::SlotCyclicEnhanceAtt()
     emit SignalUpdateUI(kRoleAgg, QString::number(role_agg_));
     emit SignalUpdateUI(kRoleDef, QString::number(role_def_));
     emit SignalUpdateUI(kRoleHp, QString::number(role_hp_));
+}
+
+int RoleSystem::GetElementAtt(ElementAttEnum attEnum) const {
+    int att = 0;
+    switch (attEnum)
+    {
+        case kElementFire:
+            att = att_fire_;
+            break;
+        case kElementMetal:
+            att = att_metal_;
+            break;
+        case kElementWood:
+            att = att_wood_;
+            break;
+        case kElementWater:
+            att = att_water_;
+            break;
+        case ElementEarth:
+            att = att_earth_;
+            break;
+    }
+    return att;
+}
+
+void RoleSystem::SetElementAtt(ElementAttEnum attEnum, int attValue) {
+    switch (attEnum)
+    {
+        case kElementFire:
+            att_fire_ = attValue;
+            break;
+        case kElementMetal:
+            att_metal_ = attValue;
+            break;
+        case kElementWood:
+            att_wood_ = attValue;
+            break;
+        case kElementWater:
+            att_water_ = attValue;
+            break;
+        case ElementEarth:
+            att_earth_ = attValue;
+            break;
+    }
+}
+
+QString RoleSystem::GetEquipAreaName(RoleEquipAreaEnum equipAreaEnum) {
+    QString equip_name;
+    switch (equipAreaEnum)
+    {
+        case kWeaponArea:
+            equip_name = equip_weapon_;
+        case kMagicArea:
+            equip_name = equip_magic_;
+            break;
+        case kHelmetArea:
+            equip_name = equip_helmet_;
+            break;
+        case kClothingArea:
+            equip_name = equip_clothing_;
+            break;
+        case kBritchesArea:
+            equip_name = equip_britches_;
+            break;
+        case kShoeArea:
+            equip_name = equip_shoe_;
+            break;
+        case kJewelrtArea:
+            equip_name = equip_jewelry_;
+            break;
+        case kMountArea:
+            equip_name = equip_mount_;
+            break;
+    }
+    return equip_name;
+}
+
+void RoleSystem::SetEquipAreaName(RoleEquipAreaEnum equipAreaEnum, QString name) {
+    switch (equipAreaEnum)
+    {
+        case kWeaponArea:
+            equip_weapon_ = name;
+        case kMagicArea:
+            equip_magic_ = name;
+            break;
+        case kHelmetArea:
+            equip_helmet_ = name;
+            break;
+        case kClothingArea:
+            equip_clothing_ = name;
+            break;
+        case kBritchesArea:
+            equip_britches_ = name;
+            break;
+        case kShoeArea:
+            equip_shoe_ = name;
+            break;
+        case kJewelrtArea:
+            equip_jewelry_ = name;
+            break;
+        case kMountArea:
+            equip_mount_ = name;
+            break;
+    }
+}
+
+void RoleSystem::SetRoleBaseAtt(RoleBaseAttEnum baseAttEnum, int attValue) {
+    switch (baseAttEnum)
+    {
+        case kRoleNameAtt:
+            qDebug() << "无法设置角色昵称";
+            break;
+        case kRoleLifeAtt:
+            qDebug() << "无法设置角色寿命";
+            break;
+        case kRolePrestigeAtt:
+            role_prestige_ = attValue;
+            break;
+        case kRoleLvAtt:
+            if(attValue > (int) FANREN && attValue < (int) MAXLV)
+                role_LV_ = (CultivationStage) attValue;
+            else
+                qDebug() << "无法设置角色修为";
+            break;
+        case kRoleExpAtt:
+            role_cur_exp_ = attValue;
+            break;
+        case kRoleAggAtt:
+            role_agg_ = attValue;
+            break;
+        case kRoleDefAtt:
+            role_def_ = attValue;
+            break;
+        case kRoleHpAtt:
+            role_hp_ = attValue;
+            break;
+        case kRoleMaxLifeAtt:
+            role_max_life_ = attValue;
+            qDebug() << "已强制修改角色最大寿命";
+            break;
+        case kkRoleMaxExpAtt:
+            role_exp_ = attValue;
+            qDebug() << "已强制修改角色最大经验值";
+            break;
+    }
 }
