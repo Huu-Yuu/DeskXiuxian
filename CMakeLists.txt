@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.5)
-
 project(DeskXiuxina)
 
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 
 # 设置Qt的qmake可执行文件路径
 if(UNIX)
@@ -14,9 +15,9 @@ if(UNIX)
     set(CMAKE_PREFIX_PATH "/opt/Qt5.9.7/5.9.7/gcc_64")
 elseif(WIN32)
     # 如果是Windows系统，设置Qt的qmake可执行文件路径
-    set(QT_QMAKE_EXECUTABLE "C:/Qt/Qt5.9.7/5.9.7/msvc2017/bin/qmake.exe")
-    set(Qt5_DIR "C:/Qt/Qt5.9.7/5.9.7/msvc2017/lib/cmake/Qt5")
-    set(CMAKE_PREFIX_PATH "C:/Qt/Qt5.9.7/5.9.7/msvc2017")
+    set(QT_QMAKE_EXECUTABLE "D:/Qt/Qt5.12.12/5.12.12/msvc2017/bin/qmake.exe")
+    set(Qt5_DIR "D:/Qt/Qt5.12.12/5.12.12/msvc2017/lib/cmake/Qt5")
+    set(CMAKE_PREFIX_PATH "D:/Qt/Qt5.12.12/5.12.12/msvc2017")
 endif()
 
 find_package(Qt5 COMPONENTS Core Gui Sql Network Widgets REQUIRED)

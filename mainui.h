@@ -51,9 +51,7 @@ public:
      */
     void UpdateFiveAtt(QString metal, QString wood, QString water, QString fire, QString earth);
 
-    /**
-     * @brief 更新角色装备,武器、法宝、头盔、上衣、腰带、鞋、首饰、坐骑
-     */
+    //更新角色装备,武器、法宝、头盔、上衣、腰带、鞋、首饰、坐骑
     void UpdateEquip(QString weapon, QString magic, QString helmet, QString clothing,
                      QString britches, QString shoe, QString jewelrt, QString mount);
 

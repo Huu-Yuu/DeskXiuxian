@@ -14,7 +14,7 @@ class ItemSystem : public QObject
 {
     Q_OBJECT
 
-    ItemSystem(QObject *parent);
+    ItemSystem();
 
 public:
     SINGLETON(ItemSystem);

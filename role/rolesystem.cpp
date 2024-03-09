@@ -1,20 +1,7 @@
 #include "rolesystem.h"
 
 QMutex RoleSystem::mutex;  // 初始化互斥锁对象
-RoleSystem* RoleSystem::instance = nullptr;  // 初始化单例对象指针
 
-RoleSystem* RoleSystem:: GetInstance()
-{
-    if (instance == nullptr)
-    {
-        QMutexLocker locker(&mutex);  // 加锁
-        if (instance == nullptr)
-        {
-            instance = new RoleSystem; // 静态局部变量确保只创建一个实例
-        }
-    }
-    return instance;
-}
 
 RoleSystem::RoleSystem()
 {
@@ -24,7 +11,7 @@ RoleSystem::RoleSystem()
 
     // 设置渡劫概率加成
     RC_SurviveDisaster = 0;
-    role_item_ = ItemSystem::GetInstance();
+    role_item_ = ItemSystem::getInstance();
 }
 
 void RoleSystem::run()
@@ -126,16 +113,6 @@ void RoleSystem::UpdataMaxRoleLife()
     role_max_life_ = static_cast<int>(role_LV_) * 100 + ((static_cast<int>(role_LV_) + 1) ^ 3 ) / 2;
 }
 
-int RoleSystem::GetRolePrestige() const
-{
-    return role_prestige_;
-}
-
-void RoleSystem::SetRolePrestige(int prestige)
-{
-    role_prestige_ = prestige;
-}
-
 CultivationStage RoleSystem::GetRoleCultivation() const
 {
     return role_LV_;
@@ -144,56 +121,6 @@ CultivationStage RoleSystem::GetRoleCultivation() const
 void RoleSystem::SetRoleCultivation(CultivationStage cultivation)
 {
     role_LV_ = cultivation;
-}
-
-int RoleSystem::GetRoleExp() const
-{
-    return role_exp_;
-}
-
-void RoleSystem::SetRoleExp(int exp)
-{
-    role_exp_ = exp;
-}
-
-int RoleSystem::GetCurRoleExp()
-{
-    return role_cur_exp_;
-}
-
-void RoleSystem::SetCurRoleExp(int exp)
-{
-    role_cur_exp_ = exp;
-}
-
-int RoleSystem::GetRoleAgg() const
-{
-    return role_agg_;
-}
-
-void RoleSystem::SetRoleAgg(int agg)
-{
-    role_agg_ = agg;
-}
-
-int RoleSystem::GetRoleDef() const
-{
-    return role_def_;
-}
-
-void RoleSystem::SetRoleDef(int def)
-{
-    role_def_ = def;
-}
-
-int RoleSystem::GetRoleHp() const
-{
-    return role_hp_;
-}
-
-void RoleSystem::SetRoleHp(int hp)
-{
-    role_hp_ = hp;
 }
 
 void RoleSystem::stopThread()

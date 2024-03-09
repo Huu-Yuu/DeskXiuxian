@@ -26,7 +26,7 @@ int ItemBase::GetItemPrice() const {
 }
 
 void ItemBase::SetItemPrice(int price) {
-    item_price_ = price
+    item_price_ = price;
 }
 
 QString ItemBase::GetItemExplain() const {
@@ -34,7 +34,7 @@ QString ItemBase::GetItemExplain() const {
 }
 
 void ItemBase::SetItemExplain(const QString &explain) {
-    item_explain_ = explain
+    item_explain_ = explain;
 }
 
 int ItemBase::SellItem(int quantity) const {

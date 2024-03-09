@@ -2,7 +2,7 @@
 
 QMutex ItemSystem::mutex_;  // 初始化互斥锁对象
 
-ItemSystem::ItemSystem(QObject *parent) : QObject(parent)
+ItemSystem::ItemSystem()
 {
     item_money_ = 0;
 }

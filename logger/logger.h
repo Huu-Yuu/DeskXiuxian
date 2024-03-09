@@ -20,7 +20,8 @@ class Logger : public QObject
     Q_OBJECT
 public:
     SINGLETON(Logger);
-    explicit Logger(QObject* parent = nullptr);
+
+    Logger();
 
     ~Logger();
 
