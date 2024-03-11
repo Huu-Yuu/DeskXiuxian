@@ -1,20 +1,6 @@
 #include "role_player.h"
 
 QMutex RolePlayer::mutex;  // 初始化互斥锁对象
-RolePlayer* RolePlayer::instance = nullptr;  // 初始化单例对象指针
-
-RolePlayer* RolePlayer:: GetInstance()
-{
-    if (instance == nullptr)
-    {
-        QMutexLocker locker(&mutex);  // 加锁
-        if (instance == nullptr)
-        {
-            instance = new RolePlayer; // 静态局部变量确保只创建一个实例
-        }
-    }
-    return instance;
-}
 
 RolePlayer::RolePlayer()
 {

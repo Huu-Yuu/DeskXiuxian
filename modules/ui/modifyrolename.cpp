@@ -6,7 +6,7 @@ ModifyRoleName::ModifyRoleName(QWidget* parent) :
     ui(new Ui::ModifyRoleName)
 {
     ui->setupUi(this);
-    data_file_->GetInstance();
+    data_file_ = data_file_->getInstance();
 
     // 设置logo
     setWindowIcon(QIcon(":/res/logo.jpg"));

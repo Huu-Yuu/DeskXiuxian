@@ -10,9 +10,11 @@
 /**
  * @brief 物品系统类
  */
-class ItemManage
+class ItemSystem : public QObject
 {
     Q_OBJECT
+
+    ItemSystem(QObject *parent);
 
 public:
     SINGLETON(ItemManage);

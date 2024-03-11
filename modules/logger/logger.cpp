@@ -3,8 +3,7 @@
 QMutex Logger::mutex_;  // 初始化互斥锁对象
 QMutex Logger::std_log_mutex;
 
-
-Logger::Logger(QObject* parent) : QObject(parent)
+Logger::Logger()
 {
     // 创建日志文件夹（如果不存在）
     QDir logDir(QDir::currentPath() + "/log");
