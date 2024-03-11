@@ -1,4 +1,4 @@
-#include "gameprogress.h"
+#include "game_progress.h"
 
 QMutex GameProgress::mutex;  // 初始化互斥锁对象
 

@@ -13,12 +13,11 @@
 #include "modules/logger/logger.h"
 #include "modules/role/role_player.h"
 #include "modules/item/item_manage.h"
-#include "modules/filedata/datamanage.h"
-#include "modules/game_progress/gameprogress.h"
+#include "modules/filedata/data_manage.h"
+#include "modules/game_progress/game_progress.h"
 #include "loginwindow.h"
 #include "modifyrolename.h"
-#include "modules/interface_manager.h"
-
+#include "common/singleton.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -27,11 +26,12 @@ namespace Ui
 }
 QT_END_NAMESPACE
 
-class MainUI : public QMainWindow, InterfaceManager
+class MainUI : public QMainWindow
 {
     Q_OBJECT
 
 public:
+    SINGLETON(MainUI);
     MainUI(QWidget* parent = nullptr);
     ~MainUI();
 

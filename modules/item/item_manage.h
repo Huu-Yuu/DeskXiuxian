@@ -4,17 +4,15 @@
 #include <QObject>
 #include <QMutex>
 #include "common//singleton.h"
-#include "modules/filedata/datamanage.h"
+#include "modules/filedata/data_manage.h"
 #include "itembase.h"
 
 /**
  * @brief 物品系统类
  */
-class ItemSystem : public QObject
+class ItemManage : public QObject
 {
     Q_OBJECT
-
-    ItemSystem(QObject *parent);
 
 public:
     SINGLETON(ItemManage);

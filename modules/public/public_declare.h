@@ -10,11 +10,11 @@
 namespace module_name
 {
     const QString main = "main";
-    const QString item = "item";                    ///< 物品模块
-    const QString role = "role";                    ///< 角色模块
-    const QString configuration = "configuration";  ///< 配置模块，数据管理
-    const QString progress = "progress";            ///< 进度模块
-    const QString uimanager = "uimanager";          ///< 界面模块
+    const QString item = "item_system";                    ///< 物品模块
+    const QString role = "role_system";                    ///< 角色模块
+    const QString data = "data_system";  ///< 配置模块，数据管理
+    const QString progress = "progress_system";            ///< 进度模块
+    const QString ui = "ui_system";          ///< 界面模块
 }
 
 namespace ItemName

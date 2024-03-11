@@ -1,4 +1,4 @@
-#include "datamanage.h"
+#include "data_manage.h"
 
 QMutex DataManage::mutex;  // 初始化互斥锁对象
 QString DataManage::user_uuid_ = "";

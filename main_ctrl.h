@@ -5,8 +5,8 @@
 #include "modules/ui/main_ui.h"
 #include "modules/role/role_player.h"
 #include "modules/logger/logger.h"
-#include "modules/filedata/datamanage.h"
-#include "modules/game_progress/gameprogress.h"
+#include "modules/filedata/data_manage.h"
+#include "modules/game_progress/game_progress.h"
 #include "modules/item/item_manage.h"
 #include "modules/server/tcp_client.h"
 

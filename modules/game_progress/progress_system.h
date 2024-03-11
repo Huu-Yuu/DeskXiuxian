@@ -6,7 +6,7 @@
 #define DESKXIUXINA_PROGRESS_SYSTEM_H
 #include <QObject>
 #include "modules/interface_manager.h"
-#include "gameprogress.h"
+#include "game_progress.h"
 
 class ProgressSystem : public InterfaceManager
 {

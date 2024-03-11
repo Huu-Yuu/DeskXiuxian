@@ -5,7 +5,7 @@
 #include "modules/public/public_declare.h"
 
 DBSystem::DBSystem() {
-    m_module_name = module_name::configuration;
+    m_module_name = module_name::data;
     data_obj_ = DataManage::getInstance();
 }
 

@@ -6,7 +6,7 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     //注册MessageHandler(注意要有日志文件夹)
 //    qInstallMessageHandler(Logger::OutputMessageHandler);
     data_file_ = DataManage::getInstance();
-    main_ui_obj_ = new MainUI;
+    main_ui_obj_ = MainUI::getInstance();
     logger_obj_ = Logger::getInstance();
     game_obj_ = GameProgress::getInstance();
     role_obj_ = RolePlayer::getInstance();

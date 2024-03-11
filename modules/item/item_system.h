@@ -6,6 +6,7 @@
 #define DESKXIUXINA_ITEM_SYSTEM_H
 #include <QObject>
 #include "modules/interface_manager.h"
+#include "item_manage.h"
 
 class ItemSystem : public InterfaceManager
 {
@@ -14,7 +15,7 @@ public:
     ItemSystem();
     ~ItemSystem();
 private:
-
+    ItemManage* item_obj_;
 };
 
 #endif //DESKXIUXINA_ITEM_SYSTEM_H

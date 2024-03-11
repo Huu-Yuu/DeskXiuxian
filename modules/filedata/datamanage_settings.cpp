@@ -1,4 +1,4 @@
-#include "datamanage.h"
+#include "data_manage.h"
 
 void DataManage::InitSettingFile()
 {
