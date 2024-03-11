@@ -1,10 +1,10 @@
-#include "mainui.h"
+#include "modules/ui/main_ui.h"
 
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
 #include <QLockFile>
-#include "mainctrl.h"
+#include "main_ctrl.h"
 
 int main(int argc, char* argv[])
 {

@@ -20,8 +20,8 @@ SOURCES += \
     item/itemsystem.cpp \
     logger/logger.cpp \
     main.cpp \
-    mainctrl.cpp \
-    mainui.cpp \
+    main_ctrl.cpp \
+    main_ui.cpp \
     role/rolesystem.cpp \
     ui/loginwindow.cpp \
     filedata/datamanage_settings.cpp \
@@ -36,8 +36,8 @@ HEADERS += \
     item/itembase.h \
     item/itemsystem.h \
     logger/logger.h \
-    mainctrl.h \
-    mainui.h \
+    main_ctrl.h \
+    main_ui.h \
     public/public_macro.h \
     public/public_type.h \
     role/rolesystem.h \
@@ -48,7 +48,7 @@ HEADERS += \
     server/tcp_client.h
 
 FORMS += \
-    mainui.ui \
+    main_ui.ui \
     ui/loginwindow.ui \
     ui/modifyrolename.ui
 
