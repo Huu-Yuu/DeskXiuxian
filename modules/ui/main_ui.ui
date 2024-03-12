@@ -69,7 +69,7 @@
                <x>0</x>
                <y>20</y>
                <width>182</width>
-               <height>321</height>
+               <height>329</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="bisic_Layout" stretch="3">
@@ -246,7 +246,7 @@
                <x>0</x>
                <y>30</y>
                <width>197</width>
-               <height>290</height>
+               <height>309</height>
               </rect>
              </property>
              <layout class="QFormLayout" name="equipment_Layout">
@@ -461,6 +461,84 @@
         <attribute name="title">
          <string> 背包</string>
         </attribute>
+        <widget class="QWidget" name="horizontalLayoutWidget_2">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>551</width>
+           <height>341</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="package_Layout" stretch="1,1">
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="bottomMargin">
+           <number>5</number>
+          </property>
+          <item>
+           <layout class="QVBoxLayout" name="item_grid_Layout" stretch="0">
+            <item>
+             <widget class="QTabWidget" name="item_preview_Widget">
+              <property name="currentIndex">
+               <number>0</number>
+              </property>
+              <widget class="QWidget" name="tab">
+               <attribute name="title">
+                <string>装备</string>
+               </attribute>
+              </widget>
+              <widget class="QWidget" name="tab_2">
+               <attribute name="title">
+                <string>道具</string>
+               </attribute>
+              </widget>
+              <widget class="QWidget" name="tab_3">
+               <attribute name="title">
+                <string>材料</string>
+               </attribute>
+              </widget>
+              <widget class="QWidget" name="tab_4">
+               <attribute name="title">
+                <string>特殊</string>
+               </attribute>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="desc_Layout">
+            <property name="leftMargin">
+             <number>20</number>
+            </property>
+            <property name="topMargin">
+             <number>10</number>
+            </property>
+            <property name="rightMargin">
+             <number>20</number>
+            </property>
+            <property name="bottomMargin">
+             <number>10</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="item_desc_label">
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;名称&lt;/p&gt;&lt;p&gt;数量&lt;/p&gt;&lt;p&gt;效果&lt;/p&gt;&lt;p&gt;描述&lt;/p&gt;&lt;p&gt;获取途径&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
        </widget>
        <widget class="QWidget" name="role_skill">
         <attribute name="title">
@@ -495,7 +573,7 @@
      <x>0</x>
      <y>0</y>
      <width>598</width>
-     <height>26</height>
+     <height>28</height>
     </rect>
    </property>
   </widget>

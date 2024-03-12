@@ -43,6 +43,7 @@ MainUI::MainUI(QWidget* parent)
 
     //主角选项卡布局
     ui->role_page->setLayout(ui->role_Layout);
+    ui->role_item->setLayout(ui->package_Layout);
     ui->bisic_Att_Box->setLayout(ui->bisic_Layout);
     ui->equipment_Box->setLayout(ui->equipment_Layout);
 

@@ -109,17 +109,7 @@ double RolePlayer::GetMaxRoleLife() const
 
 void RolePlayer::UpdataMaxRoleLife()
 {
-    role_max_life_ = static_cast<int>(role_LV_) * 100 + ((static_cast<int>(role_LV_) + 1) ^ 3 ) / 2;
-}
-
-int RolePlayer::GetRolePrestige() const
-{
-    return role_prestige_;
-}
-
-void RolePlayer::SetRolePrestige(int prestige)
-{
-    role_prestige_ = prestige;
+    role_max_life_ = (int)role_LV_  * 100 + (((int)role_LV_ + 1) ^ 3 ) / 2;
 }
 
 CultivationStage RolePlayer::GetRoleCultivation() const
@@ -132,55 +122,6 @@ void RolePlayer::SetRoleCultivation(CultivationStage cultivation)
     role_LV_ = cultivation;
 }
 
-int RolePlayer::GetRoleExp() const
-{
-    return role_exp_;
-}
-
-void RolePlayer::SetRoleExp(int exp)
-{
-    role_exp_ = exp;
-}
-
-int RolePlayer::GetCurRoleExp()
-{
-    return role_cur_exp_;
-}
-
-void RolePlayer::SetCurRoleExp(int exp)
-{
-    role_cur_exp_ = exp;
-}
-
-int RolePlayer::GetRoleAgg() const
-{
-    return role_agg_;
-}
-
-void RolePlayer::SetRoleAgg(int agg)
-{
-    role_agg_ = agg;
-}
-
-int RolePlayer::GetRoleDef() const
-{
-    return role_def_;
-}
-
-void RolePlayer::SetRoleDef(int def)
-{
-    role_def_ = def;
-}
-
-int RolePlayer::GetRoleHp() const
-{
-    return role_hp_;
-}
-
-void RolePlayer::SetRoleHp(int hp)
-{
-    role_hp_ = hp;
-}
 
 void RolePlayer::stopThread()
 {
@@ -563,9 +504,9 @@ QString RolePlayer::GetCultivationName(int cur_lv)
 void RolePlayer::UpdateEextGradeEXP()
 {
     // 获取经验值基数
-    double exp_base = 3 * (static_cast<int>(role_LV_));
+    double exp_base = 5 * (int)role_LV_;
     // 算入角色资质得出下一次升级所需经验
-    next_need_epx_ = exp_base * (1 - aptitude_) * 100 ;
+    next_need_epx_ = exp_base * (5 - aptitude_) * 500 ;
 }
 
 bool RolePlayer::CheckExpIsUpgrade()
