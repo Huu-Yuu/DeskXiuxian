@@ -23,6 +23,9 @@
 // 远程数据库密码
 #define REMOTE_DB_PASSWORD      "ef8ead2a1a2704c4"
 
+// 远程数据库密码
+#define LOCAL_DB_PASSWORD       "xiuxian666"
+
 // 远程数据库名称
 #define REMOTE_DB_NAME          "desk_xiuxian"
 

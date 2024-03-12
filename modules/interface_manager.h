@@ -15,21 +15,22 @@ public:
     virtual ~InterfaceManager();
 
     QString getModuleName();
+    virtual int Init() = 0;
 
 signals:
-    void signalSubTopic(TopicSubActionType sub_type, const QStringList& topics);
+    void SignalSubTopic(TopicSubActionType sub_type, const QStringList& topics);
     //请求外部动作
-    void signalActionRequest(const QJsonObject& request_data);
+    void SignalActionRequest(const QJsonObject& request_data);
     //本模块动作执行结果抛给上一级
-    void signalActionResponse(const QJsonObject& request_data);
+    void SignalActionResponse(const QJsonObject& request_data);
     //状态变化抛给上一级
-    void signalPubTopic(const QJsonObject& status);
+    void SignalPubTopic(const QJsonObject& status);
+
 public slots:
-    virtual void slotActionResponse(const QJsonObject& request_data) = 0;
-    virtual void slotActionRequest(const QJsonObject& request_data) = 0;
-    virtual void slotPubTopic(const QJsonObject& status) = 0;
-public:
-    virtual int Init() = 0;
+    virtual void SlotActionResponse(const QJsonObject& request_data) = 0;
+    virtual void SlotActionRequest(const QJsonObject& request_data) = 0;
+    virtual void SlotPubTopic(const QJsonObject& status) = 0;
+
 protected:
     QString m_module_name = "unknown";
 };

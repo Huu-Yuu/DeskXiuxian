@@ -170,7 +170,7 @@ private:
 
     static QSettings* file_setting_;    ///< 配置文件读取
 
-    QSqlDatabase database_;     ///< 数据库链接
+    QSqlDatabase m_database_;     ///< 数据库链接
 
 
     bool is_SaveRoleInfo = false;           ///< 保存角色信息开关

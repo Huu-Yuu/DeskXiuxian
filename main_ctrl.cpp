@@ -137,7 +137,7 @@ void MainCtrl::SlotInitRoleData()
     role_obj_->SetRoleBaseAtt(kRolePrestigeAtt, role_info_data.value("role_prestige").toString().toInt());
     role_obj_->SetRoleBaseAtt(kRoleLvAtt, cultivation);
     role_obj_->SetRoleBaseAtt(kRoleExpAtt, role_info_data.value("role_cur_exp").toString().toInt());
-    role_obj_->SetRoleBaseAtt(kkRoleMaxExpAtt, role_info_data.value("role_exp").toString().toInt());
+    role_obj_->SetRoleBaseAtt(kRoleMaxExpAtt, role_info_data.value("role_exp").toString().toInt());
     role_obj_->SetRoleBaseAtt(kRoleAggAtt, role_info_data.value("role_agg").toString().toInt());
     role_obj_->SetRoleBaseAtt(kRoleDefAtt, role_info_data.value("role_def").toString().toInt());
     role_obj_->SetRoleBaseAtt(kRoleHpAtt, role_info_data.value("role_hp").toString().toInt());
@@ -207,7 +207,7 @@ void MainCtrl::InitRoleInfo()
     role_obj_->SetRoleBaseAtt(kRolePrestigeAtt, prestige.toInt());
     role_obj_->SetRoleBaseAtt(kRoleLvAtt, cultivation);
     role_obj_->SetRoleBaseAtt(kRoleExpAtt, cur_exp.toInt());
-    role_obj_->SetRoleBaseAtt(kkRoleMaxExpAtt, exp.toInt());
+    role_obj_->SetRoleBaseAtt(kRoleMaxExpAtt, exp.toInt());
     role_obj_->SetRoleBaseAtt(kRoleAggAtt, agg.toInt());
     role_obj_->SetRoleBaseAtt(kRoleDefAtt, def.toInt());
     role_obj_->SetRoleBaseAtt(kRoleHpAtt, hp.toInt());

@@ -1,5 +1,5 @@
-#ifndef ROLESYSTEM_H
-#define ROLESYSTEM_H
+#ifndef ROLEPLAY_H
+#define ROLEPLAY_H
 
 #include <QObject>
 #include <QThread>
@@ -126,4 +126,4 @@ private:
     ItemManage* role_item_; // 角色道具
 };
 
-#endif // ROLESYSTEM_H
+#endif // ROLEPLAY_H

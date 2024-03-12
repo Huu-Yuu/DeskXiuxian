@@ -9,3 +9,27 @@ DBSystem::DBSystem() {
     data_obj_ = DataManage::getInstance();
 }
 
+int DBSystem::Init()
+{
+    return 0;
+}
+
+DBSystem::~DBSystem()
+{
+
+}
+
+void DBSystem::SlotActionResponse(const QJsonObject& request_data)
+{
+
+}
+
+void DBSystem::SlotActionRequest(const QJsonObject& request_data)
+{
+
+}
+
+void DBSystem::SlotPubTopic(const QJsonObject& status)
+{
+
+}

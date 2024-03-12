@@ -491,6 +491,8 @@ QString RolePlayer::GetCultivationName(CultivationStage cur_lv)
             return "羽化";
         case XIAN:
             return "仙";
+        case MAXLV:
+            return "最高等级标记";
     }
     return "";
 }
@@ -1244,7 +1246,7 @@ void RolePlayer::SetRoleBaseAtt(RoleBaseAttEnum baseAttEnum, int attValue) {
             role_max_life_ = attValue;
             qDebug() << "已强制修改角色最大寿命";
             break;
-        case kkRoleMaxExpAtt:
+        case kRoleMaxExpAtt:
             role_exp_ = attValue;
             qDebug() << "已强制修改角色最大经验值";
             break;

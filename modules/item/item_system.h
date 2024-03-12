@@ -14,6 +14,12 @@ class ItemSystem : public InterfaceManager
 public:
     ItemSystem();
     ~ItemSystem();
+    int Init() override;
+
+public slots:
+    void SlotActionResponse(const QJsonObject& request_data) override;
+    void SlotActionRequest(const QJsonObject& request_data) override;
+    void SlotPubTopic(const QJsonObject& status) override;
 private:
     ItemManage* item_obj_;
 };

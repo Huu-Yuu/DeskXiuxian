@@ -8,3 +8,28 @@ ProgressSystem::ProgressSystem() {
     m_module_name = module_name::progress;
     game_pro_obj_ = GameProgress::getInstance();
 }
+
+int ProgressSystem::Init()
+{
+    return 0;
+}
+
+ProgressSystem::~ProgressSystem()
+{
+
+}
+
+void ProgressSystem::SlotActionResponse(const QJsonObject& request_data)
+{
+
+}
+
+void ProgressSystem::SlotActionRequest(const QJsonObject& request_data)
+{
+
+}
+
+void ProgressSystem::SlotPubTopic(const QJsonObject& status)
+{
+
+}

@@ -14,43 +14,55 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    filedata/datamanage.cpp \
-    game_progress/gameprogress.cpp \
-    item/itembase.cpp \
-    item/itemsystem.cpp \
-    logger/logger.cpp \
+    modules/game_progress/game_progress.cpp \
+    modules/game_progress/progress_system.cpp \
+    modules/item/itembase.cpp \
+    modules/item/item_system.cpp \
+    modules/item/item_manage.cpp \
+    modules/logger/logger.cpp \
     main.cpp \
     main_ctrl.cpp \
-    main_ui.cpp \
-    role/rolesystem.cpp \
-    ui/loginwindow.cpp \
-    filedata/datamanage_settings.cpp \
-    filedata/datamanage_remote_data.cpp \
-    ui/modifyrolename.cpp \
-    public/public_func.cpp \
-    server/tcp_client.cpp
+    modules/ui/mainui.cpp \
+    modules/ui/loginwindow.cpp \
+    modules/ui/modifyrolename.cpp \
+    modules/role/role_system.cpp \
+    modules/role/role_player.cpp \
+    modules/filedata/datamanage_settings.cpp \
+    modules/filedata/datamanage_remote_data.cpp \
+    modules/filedata/db_system.cpp \
+    modules/filedata/data_manage.cpp \
+    modules/public/public_func.cpp \
+    modules/server/tcp_client.cpp \
+    modules/interface_manager.cpp
 
 HEADERS += \
-    filedata/datamanage.h \
-    game_progress/gameprogress.h \
-    item/itembase.h \
-    item/itemsystem.h \
-    logger/logger.h \
+    common/singleton.h \
+    modules/filedata/data_manage.h \
+    modules/filedata/db_system.h \
+    modules/game_progress/game_progress.h \
+    modules/game_progress/progress_system.h \
+    modules/item/itembase.h \
+    modules/item/item_system.h \
+    modules/item/item_manage.h \
+    modules/logger/logger.h \
     main_ctrl.h \
-    main_ui.h \
-    public/public_macro.h \
-    public/public_type.h \
-    role/rolesystem.h \
-    ui/loginwindow.h \
-    ui/modifyrolename.h \
-    public/public_func.h \
-    public/error_code.h \
-    server/tcp_client.h
+    modules/ui/mainui.h \
+    modules/public/public_macro.h \
+    modules/public/public_type.h \
+    modules/public/public_declare.h \
+    modules/role/role_system.h \
+    modules/role/role_player.h \
+    modules/ui/loginwindow.h \
+    modules/ui/modifyrolename.h \
+    modules/public/public_func.h \
+    modules/public/error_code.h \
+    modules/server/tcp_client.h \
+    modules/interface_manager.h
 
 FORMS += \
-    main_ui.ui \
-    ui/loginwindow.ui \
-    ui/modifyrolename.ui
+    modules/ui/mainui.ui \
+    modules/ui/loginwindow.ui \
+    modules/ui/modifyrolename.ui
 
 TRANSLATIONS += \
     DeskXiuxian_zh_CN.ts

@@ -19,7 +19,7 @@ QString InterfaceManager::getModuleName()
     return m_module_name;
 }
 
-void InterfaceManager::slotActionResponse(const QJsonObject& response_data)
+void InterfaceManager::SlotActionResponse(const QJsonObject& response_data)
 {
     Q_UNUSED(response_data);
 }
@@ -38,12 +38,12 @@ void InterfaceManager::slotActionResponse(const QJsonObject& response_data)
 //    return 0;
 //}
 
-void InterfaceManager::slotActionRequest(const QJsonObject& request_data)
+void InterfaceManager::SlotActionRequest(const QJsonObject& request_data)
 {
     Q_UNUSED(request_data);
 }
 
-void InterfaceManager::slotPubTopic(const QJsonObject& request_data)
+void InterfaceManager::SlotPubTopic(const QJsonObject& request_data)
 {
     Q_UNUSED(request_data);
 }

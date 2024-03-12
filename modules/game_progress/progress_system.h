@@ -14,7 +14,12 @@ class ProgressSystem : public InterfaceManager
 public:
     ProgressSystem();
     ~ProgressSystem();
+    int Init() override;
 
+public slots:
+    void SlotActionResponse(const QJsonObject& request_data) override;
+    void SlotActionRequest(const QJsonObject& request_data) override;
+    void SlotPubTopic(const QJsonObject& status) override;
 private:
     GameProgress* game_pro_obj_;
 };

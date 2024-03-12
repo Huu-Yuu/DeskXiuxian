@@ -32,16 +32,16 @@ DataManage::~DataManage()
 void DataManage::OpenDatabase(QString path)
 {
     // 打开现有数据库连接
-    database_ = QSqlDatabase::addDatabase("QSQLITE");
-    database_.setDatabaseName(path);
+    m_database_ = QSqlDatabase::addDatabase("QSQLITE");
+    m_database_.setDatabaseName(path);
     // 打开数据库连接
-    if (!database_.open())
+    if (!m_database_.open())
     {
-        qDebug() << "无法打开数据库:" << database_.lastError().text();
+        qDebug() << "无法打开数据库:" << m_database_.lastError().text();
     }
     else
     {
-        database_.exec("PRAGMA encoding = \"UTF-8\";");
+        m_database_.exec("PRAGMA encoding = \"UTF-8\";");
         qDebug() << "数据库已经打开.";
         if(!CheckTablesExist()) //检查并创建表单
         {
@@ -53,13 +53,19 @@ void DataManage::OpenDatabase(QString path)
 void DataManage::CreateDatabase(QString path)
 {
     // 创建数据库连接
-    database_ = QSqlDatabase::addDatabase("QSQLITE");
+    QSqlDatabase database_;
+    database_ = QSqlDatabase::addDatabase("QSQLITE", REMOTE_DB_LINKNAME);
     database_.setDatabaseName(path);
+    database_.setPassword(LOCAL_DB_PASSWORD);
+
+//    m_database_ = QSqlDatabase::addDatabase("QSQLITE");
+//    m_database_.setDatabaseName(path);
+    m_database_ = QSqlDatabase::database(REMOTE_DB_LINKNAME);;
 
     // 打开数据库连接
-    if (!database_.isOpen())
+    if (!m_database_.isOpen())
     {
-        qDebug() << "创建数据库失败:" << database_.lastError().text();
+        qDebug() << "创建数据库失败:" << m_database_.lastError().text();
     }
     else
     {
@@ -74,9 +80,8 @@ void DataManage::CreateDatabase(QString path)
 bool DataManage::CheckTablesExist()
 {
     // 检查 RoleInfo 表是否存在
-
     QString queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleInfo'";
-    QSqlQuery query;
+    QSqlQuery query(m_database_);
     if (!query.exec(queryString))
     {
         qDebug() << "执行查询 RoleInfo 时出错:" << query.lastError().text();
@@ -311,14 +316,14 @@ bool DataManage::CheckTablesExist()
 QString DataManage::GetTableToInfo(QString table_name, QString column_name)
 {
     QString result = "";
-    if(!database_.isOpen())
+    if(!m_database_.isOpen())
     {
         qDebug() << "数据库打开失败";
         return result;
     }
     else
     {
-        QSqlQuery query;
+        QSqlQuery query(m_database_);
         QString queryString = QString("SELECT %1 FROM %2").arg(column_name, table_name);
         if (!query.exec(queryString))
         {
@@ -375,11 +380,11 @@ void DataManage::SlotUpdataLoginLog()
 
 void DataManage::WriteRoleInfoToLocalDatabase()
 {
-    if(database_.isOpen())
+    if(m_database_.isOpen())
     {
         QString roleName = role_data.value("roleName").toString();
 
-        QSqlQuery query;
+        QSqlQuery query(m_database_);
         query.prepare("SELECT COUNT(*) FROM RoleInfo WHERE roleName = :roleName");
         query.bindValue(":roleName", roleName);
 
@@ -426,11 +431,11 @@ void DataManage::WriteRoleInfoToLocalDatabase()
 
 void DataManage::WriteRoleItemsToLocalDatabase()
 {
-    if(database_.isOpen())
+    if(m_database_.isOpen())
     {
         QString roleName = role_item_data.value("roleName").toString();
 
-        QSqlQuery query;
+        QSqlQuery query(m_database_);
         query.prepare("SELECT COUNT(*) FROM RoleItemEnum WHERE roleName = :roleName");
         query.bindValue(":roleName", roleName);
 
@@ -469,11 +474,11 @@ void DataManage::WriteRoleItemsToLocalDatabase()
 
 void DataManage::WriteRoleCoefficientToLocalDatabase()
 {
-    if(database_.isOpen())
+    if(m_database_.isOpen())
     {
         QString roleName = RC_data.value("roleName").toString();
 
-        QSqlQuery query;
+        QSqlQuery query(m_database_);
         query.prepare("SELECT COUNT(*) FROM RoleCoefficient WHERE roleName = :roleName");
         query.bindValue(":roleName", roleName);
 

@@ -14,6 +14,12 @@ class DBSystem : public InterfaceManager
 public:
     DBSystem();
     ~DBSystem();
+    int Init() override;
+
+public slots:
+    void SlotActionResponse(const QJsonObject& request_data) override;
+    void SlotActionRequest(const QJsonObject& request_data) override;
+    void SlotPubTopic(const QJsonObject& status) override;
 private:
     DataManage* data_obj_;
 };

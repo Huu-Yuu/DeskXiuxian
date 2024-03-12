@@ -71,3 +71,19 @@ Thumbs.db
 *.dll
 *.exe
 
+/cmake-build-debug/
+/.idea/.gitignore
+/.idea/.name
+/CMakeLists.txt.user
+/.idea/DeskXiuxian.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
+/cmake-build-debug/
+/.idea/.gitignore
+/.idea/.name
+/CMakeLists.txt.user
+/.idea/DeskXiuxian.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml

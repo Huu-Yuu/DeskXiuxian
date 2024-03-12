@@ -113,7 +113,7 @@ enum RoleItemEnum
      kRoleDefAtt,           ///< 防御力
      kRoleHpAtt,            ///< 血量
      kRoleMaxLifeAtt,       ///< 最大寿命
-     kkRoleMaxExpAtt        ///< 总经验
+     kRoleMaxExpAtt         ///< 总经验
 };
 
 /**
