@@ -14,7 +14,7 @@ namespace module_name
     const QString role = "role_system";                    ///< 角色模块
     const QString data = "data_system";  ///< 配置模块，数据管理
     const QString progress = "progress_system";            ///< 进度模块
-    const QString ui = "ui_system";          ///< 界面模块
+    const QString userinterface = "ui_system";          ///< 界面模块
 }
 
 namespace ItemName

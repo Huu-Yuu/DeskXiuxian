@@ -2,7 +2,7 @@
 #define MAINCTRL_H
 
 #include <QObject>
-#include "modules/ui/main_ui.h"
+#include "modules/ui/mainui.h"
 #include "modules/role/role_player.h"
 #include "modules/logger/logger.h"
 #include "modules/filedata/data_manage.h"

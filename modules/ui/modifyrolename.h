@@ -10,7 +10,7 @@
 #include <iostream>
 #include <QMessageBox>
 #include <QDebug>
-#include "modules/filedata/datamanage.h"
+#include "modules/filedata/data_manage.h"
 
 namespace Ui
 {

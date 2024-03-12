@@ -8,7 +8,7 @@
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
 #include <QMessageBox>
-#include "modules/filedata/datamanage.h"
+#include "modules/filedata/data_manage.h"
 
 namespace Ui
 {
