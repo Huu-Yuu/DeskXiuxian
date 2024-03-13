@@ -3,6 +3,7 @@
 #include "public_func.h"
 #include "QDateTime"
 #include "QUuid"
+#include "public_macro.h"
 
 uchar PublicFunc::CalculateSum(const uchar* data, const int len)
 {
@@ -141,4 +142,54 @@ QJsonObject PublicFunc::PackageResponse(const QString& type, const QString& id, 
     out_obj.insert("time", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
     return out_obj;
 
+}
+
+ItemType PublicFunc::ConvertItemType(RoleItemEnum item_enum) {
+    QString enum_type = QString::number(item_enum);
+    QString type_num = enum_type.left(1);
+    switch (type_num.toInt()) {
+        case 1:
+            return kItemProp;
+            break;
+        case 2:
+            return kItemMaterial;
+            break;
+        case 3:
+            return kItemSpecial;
+            break;
+        case 4:
+            return kItemEquip;
+            break;
+        default:
+            LOG_DEBUG(QString("不存在此类型:%1，强制转换为道具类型").arg(type_num));
+            return kItemProp;
+    }
+}
+
+RoleEquipAreaEnum PublicFunc::ConvertEquipArea(RoleItemEnum item_enum) {
+    QString enum_type = QString::number(item_enum);
+    QString type_num = enum_type.mid(1, 1); // 提取第二位数字
+    switch (type_num.toInt()) {
+        case 1:
+            return kWeaponArea;
+        case 2:
+            return kMagicArea;
+        case 3:
+            return kHelmetArea;
+        case 4:
+            return kClothingArea;
+        case 5:
+            return kBritchesArea;
+        case 6:
+            return kShoeArea;
+        case 7:
+            return kJewelrtArea;
+        case 8:
+            return kMountArea;
+        case 9:
+            return kTitleArea;
+        default:
+            LOG_DEBUG(QString("不存在此类型部位%1").arg(type_num));
+            return kOther;
+    }
 }

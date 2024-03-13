@@ -44,3 +44,17 @@ int ItemBase::SellItem(int quantity) const {
 int ItemBase::GetItemIndex() {
     return item_index_;
 }
+
+int ItemBase::UseItem(int sum) {
+    return 0;
+}
+
+void ItemBase::AddItemNum(int num) {
+    item_num_ += num;
+    emit SignalQuantityChanged(item_index_, item_num_);
+}
+
+void ItemBase::SubtractItemNum(int num) {
+    item_num_ -= num;
+    emit SignalQuantityChanged(item_index_, item_num_);
+}

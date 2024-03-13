@@ -32,6 +32,14 @@ enum TcpOptCode
     kTcpOptKickOffLine      = 3,    ///< 踢下线
 };
 
+enum ItemType
+{
+    kItemProp,          ///< 道具
+    kItemMaterial,      ///< 材料
+    kItemSpecial,       ///< 特殊
+    kItemEquip          ///< 装备
+};
+
 /**
  * @brief 角色面板枚举
  */
@@ -58,7 +66,8 @@ enum RoleUIEnum
     kEquipBritches,     ///< 裤子
     kEquipShoe,         ///< 鞋子
     kEquipJewelrt,      ///< 首饰
-    kEquipeMount        ///< 坐骑
+    kEquipeMount,       ///< 坐骑
+    kEquipeTitle        ///< 称号
 };
 
 /**
@@ -78,6 +87,7 @@ enum ElementAttEnum
  * **/
 enum RoleEquipAreaEnum
 {
+    kOther,
     kWeaponArea,            ///< 武器
     kMagicArea,            ///< 法宝
     kHelmetArea,           ///< 头盔
@@ -85,7 +95,8 @@ enum RoleEquipAreaEnum
     kBritchesArea,         ///< 裤子
     kShoeArea,             ///< 鞋子
     kJewelrtArea,          ///< 首饰
-    kMountArea            ///< 坐骑
+    kMountArea,            ///< 坐骑
+    kTitleArea            ///< 称号
 };
 
 /**
@@ -94,9 +105,24 @@ enum RoleEquipAreaEnum
 enum RoleItemEnum
 {
     kUnknownProp = 0,   ///< 未知
-    kRoleMoney          = 1001,        ///< 灵石
-    kPropRenameCard     = 1002        ///< 改名卡
+    ///////——————10000 - 道具——————///////
+    kRoleMoney          = 10001,        ///< 灵石
+    kPropRenameCard     = 10002        ///< 改名卡
+    ///////——————20000 - 材料——————///////
 
+    ///////——————30000 - 特殊——————///////
+
+    ///////——————40000 - 装备——————///////
+    ///////——————41000 - 武器——————///////
+
+    ///////——————42000 - 法宝——————///////
+    ///////——————43000 - 头盔——————///////
+    ///////——————44000 - 上衣——————///////
+    ///////——————45000 - 裤子——————///////
+    ///////——————46000 - 鞋子——————///////
+    ///////——————47000 - 首饰——————///////
+    ///////——————48000 - 坐骑——————///////
+    ///////——————49000 - 称号——————///////
 };
 
 /**

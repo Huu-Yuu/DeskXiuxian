@@ -1,4 +1,5 @@
 #include "role_player.h"
+#include "modules/public/public_type.h"
 
 QMutex RolePlayer::mutex;  // 初始化互斥锁对象
 
@@ -864,9 +865,17 @@ void RolePlayer::SaveRoleItem()
     // 打包角色道具
     QJsonObject role_item_data;
     role_item_data.insert("roleName", role_name_);
-    role_item_data.insert("roleMoney", role_item_->GetItemMoney());
-    role_item_data.insert("renameCard", 0);
+    role_item_data.insert(QString::number(kRoleMoney), role_item_->GetItemMoney());
     // 发送更新角色道具数据库信号
+    emit SignalUpdateRoleItemDatabase(role_item_data);
+}
+
+void RolePlayer::SaveRoleItem(ItemType item_type, RoleItemEnum item_enum, int sum)
+{
+    QJsonObject role_item_data;
+    role_item_data.insert("roleName", role_name_);
+    role_item_data.insert("ItemType", item_type);
+    role_item_data.insert(QString::number(item_enum), sum);
     emit SignalUpdateRoleItemDatabase(role_item_data);
 }
 

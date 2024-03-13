@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QNetworkInterface>
 #include "error_code.h"
+#include "public_type.h"
 
 /**
  * @brief 公共函数类
@@ -36,6 +37,9 @@ public:
      * @brief 获取本地IP地址
      */
     static QString GetLocalIpAddress();
+
+    static ItemType ConvertItemType(RoleItemEnum item_enum);  ///< 物品索引计算物品类型
+    static RoleEquipAreaEnum ConvertEquipArea(RoleItemEnum item_enum);  ///< 物品索引计算装备部位
 
     // 打包请求数据
     static QJsonObject PackageRequest(const QString& type, const QJsonObject& data, QString id,

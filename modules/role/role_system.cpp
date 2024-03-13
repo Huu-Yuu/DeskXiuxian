@@ -32,3 +32,15 @@ void RoleSystem::SlotActionRequest(const QJsonObject& request_data)
 void RoleSystem::SlotPubTopic(const QJsonObject& status)
 {
 }
+
+void RoleSystem::SlotQuantityChanged(RoleItemEnum item_enum, int sum) {
+    ItemType item_type = PublicFunc::ConvertItemType(item_enum);
+    if(item_type == kItemEquip)
+    {
+        RoleEquipAreaEnum area = PublicFunc::ConvertEquipArea(item_enum);
+    }
+    else
+    {
+        role_obj_->SaveRoleItem(item_type, item_enum, sum);
+    }
+}

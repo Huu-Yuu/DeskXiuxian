@@ -157,6 +157,7 @@ private:
      */
     int WriteUserLoginLogToRemoteDatabase();
     void WriteRoleItemsToLocalDatabase();   ///< 写入角色物品信息到     本地数据库
+    void WriteRoleEquipToLocalDatabase();   ///< 写入角色装备信息到     本地数据库
     void WriteRoleCoefficientToLocalDatabase(); ///< 写入角色计算系数信息到   本地数据库
     void WriteRoleInfoToLocalDatabase();    ///< 写入角色基本信息到     本地数据库
     QString GetSettingUserName();   ///< 获取本地保存的账号

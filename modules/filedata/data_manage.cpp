@@ -433,36 +433,42 @@ void DataManage::WriteRoleItemsToLocalDatabase()
     if(m_database_.isOpen())
     {
         QString roleName = role_item_data.value("roleName").toString();
+        role_item_data.remove("roleName");
 
         QSqlQuery query(m_database_);
-        query.prepare("SELECT COUNT(*) FROM RoleItemEnum WHERE roleName = :roleName");
+        // 开始构建更新查询语句
+        QString updateQuery = "UPDATE RoleItemEnum SET ";
+
+        // 遍历role_item_data中的键值对
+        QStringList updateValues;
+        for (auto it = role_item_data.constBegin(); it != role_item_data.constEnd(); ++it)
+        {
+            QString key = it.key();
+            QString value = it.value().toString();
+
+            // 将键值对添加到更新语句中
+            updateValues.append(key + " = :" + key);
+        }
+
+        // 将更新的键值对连接到查询语句中
+        updateQuery += updateValues.join(", ");
+        updateQuery += " WHERE roleName = :roleName";
+
+        // 准备查询
+        query.prepare(updateQuery);
+
+        // 绑定roleName参数
         query.bindValue(":roleName", roleName);
 
-        if (query.exec() && query.next())
+        // 绑定role_item_data中的键值对
+        for (auto it = role_item_data.constBegin(); it != role_item_data.constEnd(); ++it)
         {
-            int rowCount = query.value(0).toInt();
-            if (rowCount > 0)
-            {
-                // 执行更新操作
-                QString updateQuery = "UPDATE RoleItemEnum SET roleMoney = :roleMoney, renameCard = :renameCard WHERE roleName = :roleName";
-                query.prepare(updateQuery);
-            }
-            else
-            {
-                // 执行插入操作
-                QString insertQuery = "INSERT INTO RoleItemEnum (roleName, roleMoney, renameCard) "
-                                      "VALUES (:roleName, :roleMoney, :renameCard)";
-                query.prepare(insertQuery);
-            }
-
-            query.bindValue(":roleName", roleName);
-            query.bindValue(":roleMoney", role_item_data.value("roleMoney").toInt());
-            query.bindValue(":renameCard", role_item_data.value("renameCard").toInt());
-            if (!query.exec())
-            {
-                LOG_DEBUG(QString("保存数据时出错:%1").arg(query.lastError().text()));
-                return;
-            }
+            query.bindValue(":" + it.key(), it.value().toString());
+        }
+        // 执行查询
+        if (!query.exec())
+        {
+            LOG_DEBUG(QString("更新操作失败：%1").arg(query.lastError().text()));
         }
     }
     else

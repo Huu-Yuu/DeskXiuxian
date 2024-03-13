@@ -69,6 +69,7 @@ public:
     void UpdateAllUI(); ///< 更新角色全部面板数据
     void SaveRoleInfo();    ///< 保存角色基本信息数据
     void SaveRoleItem();    ///< 保存角色道具数据
+    void SaveRoleItem(ItemType item_type, RoleItemEnum item_enum, int sum);    ///< 保存角色道具数据
     void SaveCoefficient(); ///< 保存角色属性系数数据
     bool SurviveDisaster(); ///< 突破前进行渡劫 返回渡劫是否成功
 
