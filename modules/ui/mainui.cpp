@@ -47,8 +47,16 @@ MainUI::MainUI(QWidget* parent)
     ui->bisic_Att_Box->setLayout(ui->bisic_Layout);
     ui->equipment_Box->setLayout(ui->equipment_Layout);
 
-    QString msg = "当前游戏版本为：" ;
-    AddMessage(msg + GAME_VISION);
+    QString date_time_str = QString("%1 %2").arg(__DATE__).arg(__TIME__);
+    if (date_time_str.contains("  "))
+    {
+        date_time_str.replace("  ", " ");
+    }
+    QDateTime compile_data_time = QLocale(QLocale::English)
+            .toDateTime(date_time_str, "MMM d yyyy hh:mm:ss");
+    QString compile_time = compile_data_time.toString("yyyy.MM.dd hh:mm:ss");
+    QString msg = QString("当前游戏版本为：%1 发布日期：%2").arg(GAME_VISION).arg(compile_time);
+    AddMessage(msg);
 }
 
 MainUI::~MainUI()

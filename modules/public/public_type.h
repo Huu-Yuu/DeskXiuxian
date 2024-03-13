@@ -94,8 +94,8 @@ enum RoleEquipAreaEnum
 enum RoleItemEnum
 {
     kUnknownProp = 0,   ///< 未知
-    kRoleMoney,         ///< 灵石
-    kPropRenameCard     ///< 改名卡
+    kRoleMoney          = 1001,        ///< 灵石
+    kPropRenameCard     = 1002        ///< 改名卡
 
 };
 

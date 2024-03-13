@@ -92,12 +92,6 @@ MainCtrl::~MainCtrl()
         delete game_obj_;
         game_obj_ = nullptr;
     }
-
-}
-
-void MainCtrl::DebugOutToLog(QString msg)
-{
-    emit SignalLogOut(QtDebugMsg, QMessageLogContext(), msg);
 }
 
 void MainCtrl::StartFishing()

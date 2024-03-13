@@ -55,7 +55,7 @@ public:
      * @brief 登录校验
      * @return 1-登录成功 0-账号或密码错误 -1-数据库连接失败
      */
-    int LoginVerification(const QString user_name, const QString pass_word);
+    int LoginVerification(const QString& user_name, const QString& pass_word);
 
     /**
      * @brief 账号注册

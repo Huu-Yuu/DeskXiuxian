@@ -3,13 +3,18 @@
 
 #endif // PUBLIC_MACRO_H
 
-#define GAME_VISION             "v0.2.2 草稿版"
+// 调试信息输出开关
+#define DEBUG_MODE_SWITCH       1
+
+#define GAME_VISION             "v0.2.5 草稿版"
 
 // 数据库类型    0-远程数据库 1-本地数据库 2-服务器传递
 #define DATABASE_TYPE          1
 
 // 远程数据库链接名
-#define REMOTE_DB_LINKNAME      "GAMEDATA"
+#define REMOTE_DB_LINKNAME      "GAMEDATA_REMOTE"
+// 本地数据库链接名
+#define LOCAL_DB_LINKNAME      "GAMEDATA_LOCCAL"
 
 // 远程数据库地址
 #define REMOTE_DB_ADDRESS       "8.136.191.17"
@@ -34,3 +39,15 @@
 
 // 网络通信端口
 #define MAIN_SERVER_PORT        12306
+
+// 调试打印
+#if DEBUG_MODE_SWITCH == 1
+// 调试打印
+#define LOG_DEBUG(msg) \
+        do { \
+            QString logMsg = QString("[%1] %2:%3 - %4").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")).arg(__FUNCTION__).arg(__LINE__).arg(msg); \
+            qDebug() << logMsg; \
+        } while (0)
+#else
+#define LOG_DEBUG(msg) do {} while (0)
+#endif

@@ -23,11 +23,7 @@ public:
 
     ~MainCtrl();
 
-    void DebugOutToLog(QString msg);    ///< 打印日志
-
     void ShowMainUi();  ///< 显示主界面
-
-    bool LoginVerification(QString user_name, QString pass_word);   ///< 登录校验
 
 public slots:
 

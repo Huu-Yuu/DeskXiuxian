@@ -12,17 +12,17 @@ void DataManage::InitRemoteData()
     // 初始化数据库查询语句
     if (database_.open())
     {
-        qDebug() << "远程数据服务连接正常";
+        LOG_DEBUG("远程数据服务连接正常");
         // 连接成功后，可以执行其他初始化操作
         // ...
         // database_.close(); // 关闭数据库连接
     }
     else
     {
-        qDebug() << "远程数据服务连接失败";
+        LOG_DEBUG("远程数据服务连接失败");
     }
     user_ip_ = PublicFunc::GetLocalIpAddress();
-    qDebug() << "获取到当前IP地址为：" << user_ip_;
+    LOG_DEBUG(QString("获取到当前IP地址为：%1").arg(user_ip_));
 }
 
 void DataManage::InitLocalData()
@@ -44,7 +44,7 @@ void DataManage::InitLocalData()
     }
 }
 
-int DataManage::LoginVerification(QString user_name, QString pass_word)
+int DataManage::LoginVerification(const QString& user_name, const QString& pass_word)
 {
     int result = -1;
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
@@ -57,13 +57,13 @@ int DataManage::LoginVerification(QString user_name, QString pass_word)
 
     if (!query.exec())
     {
-        qDebug() << "校验失败：" << query.lastError().text();
+        LOG_DEBUG(QString("校验失败:%1").arg(query.lastError().text()));
         return result;
     }
 
     if (query.next())
     {
-        qDebug() << "校验成功";
+        LOG_DEBUG("校验成功");
         user_uuid_ = GetUserUUID(user_name, pass_word);
         if(CheckUserLogginIsFist() == 1)
         {
@@ -75,7 +75,7 @@ int DataManage::LoginVerification(QString user_name, QString pass_word)
     }
     else
     {
-        qDebug() << "用户名或密码错误";
+        LOG_DEBUG("用户名或密码错误");
         result = 0;
     }
     return result;
@@ -92,13 +92,13 @@ int DataManage::AccountRegistration(QString user_name, QString pass_word, QStrin
 
     if (!query.exec())
     {
-        qDebug() << "查询失败：" << query.lastError().text();
+        LOG_DEBUG(QString("查询失败:%1").arg(query.lastError().text()));
         return 0;
     }
 
     if (query.next())
     {
-        qDebug() << "用户名已存在";
+        LOG_DEBUG("用户名已存在");
         return -1;
     }
 
@@ -136,7 +136,7 @@ int DataManage::AccountRegistration(QString user_name, QString pass_word, QStrin
     else
     {
         // 获取总行数失败
-        qDebug() << "获取总行数失败";
+        LOG_DEBUG("获取总行数失败");
     }
     return result;
 }
@@ -149,7 +149,7 @@ bool DataManage::AutomaticLogin()
     QString pass_word = GetSettingPassWord();
     if(user_name == "" || pass_word == "")
     {
-        qDebug() << "账号密码不存在，跳过自动登录";
+        LOG_DEBUG("账号密码不存在，跳过自动登录");
     }
     if(LoginVerification(user_name, pass_word) == 1)
     {
@@ -157,11 +157,11 @@ bool DataManage::AutomaticLogin()
     }
     else
     {
-        qDebug() << "账号校验不通过，跳过自动登录";
+        LOG_DEBUG("账号校验不通过，跳过自动登录");
     }
     if(user_uuid_ != "")
     {
-        qDebug() << "账号校验成功，获取UUID";
+        LOG_DEBUG("账号校验成功，获取UUID");
         result = true;
     }
     return result;;
@@ -202,11 +202,11 @@ QString DataManage::GetUserUUID(const QString user_name, const QString pass_word
     {
         // 获取查询结果
         uuid = query.value("UUID").toString();
-        qDebug() << "成功获取UUID：" << uuid;
+        LOG_DEBUG( QString("成功获取UUID：%1").arg(uuid));
     }
     else
     {
-        qDebug() << "获取UUID失败 返回空值";
+        LOG_DEBUG("获取UUID失败 返回空值");
     }
     return uuid;
 }
@@ -231,18 +231,18 @@ int DataManage::CheckUserLogginIsFist()
         last_time = query.value("last_login_time").toString();
         if(last_time == reg_time)
         {
-            qDebug() << "检测到首次登录";
+            LOG_DEBUG("检测到首次登录");
             result = 1;
         }
         else
         {
-            qDebug() << "非首次登录";
+            LOG_DEBUG("非首次登录");
             result = 0;
         }
     }
     else
     {
-        qDebug() << "首次登录数据库查询失败";
+        LOG_DEBUG("首次登录数据库查询失败");
     }
     return result;
 }
@@ -285,14 +285,14 @@ int DataManage::ModifyRoleName(const QString new_name)
         else
         {
             // 行数不为1，报错
-            qDebug() << "查询错误：" << rowCount << "不存在这一行：" << user_uuid_;
+            LOG_DEBUG(QString("查询错误：%1 不存在这一行：%2").arg(rowCount).arg(user_uuid_));
             result = -2;
         }
     }
     else
     {
         // 查询执行失败，输出错误信息
-        qDebug() << "计数查询失败:" << query.lastError().text();
+        LOG_DEBUG(QString("计数查询失败：%1").arg(query.lastError().text()));
     }
     return result;
 }
@@ -301,7 +301,7 @@ int DataManage::InitRoleData()
 {
     if(IsRoleDataInited() == 1)
     {
-        qDebug() << "检测到角色已经初始化，将跳过本次初始化";
+        LOG_DEBUG("检测到角色已经初始化，将跳过本次初始化");
         return 1;
     }
     int result = 0;
@@ -320,13 +320,12 @@ int DataManage::InitRoleData()
     query.bindValue(":roleName", role_name);
     if (query.exec())
     {
-        qDebug() << "新建角色基本信息初始化完成";
+        LOG_DEBUG("新建角色基本信息初始化完成");
         result ++;  // 插入成功
     }
     else
     {
-        qDebug() << "插入操作失败，错误码：" << query.lastError().text();
-        qDebug() << "新建角色基本信息初始化失败：" << query.lastError().text();
+        LOG_DEBUG(QString("新建角色基本信息初始化失败：%1").arg(query.lastError().text()));
         result --;
     }
     query.prepare("INSERT INTO user_role_equip (uuid, equip_weapon, equip_magic, equip_helmet,"
@@ -335,13 +334,12 @@ int DataManage::InitRoleData()
     query.bindValue(":uuid", user_uuid_);
     if (query.exec())
     {
-        qDebug() << "新建角色装备信息初始化完成";
+        LOG_DEBUG("新建角色装备信息初始化完成");
         result ++;  // 插入成功
     }
     else
     {
-        qDebug() << "插入操作失败，错误码：" << query.lastError().text();
-        qDebug() << "新建角色装备信息初始化失败：" << query.lastError().text();
+        LOG_DEBUG(QString("新建角色装备信息初始化失败：%1").arg(query.lastError().text()));
         result --;
     }
     query.prepare("INSERT INTO user_role_rc (uuid, rc_life, rc_basic_event, rc_att_event,"
@@ -350,13 +348,12 @@ int DataManage::InitRoleData()
     query.bindValue(":uuid", user_uuid_);
     if (query.exec())
     {
-        qDebug() << "新建角色成长系数初始化完成";
+        LOG_DEBUG("新建角色成长系数初始化完成");
         result ++;  // 插入成功
     }
     else
     {
-        qDebug() << "插入操作失败，错误码：" << query.lastError().text();
-        qDebug() << "新建角色成长系数初始化失败：" << query.lastError().text();
+        LOG_DEBUG(QString("新建角色成长系数初始化失败：%1").arg(query.lastError().text()));
         result --;
     }
     query.prepare("INSERT INTO user_role_item (uuid, role_money, rename_card) "
@@ -364,13 +361,12 @@ int DataManage::InitRoleData()
     query.bindValue(":uuid", user_uuid_);
     if (query.exec())
     {
-        qDebug() << "新建角色物品初始化完成";
+        LOG_DEBUG("新建角色物品初始化完成");
         result ++;  // 插入成功
     }
     else
     {
-        qDebug() << "插入操作失败，错误码：" << query.lastError().text();
-        qDebug() << "新建角色物品初始化失败：" << query.lastError().text();
+        LOG_DEBUG(QString("新建角色物品初始化失败：%1").arg(query.lastError().text()));
         result --;
     }
     return result;
@@ -430,7 +426,7 @@ int DataManage::SetTableToInfo(const QString table_name, const QString column_na
     else
     {
         // 更新查询执行失败，输出错误信息
-        qDebug() << "Update query failed:" << query.lastError().text();
+        LOG_DEBUG(QString("更新失败：%1").arg(query.lastError().text()));
         result = -1;
     }
 
@@ -492,14 +488,14 @@ int DataManage::WriteRoleInfoToRemoteDatabase()
             else
             {
                 // 更新查询执行失败，输出错误信息
-                qDebug() << "Update query failed:" << query.lastError().text();
+                LOG_DEBUG(QString("更新失败：%1").arg(query.lastError().text()));
                 result = -1;
             }
         }
         else
         {
             // 行数不为1，报错
-            qDebug() << "查询错误：" << rowCount << "不存在这一行：" << user_uuid_;
+            LOG_DEBUG(QString("查询错误：%1 不存在这一行：%2").arg(rowCount).arg(user_uuid_));
             result = -2;
         }
     }
@@ -550,21 +546,21 @@ int DataManage::WriteRoleItemsToRemoteDatabase()
             else
             {
                 // 更新查询执行失败，输出错误信息
-                qDebug() << "Update query failed:" << query.lastError().text();
+                LOG_DEBUG(QString("更新失败：%1").arg(query.lastError().text()));
                 result = -1;
             }
         }
         else
         {
             // 行数不为1，报错
-            qDebug() << "查询错误：" << rowCount << "不存在这一行：" << user_uuid_;
+            LOG_DEBUG(QString("查询错误：%1 不存在这一行：%2").arg(rowCount).arg(user_uuid_));
             result = -2;
         }
     }
     else
     {
         // 查询执行失败，输出错误信息
-        qDebug() << "计数查询失败:" << query.lastError().text();
+        LOG_DEBUG(QString("计数查询失败：%1").arg(query.lastError().text()));
     }
     return result;
 }
@@ -616,21 +612,21 @@ int DataManage::WriteRoleCoefficientToRemoteDatabase()
             else
             {
                 // 更新查询执行失败，输出错误信息
-                qDebug() << "Update query failed:" << query.lastError().text();
+                LOG_DEBUG(QString("更新失败：%1").arg(query.lastError().text()));
                 result = -1;
             }
         }
         else
         {
             // 行数不为1，报错
-            qDebug() << "查询错误：" << rowCount << "不存在这一行：" << user_uuid_;
+            LOG_DEBUG(QString("查询错误：%1 不存在这一行：%2").arg(rowCount).arg(user_uuid_));
             result = -2;
         }
     }
     else
     {
         // 查询执行失败，输出错误信息
-        qDebug() << "计数查询失败:" << query.lastError().text();
+        LOG_DEBUG(QString("计数查询失败：%1").arg(query.lastError().text()));
     }
     return result;
 }
@@ -665,7 +661,7 @@ int DataManage::WriteUserLoginLogToRemoteDatabase()
     else
     {
         // 更新查询执行失败，输出错误信息
-        qDebug() << "Update query failed:" << query.lastError().text();
+        LOG_DEBUG(QString("更新失败：%1").arg(query.lastError().text()));
         result --;
     }
     // 更新登录日志
@@ -696,7 +692,7 @@ int DataManage::WriteUserLoginLogToRemoteDatabase()
     else
     {
         // 插入查询执行失败，输出错误信息
-        qDebug() << "Insert query failed:" << query.lastError().text();
+        LOG_DEBUG(QString("插入失败：%1").arg(query.lastError().text()));
         result --;
     }
 
@@ -746,7 +742,7 @@ QJsonObject DataManage::GetRemoteRoleInfo()
     {
         msg = "角色基本信息查询失败";
     }
-    qDebug() << msg;
+    LOG_DEBUG(msg);
     return role_info_data;
 }
 
@@ -787,7 +783,7 @@ QJsonObject DataManage::GetRemoteRoleRC()
     {
         msg = "角色RC信息查询失败";
     }
-    qDebug() << msg;
+    LOG_DEBUG(msg);
     return role_rc_data;
 }
 
@@ -818,7 +814,7 @@ QJsonObject DataManage::GetRemoteRoleItem()
     {
         msg = "角色物品信息查询失败";
     }
-    qDebug() << msg;
+    LOG_DEBUG(msg);
     return role_item_data;
 }
 
@@ -839,12 +835,12 @@ int DataManage::IsRoleDataInited()
         roleInfoCount = query.value(0).toInt();
         if (roleInfoCount > 0)
         {
-            qDebug() << "检测到角色信息已经初始化";
+            LOG_DEBUG("检测到角色信息已经初始化");
         }
     }
     else
     {
-        qDebug() << "未能获取角色信息查询结果";
+        LOG_DEBUG("未能获取角色信息查询结果");
     }
 
     // 检查user_role_item表
@@ -856,12 +852,12 @@ int DataManage::IsRoleDataInited()
         roleItemCount = query.value(0).toInt();
         if (roleItemCount > 0)
         {
-            qDebug() << "检测到角色物品已经初始化";
+            LOG_DEBUG("检测到角色物品已经初始化");
         }
     }
     else
     {
-        qDebug() << "未能获取查询结果";
+        LOG_DEBUG("未能获取查询结果");
     }
 
     // 检查user_role_rc表
@@ -873,12 +869,12 @@ int DataManage::IsRoleDataInited()
         roleRcCount = query.value(0).toInt();
         if (roleRcCount > 0)
         {
-            qDebug() << "检测到角色成长信息已经初始化";
+            LOG_DEBUG("检测到角色成长信息已经初始化");
         }
     }
     else
     {
-        qDebug() << "未能获取查询结果";
+        LOG_DEBUG("未能获取查询结果");
     }
 
     // 检查user_role_equip表
@@ -890,12 +886,12 @@ int DataManage::IsRoleDataInited()
         roleEquipCount = query.value(0).toInt();
         if (roleEquipCount > 0)
         {
-            qDebug() << "检测到角色装备已经初始化";
+            LOG_DEBUG("检测到角色装备已经初始化");
         }
     }
     else
     {
-        qDebug() << "未能获取查询结果";
+        LOG_DEBUG("未能获取查询结果");
     }
     if(roleInfoCount > 0 && roleItemCount > 0 && roleRcCount > 0 && roleEquipCount > 0)
     {

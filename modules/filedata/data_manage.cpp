@@ -32,20 +32,23 @@ DataManage::~DataManage()
 void DataManage::OpenDatabase(QString path)
 {
     // 打开现有数据库连接
-    m_database_ = QSqlDatabase::addDatabase("QSQLITE");
-    m_database_.setDatabaseName(path);
+    QSqlDatabase database_;
+    database_ = QSqlDatabase::addDatabase("QSQLITE", LOCAL_DB_LINKNAME);
+    database_.setDatabaseName(path);
+    database_.setPassword(LOCAL_DB_PASSWORD);
+    m_database_ = QSqlDatabase::database(LOCAL_DB_LINKNAME);;
     // 打开数据库连接
     if (!m_database_.open())
     {
-        qDebug() << "无法打开数据库:" << m_database_.lastError().text();
+        LOG_DEBUG(QString("无法打开数据库:%1").arg(m_database_.lastError().text()));
     }
     else
     {
         m_database_.exec("PRAGMA encoding = \"UTF-8\";");
-        qDebug() << "数据库已经打开.";
+        LOG_DEBUG("本地数据库已经打开");
         if(!CheckTablesExist()) //检查并创建表单
         {
-            qDebug() << "检查表单时出现错误";
+            LOG_DEBUG("检查表单时出现错误");
         };
     }
 }
@@ -54,24 +57,23 @@ void DataManage::CreateDatabase(QString path)
 {
     // 创建数据库连接
     QSqlDatabase database_;
-    database_ = QSqlDatabase::addDatabase("QSQLITE", REMOTE_DB_LINKNAME);
+    database_ = QSqlDatabase::addDatabase("QSQLITE", LOCAL_DB_LINKNAME);
     database_.setDatabaseName(path);
     database_.setPassword(LOCAL_DB_PASSWORD);
-
-//    m_database_ = QSqlDatabase::addDatabase("QSQLITE");
-//    m_database_.setDatabaseName(path);
-    m_database_ = QSqlDatabase::database(REMOTE_DB_LINKNAME);;
+    m_database_ = QSqlDatabase::database(LOCAL_DB_LINKNAME);;
 
     // 打开数据库连接
-    if (!m_database_.isOpen())
+    if (!m_database_.open())
     {
-        qDebug() << "创建数据库失败:" << m_database_.lastError().text();
+        LOG_DEBUG(QString("创建数据库失败:%1").arg(m_database_.lastError().text()));
     }
     else
     {
+        LOG_DEBUG("本地数据库已经打开");
+        m_database_.exec("PRAGMA encoding = \"UTF-8\";");
         if(!CheckTablesExist()) //检查并创建表单
         {
-            qDebug() << "创建数据库时，创建表单出现错误";
+            LOG_DEBUG("创建数据库时，创建表单出现错误");
         };
     }
     // database_.close();
@@ -84,7 +86,7 @@ bool DataManage::CheckTablesExist()
     QSqlQuery query(m_database_);
     if (!query.exec(queryString))
     {
-        qDebug() << "执行查询 RoleInfo 时出错:" << query.lastError().text();
+        LOG_DEBUG(QString("执行查询 RoleInfo 时出错:%1").arg(query.lastError().text()));
         return false;
     }
     // 如果 RoleInfo 表不存在，则创建表
@@ -105,7 +107,7 @@ bool DataManage::CheckTablesExist()
         query.prepare(createTableQuery);
         if (!query.exec(createTableQuery))
         {
-            qDebug() << "创建表时出错:" << query.lastError().text();
+            LOG_DEBUG(QString("创建表时出错:%1").arg(query.lastError().text()));
             return false;
         }
         // 插入初始值
@@ -125,7 +127,7 @@ bool DataManage::CheckTablesExist()
 
         if (!query.exec())
         {
-            qDebug() << "插入初始值时出错:" << query.lastError().text();
+            LOG_DEBUG(QString("插入初始值时出错:%1").arg(query.lastError().text()));
             return false;
         }
     }
@@ -133,7 +135,7 @@ bool DataManage::CheckTablesExist()
     queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleAtt'";
     if (!query.exec(queryString))
     {
-        qDebug() << "执行查询 RoleAtt 时出错:" << query.lastError().text();
+        LOG_DEBUG(QString("执行查询 RoleAtt 时出错:%1").arg(query.lastError().text()));
         return false;
     }
 
@@ -151,7 +153,7 @@ bool DataManage::CheckTablesExist()
                                    ")";
         if (!query.exec(createTableQuery))
         {
-            qDebug() << "创建表时出错:" << query.lastError().text();
+            LOG_DEBUG(QString("创建表时出错:%1").arg(query.lastError().text()));
             return false;
         }
 
@@ -168,7 +170,7 @@ bool DataManage::CheckTablesExist()
         query.bindValue(":attEarth", 0);
         if (!query.exec())
         {
-            qDebug() << "插入初始值时出错:" << query.lastError().text();
+            LOG_DEBUG(QString("插入初始值时出错:%1").arg(query.lastError().text()));
             return false;
         }
     }
@@ -177,7 +179,7 @@ bool DataManage::CheckTablesExist()
     queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleEquip'";
     if (!query.exec(queryString))
     {
-        qDebug() << "执行查询 RoleEquip 时出错:" << query.lastError().text();
+        LOG_DEBUG(QString("执行查询 RoleEquip 时出错:%1").arg(query.lastError().text()));
         return false;
     }
 
@@ -198,7 +200,7 @@ bool DataManage::CheckTablesExist()
                                    ")";
         if (!query.exec(createTableQuery))
         {
-            qDebug() << "创建表时出错:" << query.lastError().text();
+            LOG_DEBUG(QString("创建表时出错:%1").arg(query.lastError().text()));
             return false;
         }
 
@@ -218,7 +220,7 @@ bool DataManage::CheckTablesExist()
         query.bindValue(":equipMount", "哈士奇");
         if (!query.exec())
         {
-            qDebug() << "插入初始值时出错:" << query.lastError().text();
+            LOG_DEBUG(QString("插入初始值时出错:%1").arg(query.lastError().text()));
             return false;
         }
     }
@@ -227,7 +229,7 @@ bool DataManage::CheckTablesExist()
     queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleItemEnum'";
     if (!query.exec(queryString))
     {
-        qDebug() << "执行查询 RoleItemEnum 时出错:" << query.lastError().text();
+        LOG_DEBUG(QString("执行查询 RoleItemEnum 时出错:%1").arg(query.lastError().text()));
         return false;
     }
 
@@ -242,7 +244,7 @@ bool DataManage::CheckTablesExist()
                                    ")";
         if (!query.exec(createTableQuery))
         {
-            qDebug() << "创建表时出错:" << query.lastError().text();
+            LOG_DEBUG(QString("创建表时出错:%1").arg(query.lastError().text()));
             return false;
         }
 
@@ -256,7 +258,7 @@ bool DataManage::CheckTablesExist()
         query.bindValue(":renameCard", 2);
         if (!query.exec())
         {
-            qDebug() << "插入初始值时出错:" << query.lastError().text();
+            LOG_DEBUG(QString("插入初始值时出错:%1").arg(query.lastError().text()));
             return false;
         }
     }
@@ -265,7 +267,7 @@ bool DataManage::CheckTablesExist()
     queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleCoefficient'";
     if (!query.exec(queryString))
     {
-        qDebug() << "执行查询 RoleCoefficient 时出错:" << query.lastError().text();
+        LOG_DEBUG(QString("执行查询 RoleCoefficient 时出错:%1").arg(query.lastError().text()));
         return false;
     }
 
@@ -285,7 +287,7 @@ bool DataManage::CheckTablesExist()
                                    ")";
         if (!query.exec(createTableQuery))
         {
-            qDebug() << "创建表时出错:" << query.lastError().text();
+            LOG_DEBUG(QString("创建表时出错:%1").arg(query.lastError().text()));
             return false;
         }
 
@@ -306,7 +308,7 @@ bool DataManage::CheckTablesExist()
         query.bindValue(":roleAptitude", 1);
         if (!query.exec())
         {
-            qDebug() << "插入初始值时出错:" << query.lastError().text();
+            LOG_DEBUG(QString("插入初始值时出错:%1").arg(query.lastError().text()));
             return false;
         }
     }
@@ -318,7 +320,7 @@ QString DataManage::GetTableToInfo(QString table_name, QString column_name)
     QString result = "";
     if(!m_database_.isOpen())
     {
-        qDebug() << "数据库打开失败";
+        LOG_DEBUG("数据库打开失败");
         return result;
     }
     else
@@ -327,20 +329,18 @@ QString DataManage::GetTableToInfo(QString table_name, QString column_name)
         QString queryString = QString("SELECT %1 FROM %2").arg(column_name, table_name);
         if (!query.exec(queryString))
         {
-            qDebug() << queryString;
-            qDebug() << "执行查询时出错:" << query.lastError().text();
-            // database_.close();
+            LOG_DEBUG(queryString);
+            LOG_DEBUG(QString("执行查询时出错:%1").arg(query.lastError().text()));
         }
         else
         {
             if (query.next())
             {
-                qDebug() << table_name << " 查询数据为：" << column_name << " ：" << query.value(0).toString();
-                // database_.close();
+                QString log = table_name + " 查询数据为：" + column_name + " ：" + query.value(0).toString();
+                LOG_DEBUG(log);
                 result = query.value(0).toString();
             }
         }
-        // database_.close();
         return result;
     }
 }
@@ -417,15 +417,14 @@ void DataManage::WriteRoleInfoToLocalDatabase()
             query.bindValue(":roleCurExp", role_data.value("roleCurExp").toInt());
             if (!query.exec())
             {
-                qDebug() << "保存数据时出错:" << query.lastError().text();
-                // database_.close();
+                LOG_DEBUG(QString("保存数据时出错:%1").arg(query.lastError().text()));
                 return;
             }
         }
     }
     else
     {
-        qDebug() << "数据库未打开";
+        LOG_DEBUG("数据库未打开");
     }
 }
 
@@ -461,14 +460,14 @@ void DataManage::WriteRoleItemsToLocalDatabase()
             query.bindValue(":renameCard", role_item_data.value("renameCard").toInt());
             if (!query.exec())
             {
-                qDebug() << "保存数据时出错:" << query.lastError().text();
+                LOG_DEBUG(QString("保存数据时出错:%1").arg(query.lastError().text()));
                 return;
             }
         }
     }
     else
     {
-        qDebug() << "数据库未打开";
+        LOG_DEBUG("数据库未打开");
     }
 }
 
@@ -510,14 +509,14 @@ void DataManage::WriteRoleCoefficientToLocalDatabase()
             query.bindValue(":roleAptitude", RC_data.value("roleAptitude").toInt());
             if (!query.exec())
             {
-                qDebug() << "保存数据时出错:" << query.lastError().text();
+                LOG_DEBUG(QString("保存数据时出错:%1").arg(query.lastError().text()));
                 return;
             }
         }
     }
     else
     {
-        qDebug() << "数据库未打开";
+        LOG_DEBUG("数据库未打开");
     }
 }
 

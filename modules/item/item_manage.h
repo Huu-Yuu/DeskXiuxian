@@ -34,6 +34,7 @@ public slots:
 private:
     static QMutex mutex_; ///< 互斥锁，用于线程同步
     QMap<int, ItemBase*> m_action_strategy; ///< 物品索引 和 类绑定
+    QMap<int, int> m_item_sum; ///< 物品索引和数量
     int item_money_;     ///< 货币灵石
 };
 
