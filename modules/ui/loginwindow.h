@@ -8,7 +8,7 @@
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
 #include <QMessageBox>
-#include "modules/filedata/data_manage.h"
+#include "modules/filedata/data_service.h"
 
 namespace Ui
 {
@@ -49,7 +49,7 @@ private slots:
 private:
     Ui::LoginWindow* ui;
 
-    DataManage* data_file_;         // 文件管理对象
+    DataService* data_file_;         // 文件管理对象
     bool user_name_ok = false;      // 检查输入格式是否正常
     bool pass_word_ok = false;
     bool email_ok = false;

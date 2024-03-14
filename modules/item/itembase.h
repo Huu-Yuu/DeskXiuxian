@@ -18,8 +18,8 @@ public:
     int GetItemIndex();     ///< 获取物品索引
     int GetItemNum() const;     ///< 获取物品数量
     void SetItemNum(int num);       ///< 设置物品数量
-    void AddItemNum(int num);       ///< 增加物品数量
-    void SubtractItemNum(int num);       ///< 减少物品数量
+    virtual void AddItemNum(int num);       ///< 增加物品数量
+    virtual void SubtractItemNum(int num);       ///< 减少物品数量
     QString GetItemName() const;            ///< 获取物品名称
     void SetItemName(const QString& name);  ///< 写入物品名称
     int GetItemPrice() const;       ///< 获取物品价格

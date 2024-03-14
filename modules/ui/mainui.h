@@ -12,9 +12,9 @@
 #include <QTextStream>
 #include "modules/logger/logger.h"
 #include "modules/role/role_player.h"
-#include "modules/item/item_manage.h"
-#include "modules/filedata/data_manage.h"
-#include "modules/game_progress/game_progress.h"
+#include "modules/item/item_service.h"
+#include "modules/filedata/data_service.h"
+#include "modules/game_progress/game_service.h"
 #include "loginwindow.h"
 #include "modifyrolename.h"
 #include "common/singleton.h"
@@ -87,8 +87,8 @@ private:
     QProcess* process;  // 用于关闭窗口时杀死所有进程
     Ui::MainUI* ui;
     Logger* logger_obj_;
-    DataManage* data_file_;
-    ItemManage* role_item_; // 角色道具
+    DataService* data_file_;
+    ItemService* role_item_; // 角色道具
     LoginWindow* login_obj_;    // 登录器
     ModifyRoleName* modify_obj_;    // 角色名修改窗口
 };

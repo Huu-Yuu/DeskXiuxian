@@ -1,8 +1,8 @@
-#include "game_progress.h"
+#include "game_service.h"
 
-QMutex GameProgress::mutex;  // 初始化互斥锁对象
+QMutex ProgressService::mutex;  // 初始化互斥锁对象
 
-GameProgress::~GameProgress()
+ProgressService::~ProgressService()
 {
     if (jianghu_timer_ != nullptr)
     {
@@ -29,7 +29,7 @@ GameProgress::~GameProgress()
     }
 }
 
-GameProgress::GameProgress()
+ProgressService::ProgressService()
 {
     // 定时器开始
     jianghu_timer_ = new QTimer;
@@ -56,36 +56,36 @@ GameProgress::GameProgress()
     qDebug() << "游戏进程控制类 线程ID：" << currentThreadId();
 }
 
-int GameProgress::GetAnecdotesTime()
+int ProgressService::GetAnecdotesTime()
 {
     return anecdotes_time_;
 }
 
-int GameProgress::GetAttTime()
+int ProgressService::GetAttTime()
 {
     return att_time_;
 }
 
-void GameProgress::StarPractic()
+void ProgressService::StarPractic()
 {
     life_timer_->start();
     jianghu_timer_->start();
     basic_att_timer_->start();
 }
 
-void GameProgress::StopPractic()
+void ProgressService::StopPractic()
 {
     life_timer_->stop();
     jianghu_timer_->stop();
     basic_att_timer_->stop();
 }
 
-void GameProgress::StopThread()
+void ProgressService::StopThread()
 {
     m_stopRequested = true;
 }
 
-void GameProgress::run()
+void ProgressService::run()
 {
     // 创建一个事件循环对象
     QEventLoop eventLoop;
@@ -101,12 +101,12 @@ void GameProgress::run()
     m_stopRequested = false;
 }
 
-QTimer* GameProgress::GetJianghuTimer()
+QTimer* ProgressService::GetJianghuTimer()
 {
     return jianghu_timer_;
 }
 
-void GameProgress::SetAnecdotesTime_(int time)
+void ProgressService::SetAnecdotesTime_(int time)
 {
     anecdotes_time_ = time;
 }

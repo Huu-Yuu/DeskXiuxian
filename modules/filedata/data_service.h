@@ -22,17 +22,18 @@
 /**
  * @brief 文件管理类
  */
-class DataManage : public QThread
+class DataService : public QThread
 {
 
 public:
-    SINGLETON(DataManage);
-    DataManage();
+    SINGLETON(DataService);
+    DataService();
 
     void InitSettingFile(); ///< 初始化配置文件
     void InitRemoteData();  ///< 初始化远程数据库
     void InitLocalData();   ///< 初始化本地数据库
 
+    void SetRoleName(QString name); ///< 设置角色名称
     /**
      * @brief 获取表单中对应的列数据
      * @return 查询不到则返回空，否则返回查询值
@@ -113,7 +114,7 @@ public:
 
     void run();
 
-    ~DataManage();
+    ~DataService();
 
     /**
      * @brief 打印日志
@@ -189,6 +190,7 @@ private:
 
     static QString user_uuid_ ;          ///< 账号UUID
     static QString user_ip_ ;      ///< 用户IP
+    QString role_name_;         // 昵称
 
 };
 

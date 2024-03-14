@@ -14,7 +14,7 @@ InterfaceManager::~InterfaceManager()
 
 }
 
-QString InterfaceManager::getModuleName()
+QString InterfaceManager::GetModuleName()
 {
     return m_module_name;
 }

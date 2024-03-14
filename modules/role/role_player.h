@@ -11,7 +11,7 @@
 #include <QRandomGenerator>
 #include <QJsonObject>
 #include <QDebug>
-#include "modules/item/item_manage.h"
+#include "modules/item/item_service.h"
 #include "common/singleton.h"
 
 /**
@@ -125,8 +125,8 @@ private:
     double aptitude_;   // 修仙资质 0.01 ~ 1
     double next_need_epx_;   // 下次升级所需要的经验值
     int RC_Life_;        // 角色寿命系数
-    double RC_SurviveDisaster; //渡劫成功概率加成
-    ItemManage* role_item_; // 角色道具
+    double RC_SurviveDisaster_; //渡劫成功概率加成
+    ItemService* role_item_; // 角色道具
 };
 
 #endif // ROLEPLAY_H

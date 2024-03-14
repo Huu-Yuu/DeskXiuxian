@@ -1,17 +1,22 @@
 #include "main_ctrl.h"
+#include "modules/item/item_manage.h"
+#include "modules/filedata/db_manage.h"
+#include "modules/game_progress/progress_manage.h"
+#include "modules/role/role_manage.h"
+#include "modules/ui/ui_manage.h"
 
 MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
 {
 
     //注册MessageHandler(注意要有日志文件夹)
 //    qInstallMessageHandler(Logger::OutputMessageHandler);
-    data_file_ = DataManage::getInstance();
+    data_file_ = DataService::getInstance();
     main_ui_obj_ = MainUI::getInstance();
     logger_obj_ = Logger::getInstance();
-    game_obj_ = GameProgress::getInstance();
+    game_obj_ = ProgressService::getInstance();
     role_obj_ = RolePlayer::getInstance();
-    role_item_ = ItemManage::getInstance();
-
+    role_item_ = ItemService::getInstance();
+    InitObj();
 #if DATABASE_TYPE == 1
     // 初始化UI和角色数据
     InitRoleInfo();
@@ -21,9 +26,9 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     connect(main_ui_obj_, &MainUI::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
 
     // 绑定修炼
-    connect(game_obj_, &GameProgress::SignaleLifeUpdataTimeOut, role_obj_, &RolePlayer::SlotLifeUpdate);
-    connect(game_obj_, &GameProgress::SignalJianghuTimeOut, role_obj_, &RolePlayer::SlotCyclicCultivation);
-    connect(game_obj_, &GameProgress::SignalBasicAttTimeOut, role_obj_, &RolePlayer::SlotCyclicEnhanceAtt);
+    connect(game_obj_, &ProgressService::SignaleLifeUpdataTimeOut, role_obj_, &RolePlayer::SlotLifeUpdate);
+    connect(game_obj_, &ProgressService::SignalJianghuTimeOut, role_obj_, &RolePlayer::SlotCyclicCultivation);
+    connect(game_obj_, &ProgressService::SignalBasicAttTimeOut, role_obj_, &RolePlayer::SlotCyclicEnhanceAtt);
     connect(main_ui_obj_, &MainUI::SignalUpgradeLevel, role_obj_, &RolePlayer::SlotUpgradeLevel);
     connect(main_ui_obj_, &MainUI::SignalStartFishing, this, &MainCtrl::SlotStartFishing);
     connect(main_ui_obj_, &MainUI::SignalStopFishing, this, &MainCtrl::SlotStopFishing);
@@ -35,10 +40,10 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     connect(main_ui_obj_, &MainUI::SignalInitRoleData, this, &MainCtrl::SlotInitRoleData);
 
     // 保存角色基本信息
-    connect(role_obj_, &RolePlayer::SignalUpdateRoleInfoDatabase, data_file_, &DataManage::SlotSaveRoleInfoToDatabase);
-    connect(role_obj_, &RolePlayer::SignalUpdateRoleItemDatabase, data_file_, &DataManage::SlotSaveRoleItemToDatabase);
-    connect(role_obj_, &RolePlayer::SignalUpdateEquipItemDatabase, data_file_, &DataManage::SlotSaveRoleEquipToDatabase);
-    connect(role_obj_, &RolePlayer::SignalUpdateRoleCoefficientDatabase, data_file_, &DataManage::SlotSaveRoleCoefficientToDatabase);
+    connect(role_obj_, &RolePlayer::SignalUpdateRoleInfoDatabase, data_file_, &DataService::SlotSaveRoleInfoToDatabase);
+    connect(role_obj_, &RolePlayer::SignalUpdateRoleItemDatabase, data_file_, &DataService::SlotSaveRoleItemToDatabase);
+    connect(role_obj_, &RolePlayer::SignalUpdateEquipItemDatabase, data_file_, &DataService::SlotSaveRoleEquipToDatabase);
+    connect(role_obj_, &RolePlayer::SignalUpdateRoleCoefficientDatabase, data_file_, &DataService::SlotSaveRoleCoefficientToDatabase);
 
     // 消息发送到窗口
     connect(role_obj_, &RolePlayer::SignalShowMsgToUI, main_ui_obj_, &MainUI::SlotShowMsg);
@@ -169,9 +174,10 @@ void MainCtrl::InitRoleInfo()
     emit SignalShowMsgToUI(last_game_time);
     QString name = data_file_->GetTableToInfo("RoleInfo", "roleName");
     QString life = data_file_->GetTableToInfo("RoleInfo", "roleLife");
+    QString max_life = data_file_->GetTableToInfo("RoleInfo", "roleMaxLife");
     QString prestige = data_file_->GetTableToInfo("RoleInfo", "rolePrestige");
     QString LV = data_file_->GetTableToInfo("RoleInfo", "roleLv");
-    int cultivation = static_cast<CultivationStage>(LV.toInt());
+    int cultivation = LV.toInt();
     QString cur_exp = data_file_->GetTableToInfo("RoleInfo", "roleCurExp");
     QString exp = data_file_->GetTableToInfo("RoleInfo", "roleExp");
     QString agg = data_file_->GetTableToInfo("RoleInfo", "roleAgg");
@@ -190,7 +196,6 @@ void MainCtrl::InitRoleInfo()
 
     // 从数据库获取角色获取物品、道具
     QString money = data_file_->GetTableToInfo("RoleItemEnum", "roleMoney");
-    QString rename_card = data_file_->GetTableToInfo("RoleItemEnum", "renameCard");
 
     // 从数据库获取角色属性相关系数
     QString life_Coefficient = data_file_->GetTableToInfo("RoleCoefficient", "RCLife");
@@ -199,6 +204,7 @@ void MainCtrl::InitRoleInfo()
     // 将获取到的值赋值给对象
     role_obj_->SetRoleName(name);
     role_obj_->SetRoleLife(life.toUInt());
+    role_obj_->SetRoleBaseAtt(kRoleMaxLifeAtt, max_life.toInt());
     role_obj_->SetRoleBaseAtt(kRolePrestigeAtt, prestige.toInt());
     role_obj_->SetRoleBaseAtt(kRoleLvAtt, cultivation);
     role_obj_->SetRoleBaseAtt(kRoleExpAtt, cur_exp.toInt());
@@ -275,5 +281,31 @@ void MainCtrl::SlotDeviceResultDeal(int result, QJsonObject extra)
                 qDebug() << Logger::GetErrorInfo(result, 2);
             }
         }
+    }
+}
+
+void MainCtrl::InitObj() {
+    QSharedPointer<InterfaceManager> interface_manager;
+    interface_manager.reset(new ItemManage);
+    RegisterInterfaceManager(interface_manager->GetModuleName(), interface_manager);
+    interface_manager.reset(new DBManage);
+    RegisterInterfaceManager(interface_manager->GetModuleName(), interface_manager);
+    interface_manager.reset(new ProgressManage);
+    RegisterInterfaceManager(interface_manager->GetModuleName(), interface_manager);
+    interface_manager.reset(new RoleManage);
+    RegisterInterfaceManager(interface_manager->GetModuleName(), interface_manager);
+    interface_manager.reset(new UIManage);
+    RegisterInterfaceManager(interface_manager->GetModuleName(), interface_manager);
+}
+
+void MainCtrl::RegisterInterfaceManager(QString type, QSharedPointer<InterfaceManager> inter_ptr) {
+    if(m_manager_map.contains(type))
+    {
+        qDebug() << "已存在类型" << type << ",跳过注册请求";
+    }
+    else
+    {
+        qDebug() << "注册类型" << type << inter_ptr << "请求";
+        m_manager_map.insert(type, inter_ptr);
     }
 }

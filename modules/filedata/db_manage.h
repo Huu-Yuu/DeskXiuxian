@@ -2,18 +2,18 @@
 // Created by hu on 2024/3/11.
 //
 
-#ifndef DESKXIUXINA_ITEM_SYSTEM_H
-#define DESKXIUXINA_ITEM_SYSTEM_H
+#ifndef DESKXIUXINA_DB_MANAGE_H
+#define DESKXIUXINA_DB_MANAGE_H
 #include <QObject>
 #include "modules/interface_manager.h"
-#include "item_manage.h"
+#include "data_service.h"
 
-class ItemSystem : public InterfaceManager
+class DBManage : public InterfaceManager
 {
     Q_OBJECT
 public:
-    ItemSystem();
-    ~ItemSystem();
+    DBManage();
+    ~DBManage();
     int Init() override;
 
 public slots:
@@ -21,7 +21,7 @@ public slots:
     void SlotActionRequest(const QJsonObject& request_data) override;
     void SlotPubTopic(const QJsonObject& status) override;
 private:
-    ItemManage* item_obj_;
+    DataService* data_obj_;
 };
 
-#endif //DESKXIUXINA_ITEM_SYSTEM_H
+#endif //DESKXIUXINA_DB_MANAGE_H

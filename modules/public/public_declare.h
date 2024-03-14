@@ -12,7 +12,7 @@ namespace module_name
     const QString main = "main";
     const QString item = "item_system";                    ///< 物品模块
     const QString role = "role_system";                    ///< 角色模块
-    const QString data = "data_system";  ///< 配置模块，数据管理
+    const QString data = "data_system";              ///< 配置模块，数据管理
     const QString progress = "progress_system";            ///< 进度模块
     const QString userinterface = "ui_system";          ///< 界面模块
 }
@@ -23,7 +23,7 @@ namespace ItemName
     const QString ItemRenameCard = "改名卡";
 }
 
-namespace ItemCmd
+namespace itemCmd
 {
     const QString GetItemIndex = "GetItemIndex";    ///< 获取物品索引
     const QString GetItemNum = "GetItemNum";        ///< 获取物品数量
@@ -35,6 +35,12 @@ namespace ItemCmd
     const QString GetItemExplain = "GetItemExplain";///< 获取物品描述
     const QString SetItemExplain = "SetItemExplain";///< 设置物品描述
     const QString SellItem = "SellItem";            ///< 出售物品
+}
+
+namespace dbCmd
+{
+    const QString SaveRoleEquip = "SaveRoleEquip";  ///< 保存装备
+    const QString SaveRoleItem = "SaveRoleItem";    ///< 保存物品
 }
 
 

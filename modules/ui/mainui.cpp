@@ -8,8 +8,8 @@ MainUI::MainUI(QWidget* parent)
     ui->setupUi(this);
     // 初始化成员变量
     logger_obj_ = Logger::getInstance();
-    data_file_ = DataManage::getInstance();
-    role_item_ = ItemManage::getInstance();
+    data_file_ = DataService::getInstance();
+    role_item_ = ItemService::getInstance();
     login_obj_ = new LoginWindow;
     modify_obj_ = new ModifyRoleName;
     process = new QProcess;

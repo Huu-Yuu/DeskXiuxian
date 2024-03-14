@@ -11,3 +11,13 @@ RenameCard::~RenameCard()
 {
 
 }
+
+void RenameCard::AddItemNum(int num) {
+    item_num_ += num;
+    emit SignalQuantityChanged(item_index_, item_num_);
+}
+
+void RenameCard::SubtractItemNum(int num) {
+    item_num_ -= num;
+    emit SignalQuantityChanged(item_index_, item_num_);
+}

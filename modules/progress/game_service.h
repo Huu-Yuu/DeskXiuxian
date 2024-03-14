@@ -11,16 +11,16 @@
 #include "common/singleton.h"
 
 /**
- * @brief 游戏进程控制类
+ * @brief 游戏进程管理类
  */
-class GameProgress : public QThread
+class ProgressService : public QThread
 {
     Q_OBJECT
 
 public:
-    SINGLETON(GameProgress);
-    GameProgress();
-    ~GameProgress();
+    SINGLETON(ProgressService);
+    ProgressService();
+    ~ProgressService();
 
     int GetAnecdotesTime(); ///< 获取基本事件循环时间
 

@@ -1,6 +1,6 @@
-#include "data_manage.h"
+#include "data_service.h"
 
-void DataManage::InitRemoteData()
+void DataService::InitRemoteData()
 {
     QSqlDatabase database_;
     database_ = QSqlDatabase::addDatabase("QMYSQL", REMOTE_DB_LINKNAME);
@@ -25,7 +25,7 @@ void DataManage::InitRemoteData()
     LOG_DEBUG(QString("获取到当前IP地址为：%1").arg(user_ip_));
 }
 
-void DataManage::InitLocalData()
+void DataService::InitLocalData()
 {
     // 获取数据库文件路径
     QString databasePath = QCoreApplication::applicationDirPath() + "/database.db";
@@ -44,7 +44,7 @@ void DataManage::InitLocalData()
     }
 }
 
-int DataManage::LoginVerification(const QString& user_name, const QString& pass_word)
+int DataService::LoginVerification(const QString& user_name, const QString& pass_word)
 {
     int result = -1;
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
@@ -81,7 +81,7 @@ int DataManage::LoginVerification(const QString& user_name, const QString& pass_
     return result;
 }
 
-int DataManage::AccountRegistration(QString user_name, QString pass_word, QString email)
+int DataService::AccountRegistration(QString user_name, QString pass_word, QString email)
 {
     int result = -2;
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
@@ -101,7 +101,6 @@ int DataManage::AccountRegistration(QString user_name, QString pass_word, QStrin
         LOG_DEBUG("用户名已存在");
         return -1;
     }
-
     // 执行插入语句
     QString uuid = QUuid::createUuid().toString();
     QDateTime reg_time = QDateTime::currentDateTime();
@@ -141,7 +140,7 @@ int DataManage::AccountRegistration(QString user_name, QString pass_word, QStrin
     return result;
 }
 
-bool DataManage::AutomaticLogin()
+bool DataService::AutomaticLogin()
 {
     bool result = false;
     // 先获取本地保存的账号密码
@@ -167,7 +166,7 @@ bool DataManage::AutomaticLogin()
     return result;;
 }
 
-bool DataManage::CheckRoleNameIsOk(const QString role_name)
+bool DataService::CheckRoleNameIsOk(const QString role_name)
 {
     bool result = false;
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
@@ -186,7 +185,7 @@ bool DataManage::CheckRoleNameIsOk(const QString role_name)
     return result;
 }
 
-QString DataManage::GetUserUUID(const QString user_name, const QString pass_word)
+QString DataService::GetUserUUID(const QString user_name, const QString pass_word)
 {
     QString uuid = "";
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
@@ -211,7 +210,7 @@ QString DataManage::GetUserUUID(const QString user_name, const QString pass_word
     return uuid;
 }
 
-int DataManage::CheckUserLogginIsFist()
+int DataService::CheckUserLogginIsFist()
 {
     int result = -1;
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
@@ -247,9 +246,10 @@ int DataManage::CheckUserLogginIsFist()
     return result;
 }
 
-int DataManage::ModifyRoleName(const QString new_name)
+int DataService::ModifyRoleName(const QString new_name)
 {
     int result = -3;
+    role_name_ = new_name;
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
     QSqlQuery query(db);
     query.prepare("SELECT COUNT(*) FROM user_role_info WHERE uuid = :UUID");
@@ -297,7 +297,7 @@ int DataManage::ModifyRoleName(const QString new_name)
     return result;
 }
 
-int DataManage::InitRoleData()
+int DataService::InitRoleData()
 {
     if(IsRoleDataInited() == 1)
     {
@@ -307,8 +307,8 @@ int DataManage::InitRoleData()
     int result = 0;
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
     QSqlQuery query(db);
-    QString role_name = GetTableToInfo("user_data_info", "role_name", "UUID", user_uuid_);
-    if (role_name.isEmpty())
+    role_name_ = GetTableToInfo("user_data_info", "role_name", "UUID", user_uuid_);
+    if (role_name_.isEmpty())
     {
         // 查询角色名失败
         return result;
@@ -317,7 +317,7 @@ int DataManage::InitRoleData()
                   " role_agg, role_def, role_hp, role_cur_exp, role_lv) "
                   "VALUES (:uuid, :roleName, 20, 0, 0, 0, 20, 10, 100, 0, 1)");
     query.bindValue(":uuid", user_uuid_);
-    query.bindValue(":roleName", role_name);
+    query.bindValue(":roleName", role_name_);
     if (query.exec())
     {
         LOG_DEBUG("新建角色基本信息初始化完成");
@@ -372,8 +372,8 @@ int DataManage::InitRoleData()
     return result;
 }
 
-QString DataManage::GetTableToInfo(const QString table_name, const QString column_name,
-                                   const QString leach_column, QString leach_value)
+QString DataService::GetTableToInfo(const QString table_name, const QString column_name,
+                                    const QString leach_column, QString leach_value)
 {
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
     QSqlQuery query(db);
@@ -393,8 +393,8 @@ QString DataManage::GetTableToInfo(const QString table_name, const QString colum
     return result;
 }
 
-int DataManage::SetTableToInfo(const QString table_name, const QString column_name, const QString leach_column,
-                               QString leach_value, QString new_value)
+int DataService::SetTableToInfo(const QString table_name, const QString column_name, const QString leach_column,
+                                QString leach_value, QString new_value)
 {
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
     QSqlQuery query(db);
@@ -433,7 +433,7 @@ int DataManage::SetTableToInfo(const QString table_name, const QString column_na
     return result;
 }
 
-int DataManage::WriteRoleInfoToRemoteDatabase()
+int DataService::WriteRoleInfoToRemoteDatabase()
 {
     int result = -3;
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
@@ -450,6 +450,7 @@ int DataManage::WriteRoleInfoToRemoteDatabase()
             QString updateQuery = "UPDATE user_role_info SET "
                                   "role_name = :roleName, "
                                   "role_life = :roleLife, "
+                                  "role_max_life = :roleMaxLife, "
                                   "role_prestige = :rolePrestige, "
                                   "role_aptitude = :roleAptitude, "
                                   "role_lv = :roleLv, "
@@ -460,8 +461,9 @@ int DataManage::WriteRoleInfoToRemoteDatabase()
                                   "role_cur_exp = :roleCurExp "
                                   "WHERE uuid = :userUUID";
             query.prepare(updateQuery);
-            query.bindValue(":roleName", role_data_.value("roleName").toString());
+            query.bindValue(":roleName", role_name_);
             query.bindValue(":roleLife", role_data_.value("roleLife").toInt());
+            query.bindValue(":roleMaxLife", role_data_.value("roleMaxLife").toInt());
             query.bindValue(":rolePrestige", role_data_.value("rolePrestige").toInt());
             query.bindValue(":roleAptitude", role_data_.value("roleAptitude").toInt());
             query.bindValue(":roleLv", role_data_.value("roleLv").toInt());
@@ -507,7 +509,7 @@ int DataManage::WriteRoleInfoToRemoteDatabase()
     return result;
 }
 
-int DataManage::WriteRoleItemsToRemoteDatabase()
+int DataService::WriteRoleItemsToRemoteDatabase()
 {
     int result = -3;
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
@@ -565,7 +567,7 @@ int DataManage::WriteRoleItemsToRemoteDatabase()
     return result;
 }
 
-int DataManage::WriteRoleCoefficientToRemoteDatabase()
+int DataService::WriteRoleCoefficientToRemoteDatabase()
 {
     int result = -3;
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
@@ -631,7 +633,7 @@ int DataManage::WriteRoleCoefficientToRemoteDatabase()
     return result;
 }
 
-int DataManage::WriteUserLoginLogToRemoteDatabase()
+int DataService::WriteUserLoginLogToRemoteDatabase()
 {
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
     QSqlQuery query(db);
@@ -672,7 +674,7 @@ int DataManage::WriteUserLoginLogToRemoteDatabase()
     query.bindValue(":login_time", login_time);
     query.bindValue(":ip", user_ip_);
     query.bindValue(":uuid", user_uuid_);
-    query.bindValue(":roleName", role_data_.value("roleName").toString());
+    query.bindValue(":roleName", role_name_);
     query.bindValue(":level", role_data_.value("roleLv").toInt());
     // 执行插入查询
     if (query.exec())
@@ -699,14 +701,14 @@ int DataManage::WriteUserLoginLogToRemoteDatabase()
     return result;
 }
 
-int DataManage::InitRoleRemoteData()
+int DataService::InitRoleRemoteData()
 {
     int result = -1;
 
     return result;
 }
 
-QJsonObject DataManage::GetRemoteRoleInfo()
+QJsonObject DataService::GetRemoteRoleInfo()
 {
     QJsonObject role_info_data;
     QString msg;
@@ -721,7 +723,7 @@ QJsonObject DataManage::GetRemoteRoleInfo()
         if (query.next())
         {
 
-            role_info_data["role_name"] = query.value("role_name").toString();
+            role_info_data["role_name"] = role_name_;
             role_info_data["role_life"] = query.value("role_life").toInt();
             role_info_data["role_prestige"] = query.value("role_prestige").toInt();
             role_info_data["role_aptitude"] = query.value("role_aptitude").toInt();
@@ -746,13 +748,13 @@ QJsonObject DataManage::GetRemoteRoleInfo()
     return role_info_data;
 }
 
-QJsonObject DataManage::GetRemoteRoleEquip()
+QJsonObject DataService::GetRemoteRoleEquip()
 {
     QJsonObject role_equip_data;
     return role_equip_data;
 }
 
-QJsonObject DataManage::GetRemoteRoleRC()
+QJsonObject DataService::GetRemoteRoleRC()
 {
     QJsonObject role_rc_data;
     QString msg;
@@ -787,7 +789,7 @@ QJsonObject DataManage::GetRemoteRoleRC()
     return role_rc_data;
 }
 
-QJsonObject DataManage::GetRemoteRoleItem()
+QJsonObject DataService::GetRemoteRoleItem()
 {
     QJsonObject role_item_data;
     QString msg;
@@ -818,7 +820,7 @@ QJsonObject DataManage::GetRemoteRoleItem()
     return role_item_data;
 }
 
-int DataManage::IsRoleDataInited()
+int DataService::IsRoleDataInited()
 {
     int roleInfoCount = 0;
     int roleItemCount = 0;
@@ -901,4 +903,8 @@ int DataManage::IsRoleDataInited()
     {
         return 0;
     }
+}
+
+void DataService::SetRoleName(QString name) {
+    role_name_ = name;
 }

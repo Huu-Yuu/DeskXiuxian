@@ -14,10 +14,10 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    modules/game_progress/game_progress.cpp \
-    modules/game_progress/progress_system.cpp \
+    modules/progress/progress_service.cpp \
+    modules/progress/progress_manage.cpp \
     modules/item/itembase.cpp \
-    modules/item/item_system.cpp \
+    modules/item/item_service.cpp \
     modules/item/item_manage.cpp \
     modules/item/prop/prop_rename_card.cpp \
     modules/logger/logger.cpp \
@@ -26,36 +26,38 @@ SOURCES += \
     modules/ui/mainui.cpp \
     modules/ui/loginwindow.cpp \
     modules/ui/modifyrolename.cpp \
-    modules/role/role_system.cpp \
+    modules/ui/ui_manage.cpp \
+    modules/role/role_manage.cpp \
     modules/role/role_player.cpp \
     modules/filedata/datamanage_settings.cpp \
     modules/filedata/datamanage_remote_data.cpp \
-    modules/filedata/db_system.cpp \
-    modules/filedata/data_manage.cpp \
+    modules/filedata/db_manage.cpp \
+    modules/filedata/data_service.cpp \
     modules/public/public_func.cpp \
     modules/server/tcp_client.cpp \
     modules/interface_manager.cpp
 
 HEADERS += \
     common/singleton.h \
-    modules/filedata/data_manage.h \
-    modules/filedata/db_system.h \
-    modules/game_progress/game_progress.h \
-    modules/game_progress/progress_system.h \
+    modules/filedata/data_service.h \
+    modules/filedata/db_manage.h \
+    modules/game_progress/progress_service.h \
+    modules/game_progress/progress_manage.h \
     modules/item/itembase.h \
-    modules/item/item_system.h \
+    modules/item/item_service.h \
     modules/item/item_manage.h \
     modules/item/prop/prop_rename_card.h \
     modules/logger/logger.h \
     main_ctrl.h \
     modules/ui/mainui.h \
+    modules/ui/loginwindow.h \
+    modules/ui/modifyrolename.h \
+    modules/ui/ui_manage.h \
     modules/public/public_macro.h \
     modules/public/public_type.h \
     modules/public/public_declare.h \
-    modules/role/role_system.h \
+    modules/role/role_manage.h \
     modules/role/role_player.h \
-    modules/ui/loginwindow.h \
-    modules/ui/modifyrolename.h \
     modules/public/public_func.h \
     modules/public/error_code.h \
     modules/server/tcp_client.h \

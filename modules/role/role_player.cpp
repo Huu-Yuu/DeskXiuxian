@@ -10,8 +10,8 @@ RolePlayer::RolePlayer()
     next_need_epx_ = 300 * ( 1 - aptitude_);
 
     // 设置渡劫概率加成
-    RC_SurviveDisaster = 0;
-    role_item_ = ItemManage::getInstance();
+    RC_SurviveDisaster_ = 0;
+    role_item_ = ItemService::getInstance();
 }
 
 void RolePlayer::run()
@@ -110,7 +110,7 @@ double RolePlayer::GetMaxRoleLife() const
 
 void RolePlayer::UpdataMaxRoleLife()
 {
-    role_max_life_ = (int)role_LV_  * 100 + (((int)role_LV_ + 1) ^ 3 ) / 2;
+    role_max_life_ += ((int)role_LV_ + 1) ^ 3 / 2;
 }
 
 CultivationStage RolePlayer::GetRoleCultivation() const
@@ -149,7 +149,7 @@ void RolePlayer::SetLifeCoefficient(int life_coefficient)
 
 void RolePlayer::SetSurviveDisaster(int rc_survive_disaster)
 {
-    RC_SurviveDisaster = rc_survive_disaster;
+    RC_SurviveDisaster_ = rc_survive_disaster;
 }
 
 int RolePlayer::GetLifeCoefficient()
@@ -507,7 +507,7 @@ QString RolePlayer::GetCultivationName(int cur_lv)
 void RolePlayer::UpdateEextGradeEXP()
 {
     // 获取经验值基数
-    double exp_base = 5 * (int)role_LV_;
+    double exp_base = 2 * (int)role_LV_;
     // 算入角色资质得出下一次升级所需经验
     next_need_epx_ = exp_base * (5 - aptitude_) * 500 ;
 }
@@ -749,77 +749,77 @@ bool RolePlayer::SurviveDisaster()
     {
         case FANREN:
         {
-            if(rc <= 99 + RC_SurviveDisaster)
+            if(rc <= 99 + RC_SurviveDisaster_)
                 return true;
             else
                 return false;
         }
         case LIANQI:
         {
-            if(rc <= 95 + RC_SurviveDisaster)
+            if(rc <= 95 + RC_SurviveDisaster_)
                 return true;
             else
                 return false;
         }
         case ZHUJI:
         {
-            if(rc <= 85 + RC_SurviveDisaster)
+            if(rc <= 85 + RC_SurviveDisaster_)
                 return true;
             else
                 return false;
         }
         case JIEDAN:
         {
-            if(rc <= 80 + RC_SurviveDisaster)
+            if(rc <= 80 + RC_SurviveDisaster_)
                 return true;
             else
                 return false;
         }
         case YUANYING:
         {
-            if(rc <= 70 + RC_SurviveDisaster)
+            if(rc <= 70 + RC_SurviveDisaster_)
                 return true;
             else
                 return false;
         }
         case HUASHEN:
         {
-            if(rc <= 60 + RC_SurviveDisaster)
+            if(rc <= 60 + RC_SurviveDisaster_)
                 return true;
             else
                 return false;
         }
         case HETI:
         {
-            if(rc <= 50 + RC_SurviveDisaster)
+            if(rc <= 50 + RC_SurviveDisaster_)
                 return true;
             else
                 return false;
         }
         case DACHENG:
         {
-            if(rc <= 40 + RC_SurviveDisaster)
+            if(rc <= 40 + RC_SurviveDisaster_)
                 return true;
             else
                 return false;
         }
         case WUDAO:
         {
-            if(rc <= 30 + RC_SurviveDisaster)
+            if(rc <= 30 + RC_SurviveDisaster_)
                 return true;
             else
                 return false;
         }
         case YUHUA:
         {
-            if(rc <= 20 + RC_SurviveDisaster)
+            if(rc <= 20 + RC_SurviveDisaster_)
                 return true;
             else
                 return false;
         }
         case XIAN:
         {
-            if(rc <= 10 + RC_SurviveDisaster)
+            if(rc <= 10 + RC_SurviveDisaster_)
                 return true;
             else
                 return false;
@@ -846,16 +846,17 @@ void RolePlayer::SaveRoleInfo()
 {
     // 打包角色基本属性
     QJsonObject role_info_data;
-    role_info_data.insert("roleName", role_name_);
-    role_info_data.insert("roleLife", role_life_);
-    role_info_data.insert("rolePrestige", role_prestige_);
-    role_info_data.insert("roleLv", static_cast<int>(role_LV_));
-    role_info_data.insert("roleCurExp", role_cur_exp_);
-    role_info_data.insert("roleExp", role_exp_);
-    role_info_data.insert("roleAgg", role_agg_);
-    role_info_data.insert("roleDef", role_def_);
-    role_info_data.insert("roleHp", role_hp_);
-    role_info_data.insert("roleAptitude", aptitude_);
+    role_info_data.insert("role_name", role_name_);
+    role_info_data.insert("role_life", role_life_);
+    role_info_data.insert("role_max_life", role_max_life_);
+    role_info_data.insert("role_prestige", role_prestige_);
+    role_info_data.insert("role_lv", static_cast<int>(role_LV_));
+    role_info_data.insert("role_cur_exp", role_cur_exp_);
+    role_info_data.insert("role_exp", role_exp_);
+    role_info_data.insert("role_agg", role_agg_);
+    role_info_data.insert("role_def", role_def_);
+    role_info_data.insert("role_hp", role_hp_);
+    role_info_data.insert("role_aptitude", aptitude_);
     // 发送更新数据库信号
     emit SignalUpdateRoleInfoDatabase(role_info_data);
 }
@@ -864,7 +865,7 @@ void RolePlayer::SaveRoleItem()
 {
     // 打包角色道具
     QJsonObject role_item_data;
-    role_item_data.insert("roleName", role_name_);
+    role_item_data.insert("role_name", role_name_);
     role_item_data.insert(QString::number(kRoleMoney), role_item_->GetItemMoney());
     // 发送更新角色道具数据库信号
     emit SignalUpdateRoleItemDatabase(role_item_data);
@@ -873,8 +874,7 @@ void RolePlayer::SaveRoleItem()
 void RolePlayer::SaveRoleItem(ItemType item_type, RoleItemEnum item_enum, int sum)
 {
     QJsonObject role_item_data;
-    role_item_data.insert("roleName", role_name_);
-    role_item_data.insert("ItemType", item_type);
+    role_item_data.insert("role_name", role_name_);
     role_item_data.insert(QString::number(item_enum), sum);
     emit SignalUpdateRoleItemDatabase(role_item_data);
 }
@@ -882,7 +882,7 @@ void RolePlayer::SaveRoleItem(ItemType item_type, RoleItemEnum item_enum, int su
 void RolePlayer::SaveRoleEquip(RoleEquipAreaEnum area, RoleItemEnum item_enum)
 {
     QJsonObject role_item_data;
-    role_item_data.insert("roleName", role_name_);
+    role_item_data.insert("role_name", role_name_);
     QString area_str;
     switch (area)
     {
@@ -925,13 +925,13 @@ void RolePlayer::SaveCoefficient()
 {
     // 打包角色属性系数
     QJsonObject role_coefficient_data;
-    role_coefficient_data.insert("roleName", role_name_);
-    role_coefficient_data.insert("RCLife", RC_Life_);
-    role_coefficient_data.insert("RCBasicEvent", 1);
-    role_coefficient_data.insert("RCAttEvent", 1);
-    role_coefficient_data.insert("RCSurviveDisaster", RC_SurviveDisaster);
-    role_coefficient_data.insert("RCPrestigeEvent", 1);
-    role_coefficient_data.insert("RCSpecialEvent", 1);
+    role_coefficient_data.insert("role_name", role_name_);
+    role_coefficient_data.insert("RC_life", RC_Life_);
+    role_coefficient_data.insert("RC_basicEvent", 1);
+    role_coefficient_data.insert("RC_attEvent", 1);
+    role_coefficient_data.insert("RC_surviveDisaster", RC_SurviveDisaster_);
+    role_coefficient_data.insert("RC_prestigeEvent", 1);
+    role_coefficient_data.insert("RC_specialEvent", 1);
     // 发送更新角色属性系数数据库信号
     emit SignalUpdateRoleCoefficientDatabase(role_coefficient_data);
 }
@@ -964,13 +964,13 @@ void RolePlayer::SlotUpgradeLevel()
     {
         // 渡劫失败 处罚
         GetBreakthroughPenalty();
-        RC_SurviveDisaster ++;
+        RC_SurviveDisaster_ ++;
         msg = "很遗憾，" + role_name_ + "道友渡劫失败，望道友厚积薄发再渡天劫！下次突破成功率加1";
     }
     else
     {
         // 渡劫成功
-        RC_SurviveDisaster = 0;
+        RC_SurviveDisaster_ = 0;
         int next_lv = static_cast<int>(role_LV_);
         next_lv++;
         role_LV_ = static_cast<CultivationStage>(next_lv);

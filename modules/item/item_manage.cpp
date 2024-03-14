@@ -1,13 +1,20 @@
+//
+// Created by hu on 2024/3/11.
+//
 #include "item_manage.h"
 #include "modules/public/public_declare.h"
-#include "prop/prop_rename_card.h"
 
-QMutex ItemManage::mutex_;  // 初始化互斥锁对象
+ItemManage::ItemManage() {
+    m_module_name = module_name::item;
+    item_obj_ = ItemService::getInstance();
+    connect(item_obj_, &ItemService::SignalActionRequest, this, &ItemManage::SignalActionRequest);
+    connect(item_obj_, &ItemService::SignalActionResponse, this, &ItemManage::SignalActionResponse);
+    connect(item_obj_, &ItemService::SignalPubTopic, this, &ItemManage::SignalPubTopic);
+}
 
-ItemManage::ItemManage()
+int ItemManage::Init()
 {
-    item_money_ = 0;
-    InitItem();
+    return 0;
 }
 
 ItemManage::~ItemManage()
@@ -15,29 +22,17 @@ ItemManage::~ItemManage()
 
 }
 
-int ItemManage::GetItemMoney()
+void ItemManage::SlotActionResponse(const QJsonObject& request_data)
 {
-    return item_money_;
+
 }
 
- void ItemManage::SetItemMoney(int money)
- {
-     item_money_ = money;
- }
+void ItemManage::SlotActionRequest(const QJsonObject& request_data)
+{
 
-void ItemManage::ItemMoneyBusiness(int money) {
-    item_money_ += money;
 }
 
-void ItemManage::InitItem() {
-    LOG_DEBUG("正在初始化道具...");
-    m_action_strategy.insert(kPropRenameCard, RenameCard::getInstance());
-}
+void ItemManage::SlotPubTopic(const QJsonObject& status)
+{
 
-void ItemManage::SlotAddItems(RoleItemEnum item_enum, int obtain_num) {
-    m_action_strategy.value(item_enum)->AddItemNum(obtain_num);
-}
-
-void ItemManage::SlotSubtractItems(RoleItemEnum item_enum, int subtract_num) {
-    m_action_strategy.value(item_enum)->AddItemNum(subtract_num);
 }

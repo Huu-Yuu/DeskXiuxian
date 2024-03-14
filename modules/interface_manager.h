@@ -14,7 +14,7 @@ public:
     InterfaceManager();
     virtual ~InterfaceManager();
 
-    QString getModuleName();
+    QString GetModuleName();
     virtual int Init() = 0;
 
 signals:

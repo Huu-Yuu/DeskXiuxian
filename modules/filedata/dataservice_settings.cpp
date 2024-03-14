@@ -1,6 +1,6 @@
-#include "data_manage.h"
+#include "data_service.h"
 
-void DataManage::InitSettingFile()
+void DataService::InitSettingFile()
 {
     QString configFilePath = QCoreApplication::applicationDirPath() + "/config.ini";
 
@@ -25,7 +25,7 @@ void DataManage::InitSettingFile()
     file_setting_->setIniCodec("UTF-8");
 }
 
-void DataManage::SetGameConfigInfo()
+void DataService::SetGameConfigInfo()
 {
     QDateTime currentTime = QDateTime::currentDateTime();
     QString formattedTime = currentTime.toString("yyyy-MM-dd hh:mm:ss");
@@ -37,7 +37,7 @@ void DataManage::SetGameConfigInfo()
     qDebug() << "写入最后运行时间：" << formattedTime;
 }
 
-void DataManage::SetUserInfoToConfig(QString user_name, QString pass_word, QString email)
+void DataService::SetUserInfoToConfig(QString user_name, QString pass_word, QString email)
 {
     file_setting_->setValue("UserInfo/UserName", user_name);
     file_setting_->setValue("UserInfo/PassWord", pass_word);
@@ -46,17 +46,17 @@ void DataManage::SetUserInfoToConfig(QString user_name, QString pass_word, QStri
     qDebug() << "记录用户信息到配置文件";
 }
 
-QString DataManage::GetLastGameTime()
+QString DataService::GetLastGameTime()
 {
     return file_setting_->value("Date/LastGameDate", "").toString();
 }
 
-QString DataManage::GetSettingUserName()
+QString DataService::GetSettingUserName()
 {
     return file_setting_->value("UserInfo/UserName", "").toString();
 }
 
-QString DataManage::GetSettingPassWord()
+QString DataService::GetSettingPassWord()
 {
     return file_setting_->value("UserInfo/PassWord", "").toString();
 }

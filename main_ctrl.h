@@ -5,10 +5,11 @@
 #include "modules/ui/mainui.h"
 #include "modules/role/role_player.h"
 #include "modules/logger/logger.h"
-#include "modules/filedata/data_manage.h"
-#include "modules/game_progress/game_progress.h"
-#include "modules/item/item_manage.h"
+#include "modules/filedata/data_service.h"
+#include "modules/game_progress/game_service.h"
+#include "modules/item/item_service.h"
 #include "modules/server/tcp_client.h"
+#include "modules/interface_manager.h"
 
 /**
  * @brief 主控程序
@@ -20,7 +21,7 @@ public:
     explicit MainCtrl(QObject* parent = nullptr);
 
     void StartFishing();
-
+    void InitObj();
     ~MainCtrl();
 
     void ShowMainUi();  ///< 显示主界面
@@ -48,15 +49,15 @@ private:
 
     void InitRoleInfo();    ///< 初始化角色信息（角色属性和角色UI），游戏上线后进行处理
     void InitRoleNetworkData(); ///< 初始化角色网络资料
-
+    void RegisterInterfaceManager(QString type, QSharedPointer<InterfaceManager> inter_ptr);
     MainUI* main_ui_obj_;   ///< 角色UI类
     RolePlayer* role_obj_; ///< 角色系统对象
     Logger* logger_obj_;   ///< 日志管理器对象
-    DataManage* data_file_;         ///< 文件管理对象
-    GameProgress* game_obj_;    ///< 游戏进度控制对象
-    ItemManage* role_item_;     ///< 角色道具
+    DataService* data_file_;         ///< 文件管理对象
+    ProgressService* game_obj_;    ///< 游戏进度控制对象
+    ItemService* role_item_;     ///< 角色道具
 //    TcpClient* tcp_client_;
-
+    QMap<QString, QSharedPointer<InterfaceManager>> m_manager_map;
 };
 
 #endif // MAINCTRL_H

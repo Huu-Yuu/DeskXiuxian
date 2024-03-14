@@ -193,3 +193,42 @@ RoleEquipAreaEnum PublicFunc::ConvertEquipArea(RoleItemEnum item_enum) {
             return kOther;
     }
 }
+
+QString PublicFunc::ConvertEquipAreaStr(RoleEquipAreaEnum area_enum) {
+    QString area_str;
+    switch (area_enum)
+    {
+        case kOther:
+            LOG_DEBUG("不存在此部位");
+            break;
+        case kWeaponArea:
+            area_str = "equip_weapon";
+            break;
+        case kMagicArea:
+            area_str = "equip_magic";
+            break;
+        case kHelmetArea:
+            area_str = "equip_helmet";
+            break;
+        case kClothingArea:
+            area_str = "equip_clothing";
+            break;
+        case kBritchesArea:
+            area_str = "equip_britches";
+            break;
+        case kShoeArea:
+            area_str = "equip_shoe";
+            break;
+        case kJewelrArea:
+            area_str = "equip_jewelry";
+            break;
+        case kMountArea:
+            area_str = "equip_mount";
+            break;
+        case kTitleArea:
+            area_str = "equip_title";
+            break;
+    }
+    return area_str;
+}
+
