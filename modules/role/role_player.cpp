@@ -879,6 +879,48 @@ void RolePlayer::SaveRoleItem(ItemType item_type, RoleItemEnum item_enum, int su
     emit SignalUpdateRoleItemDatabase(role_item_data);
 }
 
+void RolePlayer::SaveRoleEquip(RoleEquipAreaEnum area, RoleItemEnum item_enum)
+{
+    QJsonObject role_item_data;
+    role_item_data.insert("roleName", role_name_);
+    QString area_str;
+    switch (area)
+    {
+        case kOther:
+            LOG_DEBUG("不存在此部位");
+            break;
+        case kWeaponArea:
+            area_str = "equip_weapon";
+            break;
+        case kMagicArea:
+            area_str = "equip_magic";
+            break;
+        case kHelmetArea:
+            area_str = "equip_helmet";
+            break;
+        case kClothingArea:
+            area_str = "equip_clothing";
+            break;
+        case kBritchesArea:
+            area_str = "equip_britches";
+            break;
+        case kShoeArea:
+            area_str = "equip_shoe";
+            break;
+        case kJewelrArea:
+            area_str = "equip_jewelry";
+            break;
+        case kMountArea:
+            area_str = "equip_mount";
+            break;
+        case kTitleArea:
+            area_str = "equip_title";
+            break;
+    }
+    role_item_data.insert(area_str, QString::number(item_enum));
+    emit SignalUpdateEquipItemDatabase(role_item_data);
+}
+
 void RolePlayer::SaveCoefficient()
 {
     // 打包角色属性系数
@@ -894,7 +936,7 @@ void RolePlayer::SaveCoefficient()
     emit SignalUpdateRoleCoefficientDatabase(role_coefficient_data);
 }
 
-void RolePlayer::SlotLifeUpdata()
+void RolePlayer::SlotLifeUpdate()
 {
     RC_Life_++;
     if(RC_Life_ >= 7200)
@@ -1182,7 +1224,7 @@ QString RolePlayer::GetEquipAreaName(RoleEquipAreaEnum equipAreaEnum) {
         case kShoeArea:
             equip_name = equip_shoe_;
             break;
-        case kJewelrtArea:
+        case kJewelrArea:
             equip_name = equip_jewelry_;
             break;
         case kMountArea:
@@ -1212,7 +1254,7 @@ void RolePlayer::SetEquipAreaName(RoleEquipAreaEnum equipAreaEnum, QString name)
         case kShoeArea:
             equip_shoe_ = name;
             break;
-        case kJewelrtArea:
+        case kJewelrArea:
             equip_jewelry_ = name;
             break;
         case kMountArea:

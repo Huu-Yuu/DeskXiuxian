@@ -38,6 +38,7 @@ void RoleSystem::SlotQuantityChanged(RoleItemEnum item_enum, int sum) {
     if(item_type == kItemEquip)
     {
         RoleEquipAreaEnum area = PublicFunc::ConvertEquipArea(item_enum);
+        role_obj_->SaveRoleEquip(area, item_enum);
     }
     else
     {

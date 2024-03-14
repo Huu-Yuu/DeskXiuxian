@@ -183,7 +183,7 @@ RoleEquipAreaEnum PublicFunc::ConvertEquipArea(RoleItemEnum item_enum) {
         case 6:
             return kShoeArea;
         case 7:
-            return kJewelrtArea;
+            return kJewelrArea;
         case 8:
             return kMountArea;
         case 9:

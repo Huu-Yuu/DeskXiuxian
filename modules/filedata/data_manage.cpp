@@ -96,6 +96,7 @@ bool DataManage::CheckTablesExist()
                                    "roleUUID TEXT,"
                                    "roleName TEXT,"
                                    "roleLife INTEGER,"
+                                   "roleMaxLife INTEGER,"
                                    "rolePrestige INTEGER,"
                                    "roleExp INTEGER,"
                                    "roleAgg INTEGER,"
@@ -111,13 +112,14 @@ bool DataManage::CheckTablesExist()
             return false;
         }
         // 插入初始值
-        QString insertQuery = "INSERT INTO RoleInfo (roleUUID, roleName, roleLife, rolePrestige, roleExp, roleAgg, roleDef, roleHp, roleCurExp, roleLv) "
-                              "VALUES (:roleUUID, :roleName, :roleLife, :rolePrestige, :roleExp, :roleAgg, :roleDef, :roleHp, :roleCurExp, :roleLv)";
+        QString insertQuery = "INSERT INTO RoleInfo (roleUUID, roleName, roleLife, roleMaxLife, rolePrestige, roleExp, roleAgg, roleDef, roleHp, roleCurExp, roleLv) "
+                              "VALUES (:roleUUID, :roleName, :roleLife, :roleMaxLife, :rolePrestige, :roleExp, :roleAgg, :roleDef, :roleHp, :roleCurExp, :roleLv)";
         query.prepare(insertQuery);
         query.bindValue(":roleUUID", "UUID");
         query.bindValue(":roleName", "GM姜子牙");
-        query.bindValue(":roleLife", 25);
-        query.bindValue(":rolePrestige", 10);
+        query.bindValue(":roleLife", 10);
+        query.bindValue(":roleMaxLife", 80);
+        query.bindValue(":rolePrestige", 0);
         query.bindValue(":roleExp", 0);
         query.bindValue(":roleAgg", 50);
         query.bindValue(":roleDef", 40);
@@ -189,6 +191,7 @@ bool DataManage::CheckTablesExist()
         QString createTableQuery = "CREATE TABLE RoleEquip ("
                                    "roleUUID TEXT,"
                                    "roleName TEXT,"
+                                   "equipTitle TEXT,"
                                    "equipWeapon TEXT,"
                                    "equipMagic TEXT,"
                                    "equipHelmet TEXT,"
@@ -205,11 +208,12 @@ bool DataManage::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleEquip (roleUUID, roleName, equipWeapon, equipMagic, equipHelmet, equipClothing, equipBritches, equipShoe, equipJewelry, equipMount) "
-                              "VALUES (:roleUUID, :roleName, :equipWeapon, :equipMagic, :equipHelmet, :equipClothing, :equipBritches, :equipShoe, :equipJewelry, :equipMount)";
+        QString insertQuery = "INSERT INTO RoleEquip (roleUUID, roleName, equipTitle, equipWeapon, equipMagic, equipHelmet, equipClothing, equipBritches, equipShoe, equipJewelry, equipMount) "
+                              "VALUES (:roleUUID, :roleName, :equipTitle, :equipWeapon, :equipMagic, :equipHelmet, :equipClothing, :equipBritches, :equipShoe, :equipJewelry, :equipMount)";
         query.prepare(insertQuery);
         query.bindValue(":roleUUID", "UUID");
         query.bindValue(":roleName", "GM姜子牙");
+        query.bindValue(":equipTitle", "乐善好施");
         query.bindValue(":equipWeapon", "闪光机械键盘");
         query.bindValue(":equipMagic", "陈年保温杯");
         query.bindValue(":equipHelmet", "洪荒盔");
@@ -239,8 +243,7 @@ bool DataManage::CheckTablesExist()
         QString createTableQuery = "CREATE TABLE RoleItemEnum ("
                                    "roleUUID TEXT,"
                                    "roleName TEXT,"
-                                   "roleMoney INTEGER,"
-                                   "renameCard INTEGER"
+                                   "roleMoney INTEGER"
                                    ")";
         if (!query.exec(createTableQuery))
         {
@@ -249,13 +252,12 @@ bool DataManage::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleItemEnum (roleUUID, roleName, roleMoney, renameCard) "
-                              "VALUES (:roleUUID, :roleName, :roleMoney, :renameCard)";
+        QString insertQuery = "INSERT INTO RoleItemEnum (roleUUID, roleName, roleMoney) "
+                              "VALUES (:roleUUID, :roleName, :roleMoney)";
         query.prepare(insertQuery);
         query.bindValue(":roleUUID", "UUID");
         query.bindValue(":roleName", "GM姜子牙");
         query.bindValue(":roleMoney", 100);
-        query.bindValue(":renameCard", 2);
         if (!query.exec())
         {
             LOG_DEBUG(QString("插入初始值时出错:%1").arg(query.lastError().text()));
@@ -350,24 +352,31 @@ void DataManage::DatabaseClose()
     // database_.close();
 }
 
-void DataManage::SlotSaveRoleInfoToDatabase(QJsonObject role_data)
+void DataManage::SlotSaveRoleInfoToDatabase(const QJsonObject& role_data)
 {
     is_SaveRoleInfo = true;
-    this->role_data = role_data;
+    role_data_ = role_data;
     start();
 }
 
-void DataManage::SlotSaveRoleItemToDatabase(QJsonObject role_item_data)
+void DataManage::SlotSaveRoleItemToDatabase(const QJsonObject& role_item_data)
 {
     is_SaveRoleItem = true;
-    this->role_item_data = role_item_data;
+    role_item_data_ = role_item_data;
     start();
 }
 
-void DataManage::SlotSaveRoleCoefficientToDatabase(QJsonObject RC_data)
+void DataManage::SlotSaveRoleEquipToDatabase(const QJsonObject& role_equip_data)
+{
+    is_SaveRoleEquip = true;
+    role_equip_data_ = role_equip_data;
+    start();
+}
+
+void DataManage::SlotSaveRoleCoefficientToDatabase(const QJsonObject& RC_data)
 {
     is_SaveRoleCoefficient = true;
-    this->RC_data = RC_data;
+    RC_data_ = RC_data;
     start();
 }
 
@@ -382,69 +391,17 @@ void DataManage::WriteRoleInfoToLocalDatabase()
 {
     if(m_database_.isOpen())
     {
-        QString roleName = role_data.value("roleName").toString();
-
-        QSqlQuery query(m_database_);
-        query.prepare("SELECT COUNT(*) FROM RoleInfo WHERE roleName = :roleName");
-        query.bindValue(":roleName", roleName);
-
-        if (query.exec() && query.next())
-        {
-            int rowCount = query.value(0).toInt();
-            if (rowCount > 0)
-            {
-                // 执行更新操作
-                QString updateQuery = "UPDATE RoleInfo SET roleLife = :roleLife, rolePrestige = :rolePrestige, roleLv = :roleLv, roleCurExp = :roleCurExp,"
-                                      "roleExp = :roleExp, roleAgg = :roleAgg, roleDef = :roleDef, roleHp = :roleHp WHERE roleName = :roleName";
-                query.prepare(updateQuery);
-            }
-            else
-            {
-                // 执行插入操作
-                QString insertQuery = "INSERT INTO RoleInfo (roleName, roleLife, rolePrestige, roleCultivation, roleExp, roleAgg, roleDef, roleHp, roleCurExp) "
-                                      "VALUES (:roleName, :roleLife, :rolePrestige, :roleCultivation, :roleExp, :roleAgg, :roleDef, :roleHp, :roleCurExp)";
-                query.prepare(insertQuery);
-            }
-
-            query.bindValue(":roleName", roleName);
-            query.bindValue(":roleLife", role_data.value("roleLife").toInt());
-            query.bindValue(":rolePrestige", role_data.value("rolePrestige").toInt());
-            query.bindValue(":roleLv", role_data.value("roleLv").toInt());
-            query.bindValue(":roleExp", role_data.value("roleExp").toInt());
-            query.bindValue(":roleAgg", role_data.value("roleAgg").toInt());
-            query.bindValue(":roleDef", role_data.value("roleDef").toInt());
-            query.bindValue(":roleHp", role_data.value("roleHp").toInt());
-            query.bindValue(":roleCurExp", role_data.value("roleCurExp").toInt());
-            if (!query.exec())
-            {
-                LOG_DEBUG(QString("保存数据时出错:%1").arg(query.lastError().text()));
-                return;
-            }
-        }
-    }
-    else
-    {
-        LOG_DEBUG("数据库未打开");
-    }
-}
-
-void DataManage::WriteRoleItemsToLocalDatabase()
-{
-    if(m_database_.isOpen())
-    {
-        QString roleName = role_item_data.value("roleName").toString();
-        role_item_data.remove("roleName");
-
+        QString roleName = role_data_.value("roleName").toString();
+        role_item_data_.remove("roleName");
         QSqlQuery query(m_database_);
         // 开始构建更新查询语句
-        QString updateQuery = "UPDATE RoleItemEnum SET ";
-
+        QString updateQuery = "UPDATE RoleInfo SET ";
         // 遍历role_item_data中的键值对
         QStringList updateValues;
-        for (auto it = role_item_data.constBegin(); it != role_item_data.constEnd(); ++it)
+        for (auto it = role_item_data_.constBegin(); it != role_item_data_.constEnd(); ++it)
         {
             QString key = it.key();
-            QString value = it.value().toString();
+//            QString value = it.value().toString();
 
             // 将键值对添加到更新语句中
             updateValues.append(key + " = :" + key);
@@ -461,7 +418,105 @@ void DataManage::WriteRoleItemsToLocalDatabase()
         query.bindValue(":roleName", roleName);
 
         // 绑定role_item_data中的键值对
-        for (auto it = role_item_data.constBegin(); it != role_item_data.constEnd(); ++it)
+        for (auto it = role_item_data_.constBegin(); it != role_item_data_.constEnd(); ++it)
+        {
+            query.bindValue(":" + it.key(), it.value().toString());
+        }
+        // 执行查询
+        if (!query.exec())
+        {
+            LOG_DEBUG(QString("更新操作失败：%1").arg(query.lastError().text()));
+        }
+    }
+    else
+    {
+        LOG_DEBUG("数据库未打开");
+    }
+}
+
+void DataManage::WriteRoleItemsToLocalDatabase()
+{
+    if(m_database_.isOpen())
+    {
+        QString roleName = role_item_data_.value("roleName").toString();
+        role_item_data_.remove("roleName");
+
+        QSqlQuery query(m_database_);
+        // 开始构建更新查询语句
+        QString updateQuery = "UPDATE RoleItemEnum SET ";
+
+        // 遍历role_item_data中的键值对
+        QStringList updateValues;
+        for (auto it = role_item_data_.constBegin(); it != role_item_data_.constEnd(); ++it)
+        {
+            QString key = it.key();
+//            QString value = it.value().toString();
+
+            // 将键值对添加到更新语句中
+            updateValues.append(key + " = :" + key);
+        }
+
+        // 将更新的键值对连接到查询语句中
+        updateQuery += updateValues.join(", ");
+        updateQuery += " WHERE roleName = :roleName";
+
+        // 准备查询
+        query.prepare(updateQuery);
+
+        // 绑定roleName参数
+        query.bindValue(":roleName", roleName);
+
+        // 绑定role_item_data中的键值对
+        for (auto it = role_item_data_.constBegin(); it != role_item_data_.constEnd(); ++it)
+        {
+            query.bindValue(":" + it.key(), it.value().toString());
+        }
+        // 执行查询
+        if (!query.exec())
+        {
+            LOG_DEBUG(QString("更新操作失败：%1").arg(query.lastError().text()));
+        }
+    }
+    else
+    {
+        LOG_DEBUG("数据库未打开");
+    }
+}
+
+void DataManage::WriteRoleEquipToLocalDatabase()
+{
+    if(m_database_.isOpen())
+    {
+        QString roleName = role_item_data_.value("roleName").toString();
+        role_item_data_.remove("roleName");
+
+        QSqlQuery query(m_database_);
+        // 开始构建更新查询语句
+        QString updateQuery = "UPDATE RoleEquip SET ";
+
+        // 遍历role_item_data中的键值对
+        QStringList updateValues;
+        for (auto it = role_item_data_.constBegin(); it != role_item_data_.constEnd(); ++it)
+        {
+            QString key = it.key();
+//            QString value = it.value().toString();
+
+            // 将键值对添加到更新语句中
+            updateValues.append(key + " = :" + key);
+        }
+
+        // 将更新的键值对连接到查询语句中
+        updateQuery += updateValues.join(", ");
+        updateQuery += " WHERE roleName = :roleName";
+
+        // 准备查询
+        query.prepare(updateQuery);
+
+        // 绑定roleName参数
+        query.bindValue(":roleName", roleName);
+
+        // 绑定role_item_data中的键值对
+        for (auto it = role_item_data_.constBegin(); it != role_item_data_.constEnd(); ++it)
         {
             query.bindValue(":" + it.key(), it.value().toString());
         }
@@ -481,7 +536,7 @@ void DataManage::WriteRoleCoefficientToLocalDatabase()
 {
     if(m_database_.isOpen())
     {
-        QString roleName = RC_data.value("roleName").toString();
+        QString roleName = RC_data_.value("roleName").toString();
 
         QSqlQuery query(m_database_);
         query.prepare("SELECT COUNT(*) FROM RoleCoefficient WHERE roleName = :roleName");
@@ -506,13 +561,13 @@ void DataManage::WriteRoleCoefficientToLocalDatabase()
             }
 
             query.bindValue(":roleName", roleName);
-            query.bindValue(":RCLife", RC_data.value("RCLife").toInt());
-            query.bindValue(":RCBasicEvent", RC_data.value("RCBasicEvent").toInt());
-            query.bindValue(":RCAttEvent", RC_data.value("RCAttEvent").toInt());
-            query.bindValue(":RCSurviveDisaster", RC_data.value("RCSurviveDisaster").toInt());
-            query.bindValue(":RCPrestigeEvent", RC_data.value("RCPrestigeEvent").toInt());
-            query.bindValue(":RCSpecialEvent", RC_data.value("RCSpecialEvent").toInt());
-            query.bindValue(":roleAptitude", RC_data.value("roleAptitude").toInt());
+            query.bindValue(":RCLife", RC_data_.value("RCLife").toInt());
+            query.bindValue(":RCBasicEvent", RC_data_.value("RCBasicEvent").toInt());
+            query.bindValue(":RCAttEvent", RC_data_.value("RCAttEvent").toInt());
+            query.bindValue(":RCSurviveDisaster", RC_data_.value("RCSurviveDisaster").toInt());
+            query.bindValue(":RCPrestigeEvent", RC_data_.value("RCPrestigeEvent").toInt());
+            query.bindValue(":RCSpecialEvent", RC_data_.value("RCSpecialEvent").toInt());
+            query.bindValue(":roleAptitude", RC_data_.value("roleAptitude").toInt());
             if (!query.exec())
             {
                 LOG_DEBUG(QString("保存数据时出错:%1").arg(query.lastError().text()));
@@ -529,7 +584,7 @@ void DataManage::WriteRoleCoefficientToLocalDatabase()
 void DataManage::run()
 {
     QMutexLocker locker(&mutex);
-    InitRemoteData();
+//    InitRemoteData();
 #if DATABASE_TYPE == 0
     if(is_SaveRoleInfo)
     {
@@ -557,7 +612,6 @@ void DataManage::run()
     {
         is_SaveRoleInfo = false;
         WriteRoleInfoToLocalDatabase();
-
     }
     if(is_SaveRoleItem)
     {
@@ -568,6 +622,11 @@ void DataManage::run()
     {
         is_SaveRoleCoefficient = false;
         WriteRoleCoefficientToLocalDatabase();
+    }
+    if(is_SaveRoleEquip)
+    {
+        is_SaveRoleEquip = false;
+        WriteRoleEquipToLocalDatabase();
     }
 #elif DATABASE_TYPE == 2
 #endif

@@ -122,9 +122,10 @@ public:
 
 public slots:
 
-    void SlotSaveRoleInfoToDatabase(QJsonObject role_data); ///< 保存角色基本信息数据 槽函数
-    void SlotSaveRoleItemToDatabase(QJsonObject role_item_data);    ///< 保存角色物品数据 槽函数
-    void SlotSaveRoleCoefficientToDatabase(QJsonObject RC_data);    ///< 保存角色相关属性系数数据 槽函数
+    void SlotSaveRoleInfoToDatabase(const QJsonObject& role_data); ///< 保存角色基本信息数据 槽函数
+    void SlotSaveRoleItemToDatabase(const QJsonObject& role_item_data);    ///< 保存角色物品数据 槽函数
+    void SlotSaveRoleEquipToDatabase(const QJsonObject& role_equip_data);    ///< 保存角色物品数据 槽函数
+    void SlotSaveRoleCoefficientToDatabase(const QJsonObject& RC_data);    ///< 保存角色相关属性系数数据 槽函数
     void SlotUpdataLoginLog();  ///< 更新登录日志 槽函数
 private:
     static QMutex mutex;  // 互斥锁
@@ -176,13 +177,15 @@ private:
 
     bool is_SaveRoleInfo = false;           ///< 保存角色信息开关
     bool is_SaveRoleItem = false;           ///< 保存角色物品开关
+    bool is_SaveRoleEquip = false;           ///< 保存角色物品开关
     bool is_SaveRoleCoefficient = false;    ///< 保存角色系数开关
     bool is_FirstCreation = false;          ///< 是否首次创建，用于命名角色
     bool is_SaveLoginLog = false;           ///< 上传登录日志开关 登录时间 IP UUID 角色名 等级
 
-    QJsonObject role_data;      ///< 角色基本数据
-    QJsonObject role_item_data; ///< 角色物品数据
-    QJsonObject RC_data;        ///< 角色系数
+    QJsonObject role_data_;      ///< 角色基本数据
+    QJsonObject role_item_data_; ///< 角色物品数据
+    QJsonObject role_equip_data_; ///< 角色物品数据
+    QJsonObject RC_data_;        ///< 角色系数
 
     static QString user_uuid_ ;          ///< 账号UUID
     static QString user_ip_ ;      ///< 用户IP

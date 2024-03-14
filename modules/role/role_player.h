@@ -70,6 +70,7 @@ public:
     void SaveRoleInfo();    ///< 保存角色基本信息数据
     void SaveRoleItem();    ///< 保存角色道具数据
     void SaveRoleItem(ItemType item_type, RoleItemEnum item_enum, int sum);    ///< 保存角色道具数据
+    void SaveRoleEquip(RoleEquipAreaEnum area, RoleItemEnum item_enum);   ///< 保存角色装备数据
     void SaveCoefficient(); ///< 保存角色属性系数数据
     bool SurviveDisaster(); ///< 突破前进行渡劫 返回渡劫是否成功
 
@@ -79,6 +80,7 @@ signals:
     void SignalUpdateUI(RoleUIEnum part, QString new_data); ///< 更新角色指定面板数据
     void SignalUpdateRoleInfoDatabase(QJsonObject role_data);   ///< 更新角色基本信息数据库
     void SignalUpdateRoleItemDatabase(QJsonObject role_data);   ///< 更新角色物品数据库
+    void SignalUpdateEquipItemDatabase(QJsonObject role_data);   ///< 更新角色物品数据库
     void SignalUpdateRoleCoefficientDatabase(QJsonObject RC_data);  ///< 更新角色属性各项系数
     void SignalActivateCultivaUpButton();   ///< 激活突破按钮信号
     void SignalDisableCultivaUpButton();    ///< 禁用突破按钮信号
@@ -87,7 +89,7 @@ public slots:
 
     void SlotCyclicCultivation();   ///< 循环修炼，随机经验值、随机货币
     void SlotCyclicEnhanceAtt();    ///< 循环提升 攻击力、防御力、HP
-    void SlotLifeUpdata();      ///< 寿命开始增加 槽函数
+    void SlotLifeUpdate();      ///< 寿命开始增加 槽函数
     void SlotUpgradeLevel();    ///< 修为突破 槽函数
 
 protected:

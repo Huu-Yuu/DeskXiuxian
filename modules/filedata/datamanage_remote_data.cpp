@@ -460,16 +460,16 @@ int DataManage::WriteRoleInfoToRemoteDatabase()
                                   "role_cur_exp = :roleCurExp "
                                   "WHERE uuid = :userUUID";
             query.prepare(updateQuery);
-            query.bindValue(":roleName", role_data.value("roleName").toString());
-            query.bindValue(":roleLife", role_data.value("roleLife").toInt());
-            query.bindValue(":rolePrestige", role_data.value("rolePrestige").toInt());
-            query.bindValue(":roleAptitude", role_data.value("roleAptitude").toInt());
-            query.bindValue(":roleLv", role_data.value("roleLv").toInt());
-            query.bindValue(":roleExp", role_data.value("roleExp").toInt());
-            query.bindValue(":roleAgg", role_data.value("roleAgg").toInt());
-            query.bindValue(":roleDef", role_data.value("roleDef").toInt());
-            query.bindValue(":roleHp", role_data.value("roleHp").toInt());
-            query.bindValue(":roleCurExp", role_data.value("roleCurExp").toInt());
+            query.bindValue(":roleName", role_data_.value("roleName").toString());
+            query.bindValue(":roleLife", role_data_.value("roleLife").toInt());
+            query.bindValue(":rolePrestige", role_data_.value("rolePrestige").toInt());
+            query.bindValue(":roleAptitude", role_data_.value("roleAptitude").toInt());
+            query.bindValue(":roleLv", role_data_.value("roleLv").toInt());
+            query.bindValue(":roleExp", role_data_.value("roleExp").toInt());
+            query.bindValue(":roleAgg", role_data_.value("roleAgg").toInt());
+            query.bindValue(":roleDef", role_data_.value("roleDef").toInt());
+            query.bindValue(":roleHp", role_data_.value("roleHp").toInt());
+            query.bindValue(":roleCurExp", role_data_.value("roleCurExp").toInt());
             query.bindValue(":userUUID", user_uuid_);
             if (query.exec())
             {
@@ -526,8 +526,8 @@ int DataManage::WriteRoleItemsToRemoteDatabase()
                                   "rename_card = :ReNameCard "
                                   "WHERE uuid = :userUUID";
             query.prepare(updateQuery);
-            query.bindValue(":RoleMoney", role_item_data.value("roleMoney").toString());
-            query.bindValue(":ReNameCard", role_item_data.value("renameCard").toInt());
+            query.bindValue(":RoleMoney", role_item_data_.value("roleMoney").toString());
+            query.bindValue(":ReNameCard", role_item_data_.value("renameCard").toInt());
             query.bindValue(":userUUID", user_uuid_);
             if (query.exec())
             {
@@ -588,12 +588,12 @@ int DataManage::WriteRoleCoefficientToRemoteDatabase()
                                   "rc_special_event = :RCSpecialEvent "
                                   "WHERE uuid = :UUID";
             query.prepare(updateQuery);
-            query.bindValue(":RCLife", RC_data.value("RCLife").toInt());
-            query.bindValue(":RCBasicEvent", RC_data.value("RCBasicEvent").toInt());
-            query.bindValue(":RCAttEvent", RC_data.value("RCAttEvent").toInt());
-            query.bindValue(":RCSurviveDisaster", RC_data.value("RCSurviveDisaster").toInt());
-            query.bindValue(":RCPrestigeEvent", RC_data.value("RCPrestigeEvent").toInt());
-            query.bindValue(":RCSpecialEvent", RC_data.value("RCSpecialEvent").toInt());
+            query.bindValue(":RCLife", RC_data_.value("RCLife").toInt());
+            query.bindValue(":RCBasicEvent", RC_data_.value("RCBasicEvent").toInt());
+            query.bindValue(":RCAttEvent", RC_data_.value("RCAttEvent").toInt());
+            query.bindValue(":RCSurviveDisaster", RC_data_.value("RCSurviveDisaster").toInt());
+            query.bindValue(":RCPrestigeEvent", RC_data_.value("RCPrestigeEvent").toInt());
+            query.bindValue(":RCSpecialEvent", RC_data_.value("RCSpecialEvent").toInt());
             query.bindValue(":UUID", user_uuid_);
             if (query.exec())
             {
@@ -672,8 +672,8 @@ int DataManage::WriteUserLoginLogToRemoteDatabase()
     query.bindValue(":login_time", login_time);
     query.bindValue(":ip", user_ip_);
     query.bindValue(":uuid", user_uuid_);
-    query.bindValue(":roleName", role_data.value("roleName").toString());
-    query.bindValue(":level", role_data.value("roleLv").toInt());
+    query.bindValue(":roleName", role_data_.value("roleName").toString());
+    query.bindValue(":level", role_data_.value("roleLv").toInt());
     // 执行插入查询
     if (query.exec())
     {

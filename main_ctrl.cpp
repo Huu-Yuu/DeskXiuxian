@@ -21,7 +21,7 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     connect(main_ui_obj_, &MainUI::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
 
     // 绑定修炼
-    connect(game_obj_, &GameProgress::SignaleLifeUpdataTimeOut, role_obj_, &RolePlayer::SlotLifeUpdata);
+    connect(game_obj_, &GameProgress::SignaleLifeUpdataTimeOut, role_obj_, &RolePlayer::SlotLifeUpdate);
     connect(game_obj_, &GameProgress::SignalJianghuTimeOut, role_obj_, &RolePlayer::SlotCyclicCultivation);
     connect(game_obj_, &GameProgress::SignalBasicAttTimeOut, role_obj_, &RolePlayer::SlotCyclicEnhanceAtt);
     connect(main_ui_obj_, &MainUI::SignalUpgradeLevel, role_obj_, &RolePlayer::SlotUpgradeLevel);
@@ -37,6 +37,7 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     // 保存角色基本信息
     connect(role_obj_, &RolePlayer::SignalUpdateRoleInfoDatabase, data_file_, &DataManage::SlotSaveRoleInfoToDatabase);
     connect(role_obj_, &RolePlayer::SignalUpdateRoleItemDatabase, data_file_, &DataManage::SlotSaveRoleItemToDatabase);
+    connect(role_obj_, &RolePlayer::SignalUpdateEquipItemDatabase, data_file_, &DataManage::SlotSaveRoleEquipToDatabase);
     connect(role_obj_, &RolePlayer::SignalUpdateRoleCoefficientDatabase, data_file_, &DataManage::SlotSaveRoleCoefficientToDatabase);
 
     // 消息发送到窗口
@@ -145,7 +146,7 @@ void MainCtrl::SlotInitRoleData()
 //    role_obj_->SetEquipJewelry();
     // 更新角色道具
     role_item_->SetItemMoney(role_item_data.value("role_money").toString().toInt());
-//    role_item_->SetItemRenameCard(role_item_data.value("role_money").toString().toInt());
+//    role_item_->SetItemRenameCard(role_item_data_.value("role_money").toString().toInt());
 
     // 更新角各项属性系数
     role_obj_->SetLifeCoefficient(role_rc_data.value("rc_life").toString().toInt());
@@ -211,7 +212,7 @@ void MainCtrl::InitRoleInfo()
     role_obj_->SetEquipAreaName(kClothingArea, clothing);
     role_obj_->SetEquipAreaName(kBritchesArea, britches);
     role_obj_->SetEquipAreaName(kShoeArea, shoe);
-    role_obj_->SetEquipAreaName(kJewelrtArea, jewelry);
+    role_obj_->SetEquipAreaName(kJewelrArea, jewelry);
 
     // 更新角色道具
     role_item_->SetItemMoney(money.toInt());

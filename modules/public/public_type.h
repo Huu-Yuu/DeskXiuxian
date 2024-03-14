@@ -94,7 +94,7 @@ enum RoleEquipAreaEnum
     kClothingArea,         ///< 上衣
     kBritchesArea,         ///< 裤子
     kShoeArea,             ///< 鞋子
-    kJewelrtArea,          ///< 首饰
+    kJewelrArea,          ///< 首饰
     kMountArea,            ///< 坐骑
     kTitleArea            ///< 称号
 };

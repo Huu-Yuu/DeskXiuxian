@@ -19,6 +19,7 @@ SOURCES += \
     modules/item/itembase.cpp \
     modules/item/item_system.cpp \
     modules/item/item_manage.cpp \
+    modules/item/prop/prop_rename_card.cpp \
     modules/logger/logger.cpp \
     main.cpp \
     main_ctrl.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
     modules/item/itembase.h \
     modules/item/item_system.h \
     modules/item/item_manage.h \
+    modules/item/prop/prop_rename_card.h \
     modules/logger/logger.h \
     main_ctrl.h \
     modules/ui/mainui.h \
