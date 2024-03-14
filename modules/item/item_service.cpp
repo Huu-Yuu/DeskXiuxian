@@ -51,20 +51,19 @@ void ItemService::initConnect() {
 
 void ItemService::SlotQuantityChanged(RoleItemEnum item_enum, int sum) {
     ItemType item_type = PublicFunc::ConvertItemType(item_enum);
+    QJsonObject obj_data, obj_pub;
     if(item_type == kItemEquip)
     {
         RoleEquipAreaEnum area = PublicFunc::ConvertEquipArea(item_enum);
         QString area_str =  PublicFunc::ConvertEquipAreaStr(area);
-        QJsonObject obj_data;
         obj_data.insert(area_str, QString::number(item_enum));
-        emit SignalActionRequest(PublicFunc::PackageRequest(dbCmd::SaveRoleEquip,obj_data,"",
-                                                            module_name::data, module_name::item));
+        obj_pub.insert("type", dbCmd::SaveRoleEquip);
     }
     else
     {
-        QJsonObject obj_data;
         obj_data.insert(QString::number(item_enum), QString::number(item_enum));
-        emit SignalActionRequest(PublicFunc::PackageRequest(dbCmd::SaveRoleItem,obj_data,"",
-                                                            module_name::data, module_name::item));
+        obj_pub.insert("type", dbCmd::SaveRoleItem);
     }
+    obj_pub.insert("data", obj_data);
+    emit SignalPubTopic(obj_pub);
 }

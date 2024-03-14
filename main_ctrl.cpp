@@ -17,6 +17,8 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     role_obj_ = RolePlayer::getInstance();
     role_item_ = ItemService::getInstance();
     InitObj();
+    InitConnect();
+    InitFun();
 #if DATABASE_TYPE == 1
     // 初始化UI和角色数据
     InitRoleInfo();
@@ -307,5 +309,83 @@ void MainCtrl::RegisterInterfaceManager(QString type, QSharedPointer<InterfaceMa
     {
         qDebug() << "注册类型" << type << inter_ptr << "请求";
         m_manager_map.insert(type, inter_ptr);
+    }
+}
+
+void MainCtrl::InitConnect() {
+    QMapIterator < QString, QSharedPointer<InterfaceManager> > itor(m_manager_map);
+    while(itor.hasNext())
+    {
+        itor.next();
+        connect(itor.value().data(), &InterfaceManager::SignalActionRequest,
+                this, &MainCtrl::onActionRequest);
+        connect(itor.value().data(), &InterfaceManager::SignalActionResponse,
+                this, &MainCtrl::onActionResponse);
+        connect(itor.value().data(), &InterfaceManager::SignalSubTopic,
+                this, &MainCtrl::onSubTopic);
+        connect(itor.value().data(), &InterfaceManager::SignalPubTopic,
+                this, &MainCtrl::onPubTopic);
+        connect(this, &MainCtrl::SignalActionRequestResult,
+                itor.value().data(), &InterfaceManager::SlotActionResponse);
+    }
+}
+
+void MainCtrl::onPubTopic(const QJsonObject &request_data) {
+    QString type = request_data.value("type").toString();
+    QMap<QString, QStringList>::iterator it = m_cmd_topic_listen_list.begin();
+    for(; it != m_cmd_topic_listen_list.end(); ++it)
+    {
+        if(it.value().contains(type) && m_manager_map.contains(it.key()))
+        {
+            m_manager_map[it.key()]->SlotPubTopic(request_data);
+        }
+    }
+}
+
+void MainCtrl::onSubTopic(TopicSubActionType action_type, const QStringList &topic_list) {
+    InterfaceManager* psender = qobject_cast<InterfaceManager*>(sender());
+
+    QString topic_msg;
+    for(int i = 0; i < topic_list.size(); i++)
+    {
+        topic_msg += ("," + topic_list[i]);
+    }
+    QString debug_msg = "";
+    if(action_type == TopicSubActionType::kSubType)
+    {
+        debug_msg = "注册";
+    }
+    else if(action_type == TopicSubActionType::kUnsubType)
+    {
+        debug_msg = "取消注册";
+    }
+
+    if(psender != nullptr)
+    {
+        QString module_name = psender->GetModuleName();
+        if(action_type == TopicSubActionType::kSubType)
+        {
+            m_cmd_topic_listen_list[module_name].append(topic_list);
+        }
+        else if(action_type == TopicSubActionType::kUnsubType)
+        {
+            for(int i = 0; i < topic_list.size(); i++)
+            {
+                m_cmd_topic_listen_list[module_name].removeAll(topic_list.at(i));
+            }
+        }
+    }
+    else
+    {
+        LOG_DEBUG(QString("无法处理订阅请求:模块未初始化，%1主动上报消息：%2").arg(debug_msg).arg(topic_msg));
+    }
+}
+
+void MainCtrl::InitFun() {
+    QMapIterator < QString, QSharedPointer<InterfaceManager> > itor(m_manager_map);
+    while(itor.hasNext())
+    {
+        itor.next();
+        itor.value().data()->Init();
     }
 }

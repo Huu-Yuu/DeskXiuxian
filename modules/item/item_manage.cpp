@@ -14,7 +14,10 @@ ItemManage::ItemManage() {
 
 int ItemManage::Init()
 {
-    return 0;
+    QStringList db_topics = QStringList{dbCmd::SaveRoleEquip, dbCmd::SaveRoleItem};
+
+    LOG_DEBUG(QString("发送订阅主动上报消息：%1").arg(db_topics.join(",").toStdString().c_str()));
+    emit SignalSubTopic(kSubType, db_topics);
 }
 
 ItemManage::~ItemManage()
