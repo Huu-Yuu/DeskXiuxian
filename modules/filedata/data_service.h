@@ -24,7 +24,7 @@
  */
 class DataService : public QThread
 {
-
+    Q_OBJECT
 public:
     SINGLETON(DataService);
     DataService();
@@ -32,6 +32,7 @@ public:
     void InitSettingFile(); ///< 初始化配置文件
     void InitRemoteData();  ///< 初始化远程数据库
     void InitLocalData();   ///< 初始化本地数据库
+    QJsonObject InitLocalRoleInfo();    ///< 初始化本地角色信息
 
     void SetRoleName(QString name); ///< 设置角色名称
     /**
@@ -120,7 +121,13 @@ public:
      * @brief 打印日志
      */
     void DebugOutToLog(QString msg);
-
+signals:
+    //请求外部动作
+    void SignalActionRequest(const QJsonObject& request_data);
+    //本模块动作执行结果抛给上一级
+    void SignalActionResponse(const QJsonObject& request_data);
+    //状态变化抛给上一级
+    void SignalPubTopic(const QJsonObject& status);
 public slots:
 
     void SlotSaveRoleInfoToDatabase(const QJsonObject& role_data); ///< 保存角色基本信息数据 槽函数

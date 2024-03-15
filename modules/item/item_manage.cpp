@@ -1,22 +1,20 @@
-//
-// Created by hu on 2024/3/11.
-//
 #include "item_manage.h"
 #include "modules/public/public_declare.h"
+#include <QJsonDocument>
 
 ItemManage::ItemManage() {
     m_module_name = module_name::item;
-    item_obj_ = ItemService::getInstance();
-    connect(item_obj_, &ItemService::SignalActionRequest, this, &ItemManage::SignalActionRequest);
-    connect(item_obj_, &ItemService::SignalActionResponse, this, &ItemManage::SignalActionResponse);
-    connect(item_obj_, &ItemService::SignalPubTopic, this, &ItemManage::SignalPubTopic);
+    m_service_ = ItemService::getInstance();
+    connect(m_service_, &ItemService::SignalActionRequest, this, &ItemManage::SignalActionRequest);
+    connect(m_service_, &ItemService::SignalActionResponse, this, &ItemManage::SignalActionResponse);
+    connect(m_service_, &ItemService::SignalPubTopic, this, &ItemManage::SignalPubTopic);
 }
 
 int ItemManage::Init()
 {
     QStringList db_topics = QStringList{dbCmd::SaveRoleEquip, dbCmd::SaveRoleItem};
 
-    LOG_DEBUG(QString("发送订阅主动上报消息：%1").arg(db_topics.join(",").toStdString().c_str()));
+    LOG_DEBUG(kItemManage, QString("发送订阅主动上报消息：%1").arg(db_topics.join(",").toStdString().c_str()));
     emit SignalSubTopic(kSubType, db_topics);
 }
 
@@ -35,7 +33,8 @@ void ItemManage::SlotActionRequest(const QJsonObject& request_data)
 
 }
 
-void ItemManage::SlotPubTopic(const QJsonObject& status)
+void ItemManage::SlotPubTopic(const QJsonObject& topic_data)
 {
-
+    LOG_DEBUG(kItemManage, QString("收到广播信息：%1").arg(QJsonDocument(topic_data).toJson(QJsonDocument::Compact).data()));
+    QString type = topic_data.value("type").toString();
 }

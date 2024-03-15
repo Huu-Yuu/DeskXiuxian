@@ -1,7 +1,5 @@
 #ifndef PUBLIC_MACRO_H
-    #define PUBLIC_MACRO_H
-
-#endif // PUBLIC_MACRO_H
+#define PUBLIC_MACRO_H
 
 // 调试信息输出开关
 #define DEBUG_MODE_SWITCH       1
@@ -43,11 +41,20 @@
 // 调试打印
 #if DEBUG_MODE_SWITCH == 1
 // 调试打印
-#define LOG_DEBUG(msg) \
-        do { \
-            QString logMsg = QString("[%1] %2:%3 - %4").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")).arg(__FUNCTION__).arg(__LINE__).arg(msg); \
-            qDebug() << logMsg; \
-        } while (0)
+#define LOG_DEBUG(logger, msg) \
+    do { \
+        QString logMsg = QString("[%1] %2:%3 - %4").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")).arg(__FUNCTION__).arg(__LINE__).arg(msg); \
+        qDebug() << logMsg; \
+        QString logFileName = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss_zzz") + "_" + logger + ".log"; \
+        QFile file(logFileName); \
+        if (file.open(QIODevice::WriteOnly | QIODevice::Append)) { \
+            QTextStream stream(&file); \
+            stream << logMsg << endl; \
+            file.close(); \
+        } \
+    } while (0)
 #else
 #define LOG_DEBUG(msg) do {} while (0)
 #endif
+
+#endif // PUBLIC_MACRO_H

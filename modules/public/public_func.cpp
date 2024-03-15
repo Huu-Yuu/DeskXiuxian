@@ -4,6 +4,8 @@
 #include "QDateTime"
 #include "QUuid"
 #include "public_macro.h"
+#include "public_declare.h"
+#include <QFile>
 
 uchar PublicFunc::CalculateSum(const uchar* data, const int len)
 {
@@ -161,7 +163,7 @@ ItemType PublicFunc::ConvertItemType(RoleItemEnum item_enum) {
             return kItemEquip;
             break;
         default:
-            LOG_DEBUG(QString("不存在此类型:%1，强制转换为道具类型").arg(type_num));
+            LOG_DEBUG(kMainCtrl, QString("不存在此类型:%1，强制转换为道具类型").arg(type_num));
             return kItemProp;
     }
 }
@@ -189,7 +191,7 @@ RoleEquipAreaEnum PublicFunc::ConvertEquipArea(RoleItemEnum item_enum) {
         case 9:
             return kTitleArea;
         default:
-            LOG_DEBUG(QString("不存在此类型部位%1").arg(type_num));
+            LOG_DEBUG(kMainCtrl, QString("不存在此类型部位%1").arg(type_num));
             return kOther;
     }
 }
@@ -199,7 +201,7 @@ QString PublicFunc::ConvertEquipAreaStr(RoleEquipAreaEnum area_enum) {
     switch (area_enum)
     {
         case kOther:
-            LOG_DEBUG("不存在此部位");
+            LOG_DEBUG(kMainCtrl, "不存在此部位");
             break;
         case kWeaponArea:
             area_str = "equip_weapon";

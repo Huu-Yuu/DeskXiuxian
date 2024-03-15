@@ -29,7 +29,7 @@ signals:
 public slots:
     virtual void SlotActionResponse(const QJsonObject& request_data) = 0;
     virtual void SlotActionRequest(const QJsonObject& request_data) = 0;
-    virtual void SlotPubTopic(const QJsonObject& status) = 0;
+    virtual void SlotPubTopic(const QJsonObject& topic_data) = 0;
 
 protected:
     QString m_module_name = "unknown";

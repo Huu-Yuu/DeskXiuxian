@@ -1,7 +1,3 @@
-//
-// Created by hu on 2024/3/11.
-//
-
 #ifndef DESKXIUXINA_DB_MANAGE_H
 #define DESKXIUXINA_DB_MANAGE_H
 #include <QObject>
@@ -19,9 +15,9 @@ public:
 public slots:
     void SlotActionResponse(const QJsonObject& request_data) override;
     void SlotActionRequest(const QJsonObject& request_data) override;
-    void SlotPubTopic(const QJsonObject& status) override;
+    void SlotPubTopic(const QJsonObject& topic_data) override;
 private:
-    DataService* data_obj_;
+    DataService* m_service_;
 };
 
 #endif //DESKXIUXINA_DB_MANAGE_H

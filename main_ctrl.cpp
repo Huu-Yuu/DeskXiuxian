@@ -1,13 +1,13 @@
 #include "main_ctrl.h"
 #include "modules/item/item_manage.h"
 #include "modules/filedata/db_manage.h"
-#include "modules/game_progress/progress_manage.h"
+#include "modules/progress/progress_manage.h"
 #include "modules/role/role_manage.h"
 #include "modules/ui/ui_manage.h"
+#include "modules/public/public_declare.h"
 
 MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
 {
-
     //注册MessageHandler(注意要有日志文件夹)
 //    qInstallMessageHandler(Logger::OutputMessageHandler);
     data_file_ = DataService::getInstance();
@@ -19,9 +19,26 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     InitObj();
     InitConnect();
     InitFun();
-#if DATABASE_TYPE == 1
+
+#if DATABASE_TYPE == 0
+    // 获取本地登录记录，检查是否可以自动登录
+    if(data_file_->AutomaticLogin())
+    {
+        qDebug() << "自动登录，获取角色数据";
+        SlotInitRoleData();
+        main_ui_obj_->show();
+    }
+    else
+    {
+        // 进入登录、注册界面
+        main_ui_obj_->ShowLoginWidget();
+    }
+#elif DATABASE_TYPE == 1
     // 初始化UI和角色数据
     InitRoleInfo();
+#elif DATABASE_TYPE == 2
+    // 初始化角色网络资料
+    InitRoleNetworkData();
 #endif
     // 日志输出
     connect(this, &MainCtrl::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
@@ -50,24 +67,6 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     // 消息发送到窗口
     connect(role_obj_, &RolePlayer::SignalShowMsgToUI, main_ui_obj_, &MainUI::SlotShowMsg);
     connect(this, &MainCtrl::SignalShowMsgToUI, main_ui_obj_, &MainUI::SlotShowMsg);
-
-#if DATABASE_TYPE == 0
-    // 获取本地登录记录，检查是否可以自动登录
-    if(data_file_->AutomaticLogin())
-    {
-        qDebug() << "自动登录，获取角色数据";
-        SlotInitRoleData();
-        main_ui_obj_->show();
-    }
-    else
-    {
-        // 进入登录、注册界面
-        main_ui_obj_->ShowLoginWidget();
-    }
-#elif DATABASE_TYPE == 2
-    // 初始化角色网络资料
-    InitRoleNetworkData();
-#endif
 }
 
 MainCtrl::~MainCtrl()
@@ -171,6 +170,11 @@ void MainCtrl::SlotStopFishing()
 
 void MainCtrl::InitRoleInfo()
 {
+    QJsonObject pub_data;
+    pub_data.insert("type", mainCmd::InitRoleInfo);
+    pub_data.insert("data", QJsonObject());
+    onPubTopic(pub_data);
+
     // 从数据库获取角色基本信息
     QString last_game_time = "最近一次离线时间是：" + data_file_->GetLastGameTime();
     emit SignalShowMsgToUI(last_game_time);
@@ -377,7 +381,7 @@ void MainCtrl::onSubTopic(TopicSubActionType action_type, const QStringList &top
     }
     else
     {
-        LOG_DEBUG(QString("无法处理订阅请求:模块未初始化，%1主动上报消息：%2").arg(debug_msg).arg(topic_msg));
+        LOG_DEBUG(kMainCtrl, QString("无法处理订阅请求:模块未初始化，%1主动上报消息：%2").arg(debug_msg).arg(topic_msg));
     }
 }
 
@@ -387,5 +391,34 @@ void MainCtrl::InitFun() {
     {
         itor.next();
         itor.value().data()->Init();
+    }
+}
+
+void MainCtrl::onActionRequest(const QJsonObject &request_data) {
+    QString type = request_data.value("type").toString();
+    QString dest = request_data.value("dest").toString();
+    QString ori = request_data.value("ori").toString();
+    LOG_DEBUG(kMainCtrl, QString("主控类收到请求：%1 -> %2").arg(sender()->objectName()).arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
+    if(m_manager_map.contains(dest))
+    {
+        m_manager_map[dest]->SlotActionRequest(request_data);
+    }
+    else
+    {
+        LOG_DEBUG(kMainCtrl, QString("[main] 无法处理请求：%1").arg(type));
+    }
+}
+
+void MainCtrl::onActionResponse(const QJsonObject &request_data) {
+    QString type = request_data.value("type").toString();
+    QString dest = request_data.value("dest").toString();
+    LOG_DEBUG(kMainCtrl, QString("中心回复请求：%1").arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
+    if(m_manager_map.contains(dest))
+    {
+        m_manager_map[dest]->SlotActionResponse(request_data);
+    }
+    else
+    {
+        LOG_DEBUG(kMainCtrl, QString("[main] 无法处理回复：%1").arg(type));
     }
 }

@@ -1,4 +1,5 @@
 #include "data_service.h"
+#include "modules/public/public_declare.h"
 
 void DataService::InitRemoteData()
 {
@@ -12,17 +13,17 @@ void DataService::InitRemoteData()
     // 初始化数据库查询语句
     if (database_.open())
     {
-        LOG_DEBUG("远程数据服务连接正常");
+        LOG_DEBUG(kDataManage, "远程数据服务连接正常");
         // 连接成功后，可以执行其他初始化操作
         // ...
         // database_.close(); // 关闭数据库连接
     }
     else
     {
-        LOG_DEBUG("远程数据服务连接失败");
+        LOG_DEBUG(kDataManage, "远程数据服务连接失败");
     }
     user_ip_ = PublicFunc::GetLocalIpAddress();
-    LOG_DEBUG(QString("获取到当前IP地址为：%1").arg(user_ip_));
+    LOG_DEBUG(kDataManage, QString("获取到当前IP地址为：%1").arg(user_ip_));
 }
 
 void DataService::InitLocalData()
@@ -57,13 +58,13 @@ int DataService::LoginVerification(const QString& user_name, const QString& pass
 
     if (!query.exec())
     {
-        LOG_DEBUG(QString("校验失败:%1").arg(query.lastError().text()));
+        LOG_DEBUG(kDataManage, QString("校验失败:%1").arg(query.lastError().text()));
         return result;
     }
 
     if (query.next())
     {
-        LOG_DEBUG("校验成功");
+        LOG_DEBUG(kDataManage, "校验成功");
         user_uuid_ = GetUserUUID(user_name, pass_word);
         if(CheckUserLogginIsFist() == 1)
         {
@@ -75,7 +76,7 @@ int DataService::LoginVerification(const QString& user_name, const QString& pass
     }
     else
     {
-        LOG_DEBUG("用户名或密码错误");
+        LOG_DEBUG(kDataManage, "用户名或密码错误");
         result = 0;
     }
     return result;
@@ -92,13 +93,13 @@ int DataService::AccountRegistration(QString user_name, QString pass_word, QStri
 
     if (!query.exec())
     {
-        LOG_DEBUG(QString("查询失败:%1").arg(query.lastError().text()));
+        LOG_DEBUG(kDataManage, QString("查询失败:%1").arg(query.lastError().text()));
         return 0;
     }
 
     if (query.next())
     {
-        LOG_DEBUG("用户名已存在");
+        LOG_DEBUG(kDataManage, "用户名已存在");
         return -1;
     }
     // 执行插入语句
@@ -135,7 +136,7 @@ int DataService::AccountRegistration(QString user_name, QString pass_word, QStri
     else
     {
         // 获取总行数失败
-        LOG_DEBUG("获取总行数失败");
+        LOG_DEBUG(kDataManage, "获取总行数失败");
     }
     return result;
 }
@@ -148,7 +149,7 @@ bool DataService::AutomaticLogin()
     QString pass_word = GetSettingPassWord();
     if(user_name == "" || pass_word == "")
     {
-        LOG_DEBUG("账号密码不存在，跳过自动登录");
+        LOG_DEBUG(kDataManage, "账号密码不存在，跳过自动登录");
     }
     if(LoginVerification(user_name, pass_word) == 1)
     {
@@ -156,11 +157,11 @@ bool DataService::AutomaticLogin()
     }
     else
     {
-        LOG_DEBUG("账号校验不通过，跳过自动登录");
+        LOG_DEBUG(kDataManage, "账号校验不通过，跳过自动登录");
     }
     if(user_uuid_ != "")
     {
-        LOG_DEBUG("账号校验成功，获取UUID");
+        LOG_DEBUG(kDataManage, "账号校验成功，获取UUID");
         result = true;
     }
     return result;;
@@ -201,11 +202,11 @@ QString DataService::GetUserUUID(const QString user_name, const QString pass_wor
     {
         // 获取查询结果
         uuid = query.value("UUID").toString();
-        LOG_DEBUG( QString("成功获取UUID：%1").arg(uuid));
+        LOG_DEBUG(kDataManage,  QString("成功获取UUID：%1").arg(uuid));
     }
     else
     {
-        LOG_DEBUG("获取UUID失败 返回空值");
+        LOG_DEBUG(kDataManage, "获取UUID失败 返回空值");
     }
     return uuid;
 }
@@ -230,18 +231,18 @@ int DataService::CheckUserLogginIsFist()
         last_time = query.value("last_login_time").toString();
         if(last_time == reg_time)
         {
-            LOG_DEBUG("检测到首次登录");
+            LOG_DEBUG(kDataManage, "检测到首次登录");
             result = 1;
         }
         else
         {
-            LOG_DEBUG("非首次登录");
+            LOG_DEBUG(kDataManage, "非首次登录");
             result = 0;
         }
     }
     else
     {
-        LOG_DEBUG("首次登录数据库查询失败");
+        LOG_DEBUG(kDataManage, "首次登录数据库查询失败");
     }
     return result;
 }
@@ -285,14 +286,14 @@ int DataService::ModifyRoleName(const QString new_name)
         else
         {
             // 行数不为1，报错
-            LOG_DEBUG(QString("查询错误：%1 不存在这一行：%2").arg(rowCount).arg(user_uuid_));
+            LOG_DEBUG(kDataManage, QString("查询错误：%1 不存在这一行：%2").arg(rowCount).arg(user_uuid_));
             result = -2;
         }
     }
     else
     {
         // 查询执行失败，输出错误信息
-        LOG_DEBUG(QString("计数查询失败：%1").arg(query.lastError().text()));
+        LOG_DEBUG(kDataManage, QString("计数查询失败：%1").arg(query.lastError().text()));
     }
     return result;
 }
@@ -301,7 +302,7 @@ int DataService::InitRoleData()
 {
     if(IsRoleDataInited() == 1)
     {
-        LOG_DEBUG("检测到角色已经初始化，将跳过本次初始化");
+        LOG_DEBUG(kDataManage, "检测到角色已经初始化，将跳过本次初始化");
         return 1;
     }
     int result = 0;
@@ -320,12 +321,12 @@ int DataService::InitRoleData()
     query.bindValue(":roleName", role_name_);
     if (query.exec())
     {
-        LOG_DEBUG("新建角色基本信息初始化完成");
+        LOG_DEBUG(kDataManage, "新建角色基本信息初始化完成");
         result ++;  // 插入成功
     }
     else
     {
-        LOG_DEBUG(QString("新建角色基本信息初始化失败：%1").arg(query.lastError().text()));
+        LOG_DEBUG(kDataManage, QString("新建角色基本信息初始化失败：%1").arg(query.lastError().text()));
         result --;
     }
     query.prepare("INSERT INTO user_role_equip (uuid, equip_weapon, equip_magic, equip_helmet,"
@@ -334,12 +335,12 @@ int DataService::InitRoleData()
     query.bindValue(":uuid", user_uuid_);
     if (query.exec())
     {
-        LOG_DEBUG("新建角色装备信息初始化完成");
+        LOG_DEBUG(kDataManage, "新建角色装备信息初始化完成");
         result ++;  // 插入成功
     }
     else
     {
-        LOG_DEBUG(QString("新建角色装备信息初始化失败：%1").arg(query.lastError().text()));
+        LOG_DEBUG(kDataManage, QString("新建角色装备信息初始化失败：%1").arg(query.lastError().text()));
         result --;
     }
     query.prepare("INSERT INTO user_role_rc (uuid, rc_life, rc_basic_event, rc_att_event,"
@@ -348,12 +349,12 @@ int DataService::InitRoleData()
     query.bindValue(":uuid", user_uuid_);
     if (query.exec())
     {
-        LOG_DEBUG("新建角色成长系数初始化完成");
+        LOG_DEBUG(kDataManage, "新建角色成长系数初始化完成");
         result ++;  // 插入成功
     }
     else
     {
-        LOG_DEBUG(QString("新建角色成长系数初始化失败：%1").arg(query.lastError().text()));
+        LOG_DEBUG(kDataManage, QString("新建角色成长系数初始化失败：%1").arg(query.lastError().text()));
         result --;
     }
     query.prepare("INSERT INTO user_role_item (uuid, role_money, rename_card) "
@@ -361,12 +362,12 @@ int DataService::InitRoleData()
     query.bindValue(":uuid", user_uuid_);
     if (query.exec())
     {
-        LOG_DEBUG("新建角色物品初始化完成");
+        LOG_DEBUG(kDataManage, "新建角色物品初始化完成");
         result ++;  // 插入成功
     }
     else
     {
-        LOG_DEBUG(QString("新建角色物品初始化失败：%1").arg(query.lastError().text()));
+        LOG_DEBUG(kDataManage, QString("新建角色物品初始化失败：%1").arg(query.lastError().text()));
         result --;
     }
     return result;
@@ -426,7 +427,7 @@ int DataService::SetTableToInfo(const QString table_name, const QString column_n
     else
     {
         // 更新查询执行失败，输出错误信息
-        LOG_DEBUG(QString("更新失败：%1").arg(query.lastError().text()));
+        LOG_DEBUG(kDataManage, QString("更新失败：%1").arg(query.lastError().text()));
         result = -1;
     }
 
@@ -490,14 +491,14 @@ int DataService::WriteRoleInfoToRemoteDatabase()
             else
             {
                 // 更新查询执行失败，输出错误信息
-                LOG_DEBUG(QString("更新失败：%1").arg(query.lastError().text()));
+                LOG_DEBUG(kDataManage, QString("更新失败：%1").arg(query.lastError().text()));
                 result = -1;
             }
         }
         else
         {
             // 行数不为1，报错
-            LOG_DEBUG(QString("查询错误：%1 不存在这一行：%2").arg(rowCount).arg(user_uuid_));
+            LOG_DEBUG(kDataManage, QString("查询错误：%1 不存在这一行：%2").arg(rowCount).arg(user_uuid_));
             result = -2;
         }
     }
@@ -548,21 +549,21 @@ int DataService::WriteRoleItemsToRemoteDatabase()
             else
             {
                 // 更新查询执行失败，输出错误信息
-                LOG_DEBUG(QString("更新失败：%1").arg(query.lastError().text()));
+                LOG_DEBUG(kDataManage, QString("更新失败：%1").arg(query.lastError().text()));
                 result = -1;
             }
         }
         else
         {
             // 行数不为1，报错
-            LOG_DEBUG(QString("查询错误：%1 不存在这一行：%2").arg(rowCount).arg(user_uuid_));
+            LOG_DEBUG(kDataManage, QString("查询错误：%1 不存在这一行：%2").arg(rowCount).arg(user_uuid_));
             result = -2;
         }
     }
     else
     {
         // 查询执行失败，输出错误信息
-        LOG_DEBUG(QString("计数查询失败：%1").arg(query.lastError().text()));
+        LOG_DEBUG(kDataManage, QString("计数查询失败：%1").arg(query.lastError().text()));
     }
     return result;
 }
@@ -614,21 +615,21 @@ int DataService::WriteRoleCoefficientToRemoteDatabase()
             else
             {
                 // 更新查询执行失败，输出错误信息
-                LOG_DEBUG(QString("更新失败：%1").arg(query.lastError().text()));
+                LOG_DEBUG(kDataManage, QString("更新失败：%1").arg(query.lastError().text()));
                 result = -1;
             }
         }
         else
         {
             // 行数不为1，报错
-            LOG_DEBUG(QString("查询错误：%1 不存在这一行：%2").arg(rowCount).arg(user_uuid_));
+            LOG_DEBUG(kDataManage, QString("查询错误：%1 不存在这一行：%2").arg(rowCount).arg(user_uuid_));
             result = -2;
         }
     }
     else
     {
         // 查询执行失败，输出错误信息
-        LOG_DEBUG(QString("计数查询失败：%1").arg(query.lastError().text()));
+        LOG_DEBUG(kDataManage, QString("计数查询失败：%1").arg(query.lastError().text()));
     }
     return result;
 }
@@ -663,7 +664,7 @@ int DataService::WriteUserLoginLogToRemoteDatabase()
     else
     {
         // 更新查询执行失败，输出错误信息
-        LOG_DEBUG(QString("更新失败：%1").arg(query.lastError().text()));
+        LOG_DEBUG(kDataManage, QString("更新失败：%1").arg(query.lastError().text()));
         result --;
     }
     // 更新登录日志
@@ -694,7 +695,7 @@ int DataService::WriteUserLoginLogToRemoteDatabase()
     else
     {
         // 插入查询执行失败，输出错误信息
-        LOG_DEBUG(QString("插入失败：%1").arg(query.lastError().text()));
+        LOG_DEBUG(kDataManage, QString("插入失败：%1").arg(query.lastError().text()));
         result --;
     }
 
@@ -744,7 +745,7 @@ QJsonObject DataService::GetRemoteRoleInfo()
     {
         msg = "角色基本信息查询失败";
     }
-    LOG_DEBUG(msg);
+    LOG_DEBUG(kDataManage, msg);
     return role_info_data;
 }
 
@@ -785,7 +786,7 @@ QJsonObject DataService::GetRemoteRoleRC()
     {
         msg = "角色RC信息查询失败";
     }
-    LOG_DEBUG(msg);
+    LOG_DEBUG(kDataManage, msg);
     return role_rc_data;
 }
 
@@ -816,7 +817,7 @@ QJsonObject DataService::GetRemoteRoleItem()
     {
         msg = "角色物品信息查询失败";
     }
-    LOG_DEBUG(msg);
+    LOG_DEBUG(kDataManage, msg);
     return role_item_data;
 }
 
@@ -837,12 +838,12 @@ int DataService::IsRoleDataInited()
         roleInfoCount = query.value(0).toInt();
         if (roleInfoCount > 0)
         {
-            LOG_DEBUG("检测到角色信息已经初始化");
+            LOG_DEBUG(kDataManage, "检测到角色信息已经初始化");
         }
     }
     else
     {
-        LOG_DEBUG("未能获取角色信息查询结果");
+        LOG_DEBUG(kDataManage, "未能获取角色信息查询结果");
     }
 
     // 检查user_role_item表
@@ -854,12 +855,12 @@ int DataService::IsRoleDataInited()
         roleItemCount = query.value(0).toInt();
         if (roleItemCount > 0)
         {
-            LOG_DEBUG("检测到角色物品已经初始化");
+            LOG_DEBUG(kDataManage, "检测到角色物品已经初始化");
         }
     }
     else
     {
-        LOG_DEBUG("未能获取查询结果");
+        LOG_DEBUG(kDataManage, "未能获取查询结果");
     }
 
     // 检查user_role_rc表
@@ -871,12 +872,12 @@ int DataService::IsRoleDataInited()
         roleRcCount = query.value(0).toInt();
         if (roleRcCount > 0)
         {
-            LOG_DEBUG("检测到角色成长信息已经初始化");
+            LOG_DEBUG(kDataManage, "检测到角色成长信息已经初始化");
         }
     }
     else
     {
-        LOG_DEBUG("未能获取查询结果");
+        LOG_DEBUG(kDataManage, "未能获取查询结果");
     }
 
     // 检查user_role_equip表
@@ -888,12 +889,12 @@ int DataService::IsRoleDataInited()
         roleEquipCount = query.value(0).toInt();
         if (roleEquipCount > 0)
         {
-            LOG_DEBUG("检测到角色装备已经初始化");
+            LOG_DEBUG(kDataManage, "检测到角色装备已经初始化");
         }
     }
     else
     {
-        LOG_DEBUG("未能获取查询结果");
+        LOG_DEBUG(kDataManage, "未能获取查询结果");
     }
     if(roleInfoCount > 0 && roleItemCount > 0 && roleRcCount > 0 && roleEquipCount > 0)
     {

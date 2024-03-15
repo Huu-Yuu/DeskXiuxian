@@ -6,7 +6,7 @@
 #define DESKXIUXINA_PROGRESS_MANAGE_H
 #include <QObject>
 #include "modules/interface_manager.h"
-#include "game_service.h"
+#include "progress_service.h"
 
 class ProgressManage : public InterfaceManager
 {
@@ -19,7 +19,7 @@ public:
 public slots:
     void SlotActionResponse(const QJsonObject& request_data) override;
     void SlotActionRequest(const QJsonObject& request_data) override;
-    void SlotPubTopic(const QJsonObject& status) override;
+    void SlotPubTopic(const QJsonObject& topic_data) override;
 private:
     ProgressService* game_pro_obj_;
 };

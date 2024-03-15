@@ -19,7 +19,7 @@ public:
 public slots:
     void SlotActionResponse(const QJsonObject& request_data) override;
     void SlotActionRequest(const QJsonObject& request_data) override;
-    void SlotPubTopic(const QJsonObject& status) override;
+    void SlotPubTopic(const QJsonObject& topic_data) override;
 
 private:
     RolePlayer* role_obj_;

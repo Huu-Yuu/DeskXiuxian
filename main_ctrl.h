@@ -6,7 +6,7 @@
 #include "modules/role/role_player.h"
 #include "modules/logger/logger.h"
 #include "modules/filedata/data_service.h"
-#include "modules/game_progress/game_service.h"
+#include "modules/progress/progress_service.h"
 #include "modules/item/item_service.h"
 #include "modules/server/tcp_client.h"
 #include "modules/interface_manager.h"

@@ -43,8 +43,8 @@ void InterfaceManager::SlotActionRequest(const QJsonObject& request_data)
     Q_UNUSED(request_data);
 }
 
-void InterfaceManager::SlotPubTopic(const QJsonObject& request_data)
+void InterfaceManager::SlotPubTopic(const QJsonObject& topic_data)
 {
-    Q_UNUSED(request_data);
+    Q_UNUSED(topic_data);
 }
 

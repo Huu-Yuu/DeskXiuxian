@@ -1,4 +1,4 @@
-#include "game_service.h"
+#include "progress_service.h"
 
 QMutex ProgressService::mutex;  // 初始化互斥锁对象
 
