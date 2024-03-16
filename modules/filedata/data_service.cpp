@@ -209,11 +209,11 @@ bool DataService::CheckTablesExist()
 
         // 初始化字段值
         QString insertQuery = "INSERT INTO RoleEquip (role_name, equip_title, equip_weapon, equip_magic, equip_helmet, "
-                              "equip_clothing, equip_britches, equip_shoe, equip_jewelry, equipMount) "
+                              "equip_clothing, equip_britches, equip_shoe, equip_jewelry, equip_mount) "
                               "VALUES (:role_name, :equip_title, :equip_weapon, :equip_magic, :equip_helmet, "
                               ":equip_clothing, :equip_britches, :equip_shoe, :equip_jewelry, :equip_mount)";
         query.prepare(insertQuery);
-        query.bindValue(":roleName", "GM姜子牙");
+        query.bindValue(":role_name", "GM姜子牙");
         query.bindValue(":equip_title", "乐善好施");
         query.bindValue(":equip_weapon", "闪光机械键盘");
         query.bindValue(":equip_magic", "陈年保温杯");
@@ -238,7 +238,7 @@ bool DataService::CheckTablesExist()
         return false;
     }
 
-    // 如果 RoleItemEnum 表不存在，则创建表并初始化字段值
+    // 如果 RoleItem 表不存在，则创建表并初始化字段值
     if (!query.next())
     {
         QString createTableQuery = "CREATE TABLE RoleItem ("
@@ -251,7 +251,7 @@ bool DataService::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleItemEnum (role_name) "
+        QString insertQuery = "INSERT INTO RoleItem (role_name) "
                               "VALUES (:role_name)";
         query.prepare(insertQuery);
         query.bindValue(":role_name", "GM姜子牙");
@@ -275,12 +275,12 @@ bool DataService::CheckTablesExist()
     {
         QString createTableQuery = "CREATE TABLE RoleCoefficient ("
                                    "role_name TEXT,"
-                                   "RC_life INTEGER,,"
-                                   "RC_basicEvent INTEGER,"
-                                   "RC_attEvent INTEGER,"
-                                   "RC_surviveDisaster INTEGER,"
-                                   "RC_prestigeEvent INTEGER,"
-                                   "RC_specialEvent INTEGER"
+                                   "RC_life INTEGER,"
+                                   "RC_basic_event INTEGER,"
+                                   "RC_att_event INTEGER,"
+                                   "RC_survive_disaster INTEGER,"
+                                   "RC_prestige_event INTEGER,"
+                                   "RC_special_event INTEGER"
                                    ")";
         if (!query.exec(createTableQuery))
         {
@@ -290,8 +290,8 @@ bool DataService::CheckTablesExist()
 
         // 初始化字段值
         QString insertQuery = "INSERT INTO RoleCoefficient (role_name, RC_life, RC_basic_event, RC_att_event, "
-                              "RC_survive_disaster, RC_prestige_event, RC_specialEvent) "
-                              "VALUES (:role_name, :RC_life, :RC_basicEvent, :RC_attEvent, :RC_survive_disaster,"
+                              "RC_survive_disaster, RC_prestige_event, RC_special_event) "
+                              "VALUES (:role_name, :RC_life, :RC_basic_event, :RC_attEvent, :RC_survive_disaster,"
                               " :RC_prestige_event, :RC_special_event)";
         query.prepare(insertQuery);
         query.bindValue(":role_name", "GM姜子牙");
@@ -384,8 +384,8 @@ void DataService::WriteRoleInfoToLocalDatabase()
 {
     if(m_database_.isOpen())
     {
-        QString role_name = role_data_.value("roleName").toString();
-        role_item_data_.remove("roleName");
+        QString role_name = role_data_.value("role_name").toString();
+        role_item_data_.remove("role_name");
         QSqlQuery query(m_database_);
         // 开始构建更新查询语句
         QString updateQuery = "UPDATE RoleInfo SET ";
@@ -403,7 +403,7 @@ void DataService::WriteRoleInfoToLocalDatabase()
         // 将更新的键值对连接到查询语句中
         updateQuery += updateValues.join(", ");
         updateQuery += " WHERE role_name = :role_name";
-
+        LOG_DEBUG(kDataManage, QString("查询语句：%1").arg(updateQuery));
         // 准备查询
         query.prepare(updateQuery);
 
@@ -431,12 +431,12 @@ void DataService::WriteRoleItemsToLocalDatabase()
 {
     if(m_database_.isOpen())
     {
-        QString roleName = role_item_data_.value("roleName").toString();
-        role_item_data_.remove("roleName");
+        QString roleName = role_item_data_.value("role_name").toString();
+        role_item_data_.remove("role_name");
 
         QSqlQuery query(m_database_);
         // 开始构建更新查询语句
-        QString updateQuery = "UPDATE RoleItemEnum SET ";
+        QString updateQuery = "UPDATE RoleItem SET ";
 
         // 遍历role_item_data中的键值对
         QStringList updateValues;
@@ -451,8 +451,8 @@ void DataService::WriteRoleItemsToLocalDatabase()
 
         // 将更新的键值对连接到查询语句中
         updateQuery += updateValues.join(", ");
-        updateQuery += " WHERE roleName = :roleName";
-
+        updateQuery += " WHERE role_name = :role_name";
+        LOG_DEBUG(kDataManage, QString("查询语句：%1").arg(updateQuery));
         // 准备查询
         query.prepare(updateQuery);
 
@@ -480,8 +480,8 @@ void DataService::WriteRoleEquipToLocalDatabase()
 {
     if(m_database_.isOpen())
     {
-        QString roleName = role_item_data_.value("roleName").toString();
-        role_item_data_.remove("roleName");
+        QString roleName = role_item_data_.value("role_name").toString();
+        role_item_data_.remove("role_name");
 
         QSqlQuery query(m_database_);
         // 开始构建更新查询语句
@@ -500,13 +500,13 @@ void DataService::WriteRoleEquipToLocalDatabase()
 
         // 将更新的键值对连接到查询语句中
         updateQuery += updateValues.join(", ");
-        updateQuery += " WHERE roleName = :roleName";
-
+        updateQuery += " WHERE role_name = :role_name";
+        LOG_DEBUG(kDataManage, QString("查询语句：%1").arg(updateQuery));
         // 准备查询
         query.prepare(updateQuery);
 
         // 绑定roleName参数
-        query.bindValue(":roleName", role_name_);
+        query.bindValue(":role_name", role_name_);
 
         // 绑定role_item_data中的键值对
         for (auto it = role_item_data_.constBegin(); it != role_item_data_.constEnd(); ++it)
@@ -529,11 +529,11 @@ void DataService::WriteRoleCoefficientToLocalDatabase()
 {
     if(m_database_.isOpen())
     {
-        QString roleName = RC_data_.value("roleName").toString();
+        QString roleName = RC_data_.value("role_name").toString();
 
         QSqlQuery query(m_database_);
-        query.prepare("SELECT COUNT(*) FROM RoleCoefficient WHERE roleName = :roleName");
-        query.bindValue(":roleName", role_name_);
+        query.prepare("SELECT COUNT(*) FROM Role_coefficient WHERE role_name = :role_name");
+        query.bindValue(":role_name", role_name_);
 
         if (query.exec() && query.next())
         {
@@ -668,3 +668,6 @@ QJsonObject DataService::InitLocalRoleInfo() {
     QString RC_special_event = GetTableToInfo("RoleCoefficient", "RC_special_event");
 }
 
+void DataService::SetRoleName(QString name) {
+    role_name_ = name;
+}

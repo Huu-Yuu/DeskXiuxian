@@ -121,6 +121,7 @@ private:
     QString equip_shoe_;        // 鞋子
     QString equip_jewelry_;     // 首饰
     QString equip_mount_;       // 坐骑
+    QString equip_title_;       // 称号
 
     double aptitude_;   // 修仙资质 0.01 ~ 1
     double next_need_epx_;   // 下次升级所需要的经验值

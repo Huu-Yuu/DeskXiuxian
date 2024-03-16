@@ -197,7 +197,7 @@ private:
 
     static QString user_uuid_ ;          ///< 账号UUID
     static QString user_ip_ ;      ///< 用户IP
-    QString role_name_;         // 昵称
+    QString role_name_ = "GM姜子牙";         // 昵称
 
 };
 

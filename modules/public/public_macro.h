@@ -45,7 +45,7 @@
     do { \
         QString logMsg = QString("[%1] %2:%3 - %4").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")).arg(__FUNCTION__).arg(__LINE__).arg(msg); \
         qDebug() << logMsg; \
-        QString logFileName = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss_zzz") + "_" + logger + ".log"; \
+        QString logFileName = QDateTime::currentDateTime().toString("yyyyMMdd") + "_" + logger + ".log"; \
         QFile file(logFileName); \
         if (file.open(QIODevice::WriteOnly | QIODevice::Append)) { \
             QTextStream stream(&file); \

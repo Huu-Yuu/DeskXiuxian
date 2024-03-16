@@ -8,6 +8,11 @@ UIManage::UIManage()
     m_service_ = MainUI::getInstance();
 }
 
+UIManage::~UIManage()
+{
+
+}
+
 int UIManage::Init() {
     return 0;
 }

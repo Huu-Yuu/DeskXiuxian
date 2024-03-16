@@ -133,7 +133,7 @@ void MainUI::UpdatePhysicalStrength(QString exp, QString agg, QString def, QStri
 }
 
 void MainUI::UpdateEquip(QString weapon, QString magic, QString helmet, QString clothing,
-                         QString britches, QString shoe, QString jewelrt, QString mount)
+                         QString britches, QString shoe, QString jewelrt, QString mount, QString title)
 {
     ui->equip_weapon->setText(weapon);
     ui->equip_magic->setText(magic);
@@ -143,6 +143,8 @@ void MainUI::UpdateEquip(QString weapon, QString magic, QString helmet, QString 
     ui->equip_shoe->setText(shoe);
     ui->equip_jewelry->setText(jewelrt);
     ui->equip_mount->setText(mount);
+    ui->role_title->setText(title);
+
 }
 
 void MainUI::SlotUpdateUI(RoleUIEnum part, QString new_data)

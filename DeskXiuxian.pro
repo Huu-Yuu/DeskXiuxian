@@ -14,6 +14,8 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    modules/filedata/data_service_remote_data.cpp \
+    modules/filedata/data_service_settings.cpp \
     modules/progress/progress_service.cpp \
     modules/progress/progress_manage.cpp \
     modules/item/itembase.cpp \
@@ -29,8 +31,6 @@ SOURCES += \
     modules/ui/ui_manage.cpp \
     modules/role/role_manage.cpp \
     modules/role/role_player.cpp \
-    modules/filedata/datamanage_settings.cpp \
-    modules/filedata/datamanage_remote_data.cpp \
     modules/filedata/db_manage.cpp \
     modules/filedata/data_service.cpp \
     modules/public/public_func.cpp \
@@ -41,8 +41,8 @@ HEADERS += \
     common/singleton.h \
     modules/filedata/data_service.h \
     modules/filedata/db_manage.h \
-    modules/game_progress/progress_service.h \
-    modules/game_progress/progress_manage.h \
+    modules/progress/progress_service.h \
+    modules/progress/progress_manage.h \
     modules/item/itembase.h \
     modules/item/item_service.h \
     modules/item/item_manage.h \

@@ -1,5 +1,6 @@
 #include "role_player.h"
 #include "modules/public/public_type.h"
+#include "modules/public/public_declare.h"
 
 QMutex RolePlayer::mutex;  // 初始化互斥锁对象
 
@@ -887,7 +888,7 @@ void RolePlayer::SaveRoleEquip(RoleEquipAreaEnum area, RoleItemEnum item_enum)
     switch (area)
     {
         case kOther:
-            LOG_DEBUG("不存在此部位");
+            LOG_DEBUG(kRoleManage, "不存在此部位");
             break;
         case kWeaponArea:
             area_str = "equip_weapon";
@@ -1230,6 +1231,12 @@ QString RolePlayer::GetEquipAreaName(RoleEquipAreaEnum equipAreaEnum) {
         case kMountArea:
             equip_name = equip_mount_;
             break;
+        case kTitleArea:
+            equip_name = equip_title_;
+            break;
+        case kOther:
+            LOG_DEBUG(kRoleManage, "不存在此类型名称");
+            break;
     }
     return equip_name;
 }
@@ -1239,6 +1246,7 @@ void RolePlayer::SetEquipAreaName(RoleEquipAreaEnum equipAreaEnum, QString name)
     {
         case kWeaponArea:
             equip_weapon_ = name;
+            break;
         case kMagicArea:
             equip_magic_ = name;
             break;
@@ -1259,6 +1267,12 @@ void RolePlayer::SetEquipAreaName(RoleEquipAreaEnum equipAreaEnum, QString name)
             break;
         case kMountArea:
             equip_mount_ = name;
+            break;
+        case kTitleArea:
+            equip_title_ = name;
+            break;
+        case kOther:
+            LOG_DEBUG(kRoleManage, "不存在此类型名称");
             break;
     }
 }

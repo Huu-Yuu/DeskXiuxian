@@ -178,34 +178,35 @@ void MainCtrl::InitRoleInfo()
     // 从数据库获取角色基本信息
     QString last_game_time = "最近一次离线时间是：" + data_file_->GetLastGameTime();
     emit SignalShowMsgToUI(last_game_time);
-    QString name = data_file_->GetTableToInfo("RoleInfo", "roleName");
-    QString life = data_file_->GetTableToInfo("RoleInfo", "roleLife");
-    QString max_life = data_file_->GetTableToInfo("RoleInfo", "roleMaxLife");
-    QString prestige = data_file_->GetTableToInfo("RoleInfo", "rolePrestige");
-    QString LV = data_file_->GetTableToInfo("RoleInfo", "roleLv");
+    QString name = data_file_->GetTableToInfo("RoleInfo", "role_name");
+    QString life = data_file_->GetTableToInfo("RoleInfo", "role_life");
+    QString max_life = data_file_->GetTableToInfo("RoleInfo", "role_max_life");
+    QString prestige = data_file_->GetTableToInfo("RoleInfo", "role_prestige");
+    QString LV = data_file_->GetTableToInfo("RoleInfo", "role_lv");
     int cultivation = LV.toInt();
-    QString cur_exp = data_file_->GetTableToInfo("RoleInfo", "roleCurExp");
-    QString exp = data_file_->GetTableToInfo("RoleInfo", "roleExp");
-    QString agg = data_file_->GetTableToInfo("RoleInfo", "roleAgg");
-    QString def = data_file_->GetTableToInfo("RoleInfo", "roleDef");
-    QString hp = data_file_->GetTableToInfo("RoleInfo", "roleHp");
+    QString cur_exp = data_file_->GetTableToInfo("RoleInfo", "role_cur_exp");
+    QString exp = data_file_->GetTableToInfo("RoleInfo", "role_exp");
+    QString agg = data_file_->GetTableToInfo("RoleInfo", "role_agg");
+    QString def = data_file_->GetTableToInfo("RoleInfo", "role_def");
+    QString hp = data_file_->GetTableToInfo("RoleInfo", "role_hp");
 
     // 从数据库获取角色获取装备
-    QString weapon = data_file_->GetTableToInfo("RoleEquip", "equipWeapon");
-    QString magic = data_file_->GetTableToInfo("RoleEquip", "equipMagic");
-    QString helmet = data_file_->GetTableToInfo("RoleEquip", "equipHelmet");
-    QString clothing = data_file_->GetTableToInfo("RoleEquip", "equipClothing");
-    QString britches = data_file_->GetTableToInfo("RoleEquip", "equipBritches");
-    QString shoe = data_file_->GetTableToInfo("RoleEquip", "equipShoe");
-    QString jewelry = data_file_->GetTableToInfo("RoleEquip", "equipJewelry");
-    QString mount = data_file_->GetTableToInfo("RoleEquip", "equipMount");
+    QString weapon = data_file_->GetTableToInfo("RoleEquip", "equip_weapon");
+    QString magic = data_file_->GetTableToInfo("RoleEquip", "equip_magic");
+    QString helmet = data_file_->GetTableToInfo("RoleEquip", "equip_helmet");
+    QString clothing = data_file_->GetTableToInfo("RoleEquip", "equip_clothing");
+    QString britches = data_file_->GetTableToInfo("RoleEquip", "equip_britches");
+    QString shoe = data_file_->GetTableToInfo("RoleEquip", "equip_shoe");
+    QString jewelry = data_file_->GetTableToInfo("RoleEquip", "equip_jewelry");
+    QString mount = data_file_->GetTableToInfo("RoleEquip", "equip_mount");
+    QString title = data_file_->GetTableToInfo("RoleEquip", "equip_title");
 
     // 从数据库获取角色获取物品、道具
-    QString money = data_file_->GetTableToInfo("RoleItemEnum", "roleMoney");
+    QString money = data_file_->GetTableToInfo("RoleItem", "role_money");
 
     // 从数据库获取角色属性相关系数
-    QString life_Coefficient = data_file_->GetTableToInfo("RoleCoefficient", "RCLife");
-    QString RC_SurviveDisaster = data_file_->GetTableToInfo("RoleCoefficient", "RCSurviveDisaster");
+    QString life_Coefficient = data_file_->GetTableToInfo("RoleCoefficient", "RC_life");
+    QString RC_SurviveDisaster = data_file_->GetTableToInfo("RoleCoefficient", "RC_survive_disaster");
 
     // 将获取到的值赋值给对象
     role_obj_->SetRoleName(name);
@@ -225,6 +226,8 @@ void MainCtrl::InitRoleInfo()
     role_obj_->SetEquipAreaName(kBritchesArea, britches);
     role_obj_->SetEquipAreaName(kShoeArea, shoe);
     role_obj_->SetEquipAreaName(kJewelrArea, jewelry);
+    role_obj_->SetEquipAreaName(kMountArea, mount);
+    role_obj_->SetEquipAreaName(kTitleArea, title);
 
     // 更新角色道具
     role_item_->SetItemMoney(money.toInt());
@@ -241,7 +244,7 @@ void MainCtrl::InitRoleInfo()
     // 更新UI显示
     main_ui_obj_->UpdateRoleInformation(name, life, prestige, role_obj_->GetCultivationName(cultivation));
     main_ui_obj_->UpdatePhysicalStrength(cur_exp, agg, def, hp);
-    main_ui_obj_->UpdateEquip(weapon, magic, helmet, clothing, britches, shoe, jewelry, mount);
+    main_ui_obj_->UpdateEquip(weapon, magic, helmet, clothing, britches, shoe, jewelry, mount, title);
 }
 
 void MainCtrl::InitRoleNetworkData()

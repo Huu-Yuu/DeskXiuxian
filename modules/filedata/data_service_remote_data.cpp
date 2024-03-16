@@ -905,7 +905,3 @@ int DataService::IsRoleDataInited()
         return 0;
     }
 }
-
-void DataService::SetRoleName(QString name) {
-    role_name_ = name;
-}
