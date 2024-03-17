@@ -6,7 +6,7 @@ QMutex Logger::std_log_mutex;
 Logger::Logger()
 {
     // 创建日志文件夹（如果不存在）
-    QDir logDir(QDir::currentPath() + "/log");
+    QDir logDir(QDir::currentPath() + "/../log");
     if (!logDir.exists())
     {
         logDir.mkpath(".");
