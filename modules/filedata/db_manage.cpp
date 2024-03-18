@@ -43,7 +43,7 @@ void DBManage::SlotPubTopic(const QJsonObject& topic_data)
     QString type = topic_data.value("type").toString();
     if(type.contains(mainCmd::InitRoleInfo))
     {
-
+        m_service_->InitLocalRoleInfo();
     }
     else if(type.contains(dbCmd::SaveRoleEquip))
     {

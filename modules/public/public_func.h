@@ -41,6 +41,7 @@ public:
     static ItemType ConvertItemType(RoleItemEnum item_enum);  ///< 物品索引计算物品类型
     static RoleEquipAreaEnum ConvertEquipArea(RoleItemEnum item_enum);  ///< 物品索引计算装备部位
     static QString ConvertEquipAreaStr(RoleEquipAreaEnum area_enum);  ///< 装备部位转DB字符串
+    static QString GetCultivationName(int cur_lv);  ///< 获取等级名称
 
     // 打包请求数据
     static QJsonObject PackageRequest(const QString& type, const QJsonObject& data, QString id,

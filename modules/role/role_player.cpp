@@ -1317,3 +1317,41 @@ void RolePlayer::SetRoleBaseAtt(RoleBaseAttEnum baseAttEnum, int attValue) {
             break;
     }
 }
+
+void RolePlayer::InitLocalRoleInfo(const QJsonObject& obj) {
+    QJsonObject role_info, role_equip, role_item, role_coefficient;
+    role_info = obj.value("RoleInfo").toObject();
+    role_equip = obj.value("RoleEquip").toObject();
+    role_item = obj.value("RoleItem").toObject();
+    role_coefficient = obj.value("RoleCoefficient").toObject();
+    role_name_ = role_info.value("role_name").toString();
+    role_life_ = role_info.value("role_life").toString().toDouble();
+    role_max_life_ = role_info.value("role_max_life").toString().toInt();
+    role_prestige_ = role_info.value("role_prestige").toString().toInt();
+    role_LV_ = (CultivationStage)role_info.value("role_lv").toString().toInt();
+    role_cur_exp_ = role_info.value("role_cur_exp").toString().toInt();
+    role_exp_ = role_info.value("role_exp").toString().toInt();
+    role_agg_ = role_info.value("role_agg").toString().toInt();
+    role_def_ = role_info.value("role_def").toString().toInt();
+    role_hp_ = role_info.value("role_hp").toString().toInt();
+    aptitude_ = role_info.value("role_aptitude").toString().toDouble();
+
+    equip_weapon_ = role_equip.value("equip_weapon").toString();
+    equip_magic_ = role_equip.value("equip_magic").toString();
+    equip_helmet_ = role_equip.value("equip_helmet").toString();
+    equip_clothing_ = role_equip.value("equip_clothing").toString();
+    equip_britches_ = role_equip.value("equip_britches").toString();
+    equip_shoe_ = role_equip.value("equip_shoe").toString();
+    equip_jewelry_ = role_equip.value("equip_jewelry").toString();
+    equip_mount_ = role_equip.value("equip_mount").toString();
+    equip_title_ = role_equip.value("equip_title").toString();
+
+    RC_Life_ = role_coefficient.value("RC_life").toString().toInt();
+    RC_SurviveDisaster_ = role_coefficient.value("RC_survive_disaster").toString().toDouble();
+    RC_PrestigeEvent_ = role_coefficient.value("RC_prestige_event").toString().toDouble();
+    RC_SpecialEvent_ = role_coefficient.value("RC_special_event").toString().toDouble();
+
+    UpdataMaxRoleLife();     // 更新最大寿命
+    UpdateEextGradeEXP();    // 更新升级需要的经验
+    CheckExpIsUpgrade();    // 更新是否可以升级
+}

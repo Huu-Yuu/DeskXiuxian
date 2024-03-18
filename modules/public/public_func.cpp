@@ -234,3 +234,35 @@ QString PublicFunc::ConvertEquipAreaStr(RoleEquipAreaEnum area_enum) {
     return area_str;
 }
 
+QString PublicFunc::GetCultivationName(int cur_lv) {
+    CultivationStage lv = (CultivationStage)cur_lv;
+    switch (lv)
+    {
+        case FANREN:
+            return "凡人";
+        case LIANQI:
+            return "练气";
+        case ZHUJI:
+            return "筑基";
+        case JIEDAN:
+            return "结丹";
+        case YUANYING:
+            return "元婴";
+        case HUASHEN:
+            return "化神";
+        case HETI:
+            return "合体";
+        case DACHENG:
+            return "大乘";
+        case WUDAO:
+            return "悟道";
+        case YUHUA:
+            return "羽化";
+        case XIAN:
+            return "仙";
+        case MAXLV:
+            return "最高等级标记";
+    }
+    return "";
+}
+

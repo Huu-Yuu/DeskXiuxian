@@ -25,6 +25,7 @@ public:
     SINGLETON(RolePlayer);
     RolePlayer();
 
+    void InitLocalRoleInfo(const QJsonObject& obj);    ///< 初始化本地角色信息（不包括物品）
     QString GetRoleName() const;    ///< 获取昵称
     void SetRoleName(const QString& name);  ///< 设置昵称
     double GetRoleLife() const; ///< 获取寿命
@@ -127,6 +128,8 @@ private:
     double next_need_epx_;   // 下次升级所需要的经验值
     int RC_Life_;        // 角色寿命系数 一年等于多少秒
     double RC_SurviveDisaster_; //渡劫成功概率加成
+    double RC_PrestigeEvent_;    ///< 声望事件概率
+    double RC_SpecialEvent_;    ///< 特殊事件概率
     ItemService* role_item_; // 角色道具
 };
 

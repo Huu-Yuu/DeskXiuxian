@@ -2,8 +2,7 @@
 #define DESKXIUXINA_ROLE_DB_H
 #include <QSqlDatabase>
 #include "common/singleton.h"
-#include "3rdparty/include/QxOrm/include/orm_precompiled.h"
-#include "base_table.h"
+#include "3rdparty/include/QxOrm/include/QxPrecompiled.h"
 
 class RoleInfoTable
 {
@@ -25,7 +24,8 @@ public:
     QString role_hp;
     QString role_lv;
 };
-QX_REGISTER_PRIMARY_KEY(RoleInfoTable, QString)
-QX_REGISTER_HPP_IMPORT_DLL(RoleInfoTable, BaseTable, 1)
+
+
+
 
 #endif //DESKXIUXINA_ROLE_DB_H

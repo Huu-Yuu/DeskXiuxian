@@ -645,7 +645,7 @@ QJsonObject DataService::InitLocalRoleInfo() {
     QString agg = GetTableToInfo("RoleInfo", "role_agg");
     QString def = GetTableToInfo("RoleInfo", "role_def");
     QString hp = GetTableToInfo("RoleInfo", "role_hp");
-    QString role_aptitude = GetTableToInfo("RoleInfo", "role_aptitude");
+    QString aptitude = GetTableToInfo("RoleInfo", "role_aptitude");
 
     // 从数据库获取角色获取装备
     QString weapon = GetTableToInfo("RoleEquip", "equip_weapon");
@@ -659,13 +659,53 @@ QJsonObject DataService::InitLocalRoleInfo() {
     QString title = GetTableToInfo("RoleEquip", "equip_title");
 
     // 从数据库获取角色获取物品、道具
-    QString money = GetTableToInfo("RoleItemEnum", "role_money");
+    QString money = GetTableToInfo("RoleItem", "role_money");
 
     // 从数据库获取角色属性相关系数
     QString life_Coefficient = GetTableToInfo("RoleCoefficient", "RC_life");
     QString RC_survive_disaster = GetTableToInfo("RoleCoefficient", "RC_survive_disaster");
     QString RC_prestige_event = GetTableToInfo("RoleCoefficient", "RC_prestige_event");
     QString RC_special_event = GetTableToInfo("RoleCoefficient", "RC_special_event");
+    QJsonObject role_info, role_equip, role_item, role_coefficient, obj_;
+    role_info.insert("role_name", name);
+    role_info.insert("role_life", life);
+    role_info.insert("role_max_life", max_life);
+    role_info.insert("role_prestige", prestige);
+    role_info.insert("role_lv", cultivation);
+    role_info.insert("role_cur_exp", cur_exp);
+    role_info.insert("role_exp", exp);
+    role_info.insert("role_agg", agg);
+    role_info.insert("role_def", def);
+    role_info.insert("role_hp", hp);
+    role_info.insert("role_aptitude", aptitude);
+
+    role_equip.insert("equip_weapon", weapon);
+    role_equip.insert("equip_magic", magic);
+    role_equip.insert("equip_helmet", helmet);
+    role_equip.insert("equip_clothing", clothing);
+    role_equip.insert("equip_britches", britches);
+    role_equip.insert("equip_shoe", shoe);
+    role_equip.insert("equip_jewelry", jewelry);
+    role_equip.insert("equip_mount", mount);
+    role_equip.insert("equip_title", title);
+
+    role_coefficient.insert("RC_life", life_Coefficient);
+    role_coefficient.insert("RC_survive_disaster", RC_survive_disaster);
+    role_coefficient.insert("RC_prestige_event", RC_prestige_event);
+    role_coefficient.insert("RC_special_event", RC_special_event);
+
+    obj_.insert("RoleInfo", role_info);
+    obj_.insert("RoleEquip", role_equip);
+    obj_.insert("RoleItem", role_item);
+    obj_.insert("RoleCoefficient", role_coefficient);
+
+    emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitRoleInfo,
+                                                        data_obj,
+                                                        "",
+                                                        module_name::role,
+                                                        module_name::data));
+
+    // 发送到UI
 }
 
 void DataService::SetRoleName(QString name) {
