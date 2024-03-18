@@ -13,6 +13,17 @@ CONFIG += c++11
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+DEFINES += _BUILDING_APP
+include($$PWD/3rdparty/include/QxOrm/QxOrm.pri)
+INCLUDEPATH += $$PWD/3rdparty/include/QxOrm/include
+#添加编译好的动态库，QxOrm源码编译的动态库在QxOrm/lib目录中，最好编译debug、release两个版本
+LIBS += -L$$PWD/3rdparty/include/QxOrm/lib
+CONFIG(debug, debug|release) {
+LIBS += -lQxOrmd
+} else {
+LIBS +=  -lQxOrm
+}
+
 SOURCES += \
     modules/filedata/data_service_remote_data.cpp \
     modules/filedata/data_service_settings.cpp \
