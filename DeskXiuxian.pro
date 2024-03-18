@@ -27,6 +27,7 @@ LIBS +=  -lQxOrm
 SOURCES += \
     modules/filedata/data_service_remote_data.cpp \
     modules/filedata/data_service_settings.cpp \
+    modules/filedata/role_db.cpp \
     modules/progress/progress_service.cpp \
     modules/progress/progress_manage.cpp \
     modules/item/itembase.cpp \
@@ -52,6 +53,7 @@ HEADERS += \
     common/singleton.h \
     modules/filedata/data_service.h \
     modules/filedata/db_manage.h \
+    modules/filedata/role_db.h \
     modules/progress/progress_service.h \
     modules/progress/progress_manage.h \
     modules/item/itembase.h \
