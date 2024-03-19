@@ -59,8 +59,8 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
 //    connect(main_ui_obj_, &MainUI::SignalInitRoleData, this, &MainCtrl::SlotInitRoleData);
 
     // 保存角色基本信息
-    connect(role_obj_, &RolePlayer::SignalUpdateRoleInfoDatabase, data_file_, &DataService::SlotSaveRoleInfoToDatabase);
-    connect(role_obj_, &RolePlayer::SignalUpdateRoleItemDatabase, data_file_, &DataService::SlotSaveRoleItemToDatabase);
+//    connect(role_obj_, &RolePlayer::SignalUpdateRoleInfoDatabase, data_file_, &DataService::SlotSaveRoleInfoToDatabase);
+//    connect(role_obj_, &RolePlayer::SignalUpdateRoleItemDatabase, data_file_, &DataService::SlotSaveRoleItemToDatabase);
     connect(role_obj_, &RolePlayer::SignalUpdateEquipItemDatabase, data_file_, &DataService::SlotSaveRoleEquipToDatabase);
     connect(role_obj_, &RolePlayer::SignalUpdateRoleCoefficientDatabase, data_file_, &DataService::SlotSaveRoleCoefficientToDatabase);
 

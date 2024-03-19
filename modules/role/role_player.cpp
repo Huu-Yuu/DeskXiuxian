@@ -864,7 +864,12 @@ void RolePlayer::SaveRoleInfo()
     role_info_data.insert("role_hp", role_hp_);
     role_info_data.insert("role_aptitude", aptitude_);
     // 发送更新数据库信号
-    emit SignalUpdateRoleInfoDatabase(role_info_data);
+//    emit SignalUpdateRoleInfoDatabase(role_info_data);
+    emit SignalActionRequest(PublicFunc::PackageRequest(dbCmd::SaveRoleInfo,
+                                                        role_info_data,
+                                                        "",
+                                                        module_name::data,
+                                                        module_name::role));
 }
 
 void RolePlayer::SaveRoleItem()
