@@ -35,7 +35,7 @@ void ItemManage::SlotActionRequest(const QJsonObject& request_data)
     if(type.contains(mainCmd::InitLocalRoleInfo))
     {
         QJsonObject data = request_data.value("data").toObject();
-
+        m_service_->InitLocalRoleInfo(data);
     }
 }
 

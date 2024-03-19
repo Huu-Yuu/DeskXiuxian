@@ -6,8 +6,9 @@ QMutex ItemService::mutex_;  // 初始化互斥锁对象
 
 ItemService::ItemService()
 {
-    item_money_ = 0;
+    money_num_ = 0;
     InitItem();
+    initConnect();
 }
 
 ItemService::~ItemService()
@@ -17,16 +18,16 @@ ItemService::~ItemService()
 
 int ItemService::GetItemMoney()
 {
-    return item_money_;
+    return money_num_;
 }
 
  void ItemService::SetItemMoney(int money)
  {
-     item_money_ = money;
+     money_num_ = money;
  }
 
 void ItemService::ItemMoneyBusiness(int money) {
-    item_money_ += money;
+    money_num_ += money;
 }
 
 void ItemService::InitItem() {
@@ -66,4 +67,22 @@ void ItemService::SlotQuantityChanged(RoleItemEnum item_enum, int sum) {
     }
     obj_pub.insert("data", obj_data);
     emit SignalPubTopic(obj_pub);
+}
+
+void ItemService::InitLocalRoleInfo(const QJsonObject& data) {
+    QJsonObject item_obj = data.value("RoleItem").toObject();
+    QStringList keys = item_obj.keys();
+    for(const auto& key : keys)
+    {
+        RoleItemEnum item_type = (RoleItemEnum) key.toInt();
+        int num = item_obj.value(key).toInt();
+        if(item_type == kRoleMoney)
+        {
+            money_num_ = num;
+        }
+        else if(m_action_strategy.contains(item_type))
+        {
+            m_action_strategy[item_type]->SetItemNum(num);
+        }
+    }
 }

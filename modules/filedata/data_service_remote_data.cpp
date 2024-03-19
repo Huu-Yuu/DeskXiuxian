@@ -1,5 +1,6 @@
 #include "data_service.h"
 #include "modules/public/public_declare.h"
+#include <QSqlRecord>
 
 void DataService::InitRemoteData()
 {
@@ -795,16 +796,28 @@ QJsonObject DataService::GetRemoteRoleItem()
     QString msg;
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
     QSqlQuery query(db);
-    QString query_str = "SELECT role_money, rename_card "
-                        "FROM user_role_item WHERE uuid = :UUID";
+    QString query_str = " SELECT * FROM user_role_item WHERE uuid = :UUID";
     query.prepare(query_str);
     query.bindValue(":UUID", user_uuid_);
     if (query.exec())
     {
         if (query.next())
         {
-            role_item_data["role_money"] = query.value("role_money").toInt();
-            role_item_data["rename_card"] = query.value("rename_card").toInt();
+            // 获取列数
+            int columnCount = query.record().count();
+
+            // 遍历每一列
+            for (int i = 0; i < columnCount; i++) {
+                // 获取列名和对应的值
+                QString columnName = query.record().fieldName(i);
+                QVariant value = query.value(i);
+                // 排除 uuid 列
+                if (columnName != "uuid" && columnName != "id")
+                {
+                    // 将列名和对应值插入到 QJsonObject 中
+                    role_item_data.insert(columnName, QJsonValue::fromVariant(value));
+                }
+            }
             msg = "成功获取到角色物品信息";
         }
         else

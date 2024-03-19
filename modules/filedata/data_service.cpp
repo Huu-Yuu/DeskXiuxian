@@ -242,7 +242,8 @@ bool DataService::CheckTablesExist()
     if (!query.next())
     {
         QString createTableQuery = "CREATE TABLE RoleItem ("
-                                   "role_name TEXT"
+                                   "role_name TEXT,"
+                                   "10001 INTEGER"
                                    ")";
         if (!query.exec(createTableQuery))
         {
@@ -251,10 +252,11 @@ bool DataService::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleItem (role_name) "
-                              "VALUES (:role_name)";
+        QString insertQuery = "INSERT INTO RoleItem (role_name, 10001) "
+                              "VALUES (:role_name, :10001)";
         query.prepare(insertQuery);
         query.bindValue(":role_name", "GM姜子牙");
+        query.bindValue(":10001", 0);
         if (!query.exec())
         {
             LOG_DEBUG(kDataManage, QString("插入初始值时出错:%1").arg(query.lastError().text()));
@@ -659,7 +661,7 @@ QJsonObject DataService::InitLocalRoleInfo() {
     QString title = GetTableToInfo("RoleEquip", "equip_title");
 
     // 从数据库获取角色获取物品、道具
-    QString money = GetTableToInfo("RoleItem", "role_money");
+    QString money = GetTableToInfo("RoleItem", "10001");
 
     // 从数据库获取角色属性相关系数
     QString life_Coefficient = GetTableToInfo("RoleCoefficient", "RC_life");
@@ -699,13 +701,25 @@ QJsonObject DataService::InitLocalRoleInfo() {
     obj_.insert("RoleItem", role_item);
     obj_.insert("RoleCoefficient", role_coefficient);
 
+    // 更新角色信息
     emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitLocalRoleInfo,
                                                         data_obj,
                                                         "",
                                                         module_name::role,
                                                         module_name::data));
 
-    // 发送到UI
+    // 更新道具
+    emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitLocalRoleInfo,
+                                                        data_obj,
+                                                        "",
+                                                        module_name::item,
+                                                        module_name::data));
+    // 更新UI
+    emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitLocalRoleInfo,
+                                                        data_obj,
+                                                        "",
+                                                        module_name::ui,
+                                                        module_name::data));
 }
 
 void DataService::SetRoleName(QString name) {

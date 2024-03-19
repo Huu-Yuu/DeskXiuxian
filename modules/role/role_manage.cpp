@@ -40,18 +40,6 @@ void RoleManage::SlotActionRequest(const QJsonObject& request_data)
     {
         QJsonObject data = request_data.value("data").toObject();
         m_player_->InitLocalRoleInfo(data);
-        // 更新UI
-        emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitLocalRoleInfo,
-                                                            data,
-                                                            "",
-                                                            module_name::ui,
-                                                            module_name::role));
-        // 更新道具
-        emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitLocalRoleInfo,
-                                                            data,
-                                                            "",
-                                                            module_name::item,
-                                                            module_name::role));
     }
     else if(type.contains(uiCmd::UpgradeLevel))
     {

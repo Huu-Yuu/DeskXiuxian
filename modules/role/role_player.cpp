@@ -1352,7 +1352,7 @@ void RolePlayer::InitLocalRoleInfo(const QJsonObject& obj) {
     QJsonObject role_info, role_equip, role_item, role_coefficient;
     role_info = obj.value("RoleInfo").toObject();
     role_equip = obj.value("RoleEquip").toObject();
-    role_item = obj.value("RoleItem").toObject();
+//    role_item = obj.value("RoleItem").toObject();
     role_coefficient = obj.value("RoleCoefficient").toObject();
     role_name_ = role_info.value("role_name").toString();
     role_life_ = role_info.value("role_life").toString().toDouble();

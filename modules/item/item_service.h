@@ -23,6 +23,7 @@ public:
     void initConnect(); ///< 初始化连接
     int GetItemMoney(); ///< 获取灵石数量
     void SetItemMoney(int money);   ///< 写入灵石数量
+    void InitLocalRoleInfo(const QJsonObject& data);   ///< 初始化本地角色信息
 signals:
     //请求外部动作
     void SignalActionRequest(const QJsonObject& request_data);
@@ -43,7 +44,7 @@ private:
     static QMutex mutex_; ///< 互斥锁，用于线程同步
     QMap<int, ItemBase*> m_action_strategy; ///< 物品索引 和 类绑定
     QMap<int, int> m_item_sum; ///< 物品索引和数量
-    int item_money_;     ///< 货币灵石
+    int money_num_;     ///< 货币灵石
 };
 
 #endif // ITEMSYSTEM_H
