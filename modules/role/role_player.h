@@ -86,6 +86,13 @@ signals:
     void SignalActivateCultivaUpButton();   ///< 激活突破按钮信号
     void SignalDisableCultivaUpButton();    ///< 禁用突破按钮信号
 
+    //请求外部动作
+    void SignalActionRequest(const QJsonObject& request_data);
+    //本模块动作执行结果抛给上一级
+    void SignalActionResponse(const QJsonObject& request_data);
+    //状态变化抛给上一级
+    void SignalPubTopic(const QJsonObject& pub_data);
+
 public slots:
 
     void SlotCyclicCultivation();   ///< 循环修炼，随机经验值、随机货币

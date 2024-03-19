@@ -1,4 +1,5 @@
 #include "progress_service.h"
+#include "modules/public/public_declare.h"
 
 QMutex ProgressService::mutex;  // 初始化互斥锁对象
 
@@ -71,6 +72,16 @@ void ProgressService::StarPractic()
     life_timer_->start();
     jianghu_timer_->start();
     basic_att_timer_->start();
+    // 输出角色当前事件系数
+    int seconds_info = GetAnecdotesTime() / 1000;
+    int seconds_att = GetAttTime() / 1000;
+    QJsonObject data;
+    data.insert("msg",QString("当前基本事件循环周期为：%1秒，属性事件循环周期为：%2秒").arg(seconds_info).arg(seconds_att));
+    emit SignalActionRequest(PublicFunc::PackageRequest(uiCmd::ShowMsgToUI,
+                                                        data,
+                                                        "",
+                                                        module_name::ui,
+                                                        module_name::progress));
 }
 
 void ProgressService::StopPractic()

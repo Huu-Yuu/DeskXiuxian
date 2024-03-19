@@ -56,7 +56,7 @@ MainUI::MainUI(QWidget* parent)
     QDateTime compile_data_time = QLocale(QLocale::English)
             .toDateTime(date_time_str, "MMM d yyyy hh:mm:ss");
     QString compile_time = compile_data_time.toString("yyyy.MM.dd hh:mm:ss");
-    QString msg = QString("当前游戏版本为：%1 发布日期：%2").arg(GAME_VISION).arg(compile_time);
+    QString msg = QString("当前游戏版本为：%1/n发布日期：%2").arg(GAME_VISION).arg(compile_time);
     AddMessage(msg);
 }
 
@@ -272,7 +272,7 @@ void MainUI::on_star_but_clicked()
     AddMessage(msg);
 //    emit SignalStartFishing();
     QJsonObject pub_obj;
-    pub_obj.insert("type", mainCmd::StartFishing);
+    pub_obj.insert("type", uiCmd::StartFishing);
     pub_obj.insert("data", QJsonObject());
     emit SignalPubTopic(pub_obj);
 }
@@ -283,12 +283,21 @@ void MainUI::on_end_but_clicked()
     ui->end_but->setEnabled(false);
     QString msg = "修(mo)行(yu)暂时结束！";
     AddMessage(msg);
-    emit SignalStopFishing();
+//    emit SignalStopFishing();
+    QJsonObject pub_obj;
+    pub_obj.insert("type", uiCmd::StopFishing);
+    pub_obj.insert("data", QJsonObject());
+    emit SignalPubTopic(pub_obj);
 }
 
 void MainUI::on_cultiva_up_but_clicked()
 {
-    emit SignalUpgradeLevel();
+//    emit SignalUpgradeLevel();
+    emit SignalActionRequest(PublicFunc::PackageRequest(uiCmd::UpgradeLevel,
+                                                        QJsonObject(),
+                                                        "",
+                                                        module_name::role,
+                                                        module_name::ui));
 }
 
 void MainUI::ShowLoginWidget()

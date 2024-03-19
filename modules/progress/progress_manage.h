@@ -21,7 +21,7 @@ public slots:
     void SlotActionRequest(const QJsonObject& request_data) override;
     void SlotPubTopic(const QJsonObject& topic_data) override;
 private:
-    ProgressService* game_pro_obj_;
+    ProgressService* m_service_;
 };
 
 #endif //DESKXIUXINA_PROGRESS_MANAGE_H

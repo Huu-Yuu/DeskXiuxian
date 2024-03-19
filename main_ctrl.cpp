@@ -143,13 +143,13 @@ void MainCtrl::SlotInitRoleData()
     role_obj_->SetRoleBaseAtt(kRoleDefAtt, role_info_data.value("role_def").toString().toInt());
     role_obj_->SetRoleBaseAtt(kRoleHpAtt, role_info_data.value("role_hp").toString().toInt());
     // 更新装备
-//    role_obj_->SetEquipWeapon();
-//    role_obj_->SetEquipMagic();
-//    role_obj_->SetEquipHelmet();
-//    role_obj_->SetEquipClothing();
-//    role_obj_->SetEquipBritches();
-//    role_obj_->SetEquipShoe();
-//    role_obj_->SetEquipJewelry();
+//    m_player_->SetEquipWeapon();
+//    m_player_->SetEquipMagic();
+//    m_player_->SetEquipHelmet();
+//    m_player_->SetEquipClothing();
+//    m_player_->SetEquipBritches();
+//    m_player_->SetEquipShoe();
+//    m_player_->SetEquipJewelry();
     // 更新角色道具
     role_item_->SetItemMoney(role_item_data.value("role_money").toString().toInt());
 //    role_item_->SetItemRenameCard(role_item_data_.value("role_money").toString().toInt());

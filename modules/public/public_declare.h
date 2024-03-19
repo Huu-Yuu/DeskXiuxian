@@ -55,12 +55,15 @@ namespace dbCmd
 namespace mainCmd
 {
     const QString InitRoleInfo = "InitRoleInfo";    ///< 初始化角色信息
-    const QString StartFishing = "StartFishing";    ///< 开始摸鱼
 }
 
 namespace uiCmd
 {
     const QString ShowMsgToUI = "ShowMsgToUI";  ///< 显示信息到UI
+    const QString DisableCultivaUpButton = "DisableCultivaUpButton";  ///< 禁用图片按钮
+    const QString StartFishing = "StartFishing";    ///< 开始摸鱼
+    const QString StopFishing = "StopFishing";    ///< 暂停摸鱼
+    const QString UpgradeLevel = "UpgradeLevel";    ///< 突破等级
 }
 
 #endif //DESKXIUXINA_PUBLIC_DECLARE_H

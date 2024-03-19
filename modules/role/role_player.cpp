@@ -985,13 +985,31 @@ void RolePlayer::SlotUpgradeLevel()
     SaveRoleInfo();
     SaveRoleItem();
     SaveCoefficient();
-    emit SignalShowMsgToUI(msg);
-    emit SignalDisableCultivaUpButton();
+
+//    emit SignalShowMsgToUI(msg);
+    QJsonObject data_obj;
+    data_obj.insert("msg", msg);
+    emit SignalActionRequest(PublicFunc::PackageRequest(uiCmd::ShowMsgToUI,
+                                                        data_obj,
+                                                        "",
+                                                        module_name::ui,
+                                                        module_name::role));
+//    emit SignalDisableCultivaUpButton();
+    emit SignalActionRequest(PublicFunc::PackageRequest(uiCmd::DisableCultivaUpButton,
+                                                        QJsonObject(),
+                                                        "",
+                                                        module_name::ui,
+                                                        module_name::role));
 
     // 判断经验值是否还满足升级条件
     if(!CheckExpIsUpgrade())
     {
-        emit SignalDisableCultivaUpButton();
+//        emit SignalDisableCultivaUpButton();
+        emit SignalActionRequest(PublicFunc::PackageRequest(uiCmd::DisableCultivaUpButton,
+                                                            QJsonObject(),
+                                                            "",
+                                                            module_name::ui,
+                                                            module_name::role));
     }
 }
 

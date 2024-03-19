@@ -39,7 +39,10 @@ void UIManage::SlotActionRequest(const QJsonObject &request_data) {
         QJsonObject data_obj = request_data.value("data").toObject();
         UpdateUi(data_obj);
     }
-
+    else if(type.contains(uiCmd::DisableCultivaUpButton))
+    {
+        m_service_->SlotDisableCultivaUpButton();
+    }
 }
 
 void UIManage::SlotPubTopic(const QJsonObject &status) {

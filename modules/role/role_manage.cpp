@@ -4,15 +4,22 @@
 
 RoleManage::RoleManage() {
     m_module_name = module_name::role;
-    role_obj_ = RolePlayer::getInstance();
+    m_player_ = RolePlayer::getInstance();
+
+    connect(m_player_, &RolePlayer::SignalActionRequest, this, &RoleManage::SignalActionRequest);
+    connect(m_player_, &RolePlayer::SignalActionResponse, this, &RoleManage::SignalActionResponse);
+    connect(m_player_, &RolePlayer::SignalPubTopic, this, &RoleManage::SignalPubTopic);
 }
 
 int RoleManage::Init()
 {
     QStringList db_topics = QStringList{dbCmd::SaveRoleEquip, dbCmd::SaveRoleItem};
-
-    LOG_DEBUG(kRoleManage, QString("发送订阅主动上报消息：%1").arg(db_topics.join(",").toStdString().c_str()));
-    emit SignalSubTopic(kSubType, db_topics);
+    QStringList ui_topics = QStringList{uiCmd::StartFishing};
+    QStringList subscribe_topics;
+    subscribe_topics += db_topics;
+    subscribe_topics += ui_topics;
+    LOG_DEBUG(kRoleManage, QString("发送订阅主动上报消息：%1").arg(subscribe_topics.join(",").toStdString().c_str()));
+    emit SignalSubTopic(kSubType, subscribe_topics);
 }
 
 RoleManage::~RoleManage()
@@ -32,12 +39,16 @@ void RoleManage::SlotActionRequest(const QJsonObject& request_data)
     if(type.contains(mainCmd::InitRoleInfo))
     {
         QJsonObject data = request_data.value("data").toObject();
-        role_obj_->InitLocalRoleInfo(data);
+        m_player_->InitLocalRoleInfo(data);
         emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitRoleInfo,
                                                             data,
                                                             "",
                                                             module_name::ui,
                                                             module_name::role));
+    }
+    else if(type.contains(uiCmd::UpgradeLevel))
+    {
+        m_player_->SlotUpgradeLevel();
     }
 }
 
@@ -52,6 +63,10 @@ void RoleManage::SlotPubTopic(const QJsonObject& topic_data)
     else if(type.contains(dbCmd::SaveRoleItem))
     {
 
+    }
+    else if(type.contains(uiCmd::StartFishing))
+    {
+        m_player_->CheckExpIsUpgrade();
     }
 }
 

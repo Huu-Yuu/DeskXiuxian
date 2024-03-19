@@ -22,6 +22,6 @@ public slots:
     void SlotPubTopic(const QJsonObject& topic_data) override;
 
 private:
-    RolePlayer* role_obj_;
+    RolePlayer* m_player_;
 };
 #endif //DESKXIUXINA_ROLE_MANAGE_H

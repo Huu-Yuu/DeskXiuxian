@@ -39,6 +39,13 @@ signals:
     void SignalBasicAttTimeOut();   ///< 基本属性定时器超时信号
     void SignaleLifeUpdataTimeOut();    ///< 角色寿命成长定时器超时信号
 
+    //请求外部动作
+    void SignalActionRequest(const QJsonObject& request_data);
+    //本模块动作执行结果抛给上一级
+    void SignalActionResponse(const QJsonObject& request_data);
+    //状态变化抛给上一级
+    void SignalPubTopic(const QJsonObject& pub_data);
+
 protected:
     void run();
 
