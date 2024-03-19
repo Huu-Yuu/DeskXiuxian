@@ -27,12 +27,17 @@ void RoleManage::SlotActionResponse(const QJsonObject& request_data)
 
 void RoleManage::SlotActionRequest(const QJsonObject& request_data)
 {
-    LOG_DEBUG(kUIManage, QString("收到外部请求：%1").arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
+    LOG_DEBUG(kRoleManage, QString("收到外部请求：%1").arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
     QString type = request_data.value("type").toString();
     if(type.contains(mainCmd::InitRoleInfo))
     {
         QJsonObject data = request_data.value("data").toObject();
         role_obj_->InitLocalRoleInfo(data);
+        emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitRoleInfo,
+                                                            data,
+                                                            "",
+                                                            module_name::ui,
+                                                            module_name::role));
     }
 }
 

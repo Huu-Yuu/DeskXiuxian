@@ -1,5 +1,6 @@
 #include "mainui.h"
 #include "ui_mainui.h"
+#include "modules/public/public_declare.h"
 
 MainUI::MainUI(QWidget* parent)
     : QMainWindow(parent)
@@ -269,7 +270,11 @@ void MainUI::on_star_but_clicked()
     ui->end_but->setEnabled(true);
     QString msg = "一切准备就绪，开始修(mo)行(yu)！";
     AddMessage(msg);
-    emit SignalStartFishing();
+//    emit SignalStartFishing();
+    QJsonObject pub_obj;
+    pub_obj.insert("type", mainCmd::StartFishing);
+    pub_obj.insert("data", QJsonObject());
+    emit SignalPubTopic(pub_obj);
 }
 
 void MainUI::on_end_but_clicked()

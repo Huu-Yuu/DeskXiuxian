@@ -55,6 +55,7 @@ namespace dbCmd
 namespace mainCmd
 {
     const QString InitRoleInfo = "InitRoleInfo";    ///< 初始化角色信息
+    const QString StartFishing = "StartFishing";    ///< 开始摸鱼
 }
 
 namespace uiCmd

@@ -59,6 +59,13 @@ signals:
     void SignalStartFishing();  ///< 开始修行
     void SignalStopFishing();   ///< 结束修行
 
+    //请求外部动作
+    void SignalActionRequest(const QJsonObject& request_data);
+    //本模块动作执行结果抛给上一级
+    void SignalActionResponse(const QJsonObject& request_data);
+    //状态变化抛给上一级
+    void SignalPubTopic(const QJsonObject& pub_data);
+
 public slots:
 
     void SlotShowMsg(QString msg);  ///< 显示消息到窗口 槽函数
