@@ -18,7 +18,7 @@ public slots:
     void SlotPubTopic(const QJsonObject& status) override;
 
 private:
-    void UpdateUi(QJsonObject role_data);
+    void UpdateUi(const QJsonObject& role_data);
     MainUI* m_service_;
 };
 #endif //DESKXIUXINA_UI_MANAGE_H

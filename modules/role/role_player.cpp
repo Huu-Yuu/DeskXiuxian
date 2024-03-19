@@ -523,7 +523,12 @@ bool RolePlayer::CheckExpIsUpgrade()
     // 判断当前经验值是否满足下一级的条件
     if( role_cur_exp_ >= next_need_epx_)
     {
-        emit SignalActivateCultivaUpButton();
+//        emit SignalActivateCultivaUpButton();
+        emit SignalActionRequest(PublicFunc::PackageRequest(uiCmd::ActivateCultivaUpButton,
+                                                            QJsonObject(),
+                                                            "",
+                                                            module_name::ui,
+                                                            module_name::role));
         return true;
     }
     return false;
@@ -944,15 +949,20 @@ void RolePlayer::SlotLifeUpdate()
     {
         RC_Life_ -= 7200;
         role_life_ ++;
-        emit SignalUpdateUI(kRoleLife, QString::number(role_life_));
+        QJsonObject data;
+        data.insert(QString::number(kRoleLife), QString::number(role_life_));
+//        emit SignalUpdateUI(kRoleLife, QString::number(role_life_));
+        UpdateRoleUI(data);
         if(role_life_ >= role_max_life_ - 4)
         {
-            emit SignalShowMsgToUI(QString("%1道友大限将至，请抓紧突破以增加寿命！").arg(role_name_));
+//            emit SignalShowMsgToUI(QString("%1道友大限将至，请抓紧突破以增加寿命！").arg(role_name_));
+            ShowMsgToUi(QString("%1道友大限将至，请抓紧突破以增加寿命！").arg(role_name_));
             return;
         }
         if(role_life_ >= role_max_life_)
         {
-            emit SignalShowMsgToUI(QString("%1道友大限已至享龄%2岁，让我们怀念与他共度的美好时光，他的存在将永远在我们心中闪耀！").arg(role_name_, static_cast<int>(role_life_)));
+//            emit SignalShowMsgToUI(QString("%1道友大限已至享龄%2岁，让我们怀念与他共度的美好时光，他的存在将永远在我们心中闪耀！").arg(role_name_, static_cast<int>(role_life_)));
+            ShowMsgToUi(QString("%1道友大限已至享龄%2岁，让我们怀念与他共度的美好时光，他的存在将永远在我们心中闪耀！").arg(role_name_, static_cast<int>(role_life_)));
             return;
         }
     }
@@ -987,13 +997,7 @@ void RolePlayer::SlotUpgradeLevel()
     SaveCoefficient();
 
 //    emit SignalShowMsgToUI(msg);
-    QJsonObject data_obj;
-    data_obj.insert("msg", msg);
-    emit SignalActionRequest(PublicFunc::PackageRequest(uiCmd::ShowMsgToUI,
-                                                        data_obj,
-                                                        "",
-                                                        module_name::ui,
-                                                        module_name::role));
+    ShowMsgToUi(msg);
 //    emit SignalDisableCultivaUpButton();
     emit SignalActionRequest(PublicFunc::PackageRequest(uiCmd::DisableCultivaUpButton,
                                                         QJsonObject(),
@@ -1172,10 +1176,18 @@ void RolePlayer::SlotCyclicEnhanceAtt()
     // 更新数据库
     SaveRoleInfo();
     // 发送信号，发送事件信息，更新UI
-    emit SignalShowMsgToUI(msg);
-    emit SignalUpdateUI(kRoleAgg, QString::number(role_agg_));
-    emit SignalUpdateUI(kRoleDef, QString::number(role_def_));
-    emit SignalUpdateUI(kRoleHp, QString::number(role_hp_));
+//    emit SignalShowMsgToUI(msg);
+//    emit SignalUpdateUI(kRoleAgg, QString::number(role_agg_));
+//    emit SignalUpdateUI(kRoleDef, QString::number(role_def_));
+//    emit SignalUpdateUI(kRoleHp, QString::number(role_hp_));
+
+    ShowMsgToUi(msg);
+
+    QJsonObject data;
+    data.insert(QString::number(kRoleAgg), QString::number(role_agg_));
+    data.insert(QString::number(kRoleDef), QString::number(role_def_));
+    data.insert(QString::number(kRoleHp), QString::number(role_hp_));
+    UpdateRoleUI(data);
 }
 
 int RolePlayer::GetElementAtt(ElementAttEnum attEnum) const {
@@ -1372,4 +1384,22 @@ void RolePlayer::InitLocalRoleInfo(const QJsonObject& obj) {
     UpdataMaxRoleLife();     // 更新最大寿命
     UpdateEextGradeEXP();    // 更新升级需要的经验
     CheckExpIsUpgrade();    // 更新是否可以升级
+}
+
+void RolePlayer::ShowMsgToUi(const QString& msg) {
+    QJsonObject data_obj;
+    data_obj.insert("msg", msg);
+    emit SignalActionRequest(PublicFunc::PackageRequest(uiCmd::ShowMsgToUI,
+                                                        data_obj,
+                                                        "",
+                                                        module_name::ui,
+                                                        module_name::role));
+}
+
+void RolePlayer::UpdateRoleUI(const QJsonObject& data) {
+    emit SignalActionRequest(PublicFunc::PackageRequest(uiCmd::UpdateRoleUI,
+                                                        data,
+                                                        "",
+                                                        module_name::ui,
+                                                        module_name::role));
 }

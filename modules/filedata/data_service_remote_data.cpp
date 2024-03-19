@@ -723,7 +723,6 @@ QJsonObject DataService::GetRemoteRoleInfo()
     {
         if (query.next())
         {
-
             role_info_data["role_name"] = role_name_;
             role_info_data["role_life"] = query.value("role_life").toInt();
             role_info_data["role_prestige"] = query.value("role_prestige").toInt();
@@ -904,4 +903,23 @@ int DataService::IsRoleDataInited()
     {
         return 0;
     }
+}
+
+void DataService::InitRemoteRoleInfo()
+{
+    QJsonObject role_info_data = GetRemoteRoleInfo();
+    QJsonObject role_rc_data = GetRemoteRoleRC();
+    QJsonObject role_equip_data = GetRemoteRoleEquip();
+    QJsonObject role_item_data = GetRemoteRoleItem();
+    QJsonObject data_obj;
+    data_obj.insert("RoleInfo", role_info_data);
+    data_obj.insert("RoleCoefficient", role_rc_data);
+    data_obj.insert("RoleEquip", role_equip_data);
+    data_obj.insert("RoleItem", role_item_data);
+    // 使用本地角色信息初始化指令
+    emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitLocalRoleInfo,
+                                                        data_obj,
+                                                        "",
+                                                        module_name::role,
+                                                        module_name::data));
 }

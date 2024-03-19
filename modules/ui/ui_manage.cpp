@@ -34,7 +34,7 @@ void UIManage::SlotActionRequest(const QJsonObject &request_data) {
         QString msg = data_obj.value("msg").toString();
         m_service_->SlotShowMsg(msg);
     }
-    else if(type.contains(mainCmd::InitRoleInfo))
+    else if(type.contains(mainCmd::InitLocalRoleInfo))
     {
         QJsonObject data_obj = request_data.value("data").toObject();
         UpdateUi(data_obj);
@@ -43,13 +43,32 @@ void UIManage::SlotActionRequest(const QJsonObject &request_data) {
     {
         m_service_->SlotDisableCultivaUpButton();
     }
+    else if(type.contains(uiCmd::UpdateRoleUI))
+    {
+        QJsonObject data_obj = request_data.value("data").toObject();
+        m_service_->UpdateRoleUI(data_obj);
+    }
+    else if(type.contains(uiCmd::ActivateCultivaUpButton))
+    {
+        m_service_->SlotActivateCultivaUpButton();
+    }
+    else if(type.contains(uiCmd::InitRoleUI))
+    {
+        QJsonObject data_obj = request_data.value("data").toObject();
+        QJsonObject role_info_data, role_item_data, role_rc_data, role_equic_data;
+        role_info_data = data_obj.value("role_info_data").toObject();
+        role_item_data = data_obj.value("role_item_data").toObject();
+        role_rc_data = data_obj.value("role_rc_data").toObject();
+        role_equic_data = data_obj.value("role_equic_data").toObject();
+        m_service_->InitRoleUI(role_info_data, role_item_data, role_rc_data, role_equic_data);
+    }
 }
 
 void UIManage::SlotPubTopic(const QJsonObject &status) {
 
 }
 
-void UIManage::UpdateUi(QJsonObject role_data) {
+void UIManage::UpdateUi(const QJsonObject& role_data) {
     QJsonObject role_info, role_equip, role_item, role_coefficient;
     role_info = role_data.value("RoleInfo").toObject();
     role_equip = role_data.value("RoleEquip").toObject();

@@ -30,6 +30,13 @@ namespace ItemName
     const QString ItemRenameCard = "改名卡";
 }
 
+namespace ProgressCmd
+{
+    const QString CyclicLifeUpdate = "CyclicLifeUpdate";        ///< 更新寿命
+    const QString CyclicCultivation = "CyclicCultivation";        ///< 循环修炼
+    const QString CyclicEnhanceAtt = "CyclicEnhanceAtt";        ///< 循环增加属性
+}
+
 namespace itemCmd
 {
     const QString GetItemIndex = "GetItemIndex";    ///< 获取物品索引
@@ -54,16 +61,20 @@ namespace dbCmd
 
 namespace mainCmd
 {
-    const QString InitRoleInfo = "InitRoleInfo";    ///< 初始化角色信息
+    const QString InitLocalRoleInfo = "InitLocalRoleInfo";    ///< 初始化本地角色信息
+    const QString InitRemoteRoleInfo = "InitRemoteRoleInfo";    ///< 初始化远程角色信息
 }
 
 namespace uiCmd
 {
+    const QString InitRoleUI = "InitRoleUI";    ///< 初始化角色UI
     const QString ShowMsgToUI = "ShowMsgToUI";  ///< 显示信息到UI
-    const QString DisableCultivaUpButton = "DisableCultivaUpButton";  ///< 禁用图片按钮
+    const QString DisableCultivaUpButton = "DisableCultivaUpButton";  ///< 禁用突破按钮
+    const QString ActivateCultivaUpButton = "ActivateCultivaUpButton";  ///< 激活突破按钮
     const QString StartFishing = "StartFishing";    ///< 开始摸鱼
     const QString StopFishing = "StopFishing";    ///< 暂停摸鱼
     const QString UpgradeLevel = "UpgradeLevel";    ///< 突破等级
+    const QString UpdateRoleUI = "UpdateRoleUI";    ///< 更新指定UI部件
 }
 
 #endif //DESKXIUXINA_PUBLIC_DECLARE_H

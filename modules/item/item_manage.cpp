@@ -30,7 +30,13 @@ void ItemManage::SlotActionResponse(const QJsonObject& request_data)
 
 void ItemManage::SlotActionRequest(const QJsonObject& request_data)
 {
+    LOG_DEBUG(kRoleManage, QString("收到外部请求：%1").arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
+    QString type = request_data.value("type").toString();
+    if(type.contains(mainCmd::InitLocalRoleInfo))
+    {
+        QJsonObject data = request_data.value("data").toObject();
 
+    }
 }
 
 void ItemManage::SlotPubTopic(const QJsonObject& topic_data)

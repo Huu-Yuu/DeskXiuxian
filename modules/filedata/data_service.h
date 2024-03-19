@@ -121,6 +121,8 @@ public:
      * @brief 打印日志
      */
     void DebugOutToLog(QString msg);
+
+    void InitRemoteRoleInfo();      ///< 初始化远程角色信息
 signals:
     //请求外部动作
     void SignalActionRequest(const QJsonObject& request_data);

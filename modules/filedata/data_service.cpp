@@ -699,7 +699,7 @@ QJsonObject DataService::InitLocalRoleInfo() {
     obj_.insert("RoleItem", role_item);
     obj_.insert("RoleCoefficient", role_coefficient);
 
-    emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitRoleInfo,
+    emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitLocalRoleInfo,
                                                         data_obj,
                                                         "",
                                                         module_name::role,

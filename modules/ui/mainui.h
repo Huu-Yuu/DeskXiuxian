@@ -50,6 +50,8 @@ public:
      // 初始化角色UI信息
     void InitRoleUI(QJsonObject role_info_data, QJsonObject role_item_data, QJsonObject role_rc_data, QJsonObject role_equic_data = QJsonObject());
 
+    void UpdateRoleUI(const QJsonObject& data);    ///< 更新角色信息UI
+
 signals:
 
     void SignalLogOut(QtMsgType type, const QMessageLogContext& context, const QString& message);   ///< 输出日志信号
@@ -86,10 +88,8 @@ private slots:
     void on_cultiva_up_but_clicked();
 
 private:
-    /**
-     * @brief 添加消息到消息列表
-     */
-    void AddMessage(QString msg);
+
+    void AddMessage(QString msg);   ///< 添加消息到消息列表
 
     QProcess* process;  // 用于关闭窗口时杀死所有进程
     Ui::MainUI* ui;

@@ -242,7 +242,12 @@ void MainUI::SlotLoginSuccessful()
     {
         case 0: // 非首次登录
         {
-            emit SignalInitRoleData();
+//            emit SignalInitRoleData();
+            emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitRemoteRoleInfo,
+                                                                QJsonObject(),
+                                                                "",
+                                                                module_name::data,
+                                                                module_name::ui));
             show();
             break;
         }
@@ -260,7 +265,12 @@ void MainUI::SlotRenameSuccessful()
 {
     CloseModifyNameWidget();
     // 初始化远程数据库
-    emit SignalInitRoleData();
+//    emit SignalInitRoleData();
+    emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitRemoteRoleInfo,
+                                                        QJsonObject(),
+                                                        "",
+                                                        module_name::data,
+                                                        module_name::ui));
     show();
 }
 
@@ -320,4 +330,13 @@ void MainUI::CloseModifyNameWidget()
 {
     modify_obj_->close();
     emit SignalLogOut(QtInfoMsg, QMessageLogContext(), "关闭命名窗口");
+}
+
+void MainUI::UpdateRoleUI(const QJsonObject& data) {
+    QList<QString> keys = data.keys();
+    for(const auto & key : keys)
+    {
+        QString new_data = data.value(key).toString();
+        SlotUpdateUI((RoleUIEnum)key.toInt(), new_data);
+    }
 }

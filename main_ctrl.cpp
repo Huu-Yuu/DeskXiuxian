@@ -45,18 +45,18 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     connect(main_ui_obj_, &MainUI::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
 
     // 绑定修炼
-    connect(game_obj_, &ProgressService::SignaleLifeUpdataTimeOut, role_obj_, &RolePlayer::SlotLifeUpdate);
-    connect(game_obj_, &ProgressService::SignalJianghuTimeOut, role_obj_, &RolePlayer::SlotCyclicCultivation);
-    connect(game_obj_, &ProgressService::SignalBasicAttTimeOut, role_obj_, &RolePlayer::SlotCyclicEnhanceAtt);
-    connect(main_ui_obj_, &MainUI::SignalUpgradeLevel, role_obj_, &RolePlayer::SlotUpgradeLevel);
-    connect(main_ui_obj_, &MainUI::SignalStartFishing, this, &MainCtrl::SlotStartFishing);
-    connect(main_ui_obj_, &MainUI::SignalStopFishing, this, &MainCtrl::SlotStopFishing);
+//    connect(game_obj_, &ProgressService::SignaleLifeUpdataTimeOut, role_obj_, &RolePlayer::SlotLifeUpdate);
+//    connect(game_obj_, &ProgressService::SignalJianghuTimeOut, role_obj_, &RolePlayer::SlotCyclicCultivation);
+//    connect(game_obj_, &ProgressService::SignalBasicAttTimeOut, role_obj_, &RolePlayer::SlotCyclicEnhanceAtt);
+//    connect(main_ui_obj_, &MainUI::SignalUpgradeLevel, role_obj_, &RolePlayer::SlotUpgradeLevel);
+//    connect(main_ui_obj_, &MainUI::SignalStartFishing, this, &MainCtrl::SlotStartFishing);
+//    connect(main_ui_obj_, &MainUI::SignalStopFishing, this, &MainCtrl::SlotStopFishing);
 
     // 更新UI
-    connect(role_obj_, &RolePlayer::SignalUpdateUI, main_ui_obj_, &MainUI::SlotUpdateUI);
-    connect(role_obj_, &RolePlayer::SignalActivateCultivaUpButton, main_ui_obj_, &MainUI::SlotActivateCultivaUpButton);
-    connect(role_obj_, &RolePlayer::SignalDisableCultivaUpButton, main_ui_obj_, &MainUI::SlotDisableCultivaUpButton);
-    connect(main_ui_obj_, &MainUI::SignalInitRoleData, this, &MainCtrl::SlotInitRoleData);
+//    connect(role_obj_, &RolePlayer::SignalUpdateUI, main_ui_obj_, &MainUI::SlotUpdateUI);
+//    connect(role_obj_, &RolePlayer::SignalActivateCultivaUpButton, main_ui_obj_, &MainUI::SlotActivateCultivaUpButton);
+//    connect(role_obj_, &RolePlayer::SignalDisableCultivaUpButton, main_ui_obj_, &MainUI::SlotDisableCultivaUpButton);
+//    connect(main_ui_obj_, &MainUI::SignalInitRoleData, this, &MainCtrl::SlotInitRoleData);
 
     // 保存角色基本信息
     connect(role_obj_, &RolePlayer::SignalUpdateRoleInfoDatabase, data_file_, &DataService::SlotSaveRoleInfoToDatabase);
@@ -170,10 +170,12 @@ void MainCtrl::SlotStopFishing()
 
 void MainCtrl::InitRoleInfo()
 {
-    QJsonObject pub_data;
-    pub_data.insert("type", mainCmd::InitRoleInfo);
-    pub_data.insert("data", QJsonObject());
-    onPubTopic(pub_data);
+    QJsonObject data = PublicFunc::PackageRequest(mainCmd::InitLocalRoleInfo,
+                                                  QJsonObject(),
+                                                  "",
+                                                  module_name::data,
+                                                  module_name::main);
+    onActionRequest(data);
 }
 
 void MainCtrl::InitRoleNetworkData()

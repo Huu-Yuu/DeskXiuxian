@@ -104,6 +104,8 @@ protected:
     void run();
 
 private:
+    void ShowMsgToUi(const QString& msg);       ///< 发送信息到UI显示
+    void UpdateRoleUI(const QJsonObject& data);            ///< 更新UI   键-UI枚举  值-更新文本
     static QMutex mutex;  // 互斥锁
     bool m_stopRequested = false;   // 线程停止
     QString role_name_;         // 昵称

@@ -50,9 +50,9 @@ ProgressService::ProgressService()
     basic_att_timer_->setSingleShot(false);
 
     // 将定时器信号与类信号链接
-    connect(jianghu_timer_, SIGNAL(timeout()), this, SIGNAL(SignalJianghuTimeOut()));
-    connect(basic_att_timer_, SIGNAL(timeout()), this, SIGNAL(SignalBasicAttTimeOut()));
-    connect(life_timer_, SIGNAL(timeout()), this, SIGNAL(SignaleLifeUpdataTimeOut()));
+    connect(jianghu_timer_,  &QTimer::timeout, this, &ProgressService::SlotCyclicCultivation);
+    connect(basic_att_timer_, &QTimer::timeout, this, &ProgressService::SlotCyclicBasicAtt);
+    connect(life_timer_, &QTimer::timeout, this, &ProgressService::SlotCyclicLifeUpdate);
 
     qDebug() << "游戏进程控制类 线程ID：" << currentThreadId();
 }
@@ -120,4 +120,28 @@ QTimer* ProgressService::GetJianghuTimer()
 void ProgressService::SetAnecdotesTime_(int time)
 {
     anecdotes_time_ = time;
+}
+
+void ProgressService::SlotCyclicLifeUpdate() {
+    emit SignalActionRequest(PublicFunc::PackageRequest(ProgressCmd::CyclicLifeUpdate,
+                                                        QJsonObject(),
+                                                        "",
+                                                        module_name::role,
+                                                        module_name::progress));
+}
+
+void ProgressService::SlotCyclicCultivation() {
+    emit SignalActionRequest(PublicFunc::PackageRequest(ProgressCmd::CyclicCultivation,
+                                                        QJsonObject(),
+                                                        "",
+                                                        module_name::role,
+                                                        module_name::progress));
+}
+
+void ProgressService::SlotCyclicBasicAtt() {
+    emit SignalActionRequest(PublicFunc::PackageRequest(ProgressCmd::CyclicEnhanceAtt,
+                                                        QJsonObject(),
+                                                        "",
+                                                        module_name::role,
+                                                        module_name::progress));
 }

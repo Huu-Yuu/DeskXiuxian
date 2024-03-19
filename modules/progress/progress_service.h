@@ -46,6 +46,11 @@ signals:
     //状态变化抛给上一级
     void SignalPubTopic(const QJsonObject& pub_data);
 
+public slots:
+    void SlotCyclicLifeUpdate();   ///< 寿命更新
+    void SlotCyclicCultivation();   ///< 循环修炼
+    void SlotCyclicBasicAtt();      ///< 循环增加基本属性
+
 protected:
     void run();
 

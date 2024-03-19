@@ -36,19 +36,38 @@ void RoleManage::SlotActionRequest(const QJsonObject& request_data)
 {
     LOG_DEBUG(kRoleManage, QString("收到外部请求：%1").arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
     QString type = request_data.value("type").toString();
-    if(type.contains(mainCmd::InitRoleInfo))
+    if(type.contains(mainCmd::InitLocalRoleInfo))
     {
         QJsonObject data = request_data.value("data").toObject();
         m_player_->InitLocalRoleInfo(data);
-        emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitRoleInfo,
+        // 更新UI
+        emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitLocalRoleInfo,
                                                             data,
                                                             "",
                                                             module_name::ui,
+                                                            module_name::role));
+        // 更新道具
+        emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitLocalRoleInfo,
+                                                            data,
+                                                            "",
+                                                            module_name::item,
                                                             module_name::role));
     }
     else if(type.contains(uiCmd::UpgradeLevel))
     {
         m_player_->SlotUpgradeLevel();
+    }
+    else if(type.contains(ProgressCmd::CyclicLifeUpdate))
+    {
+        m_player_->SlotLifeUpdate();
+    }
+    else if(type.contains(ProgressCmd::CyclicCultivation))
+    {
+        m_player_->SlotCyclicCultivation();
+    }
+    else if(type.contains(ProgressCmd::CyclicEnhanceAtt))
+    {
+        m_player_->SlotCyclicEnhanceAtt();
     }
 }
 

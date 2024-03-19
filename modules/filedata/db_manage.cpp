@@ -14,10 +14,8 @@ DBManage::DBManage() {
 int DBManage::Init()
 {
     QStringList db_topics = QStringList{dbCmd::SaveRoleEquip, dbCmd::SaveRoleItem, dbCmd::SaveRoleInfo, dbCmd::SaveCoefficient};
-    QStringList main_topics = QStringList{mainCmd::InitRoleInfo};
     QStringList subscribe_topics;
     subscribe_topics += db_topics;
-    subscribe_topics += subscribe_topics;
     LOG_DEBUG(kDataManage, QString("发送订阅主动上报消息：%1").arg(subscribe_topics.join(",").toStdString().c_str()));
     emit SignalSubTopic(kSubType, subscribe_topics);
 }
@@ -34,18 +32,23 @@ void DBManage::SlotActionResponse(const QJsonObject& request_data)
 
 void DBManage::SlotActionRequest(const QJsonObject& request_data)
 {
-
+    LOG_DEBUG(kRoleManage, QString("收到外部请求：%1").arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
+    QString type = request_data.value("type").toString();
+    if(type.contains(mainCmd::InitLocalRoleInfo))
+    {
+        m_service_->InitLocalRoleInfo();
+    }
+    else if(type.contains(mainCmd::InitRemoteRoleInfo))
+    {
+        m_service_->InitRemoteRoleInfo();
+    }
 }
 
 void DBManage::SlotPubTopic(const QJsonObject& topic_data)
 {
     LOG_DEBUG(kDataManage, QString("收到广播信息：%1").arg(QJsonDocument(topic_data).toJson(QJsonDocument::Compact).data()));
     QString type = topic_data.value("type").toString();
-    if(type.contains(mainCmd::InitRoleInfo))
-    {
-        m_service_->InitLocalRoleInfo();
-    }
-    else if(type.contains(dbCmd::SaveRoleEquip))
+    if(type.contains(dbCmd::SaveRoleEquip))
     {
         QJsonObject data = topic_data.value("data").toObject();
         m_service_->SlotSaveRoleEquipToDatabase(data);
