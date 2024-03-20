@@ -41,8 +41,7 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     InitRoleNetworkData();
 #endif
     // 日志输出
-    connect(this, &MainCtrl::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
-    connect(main_ui_obj_, &MainUI::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
+//    connect(this, &MainCtrl::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
 
     // 绑定修炼
 //    connect(game_obj_, &ProgressService::SignaleLifeUpdataTimeOut, role_obj_, &RolePlayer::SlotLifeUpdate);
@@ -61,12 +60,12 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
     // 保存角色基本信息
 //    connect(role_obj_, &RolePlayer::SignalUpdateRoleInfoDatabase, data_file_, &DataService::SlotSaveRoleInfoToDatabase);
 //    connect(role_obj_, &RolePlayer::SignalUpdateRoleItemDatabase, data_file_, &DataService::SlotSaveRoleItemToDatabase);
-    connect(role_obj_, &RolePlayer::SignalUpdateEquipItemDatabase, data_file_, &DataService::SlotSaveRoleEquipToDatabase);
-    connect(role_obj_, &RolePlayer::SignalUpdateRoleCoefficientDatabase, data_file_, &DataService::SlotSaveRoleCoefficientToDatabase);
+//    connect(role_obj_, &RolePlayer::SignalUpdateEquipItemDatabase, data_file_, &DataService::SlotSaveRoleEquipToDatabase);
+//    connect(role_obj_, &RolePlayer::SignalUpdateRoleCoefficientDatabase, data_file_, &DataService::SlotSaveRoleCoefficientToDatabase);
 
     // 消息发送到窗口
-    connect(role_obj_, &RolePlayer::SignalShowMsgToUI, main_ui_obj_, &MainUI::SlotShowMsg);
-    connect(this, &MainCtrl::SignalShowMsgToUI, main_ui_obj_, &MainUI::SlotShowMsg);
+//    connect(role_obj_, &RolePlayer::SignalShowMsgToUI, main_ui_obj_, &MainUI::SlotShowMsg);
+//    connect(this, &MainCtrl::SignalShowMsgToUI, main_ui_obj_, &MainUI::SlotShowMsg);
 }
 
 MainCtrl::~MainCtrl()
@@ -119,7 +118,7 @@ void MainCtrl::SlotStartFishing()
     // 输出角色当前事件系数
     int seconds_info = game_obj_->GetAnecdotesTime() / 1000;
     int seconds_att = game_obj_->GetAttTime() / 1000;
-    emit SignalShowMsgToUI(QString("当前基本事件循环周期为：%1秒，属性事件循环周期为：%2秒").arg(seconds_info).arg(seconds_att));
+//    emit SignalShowMsgToUI(QString("当前基本事件循环周期为：%1秒，属性事件循环周期为：%2秒").arg(seconds_info).arg(seconds_att));
 
 }
 

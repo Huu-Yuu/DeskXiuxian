@@ -10,11 +10,11 @@ MainUI::MainUI(QWidget* parent)
     // 初始化成员变量
     logger_obj_ = Logger::getInstance();
     data_file_ = DataService::getInstance();
-    role_item_ = ItemService::getInstance();
     login_obj_ = new LoginWindow;
     modify_obj_ = new ModifyRoleName;
     process = new QProcess;
 
+    connect(this, &MainUI::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
     connect(login_obj_, &LoginWindow::SignalLoginSuccessful, this, &MainUI::SlotLoginSuccessful);
     connect(modify_obj_, &ModifyRoleName::SignalRenameSuccessful, this, &MainUI::SlotRenameSuccessful);
 

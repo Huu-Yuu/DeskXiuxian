@@ -517,7 +517,8 @@ bool RolePlayer::CheckExpIsUpgrade()
 {
     if(role_LV_ == XIAN)
     {
-        emit SignalShowMsgToUI("仙界大能已到世间修为尽头，无法继续突破");
+//        emit SignalShowMsgToUI("仙界大能已到世间修为尽头，无法继续突破");
+        ShowMsgToUi("仙界大能已到世间修为尽头，无法继续突破");
         return false;
     }
     // 判断当前经验值是否满足下一级的条件
@@ -550,7 +551,8 @@ void RolePlayer::GetBreakthroughReward()
             role_hp_ < 300 ? role_hp_ = 300 :  role_hp_ += 300;
             role_prestige_ < 50 ? role_prestige_ = 50 : role_prestige_ += 20;
             role_item_->GetItemMoney() < 50 ? role_item_->SetItemMoney(50) :  role_item_->SetItemMoney(100);
-            emit SignalShowMsgToUI("恭喜道友渡劫成功！属性获得提升，灵石初始化为 100");
+//            emit SignalShowMsgToUI("恭喜道友渡劫成功！属性获得提升，灵石初始化为 100");
+            ShowMsgToUi("恭喜道友渡劫成功！属性获得提升，灵石初始化为 100");
             return;;
         }
         case LIANQI:
@@ -627,17 +629,25 @@ void RolePlayer::GetBreakthroughReward()
         }
         case XIAN:
         default:
-            emit SignalShowMsgToUI("突破出现错误，不改变属性值");
+//            emit SignalShowMsgToUI("突破出现错误，不改变属性值");
+            ShowMsgToUi("突破出现错误，不改变属性值");
     }
 
     QString msg = "，攻击力+" + QString::number(role_agg_ - agg) + "，防御力+" +
                   QString::number(role_def_ - def) + "，血量+" + QString::number(role_hp_ - hp) + "，声望+" + QString::number(role_prestige_ - prestige);
-    emit SignalShowMsgToUI("恭喜道友渡劫成功！属性获得大量提升" + msg);
+//    emit SignalShowMsgToUI("恭喜道友渡劫成功！属性获得大量提升" + msg);
+    ShowMsgToUi("恭喜道友渡劫成功！属性获得大量提升" + msg);
     // 更新角色相关UI面板
-    emit SignalUpdateUI(kRoleAgg, QString::number(role_agg_));
-    emit SignalUpdateUI(kRoleDef, QString::number(role_def_));
-    emit SignalUpdateUI(kRoleHp, QString::number(role_hp_));
-    emit SignalUpdateUI(kRolePrestige, QString::number(role_prestige_));
+//    emit SignalUpdateUI(kRoleAgg, QString::number(role_agg_));
+//    emit SignalUpdateUI(kRoleDef, QString::number(role_def_));
+//    emit SignalUpdateUI(kRoleHp, QString::number(role_hp_));
+//    emit SignalUpdateUI(kRolePrestige, QString::number(role_prestige_));
+    QJsonObject ui_obj;
+    ui_obj.insert(QString::number(kRoleAgg), QString::number(role_agg_));
+    ui_obj.insert(QString::number(kRoleDef), QString::number(role_def_));
+    ui_obj.insert(QString::number(kRoleHp), QString::number(role_hp_));
+    ui_obj.insert(QString::number(kRolePrestige), QString::number(role_prestige_));
+    UpdateRoleUI(ui_obj);
 }
 
 void RolePlayer::GetBreakthroughPenalty()
@@ -731,7 +741,8 @@ void RolePlayer::GetBreakthroughPenalty()
         }
         case XIAN:
         default:
-            emit SignalShowMsgToUI("突破出现错误，不改变属性值");
+//            emit SignalShowMsgToUI("突破出现错误，不改变属性值");
+            ShowMsgToUi("突破出现错误，不改变属性值");
             break;
     }
     role_agg_ -= loss_agg;
@@ -741,10 +752,16 @@ void RolePlayer::GetBreakthroughPenalty()
     QString msg = "，攻击力-" + QString::number(loss_agg) + "，防御力-" +
                   QString::number(loss_def) + "，血量-" + QString::number(loss_hp) + "，经验值-"  +  QString::number(loss_exp);
     emit SignalShowMsgToUI("道友渡劫失败，被雷劫击伤，身体被重创" + msg);
+    ShowMsgToUi("道友渡劫失败，被雷劫击伤，身体被重创" + msg);
     // 更新角色相关UI面板
-    emit SignalUpdateUI(kRoleAgg, QString::number(role_agg_));
-    emit SignalUpdateUI(kRoleDef, QString::number(role_def_));
-    emit SignalUpdateUI(kRoleHp, QString::number(role_hp_));
+//    emit SignalUpdateUI(kRoleAgg, QString::number(role_agg_));
+//    emit SignalUpdateUI(kRoleDef, QString::number(role_def_));
+//    emit SignalUpdateUI(kRoleHp, QString::number(role_hp_));
+    QJsonObject ui_obj;
+    ui_obj.insert(QString::number(kRoleAgg), QString::number(role_agg_));
+    ui_obj.insert(QString::number(kRoleDef), QString::number(role_def_));
+    ui_obj.insert(QString::number(kRoleHp), QString::number(role_hp_));
+    UpdateRoleUI(ui_obj);
 }
 
 bool RolePlayer::SurviveDisaster()
@@ -838,14 +855,24 @@ bool RolePlayer::SurviveDisaster()
 
 void RolePlayer::UpdateAllUI()
 {
-    emit SignalUpdateUI(kRoleName, role_name_);
-    emit SignalUpdateUI(kRoleLife, QString::number(role_life_));
-    emit SignalUpdateUI(kRoleCultivation, GetCultivationName(role_LV_));
-    emit SignalUpdateUI(kRoleExp, QString::number(role_cur_exp_));
-    emit SignalUpdateUI(kRoleAgg, QString::number(role_agg_));
-    emit SignalUpdateUI(kRoleDef, QString::number(role_def_));
-    emit SignalUpdateUI(kRoleHp, QString::number(role_hp_));
-    emit SignalUpdateUI(kRolePrestige, QString::number(role_prestige_));
+//    emit SignalUpdateUI(kRoleName, role_name_);
+//    emit SignalUpdateUI(kRoleLife, QString::number(role_life_));
+//    emit SignalUpdateUI(kRoleCultivation, GetCultivationName(role_LV_));
+//    emit SignalUpdateUI(kRoleExp, QString::number(role_cur_exp_));
+//    emit SignalUpdateUI(kRoleAgg, QString::number(role_agg_));
+//    emit SignalUpdateUI(kRoleDef, QString::number(role_def_));
+//    emit SignalUpdateUI(kRoleHp, QString::number(role_hp_));
+//    emit SignalUpdateUI(kRolePrestige, QString::number(role_prestige_));
+    QJsonObject ui_obj;
+    ui_obj.insert(QString::number(kRoleName), role_name_);
+    ui_obj.insert(QString::number(kRoleLife), QString::number(role_life_));
+    ui_obj.insert(QString::number(kRoleCultivation), GetCultivationName(role_LV_));
+    ui_obj.insert(QString::number(kRoleExp), QString::number(role_cur_exp_));
+    ui_obj.insert(QString::number(kRoleAgg), QString::number(role_agg_));
+    ui_obj.insert(QString::number(kRoleDef), QString::number(role_def_));
+    ui_obj.insert(QString::number(kRoleHp), QString::number(role_hp_));
+    ui_obj.insert(QString::number(kRolePrestige), QString::number(role_prestige_));
+    UpdateRoleUI(ui_obj);
 }
 
 void RolePlayer::SaveRoleInfo()
@@ -865,11 +892,10 @@ void RolePlayer::SaveRoleInfo()
     role_info_data.insert("role_aptitude", aptitude_);
     // 发送更新数据库信号
 //    emit SignalUpdateRoleInfoDatabase(role_info_data);
-    emit SignalActionRequest(PublicFunc::PackageRequest(dbCmd::SaveRoleInfo,
-                                                        role_info_data,
-                                                        "",
-                                                        module_name::data,
-                                                        module_name::role));
+    QJsonObject pub_obj;
+    pub_obj.insert("type", dbCmd::SaveRoleInfo);
+    pub_obj.insert("data", role_info_data);
+    emit SignalPubTopic(pub_obj);
 }
 
 void RolePlayer::SaveRoleItem()
@@ -929,7 +955,11 @@ void RolePlayer::SaveRoleEquip(RoleEquipAreaEnum area, RoleItemEnum item_enum)
             break;
     }
     role_item_data.insert(area_str, QString::number(item_enum));
-    emit SignalUpdateEquipItemDatabase(role_item_data);
+//    emit SignalUpdateEquipItemDatabase(role_item_data);
+    QJsonObject pub_obj;
+    pub_obj.insert("type", dbCmd::SaveRoleEquip);
+    pub_obj.insert("data", role_item_data);
+    emit SignalPubTopic(pub_obj);
 }
 
 void RolePlayer::SaveCoefficient()
@@ -938,13 +968,18 @@ void RolePlayer::SaveCoefficient()
     QJsonObject role_coefficient_data;
     role_coefficient_data.insert("role_name", role_name_);
     role_coefficient_data.insert("RC_life", RC_Life_);
-    role_coefficient_data.insert("RC_basicEvent", 1);
-    role_coefficient_data.insert("RC_attEvent", 1);
-    role_coefficient_data.insert("RC_surviveDisaster", RC_SurviveDisaster_);
-    role_coefficient_data.insert("RC_prestigeEvent", 1);
-    role_coefficient_data.insert("RC_specialEvent", 1);
+    role_coefficient_data.insert("RC_basic_event", 1);
+    role_coefficient_data.insert("RC_att_event", 1);
+    role_coefficient_data.insert("RC_survive_disaster", RC_SurviveDisaster_);
+    role_coefficient_data.insert("RC_prestige_event", 1);
+    role_coefficient_data.insert("RC_special_event", 1);
     // 发送更新角色属性系数数据库信号
-    emit SignalUpdateRoleCoefficientDatabase(role_coefficient_data);
+//    emit SignalUpdateRoleCoefficientDatabase(role_coefficient_data);
+
+    QJsonObject pub_obj;
+    pub_obj.insert("type", dbCmd::SaveCoefficient);
+    pub_obj.insert("data", role_coefficient_data);
+    emit SignalPubTopic(pub_obj);
 }
 
 void RolePlayer::SlotLifeUpdate()
@@ -1069,9 +1104,12 @@ void RolePlayer::SlotCyclicCultivation()
     SaveCoefficient();
 
     // 发送信号，发送事件信息，更新UI、数据库
-    emit SignalShowMsgToUI(msg);
-
-    emit SignalUpdateUI(kRoleExp, QString::number(role_cur_exp_));
+//    emit SignalShowMsgToUI(msg);
+    ShowMsgToUi(msg);
+//    emit SignalUpdateUI(kRoleExp, QString::number(role_cur_exp_));
+    QJsonObject ui_obj;
+    ui_obj.insert(QString::number(kRoleExp), QString::number(role_cur_exp_));
+    UpdateRoleUI(ui_obj);
 }
 
 void RolePlayer::SlotCyclicEnhanceAtt()

@@ -95,7 +95,6 @@ private:
     Ui::MainUI* ui;
     Logger* logger_obj_;
     DataService* data_file_;
-    ItemService* role_item_; // 角色道具
     LoginWindow* login_obj_;    // 登录器
     ModifyRoleName* modify_obj_;    // 角色名修改窗口
 };

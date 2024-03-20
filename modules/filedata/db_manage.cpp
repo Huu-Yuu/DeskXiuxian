@@ -42,16 +42,6 @@ void DBManage::SlotActionRequest(const QJsonObject& request_data)
     {
         m_service_->InitRemoteRoleInfo();
     }
-    else if(type.contains(dbCmd::SaveRoleInfo))
-    {
-        QJsonObject data = request_data.value("data").toObject();
-        m_service_->SlotSaveRoleInfoToDatabase(data);
-    }
-    else if(type.contains(dbCmd::SaveRoleItem))
-    {
-        QJsonObject data = request_data.value("data").toObject();
-        m_service_->SlotSaveRoleItemToDatabase(data);
-    }
 }
 
 void DBManage::SlotPubTopic(const QJsonObject& topic_data)
@@ -63,10 +53,19 @@ void DBManage::SlotPubTopic(const QJsonObject& topic_data)
         QJsonObject data = topic_data.value("data").toObject();
         m_service_->SlotSaveRoleEquipToDatabase(data);
     }
-
+    else if(type.contains(dbCmd::SaveRoleInfo))
+    {
+        QJsonObject data = topic_data.value("data").toObject();
+        m_service_->SlotSaveRoleInfoToDatabase(data);
+    }
     else if(type.contains(dbCmd::SaveCoefficient))
     {
         QJsonObject data = topic_data.value("data").toObject();
         m_service_->SlotSaveRoleCoefficientToDatabase(data);
+    }
+    else if(type.contains(dbCmd::SaveRoleItem))
+    {
+        QJsonObject data = topic_data.value("data").toObject();
+        m_service_->SlotSaveRoleItemToDatabase(data);
     }
 }

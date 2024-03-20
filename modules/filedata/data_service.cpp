@@ -482,8 +482,8 @@ void DataService::WriteRoleEquipToLocalDatabase()
 {
     if(m_database_.isOpen())
     {
-        QString roleName = role_item_data_.value("role_name").toString();
-        role_item_data_.remove("role_name");
+        QString roleName = role_equip_data_.value("role_name").toString();
+        role_equip_data_.remove("role_name");
 
         QSqlQuery query(m_database_);
         // 开始构建更新查询语句
