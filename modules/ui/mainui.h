@@ -100,7 +100,6 @@ private:
     QProcess* process;  // 用于关闭窗口时杀死所有进程
     Ui::MainUI* ui;
     Logger* logger_obj_;
-    DataService* data_file_;
     LoginWindow* login_obj_;    // 登录器
     ModifyRoleName* modify_obj_;    // 角色名修改窗口
 };

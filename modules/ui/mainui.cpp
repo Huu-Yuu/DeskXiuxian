@@ -9,7 +9,6 @@ MainUI::MainUI(QWidget* parent)
     ui->setupUi(this);
     // 初始化成员变量
     logger_obj_ = Logger::getInstance();
-    data_file_ = DataService::getInstance();
     login_obj_ = new LoginWindow;
     modify_obj_ = new ModifyRoleName;
     process = new QProcess;
@@ -82,12 +81,18 @@ void MainUI::closeEvent(QCloseEvent* event)
                                                         "",
                                                         module_name::data,
                                                         module_name::ui));
-    // 杀死所有进程
-    QString command = "taskkill /F /IM DeskXiuxian.exe";
-    process->start(command);
-    process->waitForFinished();
+    AddMessage("正在退出仙界");
+    QTimer::singleShot(2000, this, [event, this]{
+        // 杀死所有进程
+        QString command = "taskkill /F /IM DeskXiuxian.exe";
+        process->start(command);
+        process->waitForFinished();
 
-    QMainWindow::closeEvent(event);
+        QMainWindow::closeEvent(event);
+    });
+
+
+
 }
 
 void MainUI::AddMessage(QString msg)
