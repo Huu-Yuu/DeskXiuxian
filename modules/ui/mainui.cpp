@@ -237,28 +237,11 @@ void MainUI::SlotShowMsg(QString msg)
 void MainUI::SlotLoginSuccessful()
 {
     CloseLoginWidget();
-    int result = data_file_->CheckUserLogginIsFist();
-    switch (result)
-    {
-        case 0: // 非首次登录
-        {
-//            emit SignalInitRoleData();
-            emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitRemoteRoleInfo,
-                                                                QJsonObject(),
-                                                                "",
-                                                                module_name::data,
-                                                                module_name::ui));
-            show();
-            break;
-        }
-        case 1: // 首次登录显示改名窗口
-        {
-            ShowModifyNameWidget();
-            break;
-        }
-        default:
-            break;
-    }
+    emit SignalLogOut(QtInfoMsg, QMessageLogContext(), "正在检查是否首次登录");
+    emit SignalActionRequest(PublicFunc::PackageRequest(dbCmd::CheckLogInFist,
+                                                        QJsonObject(), "",
+                                                        module_name::data,
+                                                        module_name::ui));
 }
 
 void MainUI::SlotRenameSuccessful()
@@ -338,5 +321,48 @@ void MainUI::UpdateRoleUI(const QJsonObject& data) {
     {
         QString new_data = data.value(key).toString();
         SlotUpdateUI((RoleUIEnum)key.toInt(), new_data);
+    }
+}
+
+void MainUI::FistLogInDeal(int result) {
+    switch (result)
+    {
+        case 0: // 非首次登录
+        {
+            emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitRemoteRoleInfo,
+                                                                QJsonObject(),
+                                                                "",
+                                                                module_name::data,
+                                                                module_name::ui));
+            show();
+            break;
+        }
+        case 1: // 首次登录显示改名窗口
+        {
+            ShowModifyNameWidget();
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+void MainUI::AutomaticLogin(int result) {
+    switch (result) {
+        case 1:
+            qDebug() << "自动登录，获取角色数据";
+            emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitRemoteRoleInfo,
+                                                                QJsonObject(),
+                                                                "",
+                                                                module_name::data,
+                                                                module_name::ui));
+            show();
+            break;
+        case 0:
+            // 进入登录、注册界面
+            ShowLoginWidget();
+            break;
+        default:
+            LOG_DEBUG(kUIManage,"自动登录检测错误结果");
     }
 }

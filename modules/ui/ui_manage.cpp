@@ -21,8 +21,20 @@ int UIManage::Init() {
     return 0;
 }
 
-void UIManage::SlotActionResponse(const QJsonObject &request_data) {
-
+void UIManage::SlotActionResponse(const QJsonObject &response_data) {
+    LOG_DEBUG(kUIManage, QString("收到外部应答：%1").arg(QJsonDocument(response_data).toJson(QJsonDocument::Compact).data()));
+    QString type = response_data.value("type").toString();
+    QJsonObject data_obj = response_data.value("data").toObject();
+    if(type.contains(dbCmd::CheckLogInFist))
+    {
+        int result = data_obj.value("result").toInt();
+        m_service_->FistLogInDeal(result);
+    }
+    else if(type.contains(mainCmd::AutomaticLogin))
+    {
+        int result = data_obj.value("result").toInt();
+        m_service_->AutomaticLogin(result);
+    }
 }
 
 void UIManage::SlotActionRequest(const QJsonObject &request_data) {
@@ -62,9 +74,17 @@ void UIManage::SlotActionRequest(const QJsonObject &request_data) {
         role_equic_data = data_obj.value("role_equic_data").toObject();
         m_service_->InitRoleUI(role_info_data, role_item_data, role_rc_data, role_equic_data);
     }
+    else if(type.contains(uiCmd::ShowMainUI))
+    {
+        m_service_->show();
+    }
+    else if(type.contains(uiCmd::ShowLoginWidget))
+    {
+        m_service_->ShowLoginWidget();
+    }
 }
 
-void UIManage::SlotPubTopic(const QJsonObject &status) {
+void UIManage::SlotPubTopic(const QJsonObject &topic_data) {
 
 }
 

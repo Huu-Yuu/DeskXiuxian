@@ -142,9 +142,9 @@ int DataService::AccountRegistration(QString user_name, QString pass_word, QStri
     return result;
 }
 
-bool DataService::AutomaticLogin()
+int DataService::AutomaticLogin()
 {
-    bool result = false;
+    int result = 0;
     // 先获取本地保存的账号密码
     QString user_name = GetSettingUserName();
     QString pass_word = GetSettingPassWord();
@@ -155,15 +155,15 @@ bool DataService::AutomaticLogin()
     if(LoginVerification(user_name, pass_word) == 1)
     {
         user_uuid_ = GetUserUUID(user_name, pass_word);
+        if(user_uuid_ != "")
+        {
+            LOG_DEBUG(kDataManage, "账号校验成功，获取UUID");
+            result = 1;
+        }
     }
     else
     {
         LOG_DEBUG(kDataManage, "账号校验不通过，跳过自动登录");
-    }
-    if(user_uuid_ != "")
-    {
-        LOG_DEBUG(kDataManage, "账号校验成功，获取UUID");
-        result = true;
     }
     return result;;
 }

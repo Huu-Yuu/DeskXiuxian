@@ -28,12 +28,13 @@ int main(int argc, char* argv[])
         }
     }
     MainCtrl* main_ctrl = new MainCtrl;
-#if DATABASE_TYPE == 1
+#if DATABASE_TYPE == 0
+    main_ctrl->CheckAutoLogIn();
+#elif DATABASE_TYPE == 1
     main_ctrl->ShowMainUi();
-#elif DATABASE_TYPE == 0
-
+    main_ctrl->InitRoleInfo();
 #elif DATABASE_TYPE == 2
-
+    main_ctrl->InitRoleNetworkData();
 #endif
 
     a.exec();

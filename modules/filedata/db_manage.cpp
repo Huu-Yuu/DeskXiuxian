@@ -42,6 +42,32 @@ void DBManage::SlotActionRequest(const QJsonObject& request_data)
     {
         m_service_->InitRemoteRoleInfo();
     }
+    else if(type.contains(dbCmd::CheckLogInFist))
+    {
+        int result = m_service_->CheckUserLogginIsFist();   ///< 0-非首次登录  1-首次登录
+        QJsonObject data_obj;
+        data_obj.insert("result", result);
+        emit SignalActionResponse(PublicFunc::PackageResponse(dbCmd::CheckLogInFist,
+                                                              request_data.value("id").toString(),
+                                                              0,
+                                                              data_obj,
+                                                              QJsonObject(),
+                                                              request_data.value("ori").toString(),
+                                                              module_name::data));
+    }
+    else if(type.contains(mainCmd::AutomaticLogin))
+    {
+        int result = m_service_->AutomaticLogin();
+        QJsonObject data_obj;
+        data_obj.insert("result", result);
+        emit SignalActionResponse(PublicFunc::PackageResponse(mainCmd::AutomaticLogin,
+                                                              request_data.value("id").toString(),
+                                                              0,
+                                                              data_obj,
+                                                              QJsonObject(),
+                                                              request_data.value("ori").toString(),
+                                                              module_name::data));
+    }
 }
 
 void DBManage::SlotPubTopic(const QJsonObject& topic_data)

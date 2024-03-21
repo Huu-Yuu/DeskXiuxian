@@ -13,9 +13,9 @@ public:
     int Init() override;
 
 public slots:
-    void SlotActionResponse(const QJsonObject& request_data) override;
+    void SlotActionResponse(const QJsonObject& response_data) override;
     void SlotActionRequest(const QJsonObject& request_data) override;
-    void SlotPubTopic(const QJsonObject& status) override;
+    void SlotPubTopic(const QJsonObject& topic_data) override;
 
 private:
     void UpdateUi(const QJsonObject& role_data);

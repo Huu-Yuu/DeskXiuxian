@@ -57,16 +57,20 @@ namespace dbCmd
     const QString SaveRoleItem = "SaveRoleItem";    ///< 保存物品
     const QString SaveRoleInfo = "SaveRoleInfo";    ///< 保存基本信息
     const QString SaveCoefficient = "SaveCoefficient";    ///< 保存属性系数
+    const QString CheckLogInFist = "CheckLogInFist";    ///< 检测是否首次登录
 }
 
 namespace mainCmd
 {
     const QString InitLocalRoleInfo = "InitLocalRoleInfo";    ///< 初始化本地角色信息
     const QString InitRemoteRoleInfo = "InitRemoteRoleInfo";    ///< 初始化远程角色信息
+    const QString AutomaticLogin = "AutomaticLogin";    ///< 自动登录
 }
 
 namespace uiCmd
 {
+    const QString ShowMainUI = "ShowMainUI";  ///< 显示主界面
+    const QString ShowLoginWidget = "ShowLoginWidget";  ///< 显示登录窗口
     const QString InitRoleUI = "InitRoleUI";    ///< 初始化角色UI
     const QString ShowMsgToUI = "ShowMsgToUI";  ///< 显示信息到UI
     const QString DisableCultivaUpButton = "DisableCultivaUpButton";  ///< 禁用突破按钮

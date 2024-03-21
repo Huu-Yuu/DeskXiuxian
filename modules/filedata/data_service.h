@@ -72,7 +72,7 @@ public:
      * @return 1-修改成功 0-修改失败 -1-数据库操作失败
      */
     int ModifyRoleName(const QString new_name);
-    bool AutomaticLogin();  ///< 自动登录
+    int AutomaticLogin();  ///< 自动登录
     QString GetUserUUID(const QString user_name, const QString pass_word);  ///< 获取用户UUID
 
     /**

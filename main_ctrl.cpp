@@ -10,161 +10,30 @@ MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
 {
     //注册MessageHandler(注意要有日志文件夹)
 //    qInstallMessageHandler(Logger::OutputMessageHandler);
-    data_file_ = DataService::getInstance();
-    main_ui_obj_ = MainUI::getInstance();
-    logger_obj_ = Logger::getInstance();
-    game_obj_ = ProgressService::getInstance();
-    role_obj_ = RolePlayer::getInstance();
-    role_item_ = ItemService::getInstance();
+//    data_file_ = DataService::getInstance();
+//    main_ui_obj_ = MainUI::getInstance();
+//    logger_obj_ = Logger::getInstance();
+//    game_obj_ = ProgressService::getInstance();
+//    role_obj_ = RolePlayer::getInstance();
+//    role_item_ = ItemService::getInstance();
     InitObj();
     InitConnect();
     InitFun();
 
-#if DATABASE_TYPE == 0
-    // 获取本地登录记录，检查是否可以自动登录
-    if(data_file_->AutomaticLogin())
-    {
-        qDebug() << "自动登录，获取角色数据";
-        SlotInitRoleData();
-        main_ui_obj_->show();
-    }
-    else
-    {
-        // 进入登录、注册界面
-        main_ui_obj_->ShowLoginWidget();
-    }
-#elif DATABASE_TYPE == 1
-    // 初始化UI和角色数据
-    InitRoleInfo();
-#elif DATABASE_TYPE == 2
-    // 初始化角色网络资料
-    InitRoleNetworkData();
-#endif
-    // 日志输出
-//    connect(this, &MainCtrl::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
-
-    // 绑定修炼
-//    connect(game_obj_, &ProgressService::SignaleLifeUpdataTimeOut, role_obj_, &RolePlayer::SlotLifeUpdate);
-//    connect(game_obj_, &ProgressService::SignalJianghuTimeOut, role_obj_, &RolePlayer::SlotCyclicCultivation);
-//    connect(game_obj_, &ProgressService::SignalBasicAttTimeOut, role_obj_, &RolePlayer::SlotCyclicEnhanceAtt);
-//    connect(main_ui_obj_, &MainUI::SignalUpgradeLevel, role_obj_, &RolePlayer::SlotUpgradeLevel);
-//    connect(main_ui_obj_, &MainUI::SignalStartFishing, this, &MainCtrl::SlotStartFishing);
-//    connect(main_ui_obj_, &MainUI::SignalStopFishing, this, &MainCtrl::SlotStopFishing);
-
-    // 更新UI
-//    connect(role_obj_, &RolePlayer::SignalUpdateUI, main_ui_obj_, &MainUI::SlotUpdateUI);
-//    connect(role_obj_, &RolePlayer::SignalActivateCultivaUpButton, main_ui_obj_, &MainUI::SlotActivateCultivaUpButton);
-//    connect(role_obj_, &RolePlayer::SignalDisableCultivaUpButton, main_ui_obj_, &MainUI::SlotDisableCultivaUpButton);
-//    connect(main_ui_obj_, &MainUI::SignalInitRoleData, this, &MainCtrl::SlotInitRoleData);
-
-    // 保存角色基本信息
-//    connect(role_obj_, &RolePlayer::SignalUpdateRoleInfoDatabase, data_file_, &DataService::SlotSaveRoleInfoToDatabase);
-//    connect(role_obj_, &RolePlayer::SignalUpdateRoleItemDatabase, data_file_, &DataService::SlotSaveRoleItemToDatabase);
-//    connect(role_obj_, &RolePlayer::SignalUpdateEquipItemDatabase, data_file_, &DataService::SlotSaveRoleEquipToDatabase);
-//    connect(role_obj_, &RolePlayer::SignalUpdateRoleCoefficientDatabase, data_file_, &DataService::SlotSaveRoleCoefficientToDatabase);
-
-    // 消息发送到窗口
-//    connect(role_obj_, &RolePlayer::SignalShowMsgToUI, main_ui_obj_, &MainUI::SlotShowMsg);
-//    connect(this, &MainCtrl::SignalShowMsgToUI, main_ui_obj_, &MainUI::SlotShowMsg);
 }
 
 MainCtrl::~MainCtrl()
 {
-    if(data_file_ != nullptr)
-    {
-        delete data_file_;
-        data_file_ = nullptr;
-    }
-    if(main_ui_obj_ != nullptr)
-    {
-        delete main_ui_obj_;
-        main_ui_obj_ = nullptr;
-    }
-    if(role_obj_ != nullptr)
-    {
-        delete role_obj_;
-        role_obj_ = nullptr;
-    }
-    if(logger_obj_ != nullptr)
-    {
-        delete logger_obj_;
-        logger_obj_ = nullptr;
-    }
-    if(game_obj_ != nullptr)
-    {
-        // 清理游戏进程类 ———————— 线程非安全退出-待处理
-        game_obj_->quit();
-        game_obj_->wait();
-        delete game_obj_;
-        game_obj_ = nullptr;
-    }
-}
 
-void MainCtrl::StartFishing()
-{
-    // 开始倒计时：
-    game_obj_->start();
 }
 
 void MainCtrl::ShowMainUi()
 {
-    main_ui_obj_->show();
-}
-
-void MainCtrl::SlotStartFishing()
-{
-    game_obj_->StarPractic();
-    role_obj_->CheckExpIsUpgrade();
-    // 输出角色当前事件系数
-    int seconds_info = game_obj_->GetAnecdotesTime() / 1000;
-    int seconds_att = game_obj_->GetAttTime() / 1000;
-//    emit SignalShowMsgToUI(QString("当前基本事件循环周期为：%1秒，属性事件循环周期为：%2秒").arg(seconds_info).arg(seconds_att));
-
-}
-
-void MainCtrl::SlotInitRoleData()
-{
-    QJsonObject role_info_data = data_file_->GetRemoteRoleInfo();
-    QJsonObject role_rc_data = data_file_->GetRemoteRoleRC();
-    QJsonObject role_equip_data = data_file_->GetRemoteRoleEquip();
-    QJsonObject role_item_data = data_file_->GetRemoteRoleItem();
-    // 更新UI
-    main_ui_obj_->InitRoleUI(role_info_data, role_item_data, role_rc_data, role_equip_data);
-    // 更新角色基本信息
-    int cultivation = role_info_data.value("role_lv").toString().toInt();
-    role_obj_->SetRoleName(role_info_data.value("role_name").toString());
-    role_obj_->SetRoleLife(role_info_data.value("role_life").toString().toInt());
-    role_obj_->SetRoleBaseAtt(kRolePrestigeAtt, role_info_data.value("role_prestige").toString().toInt());
-    role_obj_->SetRoleBaseAtt(kRoleLvAtt, cultivation);
-    role_obj_->SetRoleBaseAtt(kRoleExpAtt, role_info_data.value("role_cur_exp").toString().toInt());
-    role_obj_->SetRoleBaseAtt(kRoleMaxExpAtt, role_info_data.value("role_exp").toString().toInt());
-    role_obj_->SetRoleBaseAtt(kRoleAggAtt, role_info_data.value("role_agg").toString().toInt());
-    role_obj_->SetRoleBaseAtt(kRoleDefAtt, role_info_data.value("role_def").toString().toInt());
-    role_obj_->SetRoleBaseAtt(kRoleHpAtt, role_info_data.value("role_hp").toString().toInt());
-    // 更新装备
-//    m_player_->SetEquipWeapon();
-//    m_player_->SetEquipMagic();
-//    m_player_->SetEquipHelmet();
-//    m_player_->SetEquipClothing();
-//    m_player_->SetEquipBritches();
-//    m_player_->SetEquipShoe();
-//    m_player_->SetEquipJewelry();
-    // 更新角色道具
-    role_item_->SetItemMoney(role_item_data.value("role_money").toString().toInt());
-//    role_item_->SetItemRenameCard(role_item_data_.value("role_money").toString().toInt());
-
-    // 更新角各项属性系数
-    role_obj_->SetLifeCoefficient(role_rc_data.value("rc_life").toString().toInt());
-    role_obj_->SetSurviveDisaster(role_rc_data.value("rc_survive_disaster").toString().toInt());
-
-    role_obj_->UpdataMaxRoleLife();     // 更新最大寿命
-    role_obj_->UpdateEextGradeEXP();    // 更新升级需要的经验
-    role_obj_->CheckExpIsUpgrade();     // 更新是否可以升级
-}
-
-void MainCtrl::SlotStopFishing()
-{
-    game_obj_->StopPractic();
+    onActionRequest(PublicFunc::PackageRequest(uiCmd::ShowMainUI,
+                                               QJsonObject(),
+                                               "",
+                                               module_name::ui,
+                                               module_name::main));
 }
 
 void MainCtrl::InitRoleInfo()
@@ -180,7 +49,11 @@ void MainCtrl::InitRoleInfo()
 void MainCtrl::InitRoleNetworkData()
 {
     // 账号校验不通过，显示注册页面
-    main_ui_obj_->ShowLoginWidget();
+    onActionRequest(PublicFunc::PackageRequest(uiCmd::ShowLoginWidget,
+                                               QJsonObject(),
+                                               "",
+                                               module_name::ui,
+                                               module_name::main));
     // 账号校验通过，显示运行界面
 //    main_ui_obj_->ShowModifyNameWidget();
 }
@@ -354,4 +227,36 @@ void MainCtrl::onActionResponse(const QJsonObject &request_data) {
     {
         LOG_DEBUG(kMainCtrl, QString("[main] 无法处理回复：%1").arg(type));
     }
+}
+
+void MainCtrl::AutomaticLogin(int result) {
+    switch (result) {
+        case 1:
+            qDebug() << "自动登录，获取角色数据";
+            onActionRequest(PublicFunc::PackageRequest(mainCmd::InitRemoteRoleInfo,
+                                                       QJsonObject(),
+                                                       "",
+                                                       module_name::data,
+                                                       module_name::ui));
+            ShowMainUi();
+            break;
+        case 0:
+            // 进入登录、注册界面
+            onActionRequest(PublicFunc::PackageRequest(uiCmd::ShowLoginWidget,
+                                                       QJsonObject(),
+                                                       "",
+                                                       module_name::ui,
+                                                       module_name::main));
+            break;
+    }
+
+}
+
+void MainCtrl::CheckAutoLogIn() {
+    // 获取本地登录记录，检查是否可以自动登录
+    onActionRequest(PublicFunc::PackageRequest(mainCmd::AutomaticLogin,
+                                               QJsonObject(),
+                                               "",
+                                               module_name::data,
+                                               module_name::ui));
 }

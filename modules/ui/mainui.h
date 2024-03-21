@@ -52,6 +52,8 @@ public:
 
     void UpdateRoleUI(const QJsonObject& data);    ///< 更新角色信息UI
 
+    void FistLogInDeal(int result); ///< 首次登录处理
+    void AutomaticLogin(int result);  ///< 自动登录
 signals:
 
     void SignalLogOut(QtMsgType type, const QMessageLogContext& context, const QString& message);   ///< 输出日志信号
