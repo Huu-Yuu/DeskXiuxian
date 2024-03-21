@@ -42,12 +42,12 @@ void DBManage::SlotActionRequest(const QJsonObject& request_data)
     {
         m_service_->InitRemoteRoleInfo();
     }
-    else if(type.contains(dbCmd::CheckLogInFist))
+    else if(type.contains(dbCmd::CheckLoginFist))
     {
         int result = m_service_->CheckUserLogginIsFist();   ///< 0-非首次登录  1-首次登录
         QJsonObject data_obj;
         data_obj.insert("result", result);
-        emit SignalActionResponse(PublicFunc::PackageResponse(dbCmd::CheckLogInFist,
+        emit SignalActionResponse(PublicFunc::PackageResponse(dbCmd::CheckLoginFist,
                                                               request_data.value("id").toString(),
                                                               0,
                                                               data_obj,
@@ -61,6 +61,91 @@ void DBManage::SlotActionRequest(const QJsonObject& request_data)
         QJsonObject data_obj;
         data_obj.insert("result", result);
         emit SignalActionResponse(PublicFunc::PackageResponse(mainCmd::AutomaticLogin,
+                                                              request_data.value("id").toString(),
+                                                              0,
+                                                              data_obj,
+                                                              QJsonObject(),
+                                                              request_data.value("ori").toString(),
+                                                              module_name::data));
+    }
+    else if(type.contains(roleCmd::ModifyRoleName))
+    {
+        QJsonObject data = request_data.value("data").toObject();
+        int result = m_service_->ModifyRoleName(data.value("name").toString());
+        QJsonObject data_obj;
+        data_obj.insert("result", result);
+        emit SignalActionResponse(PublicFunc::PackageResponse(roleCmd::ModifyRoleName,
+                                                              request_data.value("id").toString(),
+                                                              0,
+                                                              data_obj,
+                                                              QJsonObject(),
+                                                              request_data.value("ori").toString(),
+                                                              module_name::data));
+    }
+    else if(type.contains(dbCmd::CheckRoleNameIsOk))
+    {
+        QJsonObject data = request_data.value("data").toObject();
+        int result = m_service_->CheckRoleNameIsOk(data.value("name").toString());
+        QJsonObject data_obj;
+        data_obj.insert("result", result);
+        emit SignalActionResponse(PublicFunc::PackageResponse(dbCmd::CheckRoleNameIsOk,
+                                                              request_data.value("id").toString(),
+                                                              0,
+                                                              data_obj,
+                                                              QJsonObject(),
+                                                              request_data.value("ori").toString(),
+                                                              module_name::data));
+    }
+    else if(type.contains(dbCmd::LoginVerification))
+    {
+        QJsonObject data = request_data.value("data").toObject();
+        QString user_name, pass_word;
+        user_name = data.value("user_name").toString();
+        pass_word = data.value("pass_word").toString();
+        int result = m_service_->LoginVerification(user_name, pass_word);
+        QJsonObject data_obj;
+        data_obj.insert("result", result);
+        emit SignalActionResponse(PublicFunc::PackageResponse(dbCmd::LoginVerification,
+                                                              request_data.value("id").toString(),
+                                                              0,
+                                                              data_obj,
+                                                              QJsonObject(),
+                                                              request_data.value("ori").toString(),
+                                                              module_name::data));
+    }
+    else if(type.contains(dbCmd::SetUserInfoToConfig))
+    {
+        QJsonObject data = request_data.value("data").toObject();
+        QString user_name, pass_word, e_mail;
+        user_name = data.value("user_name").toString();
+        pass_word = data.value("pass_word").toString();
+        e_mail = data.value("e_mail").toString();
+        m_service_->SetUserInfoToConfig(user_name, pass_word, e_mail);
+    }
+    else if(type.contains(dbCmd::AccountRegistration))
+    {
+        QJsonObject data = request_data.value("data").toObject();
+        QString user_name, pass_word, e_mail;
+        user_name = data.value("user_name").toString();
+        pass_word = data.value("pass_word").toString();
+        e_mail = data.value("e_mail").toString();
+        int result = m_service_->AccountRegistration(user_name, pass_word, e_mail);
+        QJsonObject data_obj;
+        data_obj.insert("result", result);
+        emit SignalActionResponse(PublicFunc::PackageResponse(dbCmd::AccountRegistration,
+                                                              request_data.value("id").toString(),
+                                                              0,
+                                                              data_obj,
+                                                              QJsonObject(),
+                                                              request_data.value("ori").toString(),
+                                                              module_name::data));
+    }
+    else if(type.contains(dbCmd::UpdateLastLoginTime))
+    {
+        m_service_->UpdateLastLoginTime();
+        QJsonObject data_obj;
+        data_obj.insert("result", 1);
+        emit SignalActionResponse(PublicFunc::PackageResponse(dbCmd::UpdateLastLoginTime,
                                                               request_data.value("id").toString(),
                                                               0,
                                                               data_obj,

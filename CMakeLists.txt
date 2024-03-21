@@ -45,6 +45,10 @@ target_link_libraries(DeskXiuxina PRIVATE
     Qt5::Sql
     Qt5::Network
     Qt5::Widgets
+        if(WIN32)
+        user32
+        kernel32
+        endif()
 )
 
 #qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} DeskXiuxian_zh_CN.ts)

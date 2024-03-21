@@ -50,7 +50,7 @@ public:
                        QString leach_value, QString new_value);
     QString GetLastGameTime();  ///< 获取上次游戏时间
     void DatabaseClose();   ///< 关闭数据库
-    void SetGameConfigInfo();   ///< 写入游戏配置，最后登录时间
+    void UpdateLastLoginTime();   ///< 写入游戏配置，最后登录时间
     void SetUserInfoToConfig(QString user_name, QString pass_word, QString email);  ///< 写入用户信息到配置文件
 
     /**
@@ -65,7 +65,7 @@ public:
      */
     int AccountRegistration(const QString user_name, const QString pass_word, const QString email);
 
-    bool CheckRoleNameIsOk(const QString role_name);    ///< 检查角色昵称是否可用
+    int CheckRoleNameIsOk(const QString& role_name);    ///< 检查角色昵称是否可用
 
     /**
      * @brief 修改角色名

@@ -4,6 +4,7 @@ QT += core
 QT += network
 
 #LIBS += -L"D:/source code/DeskXiuxian/bin" -lmysql
+LIBS += -luser32 -lkernel32
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

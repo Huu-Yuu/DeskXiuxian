@@ -22,7 +22,7 @@ DataService::DataService()
 
 DataService::~DataService()
 {
-    SetGameConfigInfo();
+    UpdateLastLoginTime();
     if(file_setting_ != nullptr)
     {
         delete file_setting_;

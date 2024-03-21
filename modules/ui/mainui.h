@@ -52,8 +52,12 @@ public:
 
     void UpdateRoleUI(const QJsonObject& data);    ///< 更新角色信息UI
 
-    void FistLogInDeal(int result); ///< 首次登录处理
+    void FistLogInDeal(int result); ///< 处理首次登录结果
     void AutomaticLogin(int result);  ///< 自动登录
+    void ModifyRoleNameDeal(int result);    ///< 处理重命名结果
+    void RoleNameIsOkDeal(int result);     ///< 处理角色名是否重复结果
+    void LoginVerificationDeal(int result);   ///< 登录校验处理  1-登录成功 0-账号或密码错误 -1-数据库连接失败
+    void AccountRegistrationDeal(int result);   ///< 注册结果交互 1-注册成功 0-注册失败 -2-数据库连接失败 -1-账号已存在
 signals:
 
     void SignalLogOut(QtMsgType type, const QMessageLogContext& context, const QString& message);   ///< 输出日志信号

@@ -25,12 +25,12 @@ void DataService::InitSettingFile()
     file_setting_->setIniCodec("UTF-8");
 }
 
-void DataService::SetGameConfigInfo()
+void DataService::UpdateLastLoginTime()
 {
     QDateTime currentTime = QDateTime::currentDateTime();
     QString formattedTime = currentTime.toString("yyyy-MM-dd hh:mm:ss");
 
-    file_setting_->setPath(QSettings::IniFormat, QSettings::UserScope,
+    QSettings::setPath(QSettings::IniFormat, QSettings::UserScope,
                            QCoreApplication::applicationDirPath() + "/config.ini");
     file_setting_->setValue("Date/LastGameDate", formattedTime);
     file_setting_->sync();

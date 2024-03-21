@@ -24,12 +24,21 @@ class ModifyRoleName : public QDialog
 public:
     explicit ModifyRoleName(QWidget* parent = nullptr);
     ~ModifyRoleName();
+    void ModifyRoleNameDeal(int result);  ///< 重命名交互
+    void RoleNameIsOkDeal(int result);     ///< 处理角色名是否重复结果
 
 signals:
     /**
      * @brief 重命名成功 信号
      */
     void SignalRenameSuccessful();
+
+    //请求外部动作
+    void SignalActionRequest(const QJsonObject& request_data);
+    //本模块动作执行结果抛给上一级
+    void SignalActionResponse(const QJsonObject& response_data);
+    //状态变化抛给上一级
+    void SignalPubTopic(const QJsonObject& pub_data);
 
 private slots:
 
@@ -39,9 +48,8 @@ private slots:
 
 private:
     Ui::ModifyRoleName* ui;
-    QString roleName_;
+    QString role_name_;
     bool role_name_ok = false;      // 检查输入格式是否正常
-    DataService* data_file_;         // 文件管理对象
 };
 
 #endif // MODIFYROLENAME_H

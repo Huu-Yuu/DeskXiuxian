@@ -1,13 +1,12 @@
 #include "loginwindow.h"
 #include "ui_loginwindow.h"
+#include "modules/public/public_declare.h"
 
 LoginWindow::LoginWindow(QWidget* parent) :
     QDialog(parent),
     ui(new Ui::LoginWindow)
 {
     ui->setupUi(this);
-
-    data_file_ = data_file_->getInstance();
 
     // 设置logo
     setWindowIcon(QIcon(":/res/logo.jpg"));
@@ -43,96 +42,52 @@ QJsonObject LoginWindow::GetUserInputInfo()
 
 void LoginWindow::on_reg_btn_clicked()
 {
-    QString msg = "填入信息格式不正确，请修改后重试";
     // 检查格式是否正常
     if(user_name_ok && pass_word_ok && email_ok)
     {
-        // 注册 1-注册成功 0-注册失败 -2-数据库连接失败 -1-账号已存在
-        int result = data_file_->AccountRegistration(userName_, passWord_, eMail_);
-        switch (result)
-        {
-            case -2:
-            {
-                msg = "与服务器网络连接异常";
-                break;
-            }
-            case -1:
-            {
-                msg = "账号已存在";
-                break;
-            }
-            case 0:
-            {
-                msg = "网络连接异常";
-                break;
-            }
-            case 1:
-            {
-                msg = "注册成功，请登录";
-                ui->reg_btn->setEnabled(false);
-                break;
-            }
-            default:
-                msg = "注册时出现未知错误";
-                break;
-        }
+        QJsonObject data_obj;
+        data_obj.insert("user_name", user_name_);
+        data_obj.insert("pass_word", pass_word_);
+        data_obj.insert("e_mail", eMail_);
+        emit SignalActionRequest(PublicFunc::PackageRequest(dbCmd::AccountRegistration,
+                                                            data_obj,
+                                                            "",
+                                                            module_name::data,
+                                                            module_name::ui));
     }
-    ui->tip_text->setText(msg);
 }
 
 void LoginWindow::on_star_btn_clicked()
 {
-    QString msg = "填入信息格式不正确，请修改后重试";
     // 检查格式是否正常
     if(user_name_ok && pass_word_ok)
     {
-        // 登录验证 1-登录成功 0-账号或密码错误 -1-数据库连接失败
-        int result = data_file_->LoginVerification(userName_, passWord_);
-        switch (result)
-        {
-            case -1:
-            {
-                msg = "与服务器网络连接异常";
-                break;
-            }
-            case 0:
-            {
-                msg = "账号或密码错误";
-                break;
-            }
-            case 1:
-            {
-                // 登录成功
-                msg = "登录成功";
-                data_file_->SetUserInfoToConfig(userName_, passWord_, eMail_);
-                emit SignalLoginSuccessful();
-                break;
-            }
-            default:
-            {
-                msg = "登录时出现未知错误";
-                break;
-            }
-        }
+        QJsonObject data_obj;
+        data_obj.insert("user_name", user_name_);
+        data_obj.insert("pass_word", pass_word_);
+        emit SignalActionRequest(PublicFunc::PackageRequest(dbCmd::LoginVerification,
+                                                            data_obj,
+                                                            "",
+                                                            module_name::data,
+                                                            module_name::ui));
     }
-    ui->tip_text->setText(msg);
 }
 
 void LoginWindow::on_username_text_textChanged(const QString& arg1)
 {
-    userName_ = arg1;
+    user_name_ = arg1;
     QRegularExpression regex("^[A-Za-z0-9]{6,16}$"); // 正则表达式规则
-    QRegularExpressionMatch match = regex.match(userName_); // 进行匹配
-    if (match.hasMatch() && match.capturedStart() == 0 && match.capturedEnd() == userName_.length())
+    QRegularExpressionMatch match = regex.match(user_name_); // 进行匹配
+    if (match.hasMatch() && match.capturedStart() == 0 && match.capturedEnd() == user_name_.length())
     {
         ui->username_text->setStyleSheet("");
         user_name_ok = true;
-        qDebug() << "匹配完成，获取到输入的账号为：" + userName_;
+        qDebug() << "匹配完成，获取到输入的账号为：" + user_name_;
     }
     else
     {
         ui->username_text->setStyleSheet("QLineEdit { color: red; }");
-        userName_.clear();
+        user_name_.clear();
         user_name_ok = false;
         qDebug() << "匹配失败";
     }
@@ -141,19 +96,19 @@ void LoginWindow::on_username_text_textChanged(const QString& arg1)
 
 void LoginWindow::on_password_text_textChanged(const QString& arg1)
 {
-    passWord_ = arg1;
+    pass_word_ = arg1;
     QRegularExpression regex("^[A-Za-z0-9]{6,16}$"); // 正则表达式规则
-    QRegularExpressionMatch match = regex.match(passWord_); // 进行匹配
-    if (match.hasMatch() && match.capturedStart() == 0 && match.capturedEnd() == passWord_.length())
+    QRegularExpressionMatch match = regex.match(pass_word_); // 进行匹配
+    if (match.hasMatch() && match.capturedStart() == 0 && match.capturedEnd() == pass_word_.length())
     {
         ui->password_text->setStyleSheet("");
         pass_word_ok = true;
-        qDebug() << "匹配完成，获取到输入的密码为：" + passWord_;
+        qDebug() << "匹配完成，获取到输入的密码为：" + pass_word_;
     }
     else
     {
         ui->password_text->setStyleSheet("QLineEdit { color: red; }");
-        passWord_.clear();
+        pass_word_.clear();
         pass_word_ok = false;
         qDebug() << "匹配失败";
     }
@@ -178,5 +133,76 @@ void LoginWindow::on_email_text_textChanged(const QString& arg1)
         eMail_.clear();
         qDebug() << "匹配失败";
     }
+}
+
+void LoginWindow::LoginVerificationDeal(int result) {
+    QString msg = "填入信息格式不正确，请修改后重试";
+    switch (result)
+    {
+        case -1:
+        {
+            msg = "与服务器网络连接异常";
+            break;
+        }
+        case 0:
+        {
+            msg = "账号或密码错误";
+            break;
+        }
+        case 1:
+        {
+            // 登录成功
+            msg = "登录成功";
+            QJsonObject data_obj;
+            data_obj.insert("user_name", user_name_);
+            data_obj.insert("pass_word", pass_word_);
+            data_obj.insert("e_mail", eMail_);
+            emit SignalActionRequest(PublicFunc::PackageRequest(dbCmd::SetUserInfoToConfig,
+                                                                data_obj,
+                                                                "",
+                                                                module_name::data,
+                                                                module_name::ui));
+            emit SignalLoginSuccessful();
+            break;
+        }
+        default:
+        {
+            msg = "登录时出现未知错误";
+            break;
+        }
+    }
+    ui->tip_text->setText(msg);
+}
+
+void LoginWindow::AccountRegistrationDeal(int result) {
+    QString msg = "填入信息格式不正确，请修改后重试";
+    switch (result)
+    {
+        case -2:
+        {
+            msg = "与服务器网络连接异常";
+            break;
+        }
+        case -1:
+        {
+            msg = "账号已存在";
+            break;
+        }
+        case 0:
+        {
+            msg = "网络连接异常";
+            break;
+        }
+        case 1:
+        {
+            msg = "注册成功，请登录";
+            ui->reg_btn->setEnabled(false);
+            break;
+        }
+        default:
+            msg = "注册时出现未知错误";
+            break;
+    }
+    ui->tip_text->setText(msg);
 }
 

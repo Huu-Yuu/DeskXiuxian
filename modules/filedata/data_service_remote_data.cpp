@@ -105,7 +105,7 @@ int DataService::AccountRegistration(QString user_name, QString pass_word, QStri
     }
     // 执行插入语句
     QString uuid = QUuid::createUuid().toString();
-    QDateTime reg_time = QDateTime::currentDateTime();
+    QString reg_time = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
     QString role_name = user_name.right(4);
     QString countQuery = "SELECT COUNT(*) FROM user_role_info";
     query.prepare(countQuery);
@@ -168,9 +168,9 @@ int DataService::AutomaticLogin()
     return result;;
 }
 
-bool DataService::CheckRoleNameIsOk(const QString role_name)
+int DataService::CheckRoleNameIsOk(const QString& role_name)
 {
-    bool result = false;
+    int result;
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
     QSqlQuery query(db);
     QString queryString = QString("SELECT RoleName FROM user_data_info WHERE RoleName = '%1'").arg(role_name);
@@ -178,11 +178,11 @@ bool DataService::CheckRoleNameIsOk(const QString role_name)
     if (query.exec(queryString) && query.next())
     {
         // 查询成功且有结果，表示存在
-        result = false;
+        result = 0;
     }
     else
     {
-        result = true;
+        result = 1;
     }
     return result;
 }
@@ -640,13 +640,13 @@ int DataService::WriteUserLoginLogToRemoteDatabase()
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
     QSqlQuery query(db);
     int result = 0;
-    QDateTime login_time = QDateTime::currentDateTime();
+    QString login_time = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
     // 更新登录时间
     QString updateQuery = QString("UPDATE user_data_info SET last_login_time = :new_value WHERE uuid = :uuid");
     // 创建查询对象
     query.prepare(updateQuery);
     query.bindValue(":new_value", login_time);
-    query.bindValue(":leach", user_uuid_);
+    query.bindValue(":uuid", user_uuid_);
     // 执行更新查询
     if (query.exec())
     {
@@ -669,15 +669,14 @@ int DataService::WriteUserLoginLogToRemoteDatabase()
         result --;
     }
     // 更新登录日志
-    QString insertQuery = QString("INSERT INTO %1 (login_time, ip, uuid, role_name, level) "
-                          "VALUES (:login_time, :ip, :uuid, :role_name, :level)");
+    QString insertQuery = QString("INSERT INTO %1 (login_time, ip, uuid, role_name) "
+                          "VALUES (:login_time, :ip, :uuid, :role_name)").arg("user_login_log");
     // 创建查询对象
     query.prepare(insertQuery);
     query.bindValue(":login_time", login_time);
     query.bindValue(":ip", user_ip_);
     query.bindValue(":uuid", user_uuid_);
-    query.bindValue(":roleName", role_name_);
-    query.bindValue(":level", role_data_.value("roleLv").toInt());
+    query.bindValue(":role_name", role_name_);
     // 执行插入查询
     if (query.exec())
     {

@@ -57,7 +57,17 @@ namespace dbCmd
     const QString SaveRoleItem = "SaveRoleItem";    ///< 保存物品
     const QString SaveRoleInfo = "SaveRoleInfo";    ///< 保存基本信息
     const QString SaveCoefficient = "SaveCoefficient";    ///< 保存属性系数
-    const QString CheckLogInFist = "CheckLogInFist";    ///< 检测是否首次登录
+    const QString CheckLoginFist = "CheckLoginFist";    ///< 检测是否首次登录
+    const QString CheckRoleNameIsOk = "CheckRoleNameIsOk";    ///< 检测角色昵称是否可用
+    const QString LoginVerification = "LoginVerification";    ///< 登录校验
+    const QString SetUserInfoToConfig = "SetUserInfoToConfig";    ///< 写入用户信息到配置文件
+    const QString AccountRegistration = "AccountRegistration";    ///< 账号注册
+    const QString UpdateLastLoginTime = "UpdateLastLoginTime";    ///< 更新最后登录时间
+}
+
+namespace roleCmd
+{
+    const QString ModifyRoleName = "ModifyRoleName";    ///< 修改角色名
 }
 
 namespace mainCmd
@@ -65,6 +75,7 @@ namespace mainCmd
     const QString InitLocalRoleInfo = "InitLocalRoleInfo";    ///< 初始化本地角色信息
     const QString InitRemoteRoleInfo = "InitRemoteRoleInfo";    ///< 初始化远程角色信息
     const QString AutomaticLogin = "AutomaticLogin";    ///< 自动登录
+    const QString UpdateLogInLog = "UpdateLogInLog";    ///< 更新登录日志
 }
 
 namespace uiCmd

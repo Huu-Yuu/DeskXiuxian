@@ -25,7 +25,7 @@ void UIManage::SlotActionResponse(const QJsonObject &response_data) {
     LOG_DEBUG(kUIManage, QString("收到外部应答：%1").arg(QJsonDocument(response_data).toJson(QJsonDocument::Compact).data()));
     QString type = response_data.value("type").toString();
     QJsonObject data_obj = response_data.value("data").toObject();
-    if(type.contains(dbCmd::CheckLogInFist))
+    if(type.contains(dbCmd::CheckLoginFist))
     {
         int result = data_obj.value("result").toInt();
         m_service_->FistLogInDeal(result);
@@ -34,6 +34,30 @@ void UIManage::SlotActionResponse(const QJsonObject &response_data) {
     {
         int result = data_obj.value("result").toInt();
         m_service_->AutomaticLogin(result);
+    }
+    else if(type.contains(roleCmd::ModifyRoleName))
+    {
+        int result = data_obj.value("result").toInt();
+        m_service_->ModifyRoleNameDeal(result);
+    }
+    else if(type.contains(dbCmd::CheckRoleNameIsOk))
+    {
+        int result = data_obj.value("result").toInt();
+        m_service_->RoleNameIsOkDeal(result);
+    }
+    else if(type.contains(dbCmd::LoginVerification))
+    {
+        int result = data_obj.value("result").toInt();
+        m_service_->LoginVerificationDeal(result);
+    }
+    else if(type.contains(dbCmd::AccountRegistration))
+    {
+        int result = data_obj.value("result").toInt();
+        m_service_->AccountRegistrationDeal(result);
+    }
+    else if(type.contains(dbCmd::UpdateLastLoginTime))
+    {
+        LOG_DEBUG(kUIManage, "关闭窗口");
     }
 }
 

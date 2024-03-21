@@ -249,7 +249,6 @@ void MainCtrl::AutomaticLogin(int result) {
                                                        module_name::main));
             break;
     }
-
 }
 
 void MainCtrl::CheckAutoLogIn() {

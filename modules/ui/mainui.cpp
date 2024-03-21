@@ -16,7 +16,14 @@ MainUI::MainUI(QWidget* parent)
 
     connect(this, &MainUI::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
     connect(login_obj_, &LoginWindow::SignalLoginSuccessful, this, &MainUI::SlotLoginSuccessful);
+    connect(login_obj_, &LoginWindow::SignalActionRequest, this, &MainUI::SignalActionRequest);
+    connect(login_obj_, &LoginWindow::SignalActionResponse, this, &MainUI::SignalActionResponse);
+    connect(login_obj_, &LoginWindow::SignalPubTopic, this, &MainUI::SignalPubTopic);
     connect(modify_obj_, &ModifyRoleName::SignalRenameSuccessful, this, &MainUI::SlotRenameSuccessful);
+    connect(modify_obj_, &ModifyRoleName::SignalActionRequest, this, &MainUI::SignalActionRequest);
+    connect(modify_obj_, &ModifyRoleName::SignalActionResponse, this, &MainUI::SignalActionResponse);
+    connect(modify_obj_, &ModifyRoleName::SignalPubTopic, this, &MainUI::SignalPubTopic);
+
 
     // 初始化UI设置
     // 设置logo
@@ -70,7 +77,11 @@ void MainUI::closeEvent(QCloseEvent* event)
     qDebug() << "检测到手动关闭游戏，强制结束进程";
     // 打印到日志
     emit SignalLogOut( QtFatalMsg, QMessageLogContext(), "检测到手动关闭游戏，强制结束进程");
-    data_file_->SetGameConfigInfo();
+    emit SignalActionRequest(PublicFunc::PackageRequest(dbCmd::UpdateLastLoginTime,
+                                                        QJsonObject(),
+                                                        "",
+                                                        module_name::data,
+                                                        module_name::ui));
     // 杀死所有进程
     QString command = "taskkill /F /IM DeskXiuxian.exe";
     process->start(command);
@@ -238,7 +249,7 @@ void MainUI::SlotLoginSuccessful()
 {
     CloseLoginWidget();
     emit SignalLogOut(QtInfoMsg, QMessageLogContext(), "正在检查是否首次登录");
-    emit SignalActionRequest(PublicFunc::PackageRequest(dbCmd::CheckLogInFist,
+    emit SignalActionRequest(PublicFunc::PackageRequest(dbCmd::CheckLoginFist,
                                                         QJsonObject(), "",
                                                         module_name::data,
                                                         module_name::ui));
@@ -365,4 +376,20 @@ void MainUI::AutomaticLogin(int result) {
         default:
             LOG_DEBUG(kUIManage,"自动登录检测错误结果");
     }
+}
+
+void MainUI::ModifyRoleNameDeal(int result) {
+    modify_obj_->ModifyRoleNameDeal(result);
+}
+
+void MainUI::RoleNameIsOkDeal(int result) {
+    modify_obj_->RoleNameIsOkDeal(result);
+}
+
+void MainUI::LoginVerificationDeal(int result) {
+    login_obj_->LoginVerificationDeal(result);
+}
+
+void MainUI::AccountRegistrationDeal(int result) {
+    login_obj_->AccountRegistrationDeal(result);
 }

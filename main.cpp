@@ -38,6 +38,6 @@ int main(int argc, char* argv[])
 #endif
 
     a.exec();
-    delete main_ctrl;
+//    delete main_ctrl;
     return 0;
 }
