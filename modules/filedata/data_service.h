@@ -43,6 +43,20 @@ public:
     QString GetTableToInfo(const QString table_name, const QString column_name, const QString leach_column, QString leach_value);
 
     /**
+     * @brief 获取本地数据库中指定表单的数据，根据角色名筛选
+     * @param table_name 表单名
+     * @return 列-key   行-value
+     * **/
+    QJsonObject GetLocalTableInfo2Obj(const QString& table_name);
+
+    /**
+     * @brief 获取远程数据库中指定表单的数据，根据uuid筛选
+     * @param table_name 表单名
+     * @return 列-key   行-value
+     * **/
+    QJsonObject GetRemoteTableInfo2Obj(const QString& table_name);
+
+    /**
      * @brief 写入表单中对应的列数据
      * @return 1-写入成功 非1-写入错误
      */
@@ -71,7 +85,7 @@ public:
      * @brief 修改角色名
      * @return 1-修改成功 0-修改失败 -1-数据库操作失败
      */
-    int ModifyRoleName(const QString new_name);
+    int ModifyRoleName(const QString& new_name);
     int AutomaticLogin();  ///< 自动登录
     QString GetUserUUID(const QString user_name, const QString pass_word);  ///< 获取用户UUID
 

@@ -151,6 +151,7 @@ int DataService::AutomaticLogin()
     if(user_name == "" || pass_word == "")
     {
         LOG_DEBUG(kDataManage, "账号密码不存在，跳过自动登录");
+        return result;
     }
     if(LoginVerification(user_name, pass_word) == 1)
     {
@@ -248,10 +249,9 @@ int DataService::CheckUserLogginIsFist()
     return result;
 }
 
-int DataService::ModifyRoleName(const QString new_name)
+int DataService::ModifyRoleName(const QString& new_name)
 {
     int result = -3;
-    role_name_ = new_name;
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
     QSqlQuery query(db);
     query.prepare("SELECT COUNT(*) FROM user_role_info WHERE uuid = :UUID");
@@ -266,7 +266,7 @@ int DataService::ModifyRoleName(const QString new_name)
             // 创建查询对象
             query.prepare(queryString);
             query.bindValue(":newName", new_name);
-            qDebug() << user_uuid_;
+            qDebug() << user_uuid_ << "\t角色名：" << new_name;
             query.bindValue(":uuid", user_uuid_);
 
             if (query.exec())
@@ -276,6 +276,7 @@ int DataService::ModifyRoleName(const QString new_name)
                 {
                     // 更新成功
                     result = 1;
+                    role_name_ = new_name;
                 }
                 else
                 {
@@ -919,19 +920,58 @@ int DataService::IsRoleDataInited()
 
 void DataService::InitRemoteRoleInfo()
 {
-    QJsonObject role_info_data = GetRemoteRoleInfo();
-    QJsonObject role_rc_data = GetRemoteRoleRC();
-    QJsonObject role_equip_data = GetRemoteRoleEquip();
-    QJsonObject role_item_data = GetRemoteRoleItem();
+    QJsonObject role_info_data = GetRemoteTableInfo2Obj("user_role_info"); //GetRemoteRoleInfo();
+    QJsonObject role_rc_data = GetRemoteTableInfo2Obj("user_role_rc");//GetRemoteRoleRC();
+    QJsonObject role_equip_data = GetRemoteTableInfo2Obj("user_role_equip");//GetRemoteRoleEquip();
+    QJsonObject role_item_data = GetRemoteTableInfo2Obj("user_role_item");//GetRemoteRoleItem();
     QJsonObject data_obj;
     data_obj.insert("RoleInfo", role_info_data);
     data_obj.insert("RoleCoefficient", role_rc_data);
     data_obj.insert("RoleEquip", role_equip_data);
     data_obj.insert("RoleItem", role_item_data);
+    role_name_ = role_info_data.value("role_name").toString();
     // 使用本地角色信息初始化指令
     emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitLocalRoleInfo,
                                                         data_obj,
                                                         "",
                                                         module_name::role,
                                                         module_name::data));
+}
+
+QJsonObject DataService::GetRemoteTableInfo2Obj(const QString &table_name) {
+    QJsonObject result;
+    if(!m_database_.isOpen())
+    {
+        LOG_DEBUG(kDataManage, "数据库打开失败");
+    }
+    else
+    {
+        QSqlQuery query(m_database_);
+        query.prepare("SELECT * FROM " + table_name + " WHERE uuid = :uuid");
+        query.bindValue(":uuid", user_uuid_);
+        query.exec();
+
+        if (!query.exec()) {
+            LOG_DEBUG(kDataManage, QString("执行查询时出错：%1").arg(query.lastError().text()));
+            return result;
+        }
+        // 遍历查询结果
+        while (query.next()) {
+            QSqlRecord record = query.record();
+
+            // 获取列数
+            int columnCount = record.count();
+
+            // 遍历每一列
+            for (int i = 0; i < columnCount; ++i) {
+                // 跳过 role_name 列
+                QString field = record.fieldName(i);
+                if (field == "uuid" || field == "id")
+                    continue;
+                // 将列名和对应的值添加到 QJsonObject 中
+                result[record.fieldName(i)] = query.value(i).toString();
+            }
+        }
+    }
+    return result;
 }

@@ -139,7 +139,7 @@ private:
     double RC_SurviveDisaster_; //渡劫成功概率加成
     double RC_PrestigeEvent_;    ///< 声望事件概率
     double RC_SpecialEvent_;    ///< 特殊事件概率
-    ItemService* role_item_; // 角色道具
+//    ItemService* role_item_; // 角色道具
 };
 
 #endif // ROLEPLAY_H

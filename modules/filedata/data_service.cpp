@@ -1,5 +1,6 @@
 #include "data_service.h"
 #include "modules/public/public_declare.h"
+#include <QSqlRecord>
 
 QMutex DataService::mutex;  // 初始化互斥锁对象
 QString DataService::user_uuid_ = "";
@@ -386,8 +387,6 @@ void DataService::WriteRoleInfoToLocalDatabase()
 {
     if(m_database_.isOpen())
     {
-        QString role_name = role_data_.value("role_name").toString();
-        role_item_data_.remove("role_name");
         QSqlQuery query(m_database_);
         // 开始构建更新查询语句
         QString updateQuery = "UPDATE RoleInfo SET ";
@@ -433,9 +432,6 @@ void DataService::WriteRoleItemsToLocalDatabase()
 {
     if(m_database_.isOpen())
     {
-        QString roleName = role_item_data_.value("role_name").toString();
-        role_item_data_.remove("role_name");
-
         QSqlQuery query(m_database_);
         // 开始构建更新查询语句
         QString updateQuery = "UPDATE RoleItem SET ";
@@ -482,9 +478,6 @@ void DataService::WriteRoleEquipToLocalDatabase()
 {
     if(m_database_.isOpen())
     {
-        QString roleName = role_equip_data_.value("role_name").toString();
-        role_equip_data_.remove("role_name");
-
         QSqlQuery query(m_database_);
         // 开始构建更新查询语句
         QString updateQuery = "UPDATE RoleEquip SET ";
@@ -531,10 +524,8 @@ void DataService::WriteRoleCoefficientToLocalDatabase()
 {
     if(m_database_.isOpen())
     {
-        QString roleName = RC_data_.value("role_name").toString();
-
         QSqlQuery query(m_database_);
-        query.prepare("SELECT COUNT(*) FROM Role_coefficient WHERE role_name = :role_name");
+        query.prepare("SELECT COUNT(*) FROM RoleCoefficient WHERE role_name = :role_name");
         query.bindValue(":role_name", role_name_);
 
         if (query.exec() && query.next())
@@ -636,66 +627,12 @@ QJsonObject DataService::InitLocalRoleInfo() {
                                                          module_name::ui,
                                                          module_name::data));
 //    emit SignalShowMsgToUI(last_game_time);
-    QString name = GetTableToInfo("RoleInfo", "role_name");
-    QString life = GetTableToInfo("RoleInfo", "role_life");
-    QString max_life = GetTableToInfo("RoleInfo", "role_max_life");
-    QString prestige = GetTableToInfo("RoleInfo", "role_prestige");
-    QString LV = GetTableToInfo("RoleInfo", "role_lv");
-    int cultivation = LV.toInt();
-    QString cur_exp = GetTableToInfo("RoleInfo", "role_cur_exp");
-    QString exp = GetTableToInfo("RoleInfo", "role_exp");
-    QString agg = GetTableToInfo("RoleInfo", "role_agg");
-    QString def = GetTableToInfo("RoleInfo", "role_def");
-    QString hp = GetTableToInfo("RoleInfo", "role_hp");
-    QString aptitude = GetTableToInfo("RoleInfo", "role_aptitude");
-
-    // 从数据库获取角色获取装备
-    QString weapon = GetTableToInfo("RoleEquip", "equip_weapon");
-    QString magic = GetTableToInfo("RoleEquip", "equip_magic");
-    QString helmet = GetTableToInfo("RoleEquip", "equip_helmet");
-    QString clothing = GetTableToInfo("RoleEquip", "equip_clothing");
-    QString britches = GetTableToInfo("RoleEquip", "equip_britches");
-    QString shoe = GetTableToInfo("RoleEquip", "equip_shoe");
-    QString jewelry = GetTableToInfo("RoleEquip", "equip_jewelry");
-    QString mount = GetTableToInfo("RoleEquip", "equip_mount");
-    QString title = GetTableToInfo("RoleEquip", "equip_title");
-
-    // 从数据库获取角色获取物品、道具
-    QString money = GetTableToInfo("RoleItem", "10001");
-
-    // 从数据库获取角色属性相关系数
-    QString life_Coefficient = GetTableToInfo("RoleCoefficient", "RC_life");
-    QString RC_survive_disaster = GetTableToInfo("RoleCoefficient", "RC_survive_disaster");
-    QString RC_prestige_event = GetTableToInfo("RoleCoefficient", "RC_prestige_event");
-    QString RC_special_event = GetTableToInfo("RoleCoefficient", "RC_special_event");
     QJsonObject role_info, role_equip, role_item, role_coefficient, obj_;
-    role_info.insert("role_name", name);
-    role_info.insert("role_life", life);
-    role_info.insert("role_max_life", max_life);
-    role_info.insert("role_prestige", prestige);
-    role_info.insert("role_lv", cultivation);
-    role_info.insert("role_cur_exp", cur_exp);
-    role_info.insert("role_exp", exp);
-    role_info.insert("role_agg", agg);
-    role_info.insert("role_def", def);
-    role_info.insert("role_hp", hp);
-    role_info.insert("role_aptitude", aptitude);
 
-    role_equip.insert("equip_weapon", weapon);
-    role_equip.insert("equip_magic", magic);
-    role_equip.insert("equip_helmet", helmet);
-    role_equip.insert("equip_clothing", clothing);
-    role_equip.insert("equip_britches", britches);
-    role_equip.insert("equip_shoe", shoe);
-    role_equip.insert("equip_jewelry", jewelry);
-    role_equip.insert("equip_mount", mount);
-    role_equip.insert("equip_title", title);
-
-    role_coefficient.insert("RC_life", life_Coefficient);
-    role_coefficient.insert("RC_survive_disaster", RC_survive_disaster);
-    role_coefficient.insert("RC_prestige_event", RC_prestige_event);
-    role_coefficient.insert("RC_special_event", RC_special_event);
-
+    role_info = GetLocalTableInfo2Obj("RoleInfo");
+    role_equip = GetLocalTableInfo2Obj("RoleEquip");
+    role_item = GetLocalTableInfo2Obj("RoleItem");
+    role_coefficient = GetLocalTableInfo2Obj("RoleCoefficient");
     obj_.insert("RoleInfo", role_info);
     obj_.insert("RoleEquip", role_equip);
     obj_.insert("RoleItem", role_item);
@@ -703,20 +640,20 @@ QJsonObject DataService::InitLocalRoleInfo() {
 
     // 更新角色信息
     emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitLocalRoleInfo,
-                                                        data_obj,
+                                                        obj_,
                                                         "",
                                                         module_name::role,
                                                         module_name::data));
 
     // 更新道具
     emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitLocalRoleInfo,
-                                                        data_obj,
+                                                        obj_,
                                                         "",
                                                         module_name::item,
                                                         module_name::data));
     // 更新UI
     emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitLocalRoleInfo,
-                                                        data_obj,
+                                                        obj_,
                                                         "",
                                                         module_name::ui,
                                                         module_name::data));
@@ -725,3 +662,43 @@ QJsonObject DataService::InitLocalRoleInfo() {
 void DataService::SetRoleName(QString name) {
     role_name_ = name;
 }
+
+QJsonObject DataService::GetLocalTableInfo2Obj(const QString& table_name) {
+    QJsonObject result;
+    if(!m_database_.isOpen())
+    {
+        LOG_DEBUG(kDataManage, "数据库打开失败");
+    }
+    else
+    {
+        QSqlQuery query(m_database_);
+        query.prepare("SELECT * FROM " + table_name + " WHERE role_name = :roleName");
+        query.bindValue(":roleName", role_name_);
+        query.exec();
+
+        if (!query.exec()) {
+            LOG_DEBUG(kDataManage, QString("执行查询时出错：%1").arg(query.lastError().text()));
+            return result;
+        }
+        // 遍历查询结果
+        while (query.next()) {
+            QSqlRecord record = query.record();
+
+            // 获取列数
+            int columnCount = record.count();
+
+            // 遍历每一列
+            for (int i = 0; i < columnCount; ++i) {
+                // 跳过 role_name 列
+//                if (record.fieldName(i) == "role_name" ) {
+//                    continue;
+//                }
+                // 将列名和对应的值添加到 QJsonObject 中
+                result[record.fieldName(i)] = query.value(i).toString();
+            }
+        }
+    }
+    return result;
+}
+
+
