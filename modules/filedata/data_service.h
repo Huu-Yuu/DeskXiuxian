@@ -32,7 +32,7 @@ public:
     void InitSettingFile(); ///< 初始化配置文件
     void InitRemoteData();  ///< 初始化远程数据库
     void InitLocalData();   ///< 初始化本地数据库
-    QJsonObject InitLocalRoleInfo();    ///< 初始化本地角色信息
+    void InitLocalRoleInfo();    ///< 初始化本地角色信息
 
     void SetRoleName(QString name); ///< 设置角色名称
     /**

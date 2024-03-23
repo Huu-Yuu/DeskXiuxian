@@ -62,7 +62,7 @@ MainUI::MainUI(QWidget* parent)
     QDateTime compile_data_time = QLocale(QLocale::English)
             .toDateTime(date_time_str, "MMM d yyyy hh:mm:ss");
     QString compile_time = compile_data_time.toString("yyyy.MM.dd hh:mm:ss");
-    QString msg = QString("当前游戏版本为：%1/n发布日期：%2").arg(GAME_VISION).arg(compile_time);
+    QString msg = QString("当前游戏版本为：%1\n发布日期：%2").arg(GAME_VISION).arg(compile_time);
     AddMessage(msg);
 }
 
@@ -224,6 +224,8 @@ void MainUI::SlotUpdateUI(RoleUIEnum part, QString new_data)
         case kEquipeMount:
             ui->equip_mount->setText(new_data);
             break;
+        case kEquipeTitle:
+            ui->role_title->setText(new_data);
     }
 }
 

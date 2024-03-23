@@ -37,6 +37,12 @@ void ItemManage::SlotActionRequest(const QJsonObject& request_data)
         QJsonObject data = request_data.value("data").toObject();
         m_service_->InitLocalRoleInfo(data);
     }
+    else if(type.contains(itemCmd::IncreaseMoney))
+    {
+        QJsonObject data = request_data.value("data").toObject();
+        int money_nun = data.value("num").toInt();
+        m_service_->ItemMoneyBusiness(money_nun);
+    }
 }
 
 void ItemManage::SlotPubTopic(const QJsonObject& topic_data)

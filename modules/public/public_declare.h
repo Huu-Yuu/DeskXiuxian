@@ -39,6 +39,7 @@ namespace ProgressCmd
 
 namespace itemCmd
 {
+    const QString IncreaseMoney = "IncreaseMoney";  ///< 增加灵石
     const QString GetItemIndex = "GetItemIndex";    ///< 获取物品索引
     const QString GetItemNum = "GetItemNum";        ///< 获取物品数量
     const QString SetItemNum = "SetItemNum";        ///< 设置物品数量

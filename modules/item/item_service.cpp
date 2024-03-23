@@ -21,13 +21,20 @@ int ItemService::GetItemMoney()
     return money_num_;
 }
 
- void ItemService::SetItemMoney(int money)
- {
+void ItemService::SetItemMoney(int money)
+{
      money_num_ = money;
- }
+}
 
 void ItemService::ItemMoneyBusiness(int money) {
     money_num_ += money;
+
+    // 广播保存灵石数据
+    QJsonObject obj_data, obj_pub;
+    obj_data.insert(PublicFunc::ConvertItemEnumToStr(kRoleMoney), QString::number(money_num_));
+    obj_pub.insert("type", dbCmd::SaveRoleItem);
+    obj_pub.insert("data", obj_data);
+    emit SignalPubTopic(obj_pub);
 }
 
 void ItemService::InitItem() {
@@ -62,7 +69,7 @@ void ItemService::SlotQuantityChanged(RoleItemEnum item_enum, int sum) {
     }
     else
     {
-        obj_data.insert(QString::number(item_enum), QString::number(item_enum));
+        obj_data.insert(PublicFunc::ConvertItemEnumToStr(item_enum), QString::number(sum));
         obj_pub.insert("type", dbCmd::SaveRoleItem);
     }
     obj_pub.insert("data", obj_data);

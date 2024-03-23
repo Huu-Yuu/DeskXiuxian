@@ -38,10 +38,11 @@ public:
      */
     static QString GetLocalIpAddress();
 
-    static ItemType ConvertItemType(RoleItemEnum item_enum);  ///< 物品索引计算物品类型
-    static RoleEquipAreaEnum ConvertEquipArea(RoleItemEnum item_enum);  ///< 物品索引计算装备部位
+    static ItemType ConvertItemType(RoleItemEnum item_enum);  ///< 物品索引计算道具物品类型
+    static RoleEquipAreaEnum ConvertEquipArea(RoleItemEnum item_enum);  ///< 道具物品索引计算装备部位
     static QString ConvertEquipAreaStr(RoleEquipAreaEnum area_enum);  ///< 装备部位转DB字符串
     static QString GetCultivationName(int cur_lv);  ///< 获取等级名称
+    static QString ConvertItemEnumToStr(RoleItemEnum item_enum);    ///< 将道具物品枚举值转换为数据库列名
 
     // 打包请求数据
     static QJsonObject PackageRequest(const QString& type, const QJsonObject& data, QString id,

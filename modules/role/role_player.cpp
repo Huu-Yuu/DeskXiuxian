@@ -12,7 +12,6 @@ RolePlayer::RolePlayer()
 
     // 设置渡劫概率加成
     RC_SurviveDisaster_ = 0;
-    role_item_ = ItemService::getInstance();
 }
 
 void RolePlayer::run()
@@ -550,9 +549,8 @@ void RolePlayer::GetBreakthroughReward()
             role_def_ < 50 ? role_def_ = 50 :  role_def_ += 15;
             role_hp_ < 300 ? role_hp_ = 300 :  role_hp_ += 300;
             role_prestige_ < 50 ? role_prestige_ = 50 : role_prestige_ += 20;
-            role_item_->GetItemMoney() < 50 ? role_item_->SetItemMoney(50) :  role_item_->SetItemMoney(100);
 //            emit SignalShowMsgToUI("恭喜道友渡劫成功！属性获得提升，灵石初始化为 100");
-            ShowMsgToUi("恭喜道友渡劫成功！属性获得提升，灵石初始化为 100");
+            ShowMsgToUi("恭喜道友渡劫成功！");
             return;;
         }
         case LIANQI:
@@ -902,8 +900,8 @@ void RolePlayer::SaveRoleItem()
 {
     // 打包角色道具
     QJsonObject role_item_data;
-    role_item_data.insert("role_name", role_name_);
-    role_item_data.insert(QString::number(kRoleMoney), role_item_->GetItemMoney());
+
+
     // 发送更新角色道具数据库信号
     emit SignalUpdateRoleItemDatabase(role_item_data);
 }
@@ -1091,22 +1089,18 @@ void RolePlayer::SlotCyclicCultivation()
     }
     CheckExpIsUpgrade();
 
-    // 更新角色道具
-    role_item_->SetItemMoney(role_item_->GetItemMoney() + money);
+    // 更新角色灵石
+    IncreaseMoneyToItem(money);
 
     // 更新角色基本信息数据库
     SaveRoleInfo();
-
-    // 更新角色道具数据库
-    SaveRoleItem();
 
     // 更新角色属性系数数据库
     SaveCoefficient();
 
     // 发送信号，发送事件信息，更新UI、数据库
-//    emit SignalShowMsgToUI(msg);
     ShowMsgToUi(msg);
-//    emit SignalUpdateUI(kRoleExp, QString::number(role_cur_exp_));
+
     QJsonObject ui_obj;
     ui_obj.insert(QString::number(kRoleExp), QString::number(role_cur_exp_));
     UpdateRoleUI(ui_obj);
@@ -1283,6 +1277,7 @@ QString RolePlayer::GetEquipAreaName(RoleEquipAreaEnum equipAreaEnum) {
     {
         case kWeaponArea:
             equip_name = equip_weapon_;
+            break;
         case kMagicArea:
             equip_name = equip_magic_;
             break;
@@ -1444,5 +1439,16 @@ void RolePlayer::UpdateRoleUI(const QJsonObject& data) {
                                                         data,
                                                         "",
                                                         module_name::ui,
+                                                        module_name::role));
+}
+
+void  RolePlayer::IncreaseMoneyToItem(int num)
+{
+    QJsonObject data_obj;
+    data_obj.insert("num", num);
+    emit SignalActionRequest(PublicFunc::PackageRequest(itemCmd::IncreaseMoney,
+                                                        data_obj,
+                                                        "",
+                                                        module_name::item,
                                                         module_name::role));
 }

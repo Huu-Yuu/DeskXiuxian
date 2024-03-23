@@ -23,6 +23,11 @@ public:
     void initConnect(); ///< 初始化连接
     int GetItemMoney(); ///< 获取灵石数量
     void SetItemMoney(int money);   ///< 写入灵石数量
+    /**
+     * @brief 灵石业务，用于增加或减少
+     * @param money 增加或减少的灵石
+     * **/
+    void ItemMoneyBusiness(int money);
     void InitLocalRoleInfo(const QJsonObject& data);   ///< 初始化本地角色信息
 signals:
     //请求外部动作
@@ -32,11 +37,7 @@ signals:
     //状态变化抛给上一级
     void SignalPubTopic(const QJsonObject& status);
 public slots:
-    /**
-     * @brief 灵石业务，用于增加或减少
-     * @param money 增加或减少的灵石
-     * **/
-    void ItemMoneyBusiness(int money);
+
     void SlotAddItems(RoleItemEnum item_enum, int add_num);   ///< 获取物品槽函数
     void SlotSubtractItems(RoleItemEnum item_enum, int subtract_num);   ///< 减少物品数量
     void SlotQuantityChanged(RoleItemEnum item_enum , int sum); ///< 物品数量被改变槽函数，物品枚举，变更后的数量

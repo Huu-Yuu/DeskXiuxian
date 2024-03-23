@@ -231,7 +231,7 @@ bool DataService::CheckTablesExist()
         }
     }
 
-    // 检查 RoleItemEnum 表是否存在
+    // 检查 RoleItem 表是否存在
     queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleItem'";
     if (!query.exec(queryString))
     {
@@ -244,7 +244,7 @@ bool DataService::CheckTablesExist()
     {
         QString createTableQuery = "CREATE TABLE RoleItem ("
                                    "role_name TEXT,"
-                                   "10001 INTEGER"
+                                   "item_10001 INTEGER"
                                    ")";
         if (!query.exec(createTableQuery))
         {
@@ -253,11 +253,11 @@ bool DataService::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleItem (role_name, 10001) "
-                              "VALUES (:role_name, :10001)";
+        QString insertQuery = "INSERT INTO RoleItem (role_name, item_10001) "
+                              "VALUES (:role_name, :item_10001)";
         query.prepare(insertQuery);
         query.bindValue(":role_name", "GM姜子牙");
-        query.bindValue(":10001", 0);
+        query.bindValue(":item_10001", 0);
         if (!query.exec())
         {
             LOG_DEBUG(kDataManage, QString("插入初始值时出错:%1").arg(query.lastError().text()));
@@ -617,7 +617,7 @@ void DataService::run()
 #endif
 }
 
-QJsonObject DataService::InitLocalRoleInfo() {
+void DataService::InitLocalRoleInfo() {
     QString last_game_time = "最近一次离线时间是：" + GetLastGameTime();
     QJsonObject data_obj;
     data_obj.insert("msg", last_game_time);

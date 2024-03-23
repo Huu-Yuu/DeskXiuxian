@@ -204,7 +204,7 @@ void MainCtrl::onActionRequest(const QJsonObject &request_data) {
     QString type = request_data.value("type").toString();
     QString dest = request_data.value("dest").toString();
     QString ori = request_data.value("ori").toString();
-    LOG_DEBUG(kMainCtrl, QString("主控类收到请求：%1 -> %2").arg(sender()->objectName()).arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
+    LOG_DEBUG(kMainCtrl, QString("主控类收到请求：%1 -> %2").arg(ori).arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
     if(m_manager_map.contains(dest))
     {
         m_manager_map[dest]->SlotActionRequest(request_data);

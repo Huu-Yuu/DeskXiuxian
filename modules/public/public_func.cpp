@@ -168,6 +168,20 @@ ItemType PublicFunc::ConvertItemType(RoleItemEnum item_enum) {
     }
 }
 
+QString PublicFunc::ConvertItemEnumToStr(RoleItemEnum item_enum)
+{
+    ItemType item_type = ConvertItemType(item_enum);
+    if(item_type != kItemEquip)
+    {
+        return QString("item_%1").arg(QString::number(item_enum));
+    }
+    else
+    {
+        LOG_DEBUG(kMainCtrl, QString("不能将装备类型转换为数据库类名：%1").arg(QString::number(item_enum)));
+        return "";
+    }
+}
+
 RoleEquipAreaEnum PublicFunc::ConvertEquipArea(RoleItemEnum item_enum) {
     QString enum_type = QString::number(item_enum);
     QString type_num = enum_type.mid(1, 1); // 提取第二位数字

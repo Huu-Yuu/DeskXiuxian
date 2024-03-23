@@ -1,4 +1,5 @@
 #include "role_db.h"
+#include <QJsonObject>
 
 RoleInfoTable::RoleInfoTable() {
 
