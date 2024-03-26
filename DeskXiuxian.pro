@@ -2,6 +2,7 @@ QT += core gui
 QT += sql
 QT += core
 QT += network
+QT += websockets
 
 #LIBS += -L"D:/source code/DeskXiuxian/bin" -lmysql
 LIBS += -luser32 -lkernel32
@@ -26,6 +27,7 @@ CONFIG += c++11
 #}
 
 SOURCES += \
+    common/web_socket_client.cpp \
     modules/filedata/data_service_remote_data.cpp \
     modules/filedata/data_service_settings.cpp \
     modules/filedata/role_db.cpp \
@@ -52,6 +54,8 @@ SOURCES += \
 
 HEADERS += \
     common/singleton.h \
+    common/web_socket_client.h \
+    common/web_socket_define.h \
     modules/filedata/data_service.h \
     modules/filedata/db_manage.h \
     modules/filedata/role_db.h \

@@ -29,7 +29,7 @@ QT_END_NAMESPACE
 class MainUI : public QMainWindow
 {
     Q_OBJECT
-
+    typedef void (MainUI::*Function_Rsp)(const QJsonObject&);
 public:
     SINGLETON(MainUI);
     MainUI(QWidget* parent = nullptr);
@@ -94,9 +94,9 @@ private slots:
     void on_cultiva_up_but_clicked();
 
 private:
-
+    void initResponseFunction();    ///< 预留 初始化应答函数
     void AddMessage(QString msg);   ///< 添加消息到消息列表
-
+    QMap<QString, Function_Rsp> map_function_rsp_;  ///< 处理应答
     QProcess* process;  // 用于关闭窗口时杀死所有进程
     Ui::MainUI* ui;
     Logger* logger_obj_;

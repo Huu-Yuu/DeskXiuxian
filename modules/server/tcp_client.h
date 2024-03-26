@@ -43,15 +43,9 @@ signals:
     void SignalTcpErrorResult(int result, QJsonObject extra = QJsonObject());
 
 public slots:
-    /**
-     * @brief 网络连接槽函数
-     */
-    void SlotTcpConnect();
+    void SlotTcpConnect();  ///< 网络连接槽函数
 
-    /**
-     * @brief 连接成功处理函数
-     */
-    void SlotConnected();
+    void SlotConnected();   ///< 连接成功处理函数
 
     /**
      * @brief 读Socket数据槽函数
@@ -68,36 +62,19 @@ public slots:
      */
     void SlotReconnectTimeout();
 
-    /**
-     * @brief 断开连接处理槽函数
-     */
-    void SlotDisconnected();
+    void SlotDisconnected();    ///< 断开连接处理槽函数
 
-    /**
-     * @brief 错误码处理和转发控制
-     */
-    void SlotSocketErrorDeal(QAbstractSocket::SocketError socket_error);
+    void SlotSocketErrorDeal(QAbstractSocket::SocketError socket_error);    ///< 错误码处理和转发控制
 
 private:
-    /**
-     * @brief 是否连接成功
-     */
-    bool IsConnected();
 
-    /**
-     * @brief 生成时间戳
-     */
-    QString GenerateTimeStamp();
+    bool IsConnected(); ///< 是否连接成功
 
-    /**
-     * @brief 发送TCP数据
-     */
-    qint64 TcpWrite(QJsonObject& json_data);
+    QString GenerateTimeStamp();    ///< 生成时间戳
 
-    /**
-     * @brief 收到服务器后回复
-     */
-    void JsonDataDeal(const QByteArray& json_data);
+    qint64 TcpWrite(QJsonObject& json_data);    ///< 发送TCP数据
+
+    void JsonDataDeal(const QByteArray& json_data); ///< 收到服务器后回复
 
     /**
      * @brief JsonDataCheck 拼接数据检查

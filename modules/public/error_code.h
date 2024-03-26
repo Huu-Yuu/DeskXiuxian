@@ -44,6 +44,20 @@
 #define DB_ERROR_INVALID_DATA           int(0xEE02010E)  // 无效的数据
 #define DB_ERROR_DISK_FULL              int(0xEE02010F)  // 磁盘空间已满
 
+//数据库函数错误码(模块代号037，名称QSQL)
+#define ERROR_QSQL_BASE                           int(0xEE037000)  //SQL错误
+#define ERROR_QSQL_UPDATE                         int(0xEE037001)  //SQL更新错误
+#define ERROR_QSQL_DELETE                         int(0xEE037002)  //SQL删除错误
+#define ERROR_QSQL_CREATE                         int(0xEE037003)  //SQL创建错误
+#define ERROR_QSQL_SELECT                         int(0xEE037004)  //SQL选中错误
+#define ERROR_QSQL_OPEN                           int(0xEE037005)  //SQL打开错误
+#define ERROR_QSQL_INSERT                         int(0xEE037006)  //SQL插入错误
+#define ERROR_QSQL_EMPTY                          int(0xEE037007)  //SQL为空
+
+//配置文件错误码(模块代号038，名称SETTING_FILE)
+#define ERROR_SETTING_FILE_BASE                   int(0xEE038000)  //配置文件错误
+#define ERROR_SETTING_FILE_NOT_LOAD               int(0xEE038001)  //配置文件未加载
+
 //网络通信错误码(模块代号022, 名称:NETWORK)
 #define ERROR_NETWORK_BASE                        int(0xEE022000)  //网络通信错误
 #define ERROR_NETWORK_DISCONNECTED                int(0xEE022001)  //网络连接断开

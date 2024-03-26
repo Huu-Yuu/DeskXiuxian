@@ -20,7 +20,7 @@ elseif(WIN32)
     set(CMAKE_PREFIX_PATH "D:/Qt/Qt5.12.12/5.12.12/msvc2017")
 endif()
 
-find_package(Qt5 COMPONENTS Core Gui Sql Network Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Core Gui Sql Network Widgets WebSockets REQUIRED)
 
 # 设置源文件列表
 #cpp h
@@ -45,6 +45,7 @@ target_link_libraries(DeskXiuxina PRIVATE
     Qt5::Sql
     Qt5::Network
     Qt5::Widgets
+    Qt5::WebSockets
         if(WIN32)
         user32
         kernel32
