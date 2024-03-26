@@ -10,18 +10,14 @@ TcpClient::TcpClient(QObject* parent) : QObject(parent)
         connect(tcp_socket_, SIGNAL(error(QAbstractSocket::SocketError)),
                 this, SLOT(SlotSocketErrorDeal(QAbstractSocket::SocketError)),
                 Qt::QueuedConnection);
-        connect(tcp_socket_, SIGNAL(readyRead()),
-                this, SLOT(SlotTcpRead()), Qt::QueuedConnection);
-        connect(tcp_socket_, SIGNAL(connected()),
-                this, SLOT(SlotConnected()), Qt::QueuedConnection);
-        connect(tcp_socket_, SIGNAL(disconnected()),
-                this, SLOT(SlotDisconnected()), Qt::QueuedConnection);
+        connect(tcp_socket_, &QTcpSocket::readyRead, this, &TcpClient::SlotTcpRead, Qt::QueuedConnection);
+        connect(tcp_socket_, &QTcpSocket::connected, this, &TcpClient::SlotConnected, Qt::QueuedConnection);
+        connect(tcp_socket_, &QTcpSocket::disconnected, this, &TcpClient::SlotDisconnected, Qt::QueuedConnection);
     }
     if (reconnect_timer_ == nullptr)
     {
         reconnect_timer_ = new QTimer;
-        connect(reconnect_timer_, SIGNAL(timeout()),
-                this, SLOT(SlotReconnectTimeout()), Qt::QueuedConnection);
+        connect(reconnect_timer_, &QTimer::timeout, this, &TcpClient::SlotReconnectTimeout, Qt::QueuedConnection);
     }
     user_ip_ = PublicFunc::GetLocalIpAddress();
     SlotTcpConnect();

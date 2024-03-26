@@ -1,9 +1,9 @@
-#include "web_socket_client.h"
+#include "modules/server/web_socket_client.h"
 #include <QDebug>
 #include <QEventLoop>
 #include <QFile>
 #include <QSslKey>
-#include "/modules/public/error_display.h"
+#include "modules/public/error_display.h"
 
 WebsocketClient::WebsocketClient(const QString& address,  ST_SSL_TYPE ssl_type, QStringList param)
 {

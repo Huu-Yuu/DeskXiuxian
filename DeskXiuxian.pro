@@ -27,7 +27,6 @@ CONFIG += c++11
 #}
 
 SOURCES += \
-    common/web_socket_client.cpp \
     modules/filedata/data_service_remote_data.cpp \
     modules/filedata/data_service_settings.cpp \
     modules/filedata/role_db.cpp \
@@ -50,12 +49,11 @@ SOURCES += \
     modules/filedata/data_service.cpp \
     modules/public/public_func.cpp \
     modules/server/tcp_client.cpp \
+    modules/server/web_socket_client.cpp \
     modules/interface_manager.cpp
 
 HEADERS += \
     common/singleton.h \
-    common/web_socket_client.h \
-    common/web_socket_define.h \
     modules/filedata/data_service.h \
     modules/filedata/db_manage.h \
     modules/filedata/role_db.h \
@@ -79,6 +77,8 @@ HEADERS += \
     modules/public/public_func.h \
     modules/public/error_code.h \
     modules/server/tcp_client.h \
+    modules/server/web_socket_client.h \
+    modules/server/web_socket_define.h \
     modules/interface_manager.h
 
 FORMS += \
