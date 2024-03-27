@@ -62,7 +62,7 @@ void ItemBase::ItemNumCharge(int num) {
 }
 
 void ItemBase::UsageEffect(int sum) {
-    Q_UNUSED(sum);
+    emit SignalUseItem(item_index_, sum);
 }
 
 int ItemBase::GetItemType() {

@@ -1,6 +1,7 @@
 #include "item_service.h"
 #include "modules/public/public_declare.h"
 #include "prop/prop_rename_card.h"
+#include "modules/item/prop/prop_yanshoudan10.h"
 
 QMutex ItemService::mutex_;  // 初始化互斥锁对象
 
@@ -40,14 +41,11 @@ void ItemService::ItemMoneyBusiness(int money) {
 void ItemService::InitItem() {
     LOG_DEBUG(kItemManage, "正在初始化道具...");
     m_item_strategy.insert(kPropRenameCard, RenameCard::getInstance());
+    m_item_strategy.insert(kYanshouDan10, YanshouDan10::getInstance());
 }
 
-void ItemService::SlotAddItems(RoleItemEnum item_enum, int obtain_num) {
-    m_item_strategy.value(item_enum)->AddItemNum(obtain_num);
-}
-
-void ItemService::SlotSubtractItems(RoleItemEnum item_enum, int subtract_num) {
-    m_item_strategy.value(item_enum)->AddItemNum(subtract_num);
+void ItemService::SlotItemNumCharge(RoleItemEnum item_enum, int obtain_num) {
+    m_item_strategy.value(item_enum)->ItemNumCharge(obtain_num);
 }
 
 void ItemService::initConnect() {
@@ -109,6 +107,9 @@ void ItemService::SlotUseItem(RoleItemEnum item_index, int sum) {
                                                                 "",
                                                                 module_name::ui,
                                                                 module_name::item));
+            break;
+        case kYanshouDan10:
+
             break;
     }
     ShowMsgToUi(QString("使用道具：%1，使用数量：%2").arg(m_item_strategy[item_index]->GetItemName()).arg(sum));

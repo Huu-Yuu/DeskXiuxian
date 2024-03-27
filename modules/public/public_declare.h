@@ -1,7 +1,3 @@
-//
-// Created by hu on 2024/3/7.
-//
-
 #ifndef DESKXIUXINA_PUBLIC_DECLARE_H
 #define DESKXIUXINA_PUBLIC_DECLARE_H
 
