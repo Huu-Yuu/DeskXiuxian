@@ -206,7 +206,7 @@ private:
     bool is_FirstCreation = false;          ///< 是否首次创建，用于命名角色
     bool is_SaveLoginLog = false;           ///< 上传登录日志开关 登录时间 IP UUID 角色名 等级
 
-    QJsonObject role_data_;      ///< 角色基本数据
+    QJsonObject role_info_data_;      ///< 角色基本数据
     QJsonObject role_item_data_; ///< 角色物品数据
     QJsonObject role_equip_data_; ///< 角色物品数据
     QJsonObject RC_data_;        ///< 角色系数

@@ -372,7 +372,7 @@ void DataService::DatabaseClose()
 void DataService::SlotSaveRoleInfoToDatabase(const QJsonObject& role_data)
 {
     is_SaveRoleInfo = true;
-    role_data_ = role_data;
+    role_info_data_ = role_data;
     start();
 }
 
@@ -413,7 +413,7 @@ void DataService::WriteRoleInfoToLocalDatabase()
         QString updateQuery = "UPDATE RoleInfo SET ";
         // 遍历role_item_data中的键值对
         QStringList updateValues;
-        for (auto it = role_item_data_.constBegin(); it != role_item_data_.constEnd(); ++it)
+        for (auto it = role_info_data_.constBegin(); it != role_info_data_.constEnd(); ++it)
         {
             QString key = it.key();
 //            QString value = it.value().toString();
@@ -433,7 +433,7 @@ void DataService::WriteRoleInfoToLocalDatabase()
         query.bindValue(":role_name", role_name_);
 
         // 绑定role_item_data中的键值对
-        for (auto it = role_item_data_.constBegin(); it != role_item_data_.constEnd(); ++it)
+        for (auto it = role_info_data_.constBegin(); it != role_info_data_.constEnd(); ++it)
         {
             query.bindValue(":" + it.key(), it.value().toString());
         }
@@ -505,7 +505,7 @@ void DataService::WriteRoleEquipToLocalDatabase()
 
         // 遍历role_item_data中的键值对
         QStringList updateValues;
-        for (auto it = role_item_data_.constBegin(); it != role_item_data_.constEnd(); ++it)
+        for (auto it = role_equip_data_.constBegin(); it != role_equip_data_.constEnd(); ++it)
         {
             QString key = it.key();
 //            QString value = it.value().toString();
@@ -525,7 +525,7 @@ void DataService::WriteRoleEquipToLocalDatabase()
         query.bindValue(":role_name", role_name_);
 
         // 绑定role_item_data中的键值对
-        for (auto it = role_item_data_.constBegin(); it != role_item_data_.constEnd(); ++it)
+        for (auto it = role_equip_data_.constBegin(); it != role_equip_data_.constEnd(); ++it)
         {
             query.bindValue(":" + it.key(), it.value().toString());
         }

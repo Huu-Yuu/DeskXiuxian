@@ -483,16 +483,16 @@ int DataService::WriteRoleInfoToRemoteDatabase()
                                   "WHERE uuid = :userUUID";
             query.prepare(updateQuery);
             query.bindValue(":roleName", role_name_);
-            query.bindValue(":roleLife", role_data_.value("roleLife").toInt());
-            query.bindValue(":roleMaxLife", role_data_.value("roleMaxLife").toInt());
-            query.bindValue(":rolePrestige", role_data_.value("rolePrestige").toInt());
-            query.bindValue(":roleAptitude", role_data_.value("roleAptitude").toInt());
-            query.bindValue(":roleLv", role_data_.value("roleLv").toInt());
-            query.bindValue(":roleExp", role_data_.value("roleExp").toInt());
-            query.bindValue(":roleAgg", role_data_.value("roleAgg").toInt());
-            query.bindValue(":roleDef", role_data_.value("roleDef").toInt());
-            query.bindValue(":roleHp", role_data_.value("roleHp").toInt());
-            query.bindValue(":roleCurExp", role_data_.value("roleCurExp").toInt());
+            query.bindValue(":roleLife", role_info_data_.value("roleLife").toInt());
+            query.bindValue(":roleMaxLife", role_info_data_.value("roleMaxLife").toInt());
+            query.bindValue(":rolePrestige", role_info_data_.value("rolePrestige").toInt());
+            query.bindValue(":roleAptitude", role_info_data_.value("roleAptitude").toInt());
+            query.bindValue(":roleLv", role_info_data_.value("roleLv").toInt());
+            query.bindValue(":roleExp", role_info_data_.value("roleExp").toInt());
+            query.bindValue(":roleAgg", role_info_data_.value("roleAgg").toInt());
+            query.bindValue(":roleDef", role_info_data_.value("roleDef").toInt());
+            query.bindValue(":roleHp", role_info_data_.value("roleHp").toInt());
+            query.bindValue(":roleCurExp", role_info_data_.value("roleCurExp").toInt());
             query.bindValue(":userUUID", user_uuid_);
             if (query.exec())
             {
