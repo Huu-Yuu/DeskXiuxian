@@ -31,7 +31,26 @@ DataService::~DataService()
     }
 }
 
-void DataService::OpenDatabase(QString path)
+void DataService::InitLocalData()
+{
+    // 获取数据库文件路径
+    QString databasePath = QCoreApplication::applicationDirPath() + "/database.db";
+
+    // 检查数据库文件是否存在
+    QFileInfo databaseFile(databasePath);
+    if (!databaseFile.exists())
+    {
+        // 数据库文件不存在，创建新的数据库
+        CreateDatabase(databasePath);
+    }
+    else
+    {
+        // 数据库文件已存在，读取现有数据库
+        OpenDatabase(databasePath);
+    }
+}
+
+void DataService::OpenDatabase(const QString& path)
 {
     // 打开现有数据库连接
     QSqlDatabase database_;
@@ -244,7 +263,8 @@ bool DataService::CheckTablesExist()
     {
         QString createTableQuery = "CREATE TABLE RoleItem ("
                                    "role_name TEXT,"
-                                   "item_10001 INTEGER"
+                                   "item_10001 INTEGER,"
+                                   "item_10002 INTEGER"
                                    ")";
         if (!query.exec(createTableQuery))
         {
@@ -253,11 +273,12 @@ bool DataService::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleItem (role_name, item_10001) "
-                              "VALUES (:role_name, :item_10001)";
+        QString insertQuery = "INSERT INTO RoleItem (role_name, item_10001, item_10002) "
+                              "VALUES (:role_name, :item_10001, :item_10002)";
         query.prepare(insertQuery);
         query.bindValue(":role_name", "GM姜子牙");
         query.bindValue(":item_10001", 0);
+        query.bindValue(":item_10002", 1);  ///< 本地模式自动送一张改名卡
         if (!query.exec())
         {
             LOG_DEBUG(kDataManage, QString("插入初始值时出错:%1").arg(query.lastError().text()));
@@ -626,9 +647,8 @@ void DataService::InitLocalRoleInfo() {
                                                          "",
                                                          module_name::ui,
                                                          module_name::data));
-//    emit SignalShowMsgToUI(last_game_time);
-    QJsonObject role_info, role_equip, role_item, role_coefficient, obj_;
 
+    QJsonObject role_info, role_equip, role_item, role_coefficient, obj_;
     role_info = GetLocalTableInfo2Obj("RoleInfo");
     role_equip = GetLocalTableInfo2Obj("RoleEquip");
     role_item = GetLocalTableInfo2Obj("RoleItem");

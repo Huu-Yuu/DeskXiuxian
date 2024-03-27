@@ -39,17 +39,18 @@ namespace ProgressCmd
 
 namespace itemCmd
 {
-    const QString IncreaseMoney = "IncreaseMoney";  ///< 增加灵石
-    const QString GetItemIndex = "GetItemIndex";    ///< 获取物品索引
-    const QString GetItemNum = "GetItemNum";        ///< 获取物品数量
-    const QString SetItemNum = "SetItemNum";        ///< 设置物品数量
-    const QString GetItemName = "GetItemName";      ///< 获取物品名称
-    const QString SetItemName = "SetItemName";      ///< 设置物品名称
-    const QString GetItemPrice = "GetItemPrice";    ///< 获取物品价格
-    const QString SetItemPrice = "SetItemPrice";    ///< 设置物品价格
-    const QString GetItemExplain = "GetItemExplain";///< 获取物品描述
-    const QString SetItemExplain = "SetItemExplain";///< 设置物品描述
-    const QString SellItem = "SellItem";            ///< 出售物品
+    const QString IncreaseMoney = "IncreaseMoney";      ///< 增加灵石
+    const QString ItemAcquisition = "ItemAcquisition";  ///< 物品获取
+    const QString GetItemIndex = "GetItemIndex";        ///< 获取物品索引
+    const QString GetItemNum = "GetItemNum";            ///< 获取物品数量
+    const QString SetItemNum = "SetItemNum";            ///< 设置物品数量
+    const QString GetItemName = "GetItemName";          ///< 获取物品名称
+    const QString SetItemName = "SetItemName";          ///< 设置物品名称
+    const QString GetItemPrice = "GetItemPrice";        ///< 获取物品价格
+    const QString SetItemPrice = "SetItemPrice";        ///< 设置物品价格
+    const QString GetItemExplain = "GetItemExplain";    ///< 获取物品描述
+    const QString SetItemExplain = "SetItemExplain";    ///< 设置物品描述
+    const QString SellItem = "SellItem";                ///< 出售物品
 }
 
 namespace dbCmd
@@ -83,6 +84,7 @@ namespace uiCmd
 {
     const QString ShowMainUI = "ShowMainUI";  ///< 显示主界面
     const QString ShowLoginWidget = "ShowLoginWidget";  ///< 显示登录窗口
+    const QString ShowRenameWidget = "ShowRenameWidget";  ///< 显示改名窗口
     const QString InitRoleUI = "InitRoleUI";    ///< 初始化角色UI
     const QString ShowMsgToUI = "ShowMsgToUI";  ///< 显示信息到UI
     const QString DisableCultivaUpButton = "DisableCultivaUpButton";  ///< 禁用突破按钮

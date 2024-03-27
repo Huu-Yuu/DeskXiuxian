@@ -31,7 +31,7 @@ signals:
     /**
      * @brief 重命名成功 信号
      */
-    void SignalRenameSuccessful();
+    void SignalRenameSuccessful(QString name);
 
     //请求外部动作
     void SignalActionRequest(const QJsonObject& request_data);

@@ -229,28 +229,6 @@ void MainCtrl::onActionResponse(const QJsonObject &request_data) {
     }
 }
 
-void MainCtrl::AutomaticLogin(int result) {
-    switch (result) {
-        case 1:
-            qDebug() << "自动登录，获取角色数据";
-            onActionRequest(PublicFunc::PackageRequest(mainCmd::InitRemoteRoleInfo,
-                                                       QJsonObject(),
-                                                       "",
-                                                       module_name::data,
-                                                       module_name::ui));
-            ShowMainUi();
-            break;
-        case 0:
-            // 进入登录、注册界面
-            onActionRequest(PublicFunc::PackageRequest(uiCmd::ShowLoginWidget,
-                                                       QJsonObject(),
-                                                       "",
-                                                       module_name::ui,
-                                                       module_name::main));
-            break;
-    }
-}
-
 void MainCtrl::CheckAutoLogIn() {
     // 获取本地登录记录，检查是否可以自动登录
     onActionRequest(PublicFunc::PackageRequest(mainCmd::AutomaticLogin,

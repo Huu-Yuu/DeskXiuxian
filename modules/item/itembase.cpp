@@ -1,4 +1,5 @@
 #include "itembase.h"
+#include "modules/public/error_code.h"
 
 ItemBase::ItemBase(QObject *parent) : QObject(parent)
 {
@@ -46,15 +47,24 @@ int ItemBase::GetItemIndex() {
 }
 
 int ItemBase::UseItem(int sum) {
-    return 0;
+    if(item_num_ >= sum)
+    {
+        item_num_ -= sum;
+        UsageEffect(sum);
+        return NO_ERROR;
+    }
+    return -1;
 }
 
-void ItemBase::AddItemNum(int num) {
+void ItemBase::ItemNumCharge(int num) {
     item_num_ += num;
     emit SignalQuantityChanged(item_index_, item_num_);
 }
 
-void ItemBase::SubtractItemNum(int num) {
-    item_num_ -= num;
-    emit SignalQuantityChanged(item_index_, item_num_);
+void ItemBase::UsageEffect(int sum) {
+    Q_UNUSED(sum);
+}
+
+int ItemBase::GetItemType() {
+    return item_type_;
 }

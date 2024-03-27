@@ -27,25 +27,6 @@ void DataService::InitRemoteData()
     LOG_DEBUG(kDataManage, QString("获取到当前IP地址为：%1").arg(user_ip_));
 }
 
-void DataService::InitLocalData()
-{
-    // 获取数据库文件路径
-    QString databasePath = QCoreApplication::applicationDirPath() + "/database.db";
-
-    // 检查数据库文件是否存在
-    QFileInfo databaseFile(databasePath);
-    if (!databaseFile.exists())
-    {
-        // 数据库文件不存在，创建新的数据库
-        CreateDatabase(databasePath);
-    }
-    else
-    {
-        // 数据库文件已存在，读取现有数据库
-        OpenDatabase(databasePath);
-    }
-}
-
 int DataService::LoginVerification(const QString& user_name, const QString& pass_word)
 {
     int result = -1;
@@ -172,8 +153,9 @@ int DataService::AutomaticLogin()
 int DataService::CheckRoleNameIsOk(const QString& role_name)
 {
     int result;
+#if DATABASE_TYPE == 0
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-    QSqlQuery query(db);
+        QSqlQuery query(db);
     QString queryString = QString("SELECT RoleName FROM user_data_info WHERE RoleName = '%1'").arg(role_name);
 
     if (query.exec(queryString) && query.next())
@@ -186,6 +168,12 @@ int DataService::CheckRoleNameIsOk(const QString& role_name)
         result = 1;
     }
     return result;
+#elif DATABASE_TYPE == 1
+    return 1;
+#else
+    // 服务器
+#endif
+
 }
 
 QString DataService::GetUserUUID(const QString user_name, const QString pass_word)
@@ -252,6 +240,7 @@ int DataService::CheckUserLogginIsFist()
 int DataService::ModifyRoleName(const QString& new_name)
 {
     int result = -3;
+#if DATABASE_TYPE == 0
     QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
     QSqlQuery query(db);
     query.prepare("SELECT COUNT(*) FROM user_role_info WHERE uuid = :UUID");
@@ -294,9 +283,38 @@ int DataService::ModifyRoleName(const QString& new_name)
     }
     else
     {
-        // 查询执行失败，输出错误信息
         LOG_DEBUG(kDataManage, QString("计数查询失败：%1").arg(query.lastError().text()));
     }
+#elif DATABASE_TYPE == 1
+    QSqlDatabase db = QSqlDatabase::database(LOCAL_DB_LINKNAME);
+    QSqlQuery query(db);
+    // 获取所有表单名
+    QStringList tableList;
+    query.prepare("SELECT name FROM sqlite_master WHERE type='table'");
+    while (query.next()) {
+        tableList << query.value(0).toString();
+    }
+    auto updateRoleName = [&](const QString &tableName, const QString &roleName) {
+        QSqlQuery query_type(db);
+        QString updateQuery = "UPDATE " + tableName + " SET role_name = '" + roleName + "' WHERE role_name IS NOT NULL";
+        if (!query_type.exec(updateQuery)) {
+            LOG_DEBUG(kDataManage, QString("执行更新查询时出错：%1").arg(query_type.lastError().text()));
+            return -1;
+        }
+        return 1;
+    };
+
+    // 遍历所有表单并更新 role_name 列的值为 'new_name'
+    for (const QString &tableName : tableList) {
+        int ret = updateRoleName(tableName, new_name);
+        if(ret == -1)
+            return ret;
+    }
+    role_name_ = new_name;
+    result = 1;
+#else
+    // 服务器
+#endif
     return result;
 }
 

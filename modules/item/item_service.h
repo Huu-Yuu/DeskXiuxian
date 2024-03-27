@@ -40,10 +40,12 @@ public slots:
 
     void SlotAddItems(RoleItemEnum item_enum, int add_num);   ///< 获取物品槽函数
     void SlotSubtractItems(RoleItemEnum item_enum, int subtract_num);   ///< 减少物品数量
-    void SlotQuantityChanged(RoleItemEnum item_enum , int sum); ///< 物品数量被改变槽函数，物品枚举，变更后的数量
+    void SlotQuantityChanged(RoleItemEnum item_enum , int sum); ///< 物品数量被改变槽函数，物品索引 变更后的数量
+    void SlotUseItem(RoleItemEnum item_index, int sum = 1);     ///< 道具使用槽函数 物品索引 使用数量
 private:
+    void ShowMsgToUi(const QString& msg);       ///< 发送信息到UI显示
     static QMutex mutex_; ///< 互斥锁，用于线程同步
-    QMap<int, ItemBase*> m_action_strategy; ///< 物品索引 和 类绑定
+    QMap<int, ItemBase*> m_item_strategy; ///< 物品索引 和 类绑定
     QMap<int, int> m_item_sum; ///< 物品索引和数量
     int money_num_;     ///< 货币灵石
 };

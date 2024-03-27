@@ -168,7 +168,7 @@ ItemType PublicFunc::ConvertItemType(RoleItemEnum item_enum) {
     }
 }
 
-QString PublicFunc::ConvertItemEnumToStr(RoleItemEnum item_enum)
+QString PublicFunc::ConvertItemEnumToDBStr(RoleItemEnum item_enum)
 {
     ItemType item_type = ConvertItemType(item_enum);
     if(item_type != kItemEquip)
@@ -210,7 +210,7 @@ RoleEquipAreaEnum PublicFunc::ConvertEquipArea(RoleItemEnum item_enum) {
     }
 }
 
-QString PublicFunc::ConvertEquipAreaStr(RoleEquipAreaEnum area_enum) {
+QString PublicFunc::ConvertEquipAreaToDBStr(RoleEquipAreaEnum area_enum) {
     QString area_str;
     switch (area_enum)
     {

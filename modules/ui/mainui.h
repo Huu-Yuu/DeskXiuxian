@@ -81,7 +81,7 @@ public slots:
     void SlotActivateCultivaUpButton(); ///<  激活突破按钮 槽函数
     void SlotDisableCultivaUpButton();  ///< 禁用突破按钮 槽函数
     void SlotLoginSuccessful(); ///< 登录成功处理 槽函数
-    void SlotRenameSuccessful();    ///< 重命名成功处理 槽函数
+    void SlotRenameSuccessful(QString name);    ///< 重命名成功处理 槽函数
 
 protected:
     void closeEvent(QCloseEvent* event);

@@ -12,8 +12,8 @@ public:
     RenameCard();
     ~RenameCard();
 
-    void AddItemNum(int num) override;
-    void SubtractItemNum(int num) override;
+protected:
+    void UsageEffect(int sum = 1) override;
 private:
 
 };

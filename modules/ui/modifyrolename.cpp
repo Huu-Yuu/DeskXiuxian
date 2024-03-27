@@ -74,20 +74,24 @@ void ModifyRoleName::ModifyRoleNameDeal(int result) {
         case 0:
         {
             msg = "修改失败，请重试";
-            qDebug() << msg;
             break;
         }
         case 1:
         {
             msg = "修改成功";
-            qDebug() << msg;
-            emit SignalRenameSuccessful();
+            QJsonObject data_obj;
+            data_obj.insert("name", role_name_);
+            emit SignalActionRequest(PublicFunc::PackageRequest(roleCmd::ModifyRoleName,
+                                                                data_obj,
+                                                                "",
+                                                                module_name::role,
+                                                                module_name::ui));
+            emit SignalRenameSuccessful(role_name_);
             break;
         }
         default:
         {
             msg = "修改失败，请检查网络连接";
-            qDebug() << msg;
             break;
         }
     }

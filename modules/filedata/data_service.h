@@ -43,7 +43,7 @@ public:
     QString GetTableToInfo(const QString table_name, const QString column_name, const QString leach_column, QString leach_value);
 
     /**
-     * @brief 获取本地数据库中指定表单的数据，根据角色名筛选
+     * @brief 根据角色名获取本地数据库中指定表单的数据，将行列转换为JsonObj
      * @param table_name 表单名
      * @return 列-key   行-value
      * **/
@@ -154,7 +154,7 @@ public slots:
 private:
     static QMutex mutex;  // 互斥锁
 
-    void OpenDatabase(QString path);    ///< 打开数据库
+    void OpenDatabase(const QString& path);    ///< 打开数据库
     void CreateDatabase(QString path);  ///< 创建数据库
     bool CheckTablesExist();    ///< 检查数据库
 

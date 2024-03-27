@@ -25,7 +25,6 @@ public:
     ~MainCtrl();
 
     void ShowMainUi();  ///< 显示主界面
-    void AutomaticLogin(int result);  ///< 自动登录
     void InitRoleInfo();    ///< 初始化角色信息（角色属性和角色UI），游戏上线后进行处理
     void InitRoleNetworkData(); ///< 初始化角色网络资料
     void CheckAutoLogIn();  ///< 检测自动登录

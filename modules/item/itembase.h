@@ -16,10 +16,12 @@ public:
     explicit ItemBase(QObject *parent = nullptr);
 
     int GetItemIndex();     ///< 获取物品索引
+    int GetItemType();      ///< 获取物品类型
     int GetItemNum() const;     ///< 获取物品数量
     void SetItemNum(int num);       ///< 设置物品数量
     virtual void AddItemNum(int num);       ///< 增加物品数量
     virtual void SubtractItemNum(int num);       ///< 减少物品数量
+    void ItemNumCharge(int num);    ///< 物品数量改变 增加或减少
     QString GetItemName() const;            ///< 获取物品名称
     void SetItemName(const QString& name);  ///< 写入物品名称
     int GetItemPrice() const;       ///< 获取物品价格
@@ -37,27 +39,36 @@ public:
     /**
      * @brief 使用道具
      * @param sum 使用数量，默认为1
-     * @return 返回错误码 正在为 NO_ERROR
+     * @return 返回错误码 无错误返回 NO_ERROR
      * **/
     int UseItem(int sum = 1);
 
 signals:
     /**
-     * @brief 数量被改变信号
+     * @brief 数量被改变信号 用于修改数据库
      * @param sum 改变后的数量
      * **/
-    void SignalQuantityChanged(RoleItemEnum item_enum , int sum); ///< 数量被改变
+    void SignalQuantityChanged(RoleItemEnum item_enum , int sum);
 
     /**
      * @brief 佩戴装备信号
      * @param RoleItemEnum 物品索引
      * @param RoleEquipAreaEnum 佩戴部位
      * **/
-    void SignalWearingEquipment(RoleItemEnum item_idenx, RoleEquipAreaEnum area_enum);      ///< 佩戴装备
+    void SignalWearingEquipment(RoleItemEnum item_idenx, RoleEquipAreaEnum area_enum);
+
+    /**
+     * @brief 道具使用信号
+     * @param item_idenx 物品索引
+     * @param sum 使用数量
+     * **/
+    void SignalUseItem(RoleItemEnum item_index, int sum = 1);
 
 public slots:
 
 protected:
+    virtual void UsageEffect(int sum = 1);  ///< 道具使用效果
+
     //////————————————物品基本属性——————————————//////
     RoleItemEnum item_index_ = kUnknownProp;    ///< 物品索引
     QString item_name_ = "unknown";             ///< 名称

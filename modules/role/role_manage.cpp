@@ -57,6 +57,11 @@ void RoleManage::SlotActionRequest(const QJsonObject& request_data)
     {
         m_player_->SlotCyclicEnhanceAtt();
     }
+    else if(type.contains(roleCmd::ModifyRoleName))
+    {
+        QJsonObject data = request_data.value("data").toObject();
+        m_player_->SetRoleName(data.value("name").toString());
+    }
 }
 
 void RoleManage::SlotPubTopic(const QJsonObject& topic_data)

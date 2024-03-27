@@ -262,17 +262,22 @@ void MainUI::SlotLoginSuccessful()
                                                         module_name::ui));
 }
 
-void MainUI::SlotRenameSuccessful()
+void MainUI::SlotRenameSuccessful(QString name)
 {
     CloseModifyNameWidget();
-    // 初始化远程数据库
-//    emit SignalInitRoleData();
-    emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitRemoteRoleInfo,
-                                                        QJsonObject(),
-                                                        "",
-                                                        module_name::data,
-                                                        module_name::ui));
-    show();
+    if(!isVisible())
+    {
+        emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitRemoteRoleInfo,
+                                                            QJsonObject(),
+                                                            "",
+                                                            module_name::data,
+                                                            module_name::ui));
+        show();
+    }
+    else
+    {
+        ui->role_name->setText(name);
+    }
 }
 
 void MainUI::on_star_but_clicked()
