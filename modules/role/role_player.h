@@ -29,22 +29,23 @@ public:
     QString GetRoleName() const;    ///< 获取昵称
     void SetRoleName(const QString& name);  ///< 设置昵称
     double GetRoleLife() const; ///< 获取寿命
-    void SetRoleLife(double life);  ///< 设置寿命
+    void SetRoleLife(int life);  ///< 设置寿命
     double GetMaxRoleLife() const;  ///< 获取角色最大寿命
     void UpdataMaxRoleLife();   ///< 更新角色最大寿命
     CultivationStage GetRoleCultivation() const;    ///< 获取当前修为枚举类型
     void SetRoleCultivation(CultivationStage cultivation);  ///< 设置当前修为枚举
 
-    void SetRoleBaseAtt(RoleBaseAttEnum baseAttEnum, int attValue = 0);  ///< 设置基本属性值
+    void IncreModRoleBaseAtt(RoleBaseAttEnum baseAttEnum, int attValue = 0);  ///< 增量修改基本属性值
     QVariant GetRoleTargetProperties(RoleUIEnum tar_name);  ///< 获取角色面板对应的真实属性
+
 
     int GetElementAtt(ElementAttEnum attEnum) const;  ///< 获取元素属性
     void SetElementAtt(ElementAttEnum attEnum, int attValue = 0);   ///< 设置元素属性
     QString GetEquipAreaName(RoleEquipAreaEnum equipAreaEnum);      ///< 获取装备名称
-    void SetEquipAreaName(RoleEquipAreaEnum equipAreaEnum, QString name = "");   ///< 设置装备名称
+    void SetEquipAreaName(RoleEquipAreaEnum equipAreaEnum, const QString& name = "");   ///< 设置装备名称
     void stopThread();  ///< 线程退出
     void SetAptitude(int aptitude); ///< 设置修仙资质
-    double GetAptitude();   ///< 获取修仙资质
+    int GetAptitude();   ///< 获取修仙资质
     void SetLifeCoefficient(int life_coefficient);  ///< 设置角色寿命系数
     void SetSurviveDisaster(int rc_survive_disaster);   ///< 设置角色突破概率加成
     int GetLifeCoefficient();   ///< 获取修仙资质
@@ -107,15 +108,16 @@ private:
     void ShowMsgToUi(const QString& msg);       ///< 发送信息到UI显示
     void UpdateRoleUI(const QJsonObject& data);            ///< 更新UI   键-UI枚举  值-更新文本
     void IncreaseMoneyToItem(int num);     ///< 发送增加货币的信号到Item模块
+    int GetRoleBaseInfo(RoleBaseAttEnum baseAttEnum);   ///< 获取基本属性
     static QMutex mutex;  // 互斥锁
     bool m_stopRequested = false;   // 线程停止
     QString role_name_;         // 昵称
-    double role_life_;          // 寿命
-    double role_max_life_;      // 角色最大寿命
+    int role_life_;          // 寿命
+    int role_max_life_;      // 角色最大寿命
     int role_prestige_;         // 声望
     CultivationStage role_LV_;    // 当前角色修为
     int role_cur_exp_;  // 角色当前经验值
-    int role_exp_;      // 经验值
+    int role_exp_;      // 总经验值
     int role_agg_;      // 攻击力
     int role_def_;      // 防御力
     int role_hp_;       // 血量
@@ -134,7 +136,7 @@ private:
     QString equip_mount_;       // 坐骑
     QString equip_title_;       // 称号
 
-    double aptitude_;   // 修仙资质 0.01 ~ 1
+    int aptitude_;   // 修仙资质百分比
     double next_need_epx_;   // 下次升级所需要的经验值
     int RC_Life_;        // 角色寿命系数 一年等于多少秒
     double RC_SurviveDisaster_; //渡劫成功概率加成

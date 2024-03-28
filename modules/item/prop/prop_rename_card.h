@@ -13,7 +13,7 @@ public:
     ~RenameCard();
 
 protected:
-    void UsageEffect(int sum = 1) override;
+
 private:
 
 };

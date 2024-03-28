@@ -16,7 +16,3 @@ RenameCard::RenameCard() {
 RenameCard::~RenameCard()
 {
 }
-
-void RenameCard::UsageEffect(int sum) {
-    emit SignalUseItem(item_index_, sum);
-}

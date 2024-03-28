@@ -109,7 +109,14 @@ void ItemService::SlotUseItem(RoleItemEnum item_index, int sum) {
                                                                 module_name::item));
             break;
         case kYanshouDan10:
-
+            QJsonObject data_obj;
+            data_obj.insert("att_enum", kRoleMaxLifeAtt);
+            data_obj.insert("sum", 10 * sum);
+            emit SignalActionRequest(PublicFunc::PackageRequest(itemCmd::IncreModRoleBaseAtt,
+                                                                data_obj,
+                                                                "",
+                                                                module_name::role,
+                                                                module_name::item));
             break;
     }
     ShowMsgToUi(QString("使用道具：%1，使用数量：%2").arg(m_item_strategy[item_index]->GetItemName()).arg(sum));

@@ -36,6 +36,7 @@ namespace ProgressCmd
 namespace itemCmd
 {
     const QString IncreaseMoney = "IncreaseMoney";      ///< 增加灵石
+    const QString IncreModRoleBaseAtt = "IncreModRoleBaseAtt";      ///< 增量修改角色基本属性
     const QString ItemAcquisition = "ItemAcquisition";  ///< 物品获取
     const QString GetItemIndex = "GetItemIndex";        ///< 获取物品索引
     const QString GetItemNum = "GetItemNum";            ///< 获取物品数量

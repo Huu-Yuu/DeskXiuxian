@@ -280,3 +280,28 @@ QString PublicFunc::GetCultivationName(int cur_lv) {
     return "";
 }
 
+QString PublicFunc::ConvertBaseAttEnumToDBStr(RoleBaseAttEnum arr_enum) {
+    switch (arr_enum) {
+        case kRoleNameAtt:
+            return "role_name";
+        case kRoleLifeAtt:
+            return "role_life";
+        case kRolePrestigeAtt:
+            return "role_prestige";
+        case kRoleLvAtt:
+            return "role_lv";
+        case kRoleExpAtt:
+            return "role_cur_exp";
+        case kRoleAggAtt:
+            return "role_att";
+        case kRoleDefAtt:
+            return "role_def";
+        case kRoleHpAtt:
+            return "role_hp";
+        case kRoleMaxLifeAtt:
+            return "role_max_life";
+        case kRoleMaxExpAtt:
+            return "role_exp";
+    }
+}
+

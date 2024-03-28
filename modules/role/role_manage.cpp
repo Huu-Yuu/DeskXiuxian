@@ -62,6 +62,11 @@ void RoleManage::SlotActionRequest(const QJsonObject& request_data)
         QJsonObject data = request_data.value("data").toObject();
         m_player_->SetRoleName(data.value("name").toString());
     }
+    else if(type.contains(itemCmd::IncreModRoleBaseAtt))
+    {
+        QJsonObject data = request_data.value("data").toObject();
+        m_player_->IncreModRoleBaseAtt((RoleBaseAttEnum)data.value("att_enum").toInt(), data.value("sum").toInt());
+    }
 }
 
 void RoleManage::SlotPubTopic(const QJsonObject& topic_data)

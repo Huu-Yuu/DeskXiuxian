@@ -43,6 +43,7 @@ public:
     static QString ConvertEquipAreaToDBStr(RoleEquipAreaEnum area_enum);  ///< 装备部位枚举转字符串 数据库列名
     static QString GetCultivationName(int cur_lv);  ///< 获取等级名称
     static QString ConvertItemEnumToDBStr(RoleItemEnum item_enum);    ///< 将道具物品枚举值转换为字符串 数据库列名
+    static QString ConvertBaseAttEnumToDBStr(RoleBaseAttEnum arr_enum); ///< 将基本属性枚举值转换为字符串 数据库列名
 
     // 打包请求数据
     static QJsonObject PackageRequest(const QString& type, const QJsonObject& data, QString id,

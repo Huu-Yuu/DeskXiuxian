@@ -132,7 +132,7 @@ enum RoleItemEnum
  enum RoleBaseAttEnum
 {
      kRoleNameAtt,          ///< 昵称
-     kRoleLifeAtt,          ///< 寿命
+     kRoleLifeAtt,          ///< 当前寿命
      kRolePrestigeAtt,      ///< 声望
      kRoleLvAtt,            ///< 修为
      kRoleExpAtt,           ///< 经验值

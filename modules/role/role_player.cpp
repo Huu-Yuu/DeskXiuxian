@@ -98,7 +98,7 @@ double RolePlayer::GetRoleLife() const
     return role_life_;
 }
 
-void RolePlayer::SetRoleLife(double life)
+void RolePlayer::SetRoleLife(int life)
 {
     role_life_ = life;
 }
@@ -134,10 +134,10 @@ void RolePlayer::SetAptitude(int aptitude)
     aptitude_ = aptitude;
     QString msg = "当前资质为：" + QString::number(aptitude_);
     qDebug() << msg;
-    emit SignalShowMsgToUI(msg);
+    ShowMsgToUi(msg);
 }
 
-double RolePlayer::GetAptitude()
+int RolePlayer::GetAptitude()
 {
     return aptitude_;
 }
@@ -749,12 +749,8 @@ void RolePlayer::GetBreakthroughPenalty()
     role_cur_exp_ -= loss_exp;
     QString msg = "，攻击力-" + QString::number(loss_agg) + "，防御力-" +
                   QString::number(loss_def) + "，血量-" + QString::number(loss_hp) + "，经验值-"  +  QString::number(loss_exp);
-    emit SignalShowMsgToUI("道友渡劫失败，被雷劫击伤，身体被重创" + msg);
     ShowMsgToUi("道友渡劫失败，被雷劫击伤，身体被重创" + msg);
     // 更新角色相关UI面板
-//    emit SignalUpdateUI(kRoleAgg, QString::number(role_agg_));
-//    emit SignalUpdateUI(kRoleDef, QString::number(role_def_));
-//    emit SignalUpdateUI(kRoleHp, QString::number(role_hp_));
     QJsonObject ui_obj;
     ui_obj.insert(QString::number(kRoleAgg), QString::number(role_agg_));
     ui_obj.insert(QString::number(kRoleDef), QString::number(role_def_));
@@ -1000,7 +996,7 @@ void RolePlayer::SlotLifeUpdate()
         if(role_life_ >= role_max_life_)
         {
 //            emit SignalShowMsgToUI(QString("%1道友大限已至享龄%2岁，让我们怀念与他共度的美好时光，他的存在将永远在我们心中闪耀！").arg(role_name_, static_cast<int>(role_life_)));
-            ShowMsgToUi(QString("%1道友大限已至享龄%2岁，让我们怀念与他共度的美好时光，他的存在将永远在我们心中闪耀！").arg(role_name_, static_cast<int>(role_life_)));
+            ShowMsgToUi(QString("%1道友大限已至享龄%2岁，让我们怀念与他共度的美好时光，他的存在将永远在我们心中闪耀！").arg(role_name_, role_life_));
             return;
         }
     }
@@ -1309,7 +1305,7 @@ QString RolePlayer::GetEquipAreaName(RoleEquipAreaEnum equipAreaEnum) {
     return equip_name;
 }
 
-void RolePlayer::SetEquipAreaName(RoleEquipAreaEnum equipAreaEnum, QString name) {
+void RolePlayer::SetEquipAreaName(RoleEquipAreaEnum equipAreaEnum, const QString& name) {
     switch (equipAreaEnum)
     {
         case kWeaponArea:
@@ -1345,7 +1341,8 @@ void RolePlayer::SetEquipAreaName(RoleEquipAreaEnum equipAreaEnum, QString name)
     }
 }
 
-void RolePlayer::SetRoleBaseAtt(RoleBaseAttEnum baseAttEnum, int attValue) {
+void RolePlayer::IncreModRoleBaseAtt(RoleBaseAttEnum baseAttEnum, int attValue) {
+    RoleUIEnum ui_enum = kUnknown; ///< 用来更新UI
     switch (baseAttEnum)
     {
         case kRoleNameAtt:
@@ -1355,34 +1352,55 @@ void RolePlayer::SetRoleBaseAtt(RoleBaseAttEnum baseAttEnum, int attValue) {
             qDebug() << "无法设置角色寿命";
             break;
         case kRolePrestigeAtt:
-            role_prestige_ = attValue;
+            role_prestige_ += attValue;
+            ui_enum = kRolePrestige;
             break;
         case kRoleLvAtt:
             if(attValue > (int) FANREN && attValue < (int) MAXLV)
+            {
                 role_LV_ = (CultivationStage) attValue;
+                ui_enum = kRoleCultivation;
+            }
             else
                 qDebug() << "无法设置角色修为";
             break;
         case kRoleExpAtt:
-            role_cur_exp_ = attValue;
+            role_cur_exp_ += attValue;
+            ui_enum = kRoleExp;
             break;
         case kRoleAggAtt:
-            role_agg_ = attValue;
+            role_agg_ += attValue;
+            ui_enum = kRoleAgg;
             break;
         case kRoleDefAtt:
-            role_def_ = attValue;
+            role_def_ += attValue;
+            ui_enum = kRoleDef;
             break;
         case kRoleHpAtt:
-            role_hp_ = attValue;
+            role_hp_ += attValue;
+            ui_enum = kRoleHp;
             break;
         case kRoleMaxLifeAtt:
-            role_max_life_ = attValue;
+            role_max_life_ += attValue;
             qDebug() << "已强制修改角色最大寿命";
             break;
         case kRoleMaxExpAtt:
-            role_exp_ = attValue;
+            role_exp_ += attValue;
             qDebug() << "已强制修改角色最大经验值";
             break;
+    }
+    QJsonObject role_info_data;
+    role_info_data.insert(PublicFunc::ConvertBaseAttEnumToDBStr(baseAttEnum), GetRoleBaseInfo(baseAttEnum));
+    QJsonObject pub_obj;
+    pub_obj.insert("type", dbCmd::SaveRoleInfo);
+    pub_obj.insert("data", role_info_data);
+    emit SignalPubTopic(pub_obj);
+    // 更新角色相关UI面板
+    if(ui_enum != kUnknown)
+    {
+        QJsonObject ui_obj;
+        ui_obj.insert(QString::number(ui_enum), QString::number(GetRoleBaseInfo(baseAttEnum)));
+        UpdateRoleUI(ui_obj);
     }
 }
 
@@ -1393,7 +1411,7 @@ void RolePlayer::InitLocalRoleInfo(const QJsonObject& obj) {
 //    role_item = obj.value("RoleItem").toObject();
     role_coefficient = obj.value("RoleCoefficient").toObject();
     role_name_ = role_info.value("role_name").toString();
-    role_life_ = role_info.value("role_life").toString().toDouble();
+    role_life_ = role_info.value("role_life").toString().toInt();
     role_max_life_ = role_info.value("role_max_life").toString().toInt();
     role_prestige_ = role_info.value("role_prestige").toString().toInt();
     role_LV_ = (CultivationStage)role_info.value("role_lv").toString().toInt();
@@ -1402,7 +1420,7 @@ void RolePlayer::InitLocalRoleInfo(const QJsonObject& obj) {
     role_agg_ = role_info.value("role_agg").toString().toInt();
     role_def_ = role_info.value("role_def").toString().toInt();
     role_hp_ = role_info.value("role_hp").toString().toInt();
-    aptitude_ = role_info.value("role_aptitude").toString().toDouble();
+    aptitude_ = role_info.value("role_aptitude").toString().toInt();
 
     equip_weapon_ = role_equip.value("equip_weapon").toString();
     equip_magic_ = role_equip.value("equip_magic").toString();
@@ -1451,4 +1469,30 @@ void  RolePlayer::IncreaseMoneyToItem(int num)
                                                         "",
                                                         module_name::item,
                                                         module_name::role));
+}
+
+int RolePlayer::GetRoleBaseInfo(RoleBaseAttEnum baseAttEnum) {
+    switch (baseAttEnum) {
+        case kRoleNameAtt:
+            qDebug() << "角色名无法转换为int数据";
+            return 0;
+        case kRoleLifeAtt:
+            return role_life_;
+        case kRolePrestigeAtt:
+            return role_prestige_;
+        case kRoleLvAtt:
+            return role_LV_;
+        case kRoleExpAtt:
+            return role_cur_exp_;
+        case kRoleAggAtt:
+            return role_agg_;
+        case kRoleDefAtt:
+            return role_def_;
+        case kRoleHpAtt:
+            return role_hp_;
+        case kRoleMaxLifeAtt:
+            return role_max_life_;
+        case kRoleMaxExpAtt:
+            return role_exp_;
+    }
 }
