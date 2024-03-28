@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
     QLockFile lockFile("./DeskXiuxian.lock");
     if(!lockFile.tryLock(2000))       //上锁失败，不能启动
     {
-        printf("请不要重复启动程序... \n");
+        printf("请不要双开修仙... \n");
         return -1;
     }
     QApplication a(argc, argv);

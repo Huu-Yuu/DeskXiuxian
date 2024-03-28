@@ -14,8 +14,7 @@
 #ifndef PUBLIC_ERROR_DISPLAY
 #define PUBLIC_ERROR_DISPLAY
 
-#include "/modules/public/error_code.h"
-//#include "file_manager.h"
+#include "error_code.h"
 
 #include <QObject>
 #include <QFile>

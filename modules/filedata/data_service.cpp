@@ -435,7 +435,7 @@ void DataService::WriteRoleInfoToLocalDatabase()
         // 绑定role_item_data中的键值对
         for (auto it = role_info_data_.constBegin(); it != role_info_data_.constEnd(); ++it)
         {
-            query.bindValue(":" + it.key(), it.value().toString());
+            query.bindValue(":" + it.key(), it.value().toInt());
         }
         // 执行查询
         if (!query.exec())

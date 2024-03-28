@@ -873,7 +873,6 @@ void RolePlayer::SaveRoleInfo()
 {
     // 打包角色基本属性
     QJsonObject role_info_data;
-    role_info_data.insert("role_name", role_name_);
     role_info_data.insert("role_life", role_life_);
     role_info_data.insert("role_max_life", role_max_life_);
     role_info_data.insert("role_prestige", role_prestige_);
@@ -905,7 +904,6 @@ void RolePlayer::SaveRoleItem()
 void RolePlayer::SaveRoleItem(ItemType item_type, RoleItemEnum item_enum, int sum)
 {
     QJsonObject role_item_data;
-    role_item_data.insert("role_name", role_name_);
     role_item_data.insert(QString::number(item_enum), sum);
     emit SignalUpdateRoleItemDatabase(role_item_data);
 }
@@ -913,7 +911,6 @@ void RolePlayer::SaveRoleItem(ItemType item_type, RoleItemEnum item_enum, int su
 void RolePlayer::SaveRoleEquip(RoleEquipAreaEnum area, RoleItemEnum item_enum)
 {
     QJsonObject role_item_data;
-    role_item_data.insert("role_name", role_name_);
     QString area_str;
     switch (area)
     {
@@ -960,7 +957,6 @@ void RolePlayer::SaveCoefficient()
 {
     // 打包角色属性系数
     QJsonObject role_coefficient_data;
-    role_coefficient_data.insert("role_name", role_name_);
     role_coefficient_data.insert("RC_life", RC_Life_);
     role_coefficient_data.insert("RC_basic_event", 1);
     role_coefficient_data.insert("RC_att_event", 1);

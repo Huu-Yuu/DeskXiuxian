@@ -36,6 +36,7 @@ SOURCES += \
     modules/item/item_service.cpp \
     modules/item/item_manage.cpp \
     modules/item/prop/prop_rename_card.cpp \
+    modules/item/prop/prop_yanshoudan10.cpp \
     modules/logger/logger.cpp \
     main.cpp \
     main_ctrl.cpp \
@@ -48,6 +49,7 @@ SOURCES += \
     modules/filedata/db_manage.cpp \
     modules/filedata/data_service.cpp \
     modules/public/public_func.cpp \
+    modules/public/error_display.cpp \
     modules/server/tcp_client.cpp \
     modules/server/web_socket_client.cpp \
     modules/interface_manager.cpp
@@ -63,6 +65,7 @@ HEADERS += \
     modules/item/item_service.h \
     modules/item/item_manage.h \
     modules/item/prop/prop_rename_card.h \
+    modules/item/prop/prop_yanshoudan10.h \
     modules/logger/logger.h \
     main_ctrl.h \
     modules/ui/mainui.h \
@@ -76,6 +79,7 @@ HEADERS += \
     modules/role/role_player.h \
     modules/public/public_func.h \
     modules/public/error_code.h \
+    modules/public/error_display.h \
     modules/server/tcp_client.h \
     modules/server/web_socket_client.h \
     modules/server/web_socket_define.h \
