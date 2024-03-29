@@ -9,7 +9,6 @@ QSettings* DataService::file_setting_ = nullptr;
 
 DataService::DataService()
 {
-    user_uuid_ = "";
     InitSettingFile();
 
 #if  DATABASE_TYPE == 1
@@ -81,7 +80,7 @@ void DataService::CreateDatabase(QString path)
     database_ = QSqlDatabase::addDatabase("QSQLITE", LOCAL_DB_LINKNAME);
     database_.setDatabaseName(path);
     database_.setPassword(LOCAL_DB_PASSWORD);
-    m_database_ = QSqlDatabase::database(LOCAL_DB_LINKNAME);;
+    m_database_ = QSqlDatabase::database(LOCAL_DB_LINKNAME);
 
     // 打开数据库连接
     if (!m_database_.open())
@@ -264,7 +263,8 @@ bool DataService::CheckTablesExist()
         QString createTableQuery = "CREATE TABLE RoleItem ("
                                    "role_name TEXT,"
                                    "item_10001 INTEGER,"
-                                   "item_10002 INTEGER"
+                                   "item_10002 INTEGER,"
+                                   "item_10003 INTEGER"
                                    ")";
         if (!query.exec(createTableQuery))
         {
@@ -273,12 +273,13 @@ bool DataService::CheckTablesExist()
         }
 
         // 初始化字段值
-        QString insertQuery = "INSERT INTO RoleItem (role_name, item_10001, item_10002) "
-                              "VALUES (:role_name, :item_10001, :item_10002)";
+        QString insertQuery = "INSERT INTO RoleItem (role_name, item_10001, item_10002, item_10003) "
+                              "VALUES (:role_name, :item_10001, :item_10002, :item_10003)";
         query.prepare(insertQuery);
         query.bindValue(":role_name", "GM姜子牙");
         query.bindValue(":item_10001", 0);
         query.bindValue(":item_10002", 1);  ///< 本地模式自动送一张改名卡
+        query.bindValue(":item_10003", 0);
         if (!query.exec())
         {
             LOG_DEBUG(kDataManage, QString("插入初始值时出错:%1").arg(query.lastError().text()));

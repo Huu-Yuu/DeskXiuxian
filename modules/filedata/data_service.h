@@ -52,7 +52,7 @@ public:
     /**
      * @brief 获取远程数据库中指定表单的数据，根据uuid筛选
      * @param table_name 表单名
-     * @return 列-key   行-value
+     * @return 列-key   行-value  键值对
      * **/
     QJsonObject GetRemoteTableInfo2Obj(const QString& table_name);
 

@@ -11,8 +11,9 @@ void DataService::InitRemoteData()
     database_.setUserName(REMOTE_DB_USERNAME);
     database_.setPassword(REMOTE_DB_PASSWORD);
     database_.setDatabaseName(REMOTE_DB_NAME);
+    m_database_ = QSqlDatabase::database(REMOTE_DB_LINKNAME);
     // 初始化数据库查询语句
-    if (database_.open())
+    if (m_database_.open())
     {
         LOG_DEBUG(kDataManage, "远程数据服务连接正常");
         // 连接成功后，可以执行其他初始化操作
@@ -30,8 +31,7 @@ void DataService::InitRemoteData()
 int DataService::LoginVerification(const QString& user_name, const QString& pass_word)
 {
     int result = -1;
-    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-    QSqlQuery query(db);
+    QSqlQuery query(m_database_);
 
     // 执行查询语句
     query.prepare("SELECT * FROM user_data_info WHERE user_name = :userName AND pass_word = :password");
@@ -67,8 +67,7 @@ int DataService::LoginVerification(const QString& user_name, const QString& pass
 int DataService::AccountRegistration(QString user_name, QString pass_word, QString email)
 {
     int result = -2;
-    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-    QSqlQuery query(db);
+    QSqlQuery query(m_database_);
     // 检查用户名是否已存在
     query.prepare("SELECT user_name FROM user_data_info WHERE user_name = :userName");
     query.bindValue(":userName", user_name);
@@ -154,8 +153,7 @@ int DataService::CheckRoleNameIsOk(const QString& role_name)
 {
     int result;
 #if DATABASE_TYPE == 0
-    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-        QSqlQuery query(db);
+    QSqlQuery query(m_database_);
     QString queryString = QString("SELECT RoleName FROM user_data_info WHERE RoleName = '%1'").arg(role_name);
 
     if (query.exec(queryString) && query.next())
@@ -179,8 +177,7 @@ int DataService::CheckRoleNameIsOk(const QString& role_name)
 QString DataService::GetUserUUID(const QString user_name, const QString pass_word)
 {
     QString uuid = "";
-    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-    QSqlQuery query(db);
+    QSqlQuery query(m_database_);
     // 准备查询语句
     QString queryString = "SELECT uuid FROM user_data_info WHERE user_name = :userName AND pass_word = :password";
     query.prepare(queryString);
@@ -204,8 +201,7 @@ QString DataService::GetUserUUID(const QString user_name, const QString pass_wor
 int DataService::CheckUserLogginIsFist()
 {
     int result = -1;
-    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-    QSqlQuery query(db);
+    QSqlQuery query(m_database_);
     QString last_time = "0";
     QString reg_time = "1";
     QString queryString = "SELECT registration_time, last_login_time FROM user_data_info WHERE uuid = :uuid";
@@ -241,8 +237,7 @@ int DataService::ModifyRoleName(const QString& new_name)
 {
     int result = -3;
 #if DATABASE_TYPE == 0
-    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-    QSqlQuery query(db);
+    QSqlQuery query(m_database_);
     query.prepare("SELECT COUNT(*) FROM user_role_info WHERE uuid = :UUID");
     query.bindValue(":UUID", user_uuid_);
 
@@ -286,8 +281,7 @@ int DataService::ModifyRoleName(const QString& new_name)
         LOG_DEBUG(kDataManage, QString("计数查询失败：%1").arg(query.lastError().text()));
     }
 #elif DATABASE_TYPE == 1
-    QSqlDatabase db = QSqlDatabase::database(LOCAL_DB_LINKNAME);
-    QSqlQuery query(db);
+    QSqlQuery query(m_database_);
     // 获取所有表单名
     QStringList tableList;
     query.prepare("SELECT name FROM sqlite_master WHERE type='table'");
@@ -295,7 +289,7 @@ int DataService::ModifyRoleName(const QString& new_name)
         tableList << query.value(0).toString();
     }
     auto updateRoleName = [&](const QString &tableName, const QString &roleName) {
-        QSqlQuery query_type(db);
+        QSqlQuery query_type(m_database_);
         QString updateQuery = "UPDATE " + tableName + " SET role_name = '" + roleName + "' WHERE role_name IS NOT NULL";
         if (!query_type.exec(updateQuery)) {
             LOG_DEBUG(kDataManage, QString("执行更新查询时出错：%1").arg(query_type.lastError().text()));
@@ -326,8 +320,7 @@ int DataService::InitRoleData()
         return 1;
     }
     int result = 0;
-    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-    QSqlQuery query(db);
+    QSqlQuery query(m_database_);
     role_name_ = GetTableToInfo("user_data_info", "role_name", "UUID", user_uuid_);
     if (role_name_.isEmpty())
     {
@@ -396,8 +389,7 @@ int DataService::InitRoleData()
 QString DataService::GetTableToInfo(const QString table_name, const QString column_name,
                                     const QString leach_column, QString leach_value)
 {
-    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-    QSqlQuery query(db);
+    QSqlQuery query(m_database_);
     QString result;
     // 准备查询语句
     QString queryString = QString("SELECT %1 FROM %2 WHERE %3 = :leach").arg(column_name, table_name, leach_column);
@@ -417,8 +409,7 @@ QString DataService::GetTableToInfo(const QString table_name, const QString colu
 int DataService::SetTableToInfo(const QString table_name, const QString column_name, const QString leach_column,
                                 QString leach_value, QString new_value)
 {
-    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-    QSqlQuery query(db);
+    QSqlQuery query(m_database_);
     int result = -1;
 
     // 准备更新语句
@@ -457,8 +448,7 @@ int DataService::SetTableToInfo(const QString table_name, const QString column_n
 int DataService::WriteRoleInfoToRemoteDatabase()
 {
     int result = -3;
-    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-    QSqlQuery query(db);
+    QSqlQuery query(m_database_);
     query.prepare("SELECT COUNT(*) FROM user_role_info WHERE uuid = :UUID");
     query.bindValue(":UUID", user_uuid_);
 
@@ -533,8 +523,7 @@ int DataService::WriteRoleInfoToRemoteDatabase()
 int DataService::WriteRoleItemsToRemoteDatabase()
 {
     int result = -3;
-    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-    QSqlQuery query(db);
+    QSqlQuery query(m_database_);
     query.prepare("SELECT COUNT(*) FROM user_role_item WHERE uuid = :UUID");
     query.bindValue(":UUID", user_uuid_);
 
@@ -591,8 +580,7 @@ int DataService::WriteRoleItemsToRemoteDatabase()
 int DataService::WriteRoleCoefficientToRemoteDatabase()
 {
     int result = -3;
-    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-    QSqlQuery query(db);
+    QSqlQuery query(m_database_);
     query.prepare("SELECT COUNT(*) FROM user_role_info WHERE uuid = :UUID");
     query.bindValue(":UUID", user_uuid_);
 
@@ -656,8 +644,7 @@ int DataService::WriteRoleCoefficientToRemoteDatabase()
 
 int DataService::WriteUserLoginLogToRemoteDatabase()
 {
-    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-    QSqlQuery query(db);
+    QSqlQuery query(m_database_);
     int result = 0;
     QString login_time = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
     // 更新登录时间
@@ -732,8 +719,7 @@ QJsonObject DataService::GetRemoteRoleInfo()
 {
     QJsonObject role_info_data;
     QString msg;
-    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-    QSqlQuery query(db);
+    QSqlQuery query(m_database_);
     QString query_str = "SELECT role_name, role_life, role_prestige, role_aptitude, role_exp, role_agg, "
                         "role_def, role_hp, role_cur_exp, role_lv FROM user_role_info WHERE uuid = :UUID";
     query.prepare(query_str);
@@ -777,8 +763,7 @@ QJsonObject DataService::GetRemoteRoleRC()
 {
     QJsonObject role_rc_data;
     QString msg;
-    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-    QSqlQuery query(db);
+    QSqlQuery query(m_database_);
     QString query_str = "SELECT rc_life, rc_basic_event, rc_att_event, rc_survive_disaster, rc_prestige_event, rc_special_event "
                         "FROM user_role_rc WHERE uuid = :UUID";
     query.prepare(query_str);
@@ -812,8 +797,7 @@ QJsonObject DataService::GetRemoteRoleItem()
 {
     QJsonObject role_item_data;
     QString msg;
-    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-    QSqlQuery query(db);
+    QSqlQuery query(m_database_);
     QString query_str = " SELECT * FROM user_role_item WHERE uuid = :UUID";
     query.prepare(query_str);
     query.bindValue(":UUID", user_uuid_);
@@ -857,8 +841,7 @@ int DataService::IsRoleDataInited()
     int roleItemCount = 0;
     int roleRcCount = 0;
     int roleEquipCount = 0;
-    QSqlDatabase db = QSqlDatabase::database(REMOTE_DB_LINKNAME);
-    QSqlQuery query(db);
+    QSqlQuery query(m_database_);
     // 检查user_role_info表
     QString roleInfoQuery = QString("SELECT COUNT(*) FROM user_role_info WHERE uuid = '%1'").arg(user_uuid_);
     query.prepare(roleInfoQuery);
