@@ -24,9 +24,10 @@
 ![桌面修仙](https://github.com/HuYuAI/DeskXiuxian/assets/101235540/8a9760e4-e3cc-419c-9eee-c638139da018)
 
 
-最新运行效果：2023年8月12日01:13:19
+最新运行效果：2024年3月31日00:34:47
 
-![cur_ui](https://github.com/HuYuAI/DeskXiuxian/assets/101235540/66f227da-ea33-4594-b7ee-b869feffad72)
+![GIF](https://github.com/Huu-Yuu/DeskXiuxian/assets/101235540/936fb3b1-bd12-4d89-a7a5-52c39c294cd0)
+
 
 2024-3-11
 需要重构一下代码，解耦合
