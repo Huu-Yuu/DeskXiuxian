@@ -24,13 +24,15 @@
 ![桌面修仙](https://github.com/HuYuAI/DeskXiuxian/assets/101235540/8a9760e4-e3cc-419c-9eee-c638139da018)
 
 
-最新运行效果：2023年8月12日01:13:19
+最新运行效果：2024年3月31日00:47:26
 
-![cur_ui](https://github.com/HuYuAI/DeskXiuxian/assets/101235540/66f227da-ea33-4594-b7ee-b869feffad72)
+![GIF](https://github.com/Huu-Yuu/DeskXiuxian/assets/101235540/be6c25df-02c4-4609-890c-1e76a5c0ef27)
+
+
 
 2024-3-11
 需要重构一下代码，解耦合
 
 2024-3-27 代码重构完毕，新增改名卡道具
-
 2024-3-28 新增延寿丹道具
+2024-3-31 更新UI
