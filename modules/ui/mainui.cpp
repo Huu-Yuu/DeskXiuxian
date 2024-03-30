@@ -54,6 +54,21 @@ MainUI::MainUI(QWidget* parent)
     ui->bisic_Att_Box->setLayout(ui->bisic_Layout);
     ui->equipment_Box->setLayout(ui->equipment_Layout);
 
+    //道具选项卡布局
+    ui->item_equip->setLayout(ui->item_equip_Layout);
+    ui->item_prop->setLayout(ui->item_prop_Layout);
+    ui->item_special->setLayout(ui->item_special_Layout);
+    ui->item_material->setLayout(ui->item_material_Layout);
+
+    //商店选项卡布局
+    ui->store_equip->setLayout(ui->store_equip_Layout);
+    ui->store_prop->setLayout(ui->store_prop_Layout);
+    ui->store_special->setLayout(ui->store_special_Layout);
+    ui->store_material->setLayout(ui->store_material_Layout);
+
+    // 系统消息选项卡布局
+    ui->sys_news_tab->setLayout(ui->sys_news_Layout);
+
     QString date_time_str = QString("%1 %2").arg(__DATE__).arg(__TIME__);
     if (date_time_str.contains("  "))
     {

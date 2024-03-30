@@ -31,7 +31,7 @@
       <number>5</number>
      </property>
      <item>
-      <widget class="QTabWidget" name="tabWidget">
+      <widget class="QTabWidget" name="role_widget">
        <property name="currentIndex">
         <number>0</number>
        </property>
@@ -498,25 +498,85 @@
               <property name="currentIndex">
                <number>0</number>
               </property>
-              <widget class="QWidget" name="tab">
+              <widget class="QWidget" name="item_equip">
                <attribute name="title">
                 <string>装备</string>
                </attribute>
+               <widget class="QWidget" name="verticalLayoutWidget_2">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>20</y>
+                  <width>231</width>
+                  <height>261</height>
+                 </rect>
+                </property>
+                <layout class="QVBoxLayout" name="item_equip_Layout">
+                 <item>
+                  <widget class="QListWidget" name="item_equip_list"/>
+                 </item>
+                </layout>
+               </widget>
               </widget>
-              <widget class="QWidget" name="tab_2">
+              <widget class="QWidget" name="item_prop">
                <attribute name="title">
                 <string>道具</string>
                </attribute>
+               <widget class="QWidget" name="verticalLayoutWidget_3">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>30</y>
+                  <width>231</width>
+                  <height>261</height>
+                 </rect>
+                </property>
+                <layout class="QVBoxLayout" name="item_prop_Layout">
+                 <item>
+                  <widget class="QListWidget" name="item_prop_list"/>
+                 </item>
+                </layout>
+               </widget>
               </widget>
-              <widget class="QWidget" name="tab_3">
+              <widget class="QWidget" name="item_material">
                <attribute name="title">
                 <string>材料</string>
                </attribute>
+               <widget class="QWidget" name="verticalLayoutWidget_4">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>20</y>
+                  <width>231</width>
+                  <height>261</height>
+                 </rect>
+                </property>
+                <layout class="QVBoxLayout" name="item_material_Layout">
+                 <item>
+                  <widget class="QListWidget" name="item_material_lisit"/>
+                 </item>
+                </layout>
+               </widget>
               </widget>
-              <widget class="QWidget" name="tab_4">
+              <widget class="QWidget" name="item_special">
                <attribute name="title">
                 <string>特殊</string>
                </attribute>
+               <widget class="QWidget" name="verticalLayoutWidget_5">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>20</y>
+                  <width>231</width>
+                  <height>261</height>
+                 </rect>
+                </property>
+                <layout class="QVBoxLayout" name="item_special_Layout">
+                 <item>
+                  <widget class="QListWidget" name="item_special_list"/>
+                 </item>
+                </layout>
+               </widget>
               </widget>
              </widget>
             </item>
@@ -592,29 +652,89 @@
           <item>
            <layout class="QVBoxLayout" name="item_grid_Layout_2" stretch="0">
             <item>
-             <widget class="QTabWidget" name="item_stpre_Widget">
+             <widget class="QTabWidget" name="item_store_Widget">
               <property name="currentIndex">
                <number>0</number>
               </property>
-              <widget class="QWidget" name="tab_5">
+              <widget class="QWidget" name="store_equip">
                <attribute name="title">
                 <string>装备</string>
                </attribute>
+               <widget class="QWidget" name="verticalLayoutWidget_6">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>20</y>
+                  <width>231</width>
+                  <height>261</height>
+                 </rect>
+                </property>
+                <layout class="QVBoxLayout" name="store_equip_Layout">
+                 <item>
+                  <widget class="QListWidget" name="store_equip_list"/>
+                 </item>
+                </layout>
+               </widget>
               </widget>
-              <widget class="QWidget" name="tab_6">
+              <widget class="QWidget" name="store_prop">
                <attribute name="title">
                 <string>道具</string>
                </attribute>
+               <widget class="QWidget" name="verticalLayoutWidget_7">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>20</y>
+                  <width>231</width>
+                  <height>261</height>
+                 </rect>
+                </property>
+                <layout class="QVBoxLayout" name="store_prop_Layout">
+                 <item>
+                  <widget class="QListWidget" name="store_prop_list"/>
+                 </item>
+                </layout>
+               </widget>
               </widget>
-              <widget class="QWidget" name="tab_7">
+              <widget class="QWidget" name="store_material">
                <attribute name="title">
                 <string>材料</string>
                </attribute>
+               <widget class="QWidget" name="verticalLayoutWidget_8">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>20</y>
+                  <width>231</width>
+                  <height>261</height>
+                 </rect>
+                </property>
+                <layout class="QVBoxLayout" name="store_material_Layout">
+                 <item>
+                  <widget class="QListWidget" name="item_material_lisit_2"/>
+                 </item>
+                </layout>
+               </widget>
               </widget>
-              <widget class="QWidget" name="tab_8">
+              <widget class="QWidget" name="store_special">
                <attribute name="title">
                 <string>特殊</string>
                </attribute>
+               <widget class="QWidget" name="verticalLayoutWidget_9">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>20</y>
+                  <width>231</width>
+                  <height>261</height>
+                 </rect>
+                </property>
+                <layout class="QVBoxLayout" name="store_special_Layout">
+                 <item>
+                  <widget class="QListWidget" name="item_special_list_2"/>
+                 </item>
+                </layout>
+               </widget>
               </widget>
              </widget>
             </item>
@@ -655,10 +775,44 @@
       </widget>
      </item>
      <item>
-      <widget class="QListWidget" name="listWidget">
-       <property name="wordWrap">
-        <bool>true</bool>
+      <widget class="QTabWidget" name="news_widget">
+       <property name="currentIndex">
+        <number>0</number>
        </property>
+       <widget class="QWidget" name="sys_news_tab">
+        <attribute name="title">
+         <string>系统</string>
+        </attribute>
+        <widget class="QWidget" name="verticalLayoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>20</y>
+           <width>471</width>
+           <height>181</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="sys_news_Layout">
+          <item>
+           <widget class="QListWidget" name="listWidget">
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="world_news_tab">
+        <attribute name="title">
+         <string>世界</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="team_news_tab">
+        <attribute name="title">
+         <string> 门派</string>
+        </attribute>
+       </widget>
       </widget>
      </item>
     </layout>
