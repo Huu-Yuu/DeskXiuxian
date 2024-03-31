@@ -10,6 +10,7 @@ RenameCard::RenameCard() {
     item_name_ = "改名卡";
     item_explain_ = "可以修改一次角色昵称";
     item_type_ = kItemProp;
+    item_price_ = 1000;
     LOG_DEBUG(kItemManage, item_name_);
 }
 

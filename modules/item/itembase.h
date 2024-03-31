@@ -26,6 +26,7 @@ public:
     void SetItemPrice(int price);   ///< 设置物品价格
     QString GetItemExplain() const; ///< 获取物品描述
     void SetItemExplain(const QString& explain);    ///< 写入物品描述
+    QString GetItemAccess();        ///< 获取物品的获取途径
 
     /**
      * @brief 出售物品
@@ -73,6 +74,7 @@ protected:
     QString item_explain_ = "unknown";          ///< 描述
     int item_num_ = 0;                          ///< 数量
     int item_price_ = 0;                        ///< 价格
+    QString item_access;                        ///< 获取途径
     QMap<QString, Function_Action> m_function_action_;      ///< 函数指针
     ItemType item_type_ = kItemMaterial;        ///< 物品类型
 

@@ -2,6 +2,7 @@
 #include "modules/public/public_declare.h"
 #include "prop/prop_rename_card.h"
 #include "modules/item/prop/prop_yanshoudan10.h"
+#include <QJsonArray>
 
 QMutex ItemService::mutex_;  // 初始化互斥锁对象
 
@@ -81,7 +82,7 @@ void ItemService::InitLocalRoleInfo(const QJsonObject& data) {
     {
         QString item_num = key.mid(5);  // 获取编号
         RoleItemEnum item_type = (RoleItemEnum) item_num.toInt();
-        int num = item_obj.value(key).toInt();
+        int num = item_obj.value(key).toString().toInt();
         if(item_type == kRoleMoney)
         {
             money_num_ = num;
@@ -130,4 +131,31 @@ void ItemService::ShowMsgToUi(const QString &msg) {
                                                         "",
                                                         module_name::ui,
                                                         module_name::item));
+}
+
+void ItemService::UpdatePropShow(QJsonObject request_data)
+{
+    QJsonArray item_arr;
+    for(QMap<int, ItemBase*>::Iterator it = m_item_strategy.begin(); it != m_item_strategy.end(); it ++)
+    {
+        if(it.value()->GetItemNum() <= 0)
+            continue;
+        QJsonObject item_info;
+        item_info.insert("prop_index", it.value()->GetItemIndex());
+        item_info.insert("prop_name", it.value()->GetItemName());
+        item_info.insert("prop_describe", it.value()->GetItemExplain());
+        item_info.insert("prop_num", it.value()->GetItemNum());
+        item_info.insert("prop_access", it.value()->GetItemAccess());
+        item_info.insert("prop_price", it.value()->GetItemPrice());
+        item_arr.append(item_info);
+    }
+    QJsonObject data_obj;
+    data_obj.insert("prop_list", item_arr);
+    emit SignalActionResponse(PublicFunc::PackageResponse(uiCmd::UpdatePropShow,
+                                                          request_data.value("id").toString(),
+                                                          0,
+                                                          data_obj,
+                                                          QJsonObject(),
+                                                          request_data.value("ori").toString(),
+                                                          module_name::item));
 }

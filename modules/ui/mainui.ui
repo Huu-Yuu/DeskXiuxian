@@ -33,7 +33,7 @@
      <item>
       <widget class="QTabWidget" name="role_widget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="role_page">
         <attribute name="title">
@@ -496,7 +496,7 @@
             <item>
              <widget class="QTabWidget" name="item_preview_Widget">
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="item_equip">
                <attribute name="title">
@@ -654,7 +654,7 @@
             <item>
              <widget class="QTabWidget" name="item_store_Widget">
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="store_equip">
                <attribute name="title">
@@ -794,7 +794,7 @@
          </property>
          <layout class="QVBoxLayout" name="sys_news_Layout">
           <item>
-           <widget class="QListWidget" name="listWidget">
+           <widget class="QListWidget" name="sys_news_list">
             <property name="wordWrap">
              <bool>true</bool>
             </property>

@@ -1,6 +1,8 @@
 #include "mainui.h"
 #include "ui_mainui.h"
 #include "modules/public/public_declare.h"
+#include <QJsonArray>
+#include <QMenu>
 
 MainUI::MainUI(QWidget* parent)
     : QMainWindow(parent)
@@ -59,6 +61,7 @@ MainUI::MainUI(QWidget* parent)
     ui->item_prop->setLayout(ui->item_prop_Layout);
     ui->item_special->setLayout(ui->item_special_Layout);
     ui->item_material->setLayout(ui->item_material_Layout);
+    ui->item_prop_list->setContextMenuPolicy(Qt::CustomContextMenu);
 
     //商店选项卡布局
     ui->store_equip->setLayout(ui->store_equip_Layout);
@@ -68,6 +71,8 @@ MainUI::MainUI(QWidget* parent)
 
     // 系统消息选项卡布局
     ui->sys_news_tab->setLayout(ui->sys_news_Layout);
+    ui->sys_news_list->setContextMenuPolicy(Qt::CustomContextMenu);
+
 
     QString date_time_str = QString("%1 %2").arg(__DATE__).arg(__TIME__);
     if (date_time_str.contains("  "))
@@ -91,11 +96,7 @@ void MainUI::closeEvent(QCloseEvent* event)
     qDebug() << "检测到手动关闭游戏，强制结束进程";
     // 打印到日志
     emit SignalLogOut( QtFatalMsg, QMessageLogContext(), "检测到手动关闭游戏，强制结束进程");
-    emit SignalActionRequest(PublicFunc::PackageRequest(dbCmd::UpdateLastLoginTime,
-                                                        QJsonObject(),
-                                                        "",
-                                                        module_name::data,
-                                                        module_name::ui));
+    RequestOutside(dbCmd::UpdateLastLoginTime, module_name::data);
     AddMessage("正在退出仙界");
     QTimer::singleShot(2000, this, [event, this]{
         // 杀死所有进程
@@ -106,8 +107,6 @@ void MainUI::closeEvent(QCloseEvent* event)
         QMainWindow::closeEvent(event);
     });
 
-
-
 }
 
 void MainUI::AddMessage(QString msg)
@@ -116,9 +115,9 @@ void MainUI::AddMessage(QString msg)
 
     QString display_text = time_stamp + "：" + msg;
 
-    ui->listWidget->addItem(display_text);
+    ui->sys_news_list->addItem(display_text);
     // 滚动到底部
-    ui->listWidget->scrollToBottom();
+    ui->sys_news_list->scrollToBottom();
     // 将消息记录到日志
     emit SignalLogOut(QtInfoMsg, QMessageLogContext(), msg);
 }
@@ -271,10 +270,7 @@ void MainUI::SlotLoginSuccessful()
 {
     CloseLoginWidget();
     emit SignalLogOut(QtInfoMsg, QMessageLogContext(), "正在检查是否首次登录");
-    emit SignalActionRequest(PublicFunc::PackageRequest(dbCmd::CheckLoginFist,
-                                                        QJsonObject(), "",
-                                                        module_name::data,
-                                                        module_name::ui));
+    RequestOutside(dbCmd::CheckLoginFist, module_name::data);
 }
 
 void MainUI::SlotRenameSuccessful(QString name)
@@ -282,11 +278,7 @@ void MainUI::SlotRenameSuccessful(QString name)
     CloseModifyNameWidget();
     if(!isVisible())
     {
-        emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitRemoteRoleInfo,
-                                                            QJsonObject(),
-                                                            "",
-                                                            module_name::data,
-                                                            module_name::ui));
+        RequestOutside(mainCmd::InitRemoteRoleInfo, module_name::data);
         show();
     }
     else
@@ -323,12 +315,7 @@ void MainUI::on_end_but_clicked()
 
 void MainUI::on_cultiva_up_but_clicked()
 {
-//    emit SignalUpgradeLevel();
-    emit SignalActionRequest(PublicFunc::PackageRequest(uiCmd::UpgradeLevel,
-                                                        QJsonObject(),
-                                                        "",
-                                                        module_name::role,
-                                                        module_name::ui));
+    RequestOutside(uiCmd::UpgradeLevel, module_name::role);
 }
 
 void MainUI::ShowLoginWidget()
@@ -367,11 +354,7 @@ void MainUI::FistLogInDeal(int result) {
     {
         case 0: // 非首次登录
         {
-            emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitRemoteRoleInfo,
-                                                                QJsonObject(),
-                                                                "",
-                                                                module_name::data,
-                                                                module_name::ui));
+            RequestOutside(mainCmd::InitRemoteRoleInfo, module_name::data);
             show();
             break;
         }
@@ -386,14 +369,11 @@ void MainUI::FistLogInDeal(int result) {
 }
 
 void MainUI::AutomaticLogin(int result) {
-    switch (result) {
+    switch (result)
+    {
         case 1:
             qDebug() << "自动登录，获取角色数据";
-            emit SignalActionRequest(PublicFunc::PackageRequest(mainCmd::InitRemoteRoleInfo,
-                                                                QJsonObject(),
-                                                                "",
-                                                                module_name::data,
-                                                                module_name::ui));
+            RequestOutside(mainCmd::InitRemoteRoleInfo, module_name::data);
             show();
             break;
         case 0:
@@ -420,3 +400,131 @@ void MainUI::LoginVerificationDeal(int result) {
 void MainUI::AccountRegistrationDeal(int result) {
     login_obj_->AccountRegistrationDeal(result);
 }
+
+void MainUI::UpdateBackpackBar(QJsonObject data)
+{
+    for (auto it = data.begin(); it != data.end(); ++it) {
+        QString key = it.key();
+        QJsonArray list = it.value().toArray();
+
+        if (key == "prop_list")
+        {
+            UpdateBackpackPropBar(list);
+        }
+        else if (key == "equip_list")
+        {
+            UpdateBackpackEquipBar(list);
+        }
+        else if (key == "material_list")
+        {
+            UpdateBackpackMaterialBar(list);
+        }
+        else if (key == "special_list")
+        {
+            UpdateBackpackSpecialBar(list);
+        }
+        else
+        {
+            LOG_DEBUG(kUIManage, "当前键值判断出错：" + key);
+        }
+    }
+}
+
+void MainUI::UpdateBackpackEquipBar(QJsonArray arr)
+{
+
+}
+
+void MainUI::UpdateBackpackPropBar(QJsonArray arr)
+{
+    prop_map_ = QJsonObject();
+    show_prop_info_ = QJsonObject();
+    for (const QJsonValue &val : arr) {
+        QJsonObject obj = val.toObject();
+        if (obj.contains("prop_name")) {
+            QString propValue = obj["prop_name"].toString();
+            QListWidgetItem *item = new QListWidgetItem(propValue);
+            ui->item_prop_list->addItem(item);
+        }
+        prop_map_.insert(obj.value("prop_name").toString(), obj.value("prop_index").toInt());
+        show_prop_info_.insert(obj.value("prop_name").toString(), obj);
+    }
+}
+
+void MainUI::UpdateBackpackMaterialBar(QJsonArray arr)
+{
+
+}
+
+void MainUI::UpdateBackpackSpecialBar(QJsonArray arr)
+{
+
+}
+
+void MainUI::on_item_preview_Widget_currentChanged(int index)
+{
+    switch (index)
+    {
+        case 0: // 装备
+            break;
+        case 1: // 道具
+            ui->item_prop_list->clear();
+            RequestOutside(uiCmd::UpdatePropShow, module_name::item);
+            break;
+        case 2: // 材料
+            break;
+        case 3: // 特殊
+            break;
+    }
+}
+
+void MainUI::RequestOutside(QString cmd, QString dest)
+{
+    emit SignalActionRequest(PublicFunc::PackageRequest(cmd,
+                                                        QJsonObject(),
+                                                        "",
+                                                        dest,
+                                                        module_name::ui));
+}
+
+void MainUI::on_sys_news_list_customContextMenuRequested(const QPoint &pos)
+{
+    QMenu menu(ui->sys_news_list);
+    QAction clearAction("清屏", ui->sys_news_list);
+    menu.addAction(&clearAction);
+
+    QObject::connect(&clearAction, &QAction::triggered, [&]() {
+        ui->sys_news_list->clear();
+    });
+
+    menu.exec(QCursor::pos());
+}
+
+
+void MainUI::on_item_prop_list_customContextMenuRequested(const QPoint &pos)
+{
+    QListWidgetItem *item = ui->item_prop_list->itemAt(pos);
+    if(item)
+    {
+        QMenu menu(ui->item_prop_list);
+
+        QAction useAction("使用", ui->item_prop_list);
+        QAction sellAction("出售", ui->item_prop_list);
+
+        menu.addAction(&useAction);
+        menu.addAction(&sellAction);
+
+        QObject::connect(&useAction, &QAction::triggered, [&]() {
+            // 处理使用操作
+            qDebug() << "使用操作：" << item->text();
+        });
+
+        QObject::connect(&sellAction, &QAction::triggered, [&]() {
+            // 处理出售操作
+            qDebug() << "出售操作：" << item->text();
+        });
+        menu.exec(ui->item_prop_list->mapToGlobal(pos));
+    }
+
+}
+

@@ -46,6 +46,11 @@ int ItemBase::GetItemIndex() {
     return item_index_;
 }
 
+QString ItemBase::GetItemAccess()
+{
+    return item_access;
+}
+
 int ItemBase::UseItem(int sum) {
     if(item_num_ >= sum)
     {

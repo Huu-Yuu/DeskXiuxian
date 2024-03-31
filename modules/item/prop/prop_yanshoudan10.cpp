@@ -14,5 +14,6 @@ YanshouDan10::YanshouDan10() {
     item_name_ = "十年延寿药";
     item_explain_ = "延长十年寿命";
     item_type_ = kItemProp;
+    item_price_ = 10000;
     LOG_DEBUG(kItemManage, item_name_);
 }

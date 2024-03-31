@@ -59,6 +59,10 @@ void UIManage::SlotActionResponse(const QJsonObject &response_data) {
     {
         LOG_DEBUG(kUIManage, "关闭窗口");
     }
+    else if(type.contains(uiCmd::UpdatePropShow))
+    {
+       m_service_->UpdateBackpackBar(data_obj);
+    }
 }
 
 void UIManage::SlotActionRequest(const QJsonObject &request_data) {
@@ -106,6 +110,7 @@ void UIManage::SlotActionRequest(const QJsonObject &request_data) {
     {
         m_service_->ShowLoginWidget();
     }
+
 }
 
 void UIManage::SlotPubTopic(const QJsonObject &topic_data) {

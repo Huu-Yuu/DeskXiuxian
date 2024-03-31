@@ -29,6 +29,7 @@ public:
      * **/
     void ItemMoneyBusiness(int money);
     void InitLocalRoleInfo(const QJsonObject& data);   ///< 初始化本地角色信息
+    void UpdatePropShow(QJsonObject request_data);  ///< 更新UI道具显示
 signals:
     //请求外部动作
     void SignalActionRequest(const QJsonObject& request_data);

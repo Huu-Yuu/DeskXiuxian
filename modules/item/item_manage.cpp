@@ -43,6 +43,10 @@ void ItemManage::SlotActionRequest(const QJsonObject& request_data)
         int money_nun = data.value("num").toInt();
         m_service_->ItemMoneyBusiness(money_nun);
     }
+    else if(type.contains(uiCmd::UpdatePropShow))
+    {
+        m_service_->UpdatePropShow(request_data);
+    }
 }
 
 void ItemManage::SlotPubTopic(const QJsonObject& topic_data)

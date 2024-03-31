@@ -90,6 +90,7 @@ namespace uiCmd
     const QString StopFishing = "StopFishing";    ///< 暂停摸鱼
     const QString UpgradeLevel = "UpgradeLevel";    ///< 突破等级
     const QString UpdateRoleUI = "UpdateRoleUI";    ///< 更新指定UI部件
+    const QString UpdatePropShow = "InitPropShow";    ///< 初始化道具显示
 }
 
 #endif //DESKXIUXINA_PUBLIC_DECLARE_H
