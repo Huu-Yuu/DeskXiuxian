@@ -450,7 +450,7 @@ void DataService::WriteRoleInfoToLocalDatabase()
     }
 }
 
-void DataService::WriteRoleItemsToLocalDatabase()
+int DataService::WriteRoleItemsToLocalDatabase()
 {
     if(m_database_.isOpen())
     {
@@ -488,11 +488,14 @@ void DataService::WriteRoleItemsToLocalDatabase()
         if (!query.exec())
         {
             LOG_DEBUG(kDataManage, QString("更新操作失败：%1").arg(query.lastError().text()));
+            return DB_ERROR_EXECUTION_FAILED;
         }
+        return NO_ERROR;
     }
     else
     {
         LOG_DEBUG(kDataManage, "数据库未打开");
+        return DB_ERROR_CONNECTION_LOST;
     }
 }
 
@@ -623,7 +626,37 @@ void DataService::run()
     if(is_SaveRoleItem)
     {
         is_SaveRoleItem = false;
-        WriteRoleItemsToLocalDatabase();
+        int result = WriteRoleItemsToLocalDatabase();
+        if(result == NO_ERROR)
+        {
+            switch (prop_opt_) {
+                case kNoOpt:
+                    break;
+                case kUseOpt:
+                {
+                    for (auto it = role_item_data_.constBegin(); it != role_item_data_.constEnd(); ++it) {
+                        QJsonObject data_obj;
+                        QString key = it.key();
+                        data_obj.insert("result", 1);
+                        QString item_num = key.mid(5);  // 获取编号
+                        data_obj.insert("prop_index", item_num.toInt());
+                        data_obj.insert("num", it.value().toString().toInt());
+                        emit SignalActionRequest(PublicFunc::PackageRequest(itemCmd::UsePropsSuccessful,
+                                                                            data_obj,
+                                                                            "",
+                                                                            module_name::item,
+                                                                            module_name::data));
+                    }
+                }
+                    break;
+                case kAcquireOpt:
+                    break;
+                case kSellOpt:
+                    break;
+            }
+            prop_opt_ = kNoOpt;
+            role_item_data_ = QJsonObject();
+        }
     }
     if(is_SaveRoleCoefficient)
     {
@@ -720,6 +753,10 @@ QJsonObject DataService::GetLocalTableInfo2Obj(const QString& table_name) {
         }
     }
     return result;
+}
+
+void DataService::GetPropOpt(int opt) {
+    prop_opt_ = (PropOptEnum)opt;
 }
 
 

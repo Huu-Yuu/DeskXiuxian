@@ -3,6 +3,7 @@
 #include "modules/public/public_declare.h"
 #include <QJsonArray>
 #include <QMenu>
+#include <QListWidgetItem>
 
 MainUI::MainUI(QWidget* parent)
     : QMainWindow(parent)
@@ -516,7 +517,17 @@ void MainUI::on_item_prop_list_customContextMenuRequested(const QPoint &pos)
 
         QObject::connect(&useAction, &QAction::triggered, [&]() {
             // 处理使用操作
-            qDebug() << "使用操作：" << item->text();
+            QString prop_name = item->text();
+            AddMessage("使用道具：" + prop_name);
+            QJsonObject data_obj;
+            data_obj.insert("props_index", prop_map_.value(prop_name).toInt());
+            data_obj.insert("props_name", prop_name);
+            data_obj.insert("num", 1);
+            emit SignalActionRequest(PublicFunc::PackageRequest(itemCmd::UseProps,
+                                                                data_obj,
+                                                                "",
+                                                                module_name::item,
+                                                                module_name::ui));
         });
 
         QObject::connect(&sellAction, &QAction::triggered, [&]() {

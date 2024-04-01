@@ -169,5 +169,13 @@ enum TopicSubActionType
     kUnsubType = 2,
 };
 
+// 道具操作枚举
+enum PropOptEnum
+{
+    kNoOpt      = 0,        ///< 无操作
+    kUseOpt,                ///< 使用道具
+    kAcquireOpt,            ///< 获得道具
+    kSellOpt                ///< 出售道具
+};
 
 #endif // PUBLIC_TYPE_H

@@ -1,9 +1,11 @@
 #include "prop_rename_card.h"
 #include "modules/public/public_declare.h"
 #include "modules/public/public_macro.h"
+#include "modules/public/public_func.h"
 #include <QFile>
 #include <QDebug>
 #include <QDateTime>
+#include <QJsonObject>
 
 RenameCard::RenameCard() {
     item_index_ = kPropRenameCard;
@@ -16,4 +18,12 @@ RenameCard::RenameCard() {
 
 RenameCard::~RenameCard()
 {
+}
+
+void RenameCard::UsageEffect(int num) {
+    emit SignalActionRequest(PublicFunc::PackageRequest(uiCmd::ShowRenameWidget,
+                                                        QJsonObject(),
+                                                        "",
+                                                        module_name::ui,
+                                                        module_name::item));
 }

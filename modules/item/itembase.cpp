@@ -1,5 +1,8 @@
 #include "itembase.h"
 #include "modules/public/error_code.h"
+#include "modules/public/public_func.h"
+#include "modules/public/public_declare.h"
+#include <QJsonObject>
 
 ItemBase::ItemBase(QObject *parent) : QObject(parent)
 {
@@ -61,15 +64,25 @@ int ItemBase::UseItem(int sum) {
     return -1;
 }
 
-void ItemBase::ItemNumCharge(int num) {
+void ItemBase::ItemNumCharge(int num, PropOptEnum opt) {
     item_num_ += num;
-    emit SignalQuantityChanged(item_index_, item_num_);
+    emit SignalQuantityChanged(item_index_, item_num_, opt);
 }
 
 void ItemBase::UsageEffect(int sum) {
-    emit SignalUseItem(item_index_, sum);
+    Q_UNUSED(sum);
 }
 
 int ItemBase::GetItemType() {
     return item_type_;
+}
+
+void ItemBase::ShowMsgToUi(const QString &msg) {
+    QJsonObject data_obj;
+    data_obj.insert("msg", msg);
+    emit SignalActionRequest(PublicFunc::PackageRequest(uiCmd::ShowMsgToUI,
+                                                        data_obj,
+                                                        "",
+                                                        module_name::ui,
+                                                        module_name::item));
 }

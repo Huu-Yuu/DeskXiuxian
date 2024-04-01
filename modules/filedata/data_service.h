@@ -137,6 +137,7 @@ public:
     void DebugOutToLog(QString msg);
 
     void InitRemoteRoleInfo();      ///< 初始化远程角色信息
+    void GetPropOpt(int opt);   ///< 设置当前物品操作
 signals:
     //请求外部动作
     void SignalActionRequest(const QJsonObject& request_data);
@@ -181,7 +182,7 @@ private:
      * @return 1-写入正常 0-更新失败 -1-更新查询失败 -2-不存在这一行 -3-计数查询失败
      */
     int WriteUserLoginLogToRemoteDatabase();
-    void WriteRoleItemsToLocalDatabase();   ///< 写入角色物品信息到     本地数据库
+    int WriteRoleItemsToLocalDatabase();   ///< 写入角色物品信息到     本地数据库
     void WriteRoleEquipToLocalDatabase();   ///< 写入角色装备信息到     本地数据库
     void WriteRoleCoefficientToLocalDatabase(); ///< 写入角色计算系数信息到   本地数据库
     void WriteRoleInfoToLocalDatabase();    ///< 写入角色基本信息到     本地数据库
@@ -214,7 +215,7 @@ private:
     static QString user_uuid_ ;          ///< 账号UUID
     static QString user_ip_ ;      ///< 用户IP
     QString role_name_ = "GM姜子牙";         // 昵称
-
+    PropOptEnum prop_opt_ = kNoOpt;      ///< 当前道具操作
 };
 
 #endif // DATAMANAGE_H

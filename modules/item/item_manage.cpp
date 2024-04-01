@@ -47,6 +47,13 @@ void ItemManage::SlotActionRequest(const QJsonObject& request_data)
     {
         m_service_->UpdatePropShow(request_data);
     }
+    else if(type.contains(itemCmd::UseProps))
+    {
+        QJsonObject data = request_data.value("data").toObject();
+        int index = data.value("props_index").toInt();
+        int num = data.value("num").toInt();
+        m_service_->UseProps(index, num);
+    }
 }
 
 void ItemManage::SlotPubTopic(const QJsonObject& topic_data)

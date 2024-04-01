@@ -11,7 +11,7 @@ public:
     YanshouDan10();
     ~YanshouDan10();
 protected:
-
+    void UsageEffect(int num = 1) override;
 private:
 };
 

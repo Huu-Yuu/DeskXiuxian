@@ -19,7 +19,7 @@ public:
     int GetItemType();      ///< 获取物品类型
     int GetItemNum() const;     ///< 获取物品数量
     void SetItemNum(int num);       ///< 设置物品数量
-    void ItemNumCharge(int num);    ///< 物品数量改变 增加或减少
+    void ItemNumCharge(int num, PropOptEnum opt = kNoOpt);    ///< 物品数量改变 增加或减少
     QString GetItemName() const;            ///< 获取物品名称
     void SetItemName(const QString& name);  ///< 写入物品名称
     int GetItemPrice() const;       ///< 获取物品价格
@@ -47,7 +47,7 @@ signals:
      * @brief 数量被改变信号 用于修改数据库
      * @param sum 改变后的数量
      * **/
-    void SignalQuantityChanged(RoleItemEnum item_enum , int sum);
+    void SignalQuantityChanged(RoleItemEnum item_enum , int sum, PropOptEnum opt);
 
     /**
      * @brief 佩戴装备信号
@@ -56,18 +56,13 @@ signals:
      * **/
     void SignalWearingEquipment(RoleItemEnum item_idenx, RoleEquipAreaEnum area_enum);
 
-    /**
-     * @brief 道具使用信号
-     * @param item_idenx 物品索引
-     * @param sum 使用数量
-     * **/
-    void SignalUseItem(RoleItemEnum item_index, int sum = 1);
+    void SignalActionRequest(const QJsonObject& request_data);
 
 public slots:
 
 protected:
     virtual void UsageEffect(int sum = 1);  ///< 道具使用效果
-
+    void ShowMsgToUi(const QString& msg);       ///< 发送信息到UI显示
     //////————————————物品基本属性——————————————//////
     RoleItemEnum item_index_ = kUnknownProp;    ///< 物品索引
     QString item_name_ = "unknown";             ///< 名称

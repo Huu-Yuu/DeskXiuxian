@@ -53,11 +53,11 @@ void ItemService::initConnect() {
     for(QMap<int, ItemBase*>::iterator it = m_item_strategy.begin(); it != m_item_strategy.end(); ++it)
     {
         connect(it.value(), &ItemBase::SignalQuantityChanged, this, &ItemService::SlotQuantityChanged);
-        connect(it.value(), &ItemBase::SignalUseItem, this, &ItemService::SlotUseItem);
+        connect(it.value(), &ItemBase::SignalActionRequest, this, &ItemService::SignalActionRequest);
     }
 }
 
-void ItemService::SlotQuantityChanged(RoleItemEnum item_enum, int sum) {
+void ItemService::SlotQuantityChanged(RoleItemEnum item_enum, int sum, PropOptEnum opt) {
     QJsonObject obj_data, obj_pub;
     if(m_item_strategy[item_enum]->GetItemType() == kItemEquip)
     {
@@ -69,6 +69,7 @@ void ItemService::SlotQuantityChanged(RoleItemEnum item_enum, int sum) {
     else
     {
         obj_data.insert(PublicFunc::ConvertItemEnumToDBStr(item_enum), QString::number(sum));
+        obj_data.insert("prop_opt", opt);
         obj_pub.insert("type", dbCmd::SaveRoleItem);
     }
     obj_pub.insert("data", obj_data);
@@ -92,35 +93,6 @@ void ItemService::InitLocalRoleInfo(const QJsonObject& data) {
             m_item_strategy[item_type]->SetItemNum(num);
         }
     }
-}
-
-void ItemService::SlotUseItem(RoleItemEnum item_index, int sum) {
-    switch (item_index) {
-        case kUnknownProp:
-            LOG_DEBUG(kItemManage, "未知道具");
-            break;
-        case kRoleMoney:
-            LOG_DEBUG(kItemManage, "使用灵石");
-            break;
-        case kPropRenameCard:
-            emit SignalActionRequest(PublicFunc::PackageRequest(uiCmd::ShowRenameWidget,
-                                                                QJsonObject(),
-                                                                "",
-                                                                module_name::ui,
-                                                                module_name::item));
-            break;
-        case kYanshouDan10:
-            QJsonObject data_obj;
-            data_obj.insert("att_enum", kRoleMaxLifeAtt);
-            data_obj.insert("sum", 10 * sum);
-            emit SignalActionRequest(PublicFunc::PackageRequest(itemCmd::IncreModRoleBaseAtt,
-                                                                data_obj,
-                                                                "",
-                                                                module_name::role,
-                                                                module_name::item));
-            break;
-    }
-    ShowMsgToUi(QString("使用道具：%1，使用数量：%2").arg(m_item_strategy[item_index]->GetItemName()).arg(sum));
 }
 
 void ItemService::ShowMsgToUi(const QString &msg) {
@@ -159,3 +131,13 @@ void ItemService::UpdatePropShow(QJsonObject request_data)
                                                           request_data.value("ori").toString(),
                                                           module_name::item));
 }
+
+void ItemService::UsePropsSuccessful(const QJsonObject& data) {
+    int index = data.value("props_index").toInt();
+    m_item_strategy[index]->UseItem();
+}
+
+void ItemService::UseProps(int prop_index, int num) {
+    m_item_strategy[prop_index]->ItemNumCharge(-num);
+}
+
