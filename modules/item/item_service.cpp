@@ -105,7 +105,7 @@ void ItemService::ShowMsgToUi(const QString &msg) {
                                                         module_name::item));
 }
 
-void ItemService::UpdatePropShow(QJsonObject request_data)
+void ItemService::UpdatePropShow(const QJsonObject& request_data)
 {
     QJsonArray item_arr;
     for(QMap<int, ItemBase*>::Iterator it = m_item_strategy.begin(); it != m_item_strategy.end(); it ++)
@@ -132,12 +132,15 @@ void ItemService::UpdatePropShow(QJsonObject request_data)
                                                           module_name::item));
 }
 
-void ItemService::UsePropsSuccessful(const QJsonObject& data) {
-    int index = data.value("props_index").toInt();
-    m_item_strategy[index]->UseItem();
+void ItemService::UseProps(int prop_index, int num) {
+    m_item_strategy[prop_index]->UseItem(num);
 }
 
-void ItemService::UseProps(int prop_index, int num) {
-    m_item_strategy[prop_index]->ItemNumCharge(-num);
+void ItemService::DeductPropNum(int prop_index, int num) {
+    m_item_strategy[prop_index]->ItemNumCharge(-num, kUseOpt);
+}
+
+void ItemService::IncrementItem(int prop_index, int num) {
+    m_item_strategy[prop_index]->IncrementItem(num);
 }
 

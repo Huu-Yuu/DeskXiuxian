@@ -18,6 +18,11 @@ UIManage::~UIManage()
 }
 
 int UIManage::Init() {
+    QStringList item_topics = QStringList{itemCmd::UsePropsSuccessful};
+    QStringList topics;
+    topics += item_topics;
+    LOG_DEBUG(kItemManage, QString("发送订阅主动上报消息：%1").arg(topics.join(",").toStdString().c_str()));
+    emit SignalSubTopic(kSubType, topics);
     return 0;
 }
 
@@ -114,7 +119,23 @@ void UIManage::SlotActionRequest(const QJsonObject &request_data) {
 }
 
 void UIManage::SlotPubTopic(const QJsonObject &topic_data) {
-
+    LOG_DEBUG(kUIManage, QString("收到广播信息：%1").arg(QJsonDocument(topic_data).toJson(QJsonDocument::Compact).data()));
+    QString type = topic_data.value("type").toString();
+    if(type.contains(itemCmd::UsePropsSuccessful))
+    {
+        QJsonObject data = topic_data.value("data").toObject();
+        int result = data.value("result").toInt();
+        int index = data.value("prop_index").toInt();
+        int num = data.value("num").toInt();
+        if(result == 1)
+        {
+            m_service_->RequestOutside(uiCmd::UpdatePropShow, module_name::item);
+        }
+        else
+        {
+            m_service_->AddMessage("道具使用失败");
+        }
+    }
 }
 
 void UIManage::UpdateUi(const QJsonObject& role_data) {

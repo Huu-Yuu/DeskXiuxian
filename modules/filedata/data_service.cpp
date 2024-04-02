@@ -417,7 +417,6 @@ void DataService::WriteRoleInfoToLocalDatabase()
         for (auto it = role_info_data_.constBegin(); it != role_info_data_.constEnd(); ++it)
         {
             QString key = it.key();
-//            QString value = it.value().toString();
 
             // 将键值对添加到更新语句中
             updateValues.append(key + " = :" + key);
@@ -641,11 +640,10 @@ void DataService::run()
                         QString item_num = key.mid(5);  // 获取编号
                         data_obj.insert("prop_index", item_num.toInt());
                         data_obj.insert("num", it.value().toString().toInt());
-                        emit SignalActionRequest(PublicFunc::PackageRequest(itemCmd::UsePropsSuccessful,
-                                                                            data_obj,
-                                                                            "",
-                                                                            module_name::item,
-                                                                            module_name::data));
+                        QJsonObject pub_data;
+                        pub_data.insert("type", itemCmd::UsePropsSuccessful);
+                        pub_data.insert("data", data_obj);
+                        emit SignalPubTopic(pub_data);
                     }
                 }
                     break;

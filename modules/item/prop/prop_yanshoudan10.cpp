@@ -20,7 +20,8 @@ YanshouDan10::YanshouDan10() {
     LOG_DEBUG(kItemManage, item_name_);
 }
 
-void YanshouDan10::UsageEffect(int num) {
+void YanshouDan10::UseItem(int num) {
+    ShowMsgToUi(QString("使用成功，最大寿命增加：%1").arg(num * 10));
     QJsonObject data_obj;
     data_obj.insert("att_enum", kRoleMaxLifeAtt);
     data_obj.insert("sum", 10 * num);
@@ -30,3 +31,4 @@ void YanshouDan10::UsageEffect(int num) {
                                                         module_name::role,
                                                         module_name::item));
 }
+

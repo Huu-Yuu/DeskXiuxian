@@ -51,7 +51,7 @@ public:
     void InitRoleUI(QJsonObject role_info_data, QJsonObject role_item_data, QJsonObject role_rc_data, QJsonObject role_equic_data = QJsonObject());
 
     void UpdateRoleUI(const QJsonObject& data);    ///< 更新角色信息UI
-
+    void AddMessage(QString msg);   ///< 添加消息到消息列表
     void FistLogInDeal(int result); ///< 处理首次登录结果
     void AutomaticLogin(int result);  ///< 自动登录
     void ModifyRoleNameDeal(int result);    ///< 处理重命名结果
@@ -59,6 +59,7 @@ public:
     void LoginVerificationDeal(int result);   ///< 登录校验处理  1-登录成功 0-账号或密码错误 -1-数据库连接失败
     void AccountRegistrationDeal(int result);   ///< 注册结果交互 1-注册成功 0-注册失败 -2-数据库连接失败 -1-账号已存在
     void UpdateBackpackBar(QJsonObject data);       ///< 更新背包栏
+    void RequestOutside(const QString& cmd, const QString& dest); ///< 发送请求指令
 signals:
 
     void SignalLogOut(QtMsgType type, const QMessageLogContext& context, const QString& message);   ///< 输出日志信号
@@ -102,12 +103,10 @@ private slots:
 
 private:
     void initResponseFunction();    ///< 预留 初始化应答函数
-    void AddMessage(QString msg);   ///< 添加消息到消息列表
-    void UpdateBackpackEquipBar(QJsonArray arr);   ///< 更新背包装备显示
-    void UpdateBackpackPropBar(QJsonArray arr);   ///< 更新背包装备显示
-    void UpdateBackpackMaterialBar(QJsonArray arr); ///< 更新背包材料显示
-    void UpdateBackpackSpecialBar(QJsonArray arr); ///< 更新背包特殊物品显示
-    void RequestOutside(QString cmd, QString dest); ///< 发送请求指令
+    void UpdateBackpackEquipBar(const QJsonArray& arr);   ///< 更新背包装备显示
+    void UpdateBackpackPropBar(const QJsonArray& arr);   ///< 更新背包装备显示
+    void UpdateBackpackMaterialBar(const QJsonArray& arr); ///< 更新背包材料显示
+    void UpdateBackpackSpecialBar(const QJsonArray& arr); ///< 更新背包特殊物品显示
     QMap<QString, Function_Rsp> map_function_rsp_;  ///< 处理应答
     QProcess* process;  // 用于关闭窗口时杀死所有进程
     Ui::MainUI* ui;

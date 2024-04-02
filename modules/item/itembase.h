@@ -19,7 +19,7 @@ public:
     int GetItemType();      ///< 获取物品类型
     int GetItemNum() const;     ///< 获取物品数量
     void SetItemNum(int num);       ///< 设置物品数量
-    void ItemNumCharge(int num, PropOptEnum opt = kNoOpt);    ///< 物品数量改变 增加或减少
+    void ItemNumCharge(int num, PropOptEnum opt = kNoOpt);    ///< 物品数量改变，改变原因
     QString GetItemName() const;            ///< 获取物品名称
     void SetItemName(const QString& name);  ///< 写入物品名称
     int GetItemPrice() const;       ///< 获取物品价格
@@ -27,21 +27,18 @@ public:
     QString GetItemExplain() const; ///< 获取物品描述
     void SetItemExplain(const QString& explain);    ///< 写入物品描述
     QString GetItemAccess();        ///< 获取物品的获取途径
-
+    void IncrementItem(int num);    ///< 增量改变物品数量
     /**
      * @brief 出售物品
      * @param quantity 出售数量
      * @return 总售价
      */
     int SellItem(int quantity) const;
-
     /**
      * @brief 使用道具
      * @param sum 使用数量，默认为1
-     * @return 返回错误码 无错误返回 NO_ERROR
      * **/
-    int UseItem(int sum = 1);
-
+    virtual void UseItem(int sum = 1);
 signals:
     /**
      * @brief 数量被改变信号 用于修改数据库
@@ -61,8 +58,8 @@ signals:
 public slots:
 
 protected:
-    virtual void UsageEffect(int sum = 1);  ///< 道具使用效果
     void ShowMsgToUi(const QString& msg);       ///< 发送信息到UI显示
+
     //////————————————物品基本属性——————————————//////
     RoleItemEnum item_index_ = kUnknownProp;    ///< 物品索引
     QString item_name_ = "unknown";             ///< 名称

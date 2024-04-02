@@ -13,9 +13,12 @@ ItemManage::ItemManage() {
 int ItemManage::Init()
 {
     QStringList db_topics = QStringList{dbCmd::SaveRoleEquip, dbCmd::SaveRoleItem};
-
-    LOG_DEBUG(kItemManage, QString("发送订阅主动上报消息：%1").arg(db_topics.join(",").toStdString().c_str()));
-    emit SignalSubTopic(kSubType, db_topics);
+    QStringList item_topics = QStringList{itemCmd::UsePropsSuccessful};
+    QStringList topics;
+    topics += db_topics;
+    topics += item_topics;
+    LOG_DEBUG(kItemManage, QString("发送订阅主动上报消息：%1").arg(topics.join(",").toStdString().c_str()));
+    emit SignalSubTopic(kSubType, topics);
 }
 
 ItemManage::~ItemManage()
@@ -50,14 +53,30 @@ void ItemManage::SlotActionRequest(const QJsonObject& request_data)
     else if(type.contains(itemCmd::UseProps))
     {
         QJsonObject data = request_data.value("data").toObject();
-        int index = data.value("props_index").toInt();
+        int index = data.value("prop_index").toInt();
         int num = data.value("num").toInt();
-        m_service_->UseProps(index, num);
+        m_service_->DeductPropNum(index, num);
     }
+
 }
 
 void ItemManage::SlotPubTopic(const QJsonObject& topic_data)
 {
     LOG_DEBUG(kItemManage, QString("收到广播信息：%1").arg(QJsonDocument(topic_data).toJson(QJsonDocument::Compact).data()));
     QString type = topic_data.value("type").toString();
+    if(type.contains(itemCmd::UsePropsSuccessful))
+    {
+        QJsonObject data = topic_data.value("data").toObject();
+        int result = data.value("result").toInt();
+        int index = data.value("prop_index").toInt();
+        int num = data.value("num").toInt();
+        if(result == 1)
+        {
+            m_service_->UseProps(index, num);
+        }
+        else
+        {
+            m_service_->IncrementItem(index, num);  // 数据库扣除数量失败，则需要将数量给改回去
+        }
+    }
 }

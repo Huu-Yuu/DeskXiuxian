@@ -431,12 +431,12 @@ void MainUI::UpdateBackpackBar(QJsonObject data)
     }
 }
 
-void MainUI::UpdateBackpackEquipBar(QJsonArray arr)
+void MainUI::UpdateBackpackEquipBar(const QJsonArray& arr)
 {
 
 }
 
-void MainUI::UpdateBackpackPropBar(QJsonArray arr)
+void MainUI::UpdateBackpackPropBar(const QJsonArray& arr)
 {
     prop_map_ = QJsonObject();
     show_prop_info_ = QJsonObject();
@@ -452,12 +452,12 @@ void MainUI::UpdateBackpackPropBar(QJsonArray arr)
     }
 }
 
-void MainUI::UpdateBackpackMaterialBar(QJsonArray arr)
+void MainUI::UpdateBackpackMaterialBar(const QJsonArray& arr)
 {
 
 }
 
-void MainUI::UpdateBackpackSpecialBar(QJsonArray arr)
+void MainUI::UpdateBackpackSpecialBar(const QJsonArray& arr)
 {
 
 }
@@ -479,7 +479,7 @@ void MainUI::on_item_preview_Widget_currentChanged(int index)
     }
 }
 
-void MainUI::RequestOutside(QString cmd, QString dest)
+void MainUI::RequestOutside(const QString& cmd, const QString& dest)
 {
     emit SignalActionRequest(PublicFunc::PackageRequest(cmd,
                                                         QJsonObject(),
@@ -520,8 +520,8 @@ void MainUI::on_item_prop_list_customContextMenuRequested(const QPoint &pos)
             QString prop_name = item->text();
             AddMessage("使用道具：" + prop_name);
             QJsonObject data_obj;
-            data_obj.insert("props_index", prop_map_.value(prop_name).toInt());
-            data_obj.insert("props_name", prop_name);
+            data_obj.insert("prop_index", prop_map_.value(prop_name).toInt());
+            data_obj.insert("prop_name", prop_name);
             data_obj.insert("num", 1);
             emit SignalActionRequest(PublicFunc::PackageRequest(itemCmd::UseProps,
                                                                 data_obj,

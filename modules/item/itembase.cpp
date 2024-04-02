@@ -54,23 +54,16 @@ QString ItemBase::GetItemAccess()
     return item_access;
 }
 
-int ItemBase::UseItem(int sum) {
-    if(item_num_ >= sum)
-    {
-        item_num_ -= sum;
-        UsageEffect(sum);
-        return NO_ERROR;
-    }
-    return -1;
+void ItemBase::UseItem(int sum) {
+    Q_UNUSED(sum);
 }
 
 void ItemBase::ItemNumCharge(int num, PropOptEnum opt) {
     item_num_ += num;
-    emit SignalQuantityChanged(item_index_, item_num_, opt);
-}
-
-void ItemBase::UsageEffect(int sum) {
-    Q_UNUSED(sum);
+    if(item_num_ >= 0)
+        emit SignalQuantityChanged(item_index_, item_num_, opt);
+    else
+        qDebug() << item_name_ + "数量不能小于0";
 }
 
 int ItemBase::GetItemType() {
@@ -85,4 +78,9 @@ void ItemBase::ShowMsgToUi(const QString &msg) {
                                                         "",
                                                         module_name::ui,
                                                         module_name::item));
+}
+
+void ItemBase::IncrementItem(int num)
+{
+    item_num_ += num;
 }

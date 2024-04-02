@@ -20,10 +20,12 @@ RenameCard::~RenameCard()
 {
 }
 
-void RenameCard::UsageEffect(int num) {
+void RenameCard::UseItem(int num) {
+    ShowMsgToUi("请重新设置昵称");
     emit SignalActionRequest(PublicFunc::PackageRequest(uiCmd::ShowRenameWidget,
                                                         QJsonObject(),
                                                         "",
                                                         module_name::ui,
                                                         module_name::item));
 }
+
