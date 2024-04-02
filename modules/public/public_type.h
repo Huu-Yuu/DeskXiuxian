@@ -108,7 +108,7 @@ enum RoleItemEnum
     ///////——————10000 - 道具——————///////
     kRoleMoney          = 10001,        ///< 灵石
     kPropRenameCard     = 10002,       ///< 改名卡
-    kYanshouDan10       = 10003        ///< 十年延寿丹
+    kPropYanshouDan10   = 10003,       ///< 十年延寿丹
     ///////——————20000 - 材料——————///////
 
     ///////——————30000 - 特殊——————///////
@@ -124,6 +124,9 @@ enum RoleItemEnum
     ///////——————47000 - 首饰——————///////
     ///////——————48000 - 坐骑——————///////
     ///////——————49000 - 称号——————///////
+    kTitleLeShanHaoShi      = 49001,    ///< 乐善好施
+    kTitleChengJianChuE     = 49002,    ///< 惩奸除恶
+    kTitleChengEYangShan    = 49003     ///< 惩恶扬善
 };
 
 /**
@@ -175,7 +178,8 @@ enum PropOptEnum
     kNoOpt      = 0,        ///< 无操作
     kUseOpt,                ///< 使用道具
     kAcquireOpt,            ///< 获得道具
-    kSellOpt                ///< 出售道具
+    kSellOpt,               ///< 出售道具
+    kSyntEquip              ///< 合成装备
 };
 
 #endif // PUBLIC_TYPE_H

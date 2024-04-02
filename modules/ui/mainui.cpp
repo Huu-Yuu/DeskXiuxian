@@ -532,7 +532,8 @@ void MainUI::on_item_prop_list_customContextMenuRequested(const QPoint &pos)
 
         QObject::connect(&sellAction, &QAction::triggered, [&]() {
             // 处理出售操作
-            qDebug() << "出售操作：" << item->text();
+            QString prop_name = item->text();
+            AddMessage("出售道具：" + prop_name);
         });
         menu.exec(ui->item_prop_list->mapToGlobal(pos));
     }

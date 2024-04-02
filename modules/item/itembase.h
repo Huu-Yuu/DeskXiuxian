@@ -39,6 +39,9 @@ public:
      * @param sum 使用数量，默认为1
      * **/
     virtual void UseItem(int sum = 1);
+
+    virtual bool CanUpgrade();  ///< 检测装备能否升级
+    virtual void EquipUpgrade();    ///< 装备升级
 signals:
     /**
      * @brief 数量被改变信号 用于修改数据库
