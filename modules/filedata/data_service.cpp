@@ -651,6 +651,8 @@ void DataService::run()
                     break;
                 case kSellOpt:
                     break;
+                case kSyntEquip:
+                    break;
             }
             prop_opt_ = kNoOpt;
             role_item_data_ = QJsonObject();

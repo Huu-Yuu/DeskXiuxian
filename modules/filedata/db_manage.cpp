@@ -178,6 +178,7 @@ void DBManage::SlotPubTopic(const QJsonObject& topic_data)
     {
         QJsonObject data = topic_data.value("data").toObject();
         int opt = data.value("prop_opt").toInt();
+        data.remove("prop_opt");
         m_service_->GetPropOpt(opt);
         m_service_->SlotSaveRoleItemToDatabase(data);
     }

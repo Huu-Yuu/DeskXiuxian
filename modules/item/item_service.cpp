@@ -45,10 +45,6 @@ void ItemService::InitItem() {
     m_item_strategy.insert(kPropYanshouDan10, YanshouDan10::getInstance());
 }
 
-void ItemService::SlotItemNumCharge(RoleItemEnum item_enum, int obtain_num) {
-    m_item_strategy.value(item_enum)->ItemNumCharge(obtain_num);
-}
-
 void ItemService::initConnect() {
     for(QMap<int, ItemBase*>::iterator it = m_item_strategy.begin(); it != m_item_strategy.end(); ++it)
     {

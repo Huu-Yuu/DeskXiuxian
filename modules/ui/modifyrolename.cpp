@@ -87,6 +87,7 @@ void ModifyRoleName::ModifyRoleNameDeal(int result) {
                                                                 module_name::role,
                                                                 module_name::ui));
             emit SignalRenameSuccessful(role_name_);
+            ShowMsgToUi("重命名角色：" + role_name_);
             break;
         }
         default:
@@ -114,3 +115,12 @@ void ModifyRoleName::RoleNameIsOkDeal(int result) {
     ui->tip_text->setText(msg);
 }
 
+void ModifyRoleName::ShowMsgToUi(const QString &msg) {
+    QJsonObject data_obj;
+    data_obj.insert("msg", msg);
+    emit SignalActionRequest(PublicFunc::PackageRequest(uiCmd::ShowMsgToUI,
+                                                        data_obj,
+                                                        "",
+                                                        module_name::ui,
+                                                        module_name::ui));
+}

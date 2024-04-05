@@ -47,6 +47,7 @@ private slots:
     void on_check_btn_clicked();
 
 private:
+    void ShowMsgToUi(const QString& msg);       ///< 发送信息到UI显示
     Ui::ModifyRoleName* ui;
     QString role_name_;
     bool role_name_ok = false;      // 检查输入格式是否正常

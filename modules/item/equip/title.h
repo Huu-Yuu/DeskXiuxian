@@ -10,7 +10,6 @@ class Title_LSHS : public ItemBase
     SINGLETON(Title_LSHS);
 public:
     Title_LSHS();
-    ~Title_LSHS();
 };
 
 class Title_CJCE : public ItemBase

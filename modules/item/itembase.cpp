@@ -84,3 +84,14 @@ void ItemBase::IncrementItem(int num)
 {
     item_num_ += num;
 }
+
+
+bool ItemBase::CanUpgrade()
+{
+    return false;
+}
+
+void ItemBase::EquipUpgrade()
+{
+
+}

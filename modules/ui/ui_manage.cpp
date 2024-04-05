@@ -115,6 +115,10 @@ void UIManage::SlotActionRequest(const QJsonObject &request_data) {
     {
         m_service_->ShowLoginWidget();
     }
+    else if(type.contains(uiCmd::ShowRenameWidget))
+    {
+        m_service_->ShowModifyNameWidget();
+    }
 
 }
 

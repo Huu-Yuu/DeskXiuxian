@@ -35,6 +35,7 @@ SOURCES += \
     modules/item/itembase.cpp \
     modules/item/item_service.cpp \
     modules/item/item_manage.cpp \
+    modules/item/equip/title.cpp \
     modules/item/prop/prop_rename_card.cpp \
     modules/item/prop/prop_yanshoudan10.cpp \
     modules/logger/logger.cpp \
@@ -64,6 +65,7 @@ HEADERS += \
     modules/item/itembase.h \
     modules/item/item_service.h \
     modules/item/item_manage.h \
+    modules/item/equip/title.h \
     modules/item/prop/prop_rename_card.h \
     modules/item/prop/prop_yanshoudan10.h \
     modules/logger/logger.h \
