@@ -10,6 +10,27 @@ UIManage::UIManage()
     connect(m_service_, &MainUI::SignalActionRequest, this, &UIManage::SignalActionRequest);
     connect(m_service_, &MainUI::SignalActionResponse, this, &UIManage::SignalActionResponse);
     connect(m_service_, &MainUI::SignalPubTopic, this, &UIManage::SignalPubTopic);
+
+    map_function_request_[mainCmd::InitLocalRoleInfo] = &UIManage::Do_Request_InitLocalRoleInfo;
+    map_function_request_[uiCmd::ShowMsgToUI] = &UIManage::Do_Request_ShowMsgToUI;
+    map_function_request_[uiCmd::DisableCultivaUpButton] = &UIManage::Do_Request_DisableCultivaUpButton;
+    map_function_request_[uiCmd::UpdateRoleUI] = &UIManage::Do_Request_UpdateRoleUI;
+    map_function_request_[uiCmd::ActivateCultivaUpButton] = &UIManage::Do_Request_ActivateCultivaUpButton;
+    map_function_request_[uiCmd::InitRoleUI] = &UIManage::Do_Request_InitRoleUI;
+    map_function_request_[uiCmd::ShowMainUI] = &UIManage::Do_Request_ShowMainUI;
+    map_function_request_[uiCmd::ShowLoginWidget] = &UIManage::Do_Request_ShowLoginWidget;
+    map_function_request_[uiCmd::ShowRenameWidget] = &UIManage::Do_Request_ShowRenameWidget;
+
+    map_function_response_[dbCmd::CheckLoginFist] = &UIManage::Do_Response_CheckLoginFist;
+    map_function_response_[dbCmd::CheckRoleNameIsOk] = &UIManage::Do_Response_CheckRoleNameIsOk;
+    map_function_response_[dbCmd::LoginVerification] = &UIManage::Do_Response_LoginVerification;
+    map_function_response_[dbCmd::AccountRegistration] = &UIManage::Do_Response_AccountRegistration;
+    map_function_response_[dbCmd::UpdateLastLoginTime] = &UIManage::Do_Response_UpdateLastLoginTime;
+    map_function_response_[mainCmd::AutomaticLogin] = &UIManage::Do_Response_AutomaticLogin;
+    map_function_response_[roleCmd::ModifyRoleName] = &UIManage::Do_Response_ModifyRoleName;
+    map_function_response_[uiCmd::UpdatePropShow] = &UIManage::Do_Response_UpdatePropShow;
+
+    map_function_topic_[itemCmd::UsePropsSuccessful] = &UIManage::Do_Topic_UsePropsSuccessful;
 }
 
 UIManage::~UIManage()
@@ -29,117 +50,30 @@ int UIManage::Init() {
 void UIManage::SlotActionResponse(const QJsonObject &response_data) {
     LOG_DEBUG(kUIManage, QString("收到外部应答：%1").arg(QJsonDocument(response_data).toJson(QJsonDocument::Compact).data()));
     QString type = response_data.value("type").toString();
-    QJsonObject data_obj = response_data.value("data").toObject();
-    if(type.contains(dbCmd::CheckLoginFist))
+
+    if(map_function_response_.keys().contains(type))
     {
-        int result = data_obj.value("result").toInt();
-        m_service_->FistLogInDeal(result);
-    }
-    else if(type.contains(mainCmd::AutomaticLogin))
-    {
-        int result = data_obj.value("result").toInt();
-        m_service_->AutomaticLogin(result);
-    }
-    else if(type.contains(roleCmd::ModifyRoleName))
-    {
-        int result = data_obj.value("result").toInt();
-        m_service_->ModifyRoleNameDeal(result);
-    }
-    else if(type.contains(dbCmd::CheckRoleNameIsOk))
-    {
-        int result = data_obj.value("result").toInt();
-        m_service_->RoleNameIsOkDeal(result);
-    }
-    else if(type.contains(dbCmd::LoginVerification))
-    {
-        int result = data_obj.value("result").toInt();
-        m_service_->LoginVerificationDeal(result);
-    }
-    else if(type.contains(dbCmd::AccountRegistration))
-    {
-        int result = data_obj.value("result").toInt();
-        m_service_->AccountRegistrationDeal(result);
-    }
-    else if(type.contains(dbCmd::UpdateLastLoginTime))
-    {
-        LOG_DEBUG(kUIManage, "关闭窗口");
-    }
-    else if(type.contains(uiCmd::UpdatePropShow))
-    {
-       m_service_->UpdateBackpackBar(data_obj);
+        (this->*map_function_response_[type])(response_data);
     }
 }
 
 void UIManage::SlotActionRequest(const QJsonObject &request_data) {
     LOG_DEBUG(kUIManage, QString("收到外部请求：%1").arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
     QString type = request_data.value("type").toString();
-    if(type.contains(uiCmd::ShowMsgToUI))
+    if(map_function_request_.keys().contains(type))
     {
-        QJsonObject data_obj = request_data.value("data").toObject();
-        QString msg = data_obj.value("msg").toString();
-        m_service_->SlotShowMsg(msg);
+        (this->*map_function_request_[type])(request_data);
     }
-    else if(type.contains(mainCmd::InitLocalRoleInfo))
-    {
-        QJsonObject data_obj = request_data.value("data").toObject();
-        UpdateUi(data_obj);
-    }
-    else if(type.contains(uiCmd::DisableCultivaUpButton))
-    {
-        m_service_->SlotDisableCultivaUpButton();
-    }
-    else if(type.contains(uiCmd::UpdateRoleUI))
-    {
-        QJsonObject data_obj = request_data.value("data").toObject();
-        m_service_->UpdateRoleUI(data_obj);
-    }
-    else if(type.contains(uiCmd::ActivateCultivaUpButton))
-    {
-        m_service_->SlotActivateCultivaUpButton();
-    }
-    else if(type.contains(uiCmd::InitRoleUI))
-    {
-        QJsonObject data_obj = request_data.value("data").toObject();
-        QJsonObject role_info_data, role_item_data, role_rc_data, role_equic_data;
-        role_info_data = data_obj.value("role_info_data").toObject();
-        role_item_data = data_obj.value("role_item_data").toObject();
-        role_rc_data = data_obj.value("role_rc_data").toObject();
-        role_equic_data = data_obj.value("role_equic_data").toObject();
-        m_service_->InitRoleUI(role_info_data, role_item_data, role_rc_data, role_equic_data);
-    }
-    else if(type.contains(uiCmd::ShowMainUI))
-    {
-        m_service_->show();
-    }
-    else if(type.contains(uiCmd::ShowLoginWidget))
-    {
-        m_service_->ShowLoginWidget();
-    }
-    else if(type.contains(uiCmd::ShowRenameWidget))
-    {
-        m_service_->ShowModifyNameWidget();
-    }
-
 }
 
 void UIManage::SlotPubTopic(const QJsonObject &topic_data) {
     LOG_DEBUG(kUIManage, QString("收到广播信息：%1").arg(QJsonDocument(topic_data).toJson(QJsonDocument::Compact).data()));
     QString type = topic_data.value("type").toString();
-    if(type.contains(itemCmd::UsePropsSuccessful))
+    if(map_function_topic_.keys().contains(type))
     {
-        QJsonObject data = topic_data.value("data").toObject();
-        int result = data.value("result").toInt();
-        int index = data.value("prop_index").toInt();
-        int num = data.value("num").toInt();
-        if(result == 1)
-        {
-            m_service_->RequestOutside(uiCmd::UpdatePropShow, module_name::item);
-        }
-        else
-        {
-            m_service_->AddMessage("道具使用失败");
-        }
+        (this->*map_function_topic_[type])(topic_data);
     }
+
 }
 
 void UIManage::UpdateUi(const QJsonObject& role_data) {
@@ -170,4 +104,134 @@ void UIManage::UpdateUi(const QJsonObject& role_data) {
     m_service_->UpdatePhysicalStrength(role_cur_exp, role_agg, role_def, role_hp);
     m_service_->UpdateEquip(equip_weapon, equip_magic, equip_helmet, equip_clothing, equip_britches,
                             equip_shoe, equip_jewelry, equip_mount, equip_title);
+}
+
+void UIManage::Do_Request_ShowMsgToUI(const QJsonObject& request_data)
+{
+    QJsonObject data_obj = request_data.value("data").toObject();
+    QString msg = data_obj.value("msg").toString();
+    m_service_->SlotShowMsg(msg);
+}
+
+void UIManage::Do_Request_InitLocalRoleInfo(const QJsonObject& request_data)
+{
+    QJsonObject data_obj = request_data.value("data").toObject();
+    UpdateUi(data_obj);
+}
+
+void UIManage::Do_Request_DisableCultivaUpButton(const QJsonObject& request_data)
+{
+    Q_UNUSED(request_data);
+    m_service_->SlotDisableCultivaUpButton();
+}
+
+void UIManage::Do_Request_UpdateRoleUI(const QJsonObject& request_data)
+{
+    QJsonObject data_obj = request_data.value("data").toObject();
+    m_service_->UpdateRoleUI(data_obj);
+}
+
+void UIManage::Do_Request_ActivateCultivaUpButton(const QJsonObject& request_data)
+{
+    Q_UNUSED(request_data);
+    m_service_->SlotActivateCultivaUpButton();
+}
+
+void UIManage::Do_Request_InitRoleUI(const QJsonObject& request_data)
+{
+    QJsonObject data_obj = request_data.value("data").toObject();
+    QJsonObject role_info_data, role_item_data, role_rc_data, role_equic_data;
+    role_info_data = data_obj.value("role_info_data").toObject();
+    role_item_data = data_obj.value("role_item_data").toObject();
+    role_rc_data = data_obj.value("role_rc_data").toObject();
+    role_equic_data = data_obj.value("role_equic_data").toObject();
+    m_service_->InitRoleUI(role_info_data, role_item_data, role_rc_data, role_equic_data);
+}
+
+void UIManage::Do_Request_ShowMainUI(const QJsonObject& request_data)
+{
+    Q_UNUSED(request_data);
+    m_service_->show();
+}
+
+void UIManage::Do_Request_ShowLoginWidget(const QJsonObject& request_data)
+{
+    Q_UNUSED(request_data);
+    m_service_->ShowLoginWidget();
+}
+
+void UIManage::Do_Request_ShowRenameWidget(const QJsonObject& request_data)
+{
+    Q_UNUSED(request_data);
+    m_service_->ShowModifyNameWidget();
+}
+
+void UIManage::Do_Response_CheckLoginFist(const QJsonObject& response_data)
+{
+    QJsonObject data_obj = response_data.value("data").toObject();
+    int result = data_obj.value("result").toInt();
+    m_service_->FistLogInDeal(result);
+}
+
+void UIManage::Do_Response_AutomaticLogin(const QJsonObject& response_data)
+{
+    QJsonObject data_obj = response_data.value("data").toObject();
+    int result = data_obj.value("result").toInt();
+    m_service_->AutomaticLogin(result);
+}
+
+void UIManage::Do_Response_ModifyRoleName(const QJsonObject& response_data)
+{
+    QJsonObject data_obj = response_data.value("data").toObject();
+    int result = data_obj.value("result").toInt();
+    m_service_->ModifyRoleNameDeal(result);
+}
+
+void UIManage::Do_Response_CheckRoleNameIsOk(const QJsonObject& response_data)
+{
+    QJsonObject data_obj = response_data.value("data").toObject();
+    int result = data_obj.value("result").toInt();
+    m_service_->RoleNameIsOkDeal(result);
+}
+
+void UIManage::Do_Response_LoginVerification(const QJsonObject& response_data)
+{
+    QJsonObject data_obj = response_data.value("data").toObject();
+    int result = data_obj.value("result").toInt();
+    m_service_->LoginVerificationDeal(result);
+}
+
+void UIManage::Do_Response_AccountRegistration(const QJsonObject& response_data)
+{
+    QJsonObject data_obj = response_data.value("data").toObject();
+    int result = data_obj.value("result").toInt();
+    m_service_->AccountRegistrationDeal(result);
+}
+
+void UIManage::Do_Response_UpdateLastLoginTime(const QJsonObject& response_data)
+{
+    Q_UNUSED(response_data);
+    LOG_DEBUG(kUIManage, "关闭窗口");
+}
+
+void UIManage::Do_Response_UpdatePropShow(const QJsonObject& response_data)
+{
+    QJsonObject data_obj = response_data.value("data").toObject();
+    m_service_->UpdateBackpackBar(data_obj);
+}
+
+void UIManage::Do_Topic_UsePropsSuccessful(const QJsonObject& topic_data)
+{
+    QJsonObject data = topic_data.value("data").toObject();
+    int result = data.value("result").toInt();
+    int index = data.value("prop_index").toInt();
+    int num = data.value("num").toInt();
+    if(result == 1)
+    {
+        m_service_->RequestOutside(uiCmd::UpdatePropShow, module_name::item);
+    }
+    else
+    {
+        m_service_->AddMessage("道具使用失败");
+    }
 }

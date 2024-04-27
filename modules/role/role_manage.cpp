@@ -116,3 +116,13 @@ void RoleManage::Do_Topic_StartFishing(const QJsonObject& topic_data)
     Q_UNUSED(topic_data);
     m_player_->CheckExpIsUpgrade();
 }
+
+void RoleManage::Do_Topic_SaveRoleEquip(const QJsonObject& topic_data)
+{
+    Q_UNUSED(topic_data);
+}
+
+void RoleManage::Do_Topic_SaveRoleItem(const QJsonObject& topic_data)
+{
+    Q_UNUSED(topic_data);
+}

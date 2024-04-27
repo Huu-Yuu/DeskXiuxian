@@ -4,7 +4,7 @@
 // 调试信息输出开关
 #define DEBUG_MODE_SWITCH       1
 
-#define GAME_VISION             "v0.5.0 重构版"
+#define GAME_VISION             "v0.5.1 重构版"
 
 // 数据库类型    0-远程数据库 1-本地数据库 2-服务器传递
 #define DATABASE_TYPE          1
