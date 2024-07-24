@@ -382,7 +382,7 @@ void MainUI::AutomaticLogin(int result) {
             ShowLoginWidget();
             break;
         default:
-            LOG_DEBUG(kUIManage,"自动登录检测错误结果");
+            LOG_INFO(kUIManage, "自动登录检测错误结果");
     }
 }
 
@@ -426,7 +426,7 @@ void MainUI::UpdateBackpackBar(QJsonObject data)
         }
         else
         {
-            LOG_DEBUG(kUIManage, "当前键值判断出错：" + key);
+            LOG_INFO(kUIManage, "当前键值判断出错：" + key);
         }
     }
 }

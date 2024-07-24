@@ -79,6 +79,8 @@ HEADERS += \
     modules/public/public_declare.h \
     modules/role/role_manage.h \
     modules/role/role_player.h \
+    modules/role/simple_int_encryptor.h \
+    modules/role/encrypt_int.h \
     modules/public/public_func.h \
     modules/public/error_code.h \
     modules/public/error_display.h \

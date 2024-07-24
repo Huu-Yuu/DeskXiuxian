@@ -17,7 +17,7 @@ YanshouDan10::YanshouDan10() {
     item_explain_ = "延长十年寿命";
     item_type_ = kItemProp;
     item_price_ = 10000;
-    LOG_DEBUG(kItemManage, item_name_);
+    LOG_INFO(kItemManage, item_name_);
 }
 
 void YanshouDan10::UseItem(int num) {

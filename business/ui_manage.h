@@ -2,11 +2,11 @@
 #define DESKXIUXINA_UI_MANAGE_H
 #include <QObject>
 #include "modules/interface_manager.h"
-#include "mainui.h"
+#include "modules/ui/mainui.h"
 
 class UIManage : public InterfaceManager
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     UIManage();
     ~UIManage();

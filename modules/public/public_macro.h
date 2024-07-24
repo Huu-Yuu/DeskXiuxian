@@ -41,7 +41,7 @@
 // 调试打印
 #if DEBUG_MODE_SWITCH == 1
 // 调试打印
-#define LOG_DEBUG(logger, msg) \
+#define LOG_INFO(logger, msg) \
     do { \
         QString logMsg = QString("[%1] %2:%3 - %4").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")).arg(__FUNCTION__).arg(__LINE__).arg(msg); \
         qDebug() << logMsg; \
@@ -54,7 +54,7 @@
         } \
     } while (0)
 #else
-#define LOG_DEBUG(msg) do {} while (0)
+#define LOG_INFO(msg) do {} while (0)
 #endif
 
 #endif // PUBLIC_MACRO_H

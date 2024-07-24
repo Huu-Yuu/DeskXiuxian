@@ -1,9 +1,9 @@
 #include "main_ctrl.h"
-#include "modules/item/item_manage.h"
-#include "modules/filedata/db_manage.h"
-#include "modules/progress/progress_manage.h"
-#include "modules/role/role_manage.h"
-#include "modules/ui/ui_manage.h"
+#include "business/item_manage.h"
+#include "business/db_manage.h"
+#include "business/progress_manage.h"
+#include "business/role_manage.h"
+#include "business/ui_manage.h"
 #include "modules/public/public_declare.h"
 
 MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
@@ -182,7 +182,7 @@ void MainCtrl::onSubTopic(TopicSubActionType action_type, const QStringList &top
     }
     else
     {
-        LOG_DEBUG(kMainCtrl, QString("无法处理订阅请求:模块未初始化，%1主动上报消息：%2").arg(debug_msg).arg(topic_msg));
+        LOG_INFO(kMainCtrl, QString("无法处理订阅请求:模块未初始化，%1主动上报消息：%2").arg(debug_msg).arg(topic_msg));
     }
 }
 
@@ -199,28 +199,28 @@ void MainCtrl::onActionRequest(const QJsonObject &request_data) {
     QString type = request_data.value("type").toString();
     QString dest = request_data.value("dest").toString();
     QString ori = request_data.value("ori").toString();
-    LOG_DEBUG(kMainCtrl, QString("主控类收到请求：%1 -> %2").arg(ori).arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
+    LOG_INFO(kMainCtrl, QString("主控类收到请求：%1 -> %2").arg(ori).arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
     if(m_manager_map.contains(dest))
     {
         m_manager_map[dest]->SlotActionRequest(request_data);
     }
     else
     {
-        LOG_DEBUG(kMainCtrl, QString("[main] 无法处理请求：%1").arg(type));
+        LOG_INFO(kMainCtrl, QString("[main] 无法处理请求：%1").arg(type));
     }
 }
 
 void MainCtrl::onActionResponse(const QJsonObject &request_data) {
     QString type = request_data.value("type").toString();
     QString dest = request_data.value("dest").toString();
-    LOG_DEBUG(kMainCtrl, QString("中心回复请求：%1").arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
+    LOG_INFO(kMainCtrl, QString("中心回复请求：%1").arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
     if(m_manager_map.contains(dest))
     {
         m_manager_map[dest]->SlotActionResponse(request_data);
     }
     else
     {
-        LOG_DEBUG(kMainCtrl, QString("[main] 无法处理回复：%1").arg(type));
+        LOG_INFO(kMainCtrl, QString("[main] 无法处理回复：%1").arg(type));
     }
 }
 

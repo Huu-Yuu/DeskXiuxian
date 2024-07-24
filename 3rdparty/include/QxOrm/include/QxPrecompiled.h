@@ -33,22 +33,22 @@
 #define _QX_ORM_PRECOMPILED_HEADER_H_
 
 #ifdef _MSC_VER
-#pragma once
+    #pragma once
 #endif
 
 #ifdef _MSC_VER
-#if (_MSC_VER < 1800) // MSVC 2012 and below
-#ifndef _VARIADIC_MAX
-#define _VARIADIC_MAX 10 // to manage correctly std::tuple
-#endif // _VARIADIC_MAX
-#endif // (_MSC_VER < 1800)
+    #if (_MSC_VER < 1800) // MSVC 2012 and below
+        #ifndef _VARIADIC_MAX
+            #define _VARIADIC_MAX 10 // to manage correctly std::tuple
+        #endif // _VARIADIC_MAX
+    #endif // (_MSC_VER < 1800)
 #endif // _MSC_VER
 
 #ifdef _MSC_VER
-#pragma warning(disable:4503) /* -- Disable 4503 warning because of boost template -- */
-#pragma warning(disable:4100) /* -- Disable warning 'unreferenced formal parameter' -- */
-#pragma warning(disable:4996)
-#pragma warning(disable:4661)
+    #pragma warning(disable:4503) /* -- Disable 4503 warning because of boost template -- */
+    #pragma warning(disable:4100) /* -- Disable warning 'unreferenced formal parameter' -- */
+    #pragma warning(disable:4996)
+    #pragma warning(disable:4661)
 #endif // _MSC_VER
 
 #include <iostream>
@@ -84,52 +84,52 @@
 #include <QtCore/qpair.h>
 
 #ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable:4396)
+    #pragma warning(push)
+    #pragma warning(disable:4396)
 #endif // _MSC_VER
 
 #ifndef _QX_ENABLE_BOOST
-#ifdef _QX_ENABLE_BOOST_SERIALIZATION
-#define _QX_ENABLE_BOOST
-#endif // _QX_ENABLE_BOOST_SERIALIZATION
+    #ifdef _QX_ENABLE_BOOST_SERIALIZATION
+        #define _QX_ENABLE_BOOST
+    #endif // _QX_ENABLE_BOOST_SERIALIZATION
 #endif // _QX_ENABLE_BOOST
 
 #ifdef _QX_ENABLE_BOOST
-#define BOOST_ALL_NO_LIB /* -- Disable auto-link feature provided by boost -- */
-#include <boost/config.hpp>
-#include <boost/version.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
-#include <boost/intrusive_ptr.hpp>
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
-#include <boost/tuple/tuple.hpp>
-#include <boost/tuple/tuple_comparison.hpp>
-#include <boost/tuple/tuple_io.hpp>
-#include <boost/optional.hpp>
-#include <boost/none.hpp>
-#include <boost/serialization/force_include.hpp>
+    #define BOOST_ALL_NO_LIB /* -- Disable auto-link feature provided by boost -- */
+    #include <boost/config.hpp>
+    #include <boost/version.hpp>
+    #include <boost/scoped_ptr.hpp>
+    #include <boost/shared_ptr.hpp>
+    #include <boost/weak_ptr.hpp>
+    #include <boost/intrusive_ptr.hpp>
+    #include <boost/unordered_map.hpp>
+    #include <boost/unordered_set.hpp>
+    #include <boost/tuple/tuple.hpp>
+    #include <boost/tuple/tuple_comparison.hpp>
+    #include <boost/tuple/tuple_io.hpp>
+    #include <boost/optional.hpp>
+    #include <boost/none.hpp>
+    #include <boost/serialization/force_include.hpp>
 #endif // _QX_ENABLE_BOOST
 
 #ifdef BOOST_DLLEXPORT
-#undef BOOST_DLLEXPORT
-#define BOOST_DLLEXPORT /* Nothing */
+    #undef BOOST_DLLEXPORT
+    #define BOOST_DLLEXPORT /* Nothing */
 #endif // BOOST_DLLEXPORT
 
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION
-#ifdef _MSC_VER
-#include <boost/serialization/serialization.hpp> /* -- To avoid warning 4100 => header in precompiled header -- */
-#include <boost/archive/detail/iserializer.hpp>
-#include <boost/archive/detail/oserializer.hpp>
-#endif // _MSC_VER
+    #ifdef _MSC_VER
+        #include <boost/serialization/serialization.hpp> /* -- To avoid warning 4100 => header in precompiled header -- */
+        #include <boost/archive/detail/iserializer.hpp>
+        #include <boost/archive/detail/oserializer.hpp>
+    #endif // _MSC_VER
 #endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 #ifdef _MSC_VER
-#pragma warning(pop)
+    #pragma warning(pop)
 #endif // _MSC_VER
 
-#include <QxCommon/QxConfig.h>
-#include <QxCommon/QxMacro.h>
+#include "QxCommon/QxConfig.h"
+#include "QxCommon/QxMacro.h"
 
 #endif // _QX_ORM_PRECOMPILED_HEADER_H_

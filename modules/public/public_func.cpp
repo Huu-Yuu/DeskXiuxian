@@ -163,7 +163,7 @@ ItemType PublicFunc::ConvertItemType(RoleItemEnum item_enum) {
             return kItemEquip;
             break;
         default:
-            LOG_DEBUG(kMainCtrl, QString("不存在此类型:%1，强制转换为道具类型").arg(type_num));
+            LOG_INFO(kMainCtrl, QString("不存在此类型:%1，强制转换为道具类型").arg(type_num));
             return kItemProp;
     }
 }
@@ -177,7 +177,7 @@ QString PublicFunc::ConvertItemEnumToDBStr(RoleItemEnum item_enum)
     }
     else
     {
-        LOG_DEBUG(kMainCtrl, QString("不能将装备类型转换为数据库类名：%1").arg(QString::number(item_enum)));
+        LOG_INFO(kMainCtrl, QString("不能将装备类型转换为数据库类名：%1").arg(QString::number(item_enum)));
         return "";
     }
 }
@@ -205,7 +205,7 @@ RoleEquipAreaEnum PublicFunc::ConvertEquipArea(RoleItemEnum item_enum) {
         case 9:
             return kTitleArea;
         default:
-            LOG_DEBUG(kMainCtrl, QString("不存在此类型部位%1").arg(type_num));
+            LOG_INFO(kMainCtrl, QString("不存在此类型部位%1").arg(type_num));
             return kOther;
     }
 }
@@ -215,7 +215,7 @@ QString PublicFunc::ConvertEquipAreaToDBStr(RoleEquipAreaEnum area_enum) {
     switch (area_enum)
     {
         case kOther:
-            LOG_DEBUG(kMainCtrl, "不存在此部位");
+            LOG_INFO(kMainCtrl, "不存在此部位");
             break;
         case kWeaponArea:
             area_str = "equip_weapon";

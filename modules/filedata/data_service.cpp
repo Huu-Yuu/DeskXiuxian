@@ -60,15 +60,15 @@ void DataService::OpenDatabase(const QString& path)
     // 打开数据库连接
     if (!m_database_.open())
     {
-        LOG_DEBUG(kDataManage, QString("无法打开数据库:%1").arg(m_database_.lastError().text()));
+        LOG_INFO(kDataManage, QString("无法打开数据库:%1").arg(m_database_.lastError().text()));
     }
     else
     {
         m_database_.exec("PRAGMA encoding = \"UTF-8\";");
-        LOG_DEBUG(kDataManage, "本地数据库已经打开");
+        LOG_INFO(kDataManage, "本地数据库已经打开");
         if(!CheckTablesExist()) //检查并创建表单
         {
-            LOG_DEBUG(kDataManage, "检查表单时出现错误");
+            LOG_INFO(kDataManage, "检查表单时出现错误");
         };
     }
 }
@@ -85,15 +85,15 @@ void DataService::CreateDatabase(QString path)
     // 打开数据库连接
     if (!m_database_.open())
     {
-        LOG_DEBUG(kDataManage, QString("创建数据库失败:%1").arg(m_database_.lastError().text()));
+        LOG_INFO(kDataManage, QString("创建数据库失败:%1").arg(m_database_.lastError().text()));
     }
     else
     {
-        LOG_DEBUG(kDataManage, "本地数据库已经打开");
+        LOG_INFO(kDataManage, "本地数据库已经打开");
         m_database_.exec("PRAGMA encoding = \"UTF-8\";");
         if(!CheckTablesExist()) //检查并创建表单
         {
-            LOG_DEBUG(kDataManage, "创建数据库时，创建表单出现错误");
+            LOG_INFO(kDataManage, "创建数据库时，创建表单出现错误");
         };
     }
     // database_.close();
@@ -106,7 +106,7 @@ bool DataService::CheckTablesExist()
     QSqlQuery query(m_database_);
     if (!query.exec(queryString))
     {
-        LOG_DEBUG(kDataManage, QString("执行查询 RoleInfo 时出错:%1").arg(query.lastError().text()));
+        LOG_INFO(kDataManage, QString("执行查询 RoleInfo 时出错:%1").arg(query.lastError().text()));
         return false;
     }
     // 如果 RoleInfo 表不存在，则创建表
@@ -128,7 +128,7 @@ bool DataService::CheckTablesExist()
         query.prepare(createTableQuery);
         if (!query.exec(createTableQuery))
         {
-            LOG_DEBUG(kDataManage, QString("创建表时出错:%1").arg(query.lastError().text()));
+            LOG_INFO(kDataManage, QString("创建表时出错:%1").arg(query.lastError().text()));
             return false;
         }
         // 插入初始值
@@ -151,7 +151,7 @@ bool DataService::CheckTablesExist()
 
         if (!query.exec())
         {
-            LOG_DEBUG(kDataManage, QString("插入初始值时出错:%1").arg(query.lastError().text()));
+            LOG_INFO(kDataManage, QString("插入初始值时出错:%1").arg(query.lastError().text()));
             return false;
         }
     }
@@ -159,7 +159,7 @@ bool DataService::CheckTablesExist()
     queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleAtt'";
     if (!query.exec(queryString))
     {
-        LOG_DEBUG(kDataManage, QString("执行查询 RoleAtt 时出错:%1").arg(query.lastError().text()));
+        LOG_INFO(kDataManage, QString("执行查询 RoleAtt 时出错:%1").arg(query.lastError().text()));
         return false;
     }
 
@@ -176,7 +176,7 @@ bool DataService::CheckTablesExist()
                                    ")";
         if (!query.exec(createTableQuery))
         {
-            LOG_DEBUG(kDataManage, QString("创建表时出错:%1").arg(query.lastError().text()));
+            LOG_INFO(kDataManage, QString("创建表时出错:%1").arg(query.lastError().text()));
             return false;
         }
 
@@ -192,7 +192,7 @@ bool DataService::CheckTablesExist()
         query.bindValue(":att_earth", 0);
         if (!query.exec())
         {
-            LOG_DEBUG(kDataManage, QString("插入初始值时出错:%1").arg(query.lastError().text()));
+            LOG_INFO(kDataManage, QString("插入初始值时出错:%1").arg(query.lastError().text()));
             return false;
         }
     }
@@ -201,7 +201,7 @@ bool DataService::CheckTablesExist()
     queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleEquip'";
     if (!query.exec(queryString))
     {
-        LOG_DEBUG(kDataManage, QString("执行查询 RoleEquip 时出错:%1").arg(query.lastError().text()));
+        LOG_INFO(kDataManage, QString("执行查询 RoleEquip 时出错:%1").arg(query.lastError().text()));
         return false;
     }
 
@@ -222,7 +222,7 @@ bool DataService::CheckTablesExist()
                                    ")";
         if (!query.exec(createTableQuery))
         {
-            LOG_DEBUG(kDataManage, QString("创建表时出错:%1").arg(query.lastError().text()));
+            LOG_INFO(kDataManage, QString("创建表时出错:%1").arg(query.lastError().text()));
             return false;
         }
 
@@ -244,7 +244,7 @@ bool DataService::CheckTablesExist()
         query.bindValue(":equip_mount", "哈士奇");
         if (!query.exec())
         {
-            LOG_DEBUG(kDataManage, QString("插入初始值时出错:%1").arg(query.lastError().text()));
+            LOG_INFO(kDataManage, QString("插入初始值时出错:%1").arg(query.lastError().text()));
             return false;
         }
     }
@@ -253,7 +253,7 @@ bool DataService::CheckTablesExist()
     queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleItem'";
     if (!query.exec(queryString))
     {
-        LOG_DEBUG(kDataManage, QString("执行查询 RoleItem 时出错:%1").arg(query.lastError().text()));
+        LOG_INFO(kDataManage, QString("执行查询 RoleItem 时出错:%1").arg(query.lastError().text()));
         return false;
     }
 
@@ -268,7 +268,7 @@ bool DataService::CheckTablesExist()
                                    ")";
         if (!query.exec(createTableQuery))
         {
-            LOG_DEBUG(kDataManage, QString("创建表时出错:%1").arg(query.lastError().text()));
+            LOG_INFO(kDataManage, QString("创建表时出错:%1").arg(query.lastError().text()));
             return false;
         }
 
@@ -282,7 +282,7 @@ bool DataService::CheckTablesExist()
         query.bindValue(":item_10003", 0);
         if (!query.exec())
         {
-            LOG_DEBUG(kDataManage, QString("插入初始值时出错:%1").arg(query.lastError().text()));
+            LOG_INFO(kDataManage, QString("插入初始值时出错:%1").arg(query.lastError().text()));
             return false;
         }
     }
@@ -291,7 +291,7 @@ bool DataService::CheckTablesExist()
     queryString = "SELECT name FROM sqlite_master WHERE type='table' AND name='RoleCoefficient'";
     if (!query.exec(queryString))
     {
-        LOG_DEBUG(kDataManage, QString("执行查询 RoleCoefficient 时出错:%1").arg(query.lastError().text()));
+        LOG_INFO(kDataManage, QString("执行查询 RoleCoefficient 时出错:%1").arg(query.lastError().text()));
         return false;
     }
 
@@ -309,7 +309,7 @@ bool DataService::CheckTablesExist()
                                    ")";
         if (!query.exec(createTableQuery))
         {
-            LOG_DEBUG(kDataManage, QString("创建表时出错:%1").arg(query.lastError().text()));
+            LOG_INFO(kDataManage, QString("创建表时出错:%1").arg(query.lastError().text()));
             return false;
         }
 
@@ -328,7 +328,7 @@ bool DataService::CheckTablesExist()
         query.bindValue(":RC_special_event", 1);
         if (!query.exec())
         {
-            LOG_DEBUG(kDataManage, QString("插入初始值时出错:%1").arg(query.lastError().text()));
+            LOG_INFO(kDataManage, QString("插入初始值时出错:%1").arg(query.lastError().text()));
             return false;
         }
     }
@@ -340,7 +340,7 @@ QString DataService::GetTableToInfo(QString table_name, QString column_name)
     QString result = "";
     if(!m_database_.isOpen())
     {
-        LOG_DEBUG(kDataManage, "数据库打开失败");
+        LOG_INFO(kDataManage, "数据库打开失败");
         return result;
     }
     else
@@ -349,15 +349,15 @@ QString DataService::GetTableToInfo(QString table_name, QString column_name)
         QString queryString = QString("SELECT %1 FROM %2").arg(column_name, table_name);
         if (!query.exec(queryString))
         {
-            LOG_DEBUG(kDataManage, queryString);
-            LOG_DEBUG(kDataManage, QString("执行查询时出错:%1").arg(query.lastError().text()));
+            LOG_INFO(kDataManage, queryString);
+            LOG_INFO(kDataManage, QString("执行查询时出错:%1").arg(query.lastError().text()));
         }
         else
         {
             if (query.next())
             {
                 QString log = table_name + " 查询数据为：" + column_name + " ：" + query.value(0).toString();
-                LOG_DEBUG(kDataManage, log);
+                LOG_INFO(kDataManage, log);
                 result = query.value(0).toString();
             }
         }
@@ -425,7 +425,7 @@ void DataService::WriteRoleInfoToLocalDatabase()
         // 将更新的键值对连接到查询语句中
         updateQuery += updateValues.join(", ");
         updateQuery += " WHERE role_name = :role_name";
-        LOG_DEBUG(kDataManage, QString("查询语句：%1").arg(updateQuery));
+        LOG_INFO(kDataManage, QString("查询语句：%1").arg(updateQuery));
         // 准备查询
         query.prepare(updateQuery);
 
@@ -440,12 +440,12 @@ void DataService::WriteRoleInfoToLocalDatabase()
         // 执行查询
         if (!query.exec())
         {
-            LOG_DEBUG(kDataManage, QString("更新操作失败：%1").arg(query.lastError().text()));
+            LOG_INFO(kDataManage, QString("更新操作失败：%1").arg(query.lastError().text()));
         }
     }
     else
     {
-        LOG_DEBUG(kDataManage, "数据库未打开");
+        LOG_INFO(kDataManage, "数据库未打开");
     }
 }
 
@@ -471,7 +471,7 @@ int DataService::WriteRoleItemsToLocalDatabase()
         // 将更新的键值对连接到查询语句中
         updateQuery += updateValues.join(", ");
         updateQuery += " WHERE role_name = :role_name";
-        LOG_DEBUG(kDataManage, QString("查询语句：%1").arg(updateQuery));
+        LOG_INFO(kDataManage, QString("查询语句：%1").arg(updateQuery));
         // 准备查询
         query.prepare(updateQuery);
 
@@ -486,14 +486,14 @@ int DataService::WriteRoleItemsToLocalDatabase()
         // 执行查询
         if (!query.exec())
         {
-            LOG_DEBUG(kDataManage, QString("更新操作失败：%1").arg(query.lastError().text()));
+            LOG_INFO(kDataManage, QString("更新操作失败：%1").arg(query.lastError().text()));
             return DB_ERROR_EXECUTION_FAILED;
         }
         return NO_ERROR;
     }
     else
     {
-        LOG_DEBUG(kDataManage, "数据库未打开");
+        LOG_INFO(kDataManage, "数据库未打开");
         return DB_ERROR_CONNECTION_LOST;
     }
 }
@@ -520,7 +520,7 @@ void DataService::WriteRoleEquipToLocalDatabase()
         // 将更新的键值对连接到查询语句中
         updateQuery += updateValues.join(", ");
         updateQuery += " WHERE role_name = :role_name";
-        LOG_DEBUG(kDataManage, QString("查询语句：%1").arg(updateQuery));
+        LOG_INFO(kDataManage, QString("查询语句：%1").arg(updateQuery));
         // 准备查询
         query.prepare(updateQuery);
 
@@ -535,12 +535,12 @@ void DataService::WriteRoleEquipToLocalDatabase()
         // 执行查询
         if (!query.exec())
         {
-            LOG_DEBUG(kDataManage, QString("更新操作失败：%1").arg(query.lastError().text()));
+            LOG_INFO(kDataManage, QString("更新操作失败：%1").arg(query.lastError().text()));
         }
     }
     else
     {
-        LOG_DEBUG(kDataManage, "数据库未打开");
+        LOG_INFO(kDataManage, "数据库未打开");
     }
 }
 
@@ -579,14 +579,14 @@ void DataService::WriteRoleCoefficientToLocalDatabase()
             query.bindValue(":RC_special_event", RC_data_.value("RC_special_event").toInt());
             if (!query.exec())
             {
-                LOG_DEBUG(kDataManage, QString("保存数据时出错:%1").arg(query.lastError().text()));
+                LOG_INFO(kDataManage, QString("保存数据时出错:%1").arg(query.lastError().text()));
                 return;
             }
         }
     }
     else
     {
-        LOG_DEBUG(kDataManage, "数据库未打开");
+        LOG_INFO(kDataManage, "数据库未打开");
     }
 }
 
@@ -721,7 +721,7 @@ QJsonObject DataService::GetLocalTableInfo2Obj(const QString& table_name) {
     QJsonObject result;
     if(!m_database_.isOpen())
     {
-        LOG_DEBUG(kDataManage, "数据库打开失败");
+        LOG_INFO(kDataManage, "数据库打开失败");
     }
     else
     {
@@ -731,7 +731,7 @@ QJsonObject DataService::GetLocalTableInfo2Obj(const QString& table_name) {
         query.exec();
 
         if (!query.exec()) {
-            LOG_DEBUG(kDataManage, QString("执行查询时出错：%1").arg(query.lastError().text()));
+            LOG_INFO(kDataManage, QString("执行查询时出错：%1").arg(query.lastError().text()));
             return result;
         }
         // 遍历查询结果

@@ -13,7 +13,7 @@ RenameCard::RenameCard() {
     item_explain_ = "可以修改一次角色昵称";
     item_type_ = kItemProp;
     item_price_ = 1000;
-    LOG_DEBUG(kItemManage, item_name_);
+    LOG_INFO(kItemManage, item_name_);
 }
 
 RenameCard::~RenameCard()

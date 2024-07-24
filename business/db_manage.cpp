@@ -1,4 +1,4 @@
-#include "db_manage.h"
+#include "business/db_manage.h"
 #include "modules/public/public_declare.h"
 #include <QJsonDocument>
 
@@ -32,7 +32,7 @@ int DBManage::Init()
     QStringList db_topics = QStringList{dbCmd::SaveRoleEquip, dbCmd::SaveRoleItem, dbCmd::SaveRoleInfo, dbCmd::SaveCoefficient};
     QStringList subscribe_topics;
     subscribe_topics += db_topics;
-    LOG_DEBUG(kDataManage, QString("发送订阅主动上报消息：%1").arg(subscribe_topics.join(",").toStdString().c_str()));
+    LOG_INFO(kDataManage, QString("发送订阅主动上报消息：%1").arg(subscribe_topics.join(",").toStdString().c_str()));
     emit SignalSubTopic(kSubType, subscribe_topics);
 }
 
@@ -43,7 +43,7 @@ DBManage::~DBManage()
 
 void DBManage::SlotActionResponse(const QJsonObject& response_data)
 {
-    LOG_DEBUG(kRoleManage, QString("收到外部应答：%1").arg(QJsonDocument(response_data).toJson(QJsonDocument::Compact).data()));
+    LOG_INFO(kRoleManage, QString("收到外部应答：%1").arg(QJsonDocument(response_data).toJson(QJsonDocument::Compact).data()));
     QString type = response_data.value("type").toString();
     if(map_function_response_.keys().contains(type))
     {
@@ -53,7 +53,7 @@ void DBManage::SlotActionResponse(const QJsonObject& response_data)
 
 void DBManage::SlotActionRequest(const QJsonObject& request_data)
 {
-    LOG_DEBUG(kRoleManage, QString("收到外部请求：%1").arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
+    LOG_INFO(kRoleManage, QString("收到外部请求：%1").arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
     QString type = request_data.value("type").toString();
     if(map_function_request_.keys().contains(type))
     {
@@ -63,7 +63,7 @@ void DBManage::SlotActionRequest(const QJsonObject& request_data)
 
 void DBManage::SlotPubTopic(const QJsonObject& topic_data)
 {
-    LOG_DEBUG(kDataManage, QString("收到广播信息：%1").arg(QJsonDocument(topic_data).toJson(QJsonDocument::Compact).data()));
+    LOG_INFO(kDataManage, QString("收到广播信息：%1").arg(QJsonDocument(topic_data).toJson(QJsonDocument::Compact).data()));
     QString type = topic_data.value("type").toString();
     if(map_function_topic_.keys().contains(type))
     {

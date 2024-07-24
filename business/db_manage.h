@@ -2,7 +2,7 @@
 #define DESKXIUXINA_DB_MANAGE_H
 #include <QObject>
 #include "modules/interface_manager.h"
-#include "data_service.h"
+#include "modules/filedata/data_service.h"
 
 class DBManage : public InterfaceManager
 {

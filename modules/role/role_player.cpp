@@ -915,7 +915,7 @@ void RolePlayer::SaveRoleEquip(RoleEquipAreaEnum area, RoleItemEnum item_enum)
     switch (area)
     {
         case kOther:
-            LOG_DEBUG(kRoleManage, "不存在此部位");
+            LOG_INFO(kRoleManage, "不存在此部位");
             break;
         case kWeaponArea:
             area_str = "equip_weapon";
@@ -1295,7 +1295,7 @@ QString RolePlayer::GetEquipAreaName(RoleEquipAreaEnum equipAreaEnum) {
             equip_name = equip_title_;
             break;
         case kOther:
-            LOG_DEBUG(kRoleManage, "不存在此类型名称");
+            LOG_INFO(kRoleManage, "不存在此类型名称");
             break;
     }
     return equip_name;
@@ -1332,7 +1332,7 @@ void RolePlayer::SetEquipAreaName(RoleEquipAreaEnum equipAreaEnum, const QString
             equip_title_ = name;
             break;
         case kOther:
-            LOG_DEBUG(kRoleManage, "不存在此类型名称");
+            LOG_INFO(kRoleManage, "不存在此类型名称");
             break;
     }
 }

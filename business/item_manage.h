@@ -2,7 +2,7 @@
 #define DESKXIUXINA_ITEM_MANAGE_H
 #include <QObject>
 #include "modules/interface_manager.h"
-#include "item_service.h"
+#include "modules/item/item_service.h"
 
 class ItemManage : public InterfaceManager
 {

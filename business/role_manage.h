@@ -6,7 +6,7 @@
 #define DESKXIUXINA_ROLE_MANAGE_H
 #include <QObject>
 #include "modules/interface_manager.h"
-#include "role_player.h"
+#include "modules/role/role_player.h"
 
 class RoleManage : public InterfaceManager
 {

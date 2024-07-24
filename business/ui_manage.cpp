@@ -1,4 +1,4 @@
-#include "ui_manage.h"
+#include "business/ui_manage.h"
 #include "modules/public/public_declare.h"
 #include <QJsonDocument>
 
@@ -42,13 +42,13 @@ int UIManage::Init() {
     QStringList item_topics = QStringList{itemCmd::UsePropsSuccessful};
     QStringList topics;
     topics += item_topics;
-    LOG_DEBUG(kItemManage, QString("发送订阅主动上报消息：%1").arg(topics.join(",").toStdString().c_str()));
+    LOG_INFO(kItemManage, QString("发送订阅主动上报消息：%1").arg(topics.join(",").toStdString().c_str()));
     emit SignalSubTopic(kSubType, topics);
     return 0;
 }
 
 void UIManage::SlotActionResponse(const QJsonObject &response_data) {
-    LOG_DEBUG(kUIManage, QString("收到外部应答：%1").arg(QJsonDocument(response_data).toJson(QJsonDocument::Compact).data()));
+    LOG_INFO(kUIManage, QString("收到外部应答：%1").arg(QJsonDocument(response_data).toJson(QJsonDocument::Compact).data()));
     QString type = response_data.value("type").toString();
 
     if(map_function_response_.keys().contains(type))
@@ -58,7 +58,7 @@ void UIManage::SlotActionResponse(const QJsonObject &response_data) {
 }
 
 void UIManage::SlotActionRequest(const QJsonObject &request_data) {
-    LOG_DEBUG(kUIManage, QString("收到外部请求：%1").arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
+    LOG_INFO(kUIManage, QString("收到外部请求：%1").arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
     QString type = request_data.value("type").toString();
     if(map_function_request_.keys().contains(type))
     {
@@ -67,7 +67,7 @@ void UIManage::SlotActionRequest(const QJsonObject &request_data) {
 }
 
 void UIManage::SlotPubTopic(const QJsonObject &topic_data) {
-    LOG_DEBUG(kUIManage, QString("收到广播信息：%1").arg(QJsonDocument(topic_data).toJson(QJsonDocument::Compact).data()));
+    LOG_INFO(kUIManage, QString("收到广播信息：%1").arg(QJsonDocument(topic_data).toJson(QJsonDocument::Compact).data()));
     QString type = topic_data.value("type").toString();
     if(map_function_topic_.keys().contains(type))
     {
@@ -211,7 +211,7 @@ void UIManage::Do_Response_AccountRegistration(const QJsonObject& response_data)
 void UIManage::Do_Response_UpdateLastLoginTime(const QJsonObject& response_data)
 {
     Q_UNUSED(response_data);
-    LOG_DEBUG(kUIManage, "关闭窗口");
+    LOG_INFO(kUIManage, "关闭窗口");
 }
 
 void UIManage::Do_Response_UpdatePropShow(const QJsonObject& response_data)

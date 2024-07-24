@@ -1,4 +1,4 @@
-#include "item_manage.h"
+#include "business/item_manage.h"
 #include "modules/public/public_declare.h"
 #include <QJsonDocument>
 
@@ -24,7 +24,7 @@ int ItemManage::Init()
     QStringList topics;
     topics += db_topics;
     topics += item_topics;
-    LOG_DEBUG(kItemManage, QString("发送订阅主动上报消息：%1").arg(topics.join(",").toStdString().c_str()));
+    LOG_INFO(kItemManage, QString("发送订阅主动上报消息：%1").arg(topics.join(",").toStdString().c_str()));
     emit SignalSubTopic(kSubType, topics);
 }
 
@@ -35,7 +35,7 @@ ItemManage::~ItemManage()
 
 void ItemManage::SlotActionResponse(const QJsonObject& response_data)
 {
-    LOG_DEBUG(kRoleManage, QString("收到外部应答：%1").arg(QJsonDocument(response_data).toJson(QJsonDocument::Compact).data()));
+    LOG_INFO(kRoleManage, QString("收到外部应答：%1").arg(QJsonDocument(response_data).toJson(QJsonDocument::Compact).data()));
     QString type = response_data.value("type").toString();
     if(map_function_rsponse_.keys().contains(type))
     {
@@ -45,7 +45,7 @@ void ItemManage::SlotActionResponse(const QJsonObject& response_data)
 
 void ItemManage::SlotActionRequest(const QJsonObject& request_data)
 {
-    LOG_DEBUG(kRoleManage, QString("收到外部请求：%1").arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
+    LOG_INFO(kRoleManage, QString("收到外部请求：%1").arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
     QString type = request_data.value("type").toString();
     if(map_function_request_.keys().contains(type))
     {
@@ -55,7 +55,7 @@ void ItemManage::SlotActionRequest(const QJsonObject& request_data)
 
 void ItemManage::SlotPubTopic(const QJsonObject& topic_data)
 {
-    LOG_DEBUG(kItemManage, QString("收到广播信息：%1").arg(QJsonDocument(topic_data).toJson(QJsonDocument::Compact).data()));
+    LOG_INFO(kItemManage, QString("收到广播信息：%1").arg(QJsonDocument(topic_data).toJson(QJsonDocument::Compact).data()));
     QString type = topic_data.value("type").toString();
     if(map_function_topic_.keys().contains(type))
     {

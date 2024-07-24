@@ -40,7 +40,7 @@ void ItemService::ItemMoneyBusiness(int money) {
 }
 
 void ItemService::InitItem() {
-    LOG_DEBUG(kItemManage, "正在初始化道具...");
+    LOG_INFO(kItemManage, "正在初始化道具...");
     m_item_strategy.insert(kPropRenameCard, RenameCard::getInstance());
     m_item_strategy.insert(kPropYanshouDan10, YanshouDan10::getInstance());
 }

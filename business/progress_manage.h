@@ -6,7 +6,7 @@
 #define DESKXIUXINA_PROGRESS_MANAGE_H
 #include <QObject>
 #include "modules/interface_manager.h"
-#include "progress_service.h"
+#include "modules/progress/progress_service.h"
 
 class ProgressManage : public InterfaceManager
 {

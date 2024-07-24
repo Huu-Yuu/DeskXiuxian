@@ -1,4 +1,4 @@
-#include "modules/progress/progress_manage.h"
+#include "business/progress_manage.h"
 #include "modules/public/public_declare.h"
 #include <QJsonDocument>
 
@@ -20,7 +20,7 @@ int ProgressManage::Init()
 
     QStringList subscribe_topics;
     subscribe_topics += ui_topics;
-    LOG_DEBUG(kItemManage, QString("发送订阅主动上报消息：%1").arg(subscribe_topics.join(",").toStdString().c_str()));
+    LOG_INFO(kItemManage, QString("发送订阅主动上报消息：%1").arg(subscribe_topics.join(",").toStdString().c_str()));
     emit SignalSubTopic(kSubType, subscribe_topics);
 }
 
@@ -31,7 +31,7 @@ ProgressManage::~ProgressManage()
 
 void ProgressManage::SlotActionResponse(const QJsonObject& response_data)
 {
-    LOG_DEBUG(kProgressManage, QString("收到外部请求：%1").arg(QJsonDocument(response_data).toJson(QJsonDocument::Compact).data()));
+    LOG_INFO(kProgressManage, QString("收到外部请求：%1").arg(QJsonDocument(response_data).toJson(QJsonDocument::Compact).data()));
     QString type = response_data.value("type").toString();
     if(map_function_response_.keys().contains(type))
     {
@@ -41,7 +41,7 @@ void ProgressManage::SlotActionResponse(const QJsonObject& response_data)
 
 void ProgressManage::SlotActionRequest(const QJsonObject& request_data)
 {
-    LOG_DEBUG(kProgressManage, QString("收到外部请求：%1").arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
+    LOG_INFO(kProgressManage, QString("收到外部请求：%1").arg(QJsonDocument(request_data).toJson(QJsonDocument::Compact).data()));
     QString type = request_data.value("type").toString();
     if(map_function_request_.keys().contains(type))
     {
@@ -51,7 +51,7 @@ void ProgressManage::SlotActionRequest(const QJsonObject& request_data)
 
 void ProgressManage::SlotPubTopic(const QJsonObject& topic_data)
 {
-    LOG_DEBUG(kProgressManage, QString("收到广播信息：%1").arg(QJsonDocument(topic_data).toJson(QJsonDocument::Compact).data()));
+    LOG_INFO(kProgressManage, QString("收到广播信息：%1").arg(QJsonDocument(topic_data).toJson(QJsonDocument::Compact).data()));
     QString type = topic_data.value("type").toString();
     if(map_function_topic_.keys().contains(type))
     {

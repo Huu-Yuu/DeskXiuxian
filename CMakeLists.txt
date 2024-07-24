@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.5)
 project(DeskXiuxina)
 
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_AUTOMOC ON)
+#set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-set(CMAKE_AUTOUIC ON)
+#set(CMAKE_AUTOUIC ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 
 # 设置Qt的qmake可执行文件路径
@@ -28,11 +28,21 @@ set(SRC_DIR ${CMAKE_SOURCE_DIR})
 file(GLOB_RECURSE SRC_SOURCE_FILES ${SRC_DIR}/*.cpp)
 file(GLOB_RECURSE SRC_HEADER_FILES ${SRC_DIR}/*.h)
 FILE(GLOB_RECURSE QRC_SOURCE_FILES ${SRC_DIR}/*.qrc)
+# 手动包含UI文件
+set(UI_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/ui/mainui.ui
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/ui/loginwindow.ui
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/ui/modifyrolename.ui
+)
+# 生成对应的头文件
+qt5_wrap_ui(UI_HEADERS ${UI_FILES})
 
 add_executable(DeskXiuxina
         ${SRC_SOURCE_FILES}
         ${SRC_HEADER_FILES}
         ${QRC_SOURCE_FILES}
+        ${UI_FILES}
+        ${UI_HEADERS}
 )
 
 target_include_directories(DeskXiuxina PUBLIC
