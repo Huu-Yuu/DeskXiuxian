@@ -103,9 +103,8 @@ Item {
 
 }
 
-/*##^## Designer {
-    D{i:0;autoSize:true;height:800;width:1280}D{i:22;anchors_height:100;anchors_width:100;anchors_x:20;anchors_y:22}
-D{i:17;anchors_height:41;anchors_width:51;anchors_x:120;anchors_y:8}D{i:20;anchors_height:100;anchors_width:100;anchors_x:0;anchors_y:0}
-D{i:19;anchors_height:41;anchors_width:51;anchors_x:120;anchors_y:8}D{i:21;anchors_height:100;anchors_width:100;anchors_x:710;anchors_y:499}
+/*##^##
+Designer {
+    D{i:0;autoSize:true;formeditorZoom:0.9;height:800;width:1280}
 }
- ##^##*/
+##^##*/

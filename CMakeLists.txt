@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+﻿cmake_minimum_required(VERSION 3.5)
 project(DeskXiuxina)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -6,6 +6,10 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_AUTORCC ON)
 #set(CMAKE_AUTOUIC ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+if(MSVC)
+    add_compile_options(/utf-8)
+endif()
+
 
 # 设置Qt的qmake可执行文件路径
 if(UNIX)
@@ -28,6 +32,14 @@ set(SRC_DIR ${CMAKE_SOURCE_DIR})
 file(GLOB_RECURSE SRC_SOURCE_FILES ${SRC_DIR}/*.cpp)
 file(GLOB_RECURSE SRC_HEADER_FILES ${SRC_DIR}/*.h)
 FILE(GLOB_RECURSE QRC_SOURCE_FILES ${SRC_DIR}/*.qrc)
+
+if(UNIX)
+    message("Linux 系统")
+elseif(WIN32)
+
+    message("Windows 系统")
+endif()
+
 # 手动包含UI文件
 set(UI_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/ui/mainui.ui

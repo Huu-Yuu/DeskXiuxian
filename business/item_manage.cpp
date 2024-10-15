@@ -1,4 +1,4 @@
-#include "business/item_manage.h"
+﻿#include "business/item_manage.h"
 #include "modules/public/public_declare.h"
 #include <QJsonDocument>
 
@@ -26,6 +26,7 @@ int ItemManage::Init()
     topics += item_topics;
     LOG_INFO(kItemManage, QString("发送订阅主动上报消息：%1").arg(topics.join(",").toStdString().c_str()));
     emit SignalSubTopic(kSubType, topics);
+    return NO_ERROR;
 }
 
 ItemManage::~ItemManage()

@@ -1,4 +1,4 @@
-#include "business/db_manage.h"
+﻿#include "business/db_manage.h"
 #include "modules/public/public_declare.h"
 #include <QJsonDocument>
 
@@ -34,6 +34,7 @@ int DBManage::Init()
     subscribe_topics += db_topics;
     LOG_INFO(kDataManage, QString("发送订阅主动上报消息：%1").arg(subscribe_topics.join(",").toStdString().c_str()));
     emit SignalSubTopic(kSubType, subscribe_topics);
+    return NO_ERROR;
 }
 
 DBManage::~DBManage()

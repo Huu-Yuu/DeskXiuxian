@@ -1,4 +1,4 @@
-#ifndef DATAMANAGE_H
+﻿#ifndef DATAMANAGE_H
 #define DATAMANAGE_H
 
 #include <QObject>

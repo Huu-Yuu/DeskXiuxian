@@ -31,10 +31,8 @@ SOURCES += \
     modules/filedata/data_service_settings.cpp \
     modules/filedata/role_db.cpp \
     modules/progress/progress_service.cpp \
-    modules/progress/progress_manage.cpp \
     modules/item/itembase.cpp \
     modules/item/item_service.cpp \
-    modules/item/item_manage.cpp \
     modules/item/equip/title.cpp \
     modules/item/prop/prop_rename_card.cpp \
     modules/item/prop/prop_yanshoudan10.cpp \
@@ -44,27 +42,24 @@ SOURCES += \
     modules/ui/mainui.cpp \
     modules/ui/loginwindow.cpp \
     modules/ui/modifyrolename.cpp \
-    modules/ui/ui_manage.cpp \
-    modules/role/role_manage.cpp \
     modules/role/role_player.cpp \
-    modules/filedata/db_manage.cpp \
     modules/filedata/data_service.cpp \
     modules/public/public_func.cpp \
     modules/public/error_display.cpp \
     modules/server/tcp_client.cpp \
     modules/server/web_socket_client.cpp \
-    modules/interface_manager.cpp
+    business/progress_manage.cpp \
+    business/db_manage.cpp \
+    business/item_manage.cpp \
+    business/role_manage.cpp \
+    business/ui_manage.cpp
 
 HEADERS += \
     common/singleton.h \
     modules/filedata/data_service.h \
-    modules/filedata/db_manage.h \
     modules/filedata/role_db.h \
     modules/progress/progress_service.h \
-    modules/progress/progress_manage.h \
-    modules/item/itembase.h \
     modules/item/item_service.h \
-    modules/item/item_manage.h \
     modules/item/equip/title.h \
     modules/item/prop/prop_rename_card.h \
     modules/item/prop/prop_yanshoudan10.h \
@@ -77,7 +72,6 @@ HEADERS += \
     modules/public/public_macro.h \
     modules/public/public_type.h \
     modules/public/public_declare.h \
-    modules/role/role_manage.h \
     modules/role/role_player.h \
     modules/role/simple_int_encryptor.h \
     modules/role/encrypt_int.h \
@@ -87,7 +81,12 @@ HEADERS += \
     modules/server/tcp_client.h \
     modules/server/web_socket_client.h \
     modules/server/web_socket_define.h \
-    modules/interface_manager.h
+    modules/interface_manager.h \
+    business/progress_manage.h \
+    business/db_manage.h \
+    business/item_manage.h \
+    business/role_manage.h \
+    business/ui_manage.h
 
 FORMS += \
     modules/ui/mainui.ui \

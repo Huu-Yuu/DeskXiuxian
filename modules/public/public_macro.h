@@ -1,4 +1,4 @@
-#ifndef PUBLIC_MACRO_H
+﻿#ifndef PUBLIC_MACRO_H
 #define PUBLIC_MACRO_H
 
 // 调试信息输出开关

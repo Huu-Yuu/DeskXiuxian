@@ -1,4 +1,4 @@
-#include "business/role_manage.h"
+﻿#include "business/role_manage.h"
 #include "modules/public/public_declare.h"
 #include <QJsonDocument>
 
@@ -32,6 +32,7 @@ int RoleManage::Init()
     subscribe_topics += ui_topics;
     LOG_INFO(kRoleManage, QString("发送订阅主动上报消息：%1").arg(subscribe_topics.join(",").toStdString().c_str()));
     emit SignalSubTopic(kSubType, subscribe_topics);
+    return NO_ERROR;
 }
 
 RoleManage::~RoleManage()
