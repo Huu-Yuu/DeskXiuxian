@@ -2,5 +2,10 @@
     <qresource prefix="/">
         <file>res/user.png</file>
         <file>res/logo.jpg</file>
+        <file>modules/ui/qml/welcome_page.qml</file>
+        <file>modules/ui/qml/adapter/ScreenAdapter.qml</file>
+        <file>modules/ui/qml/create_component.js</file>
+        <file>res/welcome.png</file>
+        <file>res/welcome_background.png</file>
     </qresource>
 </RCC>
