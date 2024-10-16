@@ -55,6 +55,10 @@ void LoginWindow::on_reg_btn_clicked()
                                                             module_name::data,
                                                             module_name::ui));
     }
+    else
+    {
+        ui->tip_text->setText("注册失败，请重新填写以上三个信息");
+    }
 }
 
 void LoginWindow::on_star_btn_clicked()

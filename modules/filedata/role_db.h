@@ -2,7 +2,7 @@
 #define DESKXIUXINA_ROLE_DB_H
 #include <QSqlDatabase>
 #include "common/singleton.h"
-#include "3rdparty/include/QxOrm/include/QxPrecompiled.h"
+#include <QJsonObject>
 
 class RoleInfoTable
 {

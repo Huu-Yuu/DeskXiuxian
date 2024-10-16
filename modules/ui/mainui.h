@@ -18,6 +18,7 @@
 #include "loginwindow.h"
 #include "modifyrolename.h"
 #include "common/singleton.h"
+#include "qmladapter.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -31,11 +32,9 @@ class MainUI : public QMainWindow
     Q_OBJECT
     typedef void (MainUI::*Function_Rsp)(const QJsonObject&);
 public:
-    SINGLETON(MainUI);
+    SINGLETON(MainUI)
     MainUI(QWidget* parent = nullptr);
     ~MainUI();
-
-//    Ui::MainUI* GetUI();
 
     void UpdateRoleInformation(QString name, QString life, QString prestige, QString cultivation);  ///< 更新角色基本信息，昵称、寿命、声望、修为
     void UpdatePhysicalStrength(QString exp, QString agg, QString def, QString hp);             ///< 更新角色身体强度，经验值、攻击力、防御力、生命值
@@ -115,5 +114,6 @@ private:
     ModifyRoleName* modify_obj_;    // 角色名修改窗口
     QJsonObject prop_map_;    // 道具名和枚举值映射
     QJsonObject show_prop_info_;    // 显示道具的信息  道具名-道具信息
+    QmlAdapter m_qmladapter;    // QML界面
 };
 #endif // MAINUI_H

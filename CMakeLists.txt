@@ -1,22 +1,24 @@
 ﻿cmake_minimum_required(VERSION 3.5)
 project(DeskXiuxina)
 
+#Ubuntu16.04 环境下使用 Qt5.12.0 GCC 64bit 编译通过
+
 set(CMAKE_CXX_STANDARD 11)
-#set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 #set(CMAKE_AUTOUIC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 if(MSVC)
     add_compile_options(/utf-8)
 endif()
 
-
 # 设置Qt的qmake可执行文件路径
 if(UNIX)
     # 如果是Unix系统，设置Qt的qmake可执行文件路径
-    set(QT_QMAKE_EXECUTABLE "/opt/Qt5.9.7/5.9.7/gcc_64/bin/qmake")
-    set(Qt5_DIR "/opt/Qt5.9.7/5.9.7/gcc_64/lib/cmake/Qt5")
-    set(CMAKE_PREFIX_PATH "/opt/Qt5.9.7/5.9.7/gcc_64")
+    set(QT_QMAKE_EXECUTABLE "/opt/Qt5.12.0/5.12.0/gcc_64/bin/qmake")
+    set(Qt5_DIR "/opt/Qt5.12.0/5.12.0/gcc_64/lib/cmake/Qt5")
+    set(CMAKE_PREFIX_PATH "/opt/Qt5.12.0/5.12.0/gcc_64")
 elseif(WIN32)
     # 如果是Windows系统，设置Qt的qmake可执行文件路径
     set(QT_QMAKE_EXECUTABLE "D:/Qt/Qt5.12.12/5.12.12/msvc2017/bin/qmake.exe")
@@ -24,7 +26,7 @@ elseif(WIN32)
     set(CMAKE_PREFIX_PATH "D:/Qt/Qt5.12.12/5.12.12/msvc2017")
 endif()
 
-find_package(Qt5 COMPONENTS Core Gui Sql Network Widgets WebSockets REQUIRED)
+find_package(Qt5 COMPONENTS Core Gui Sql Network Widgets WebSockets Qml Quick REQUIRED)
 
 # 设置源文件列表
 #cpp h
@@ -36,7 +38,6 @@ FILE(GLOB_RECURSE QRC_SOURCE_FILES ${SRC_DIR}/*.qrc)
 if(UNIX)
     message("Linux 系统")
 elseif(WIN32)
-
     message("Windows 系统")
 endif()
 
@@ -68,10 +69,8 @@ target_link_libraries(DeskXiuxina PRIVATE
     Qt5::Network
     Qt5::Widgets
     Qt5::WebSockets
-        if(WIN32)
-        user32
-        kernel32
-        endif()
+    Qt5::Qml
+    Qt5::Quick
 )
 
 #qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} DeskXiuxian_zh_CN.ts)
