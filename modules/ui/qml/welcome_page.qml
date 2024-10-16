@@ -64,6 +64,7 @@ Item {
             anchors.right: parent.right
             anchors.left: parent.left
             font.pixelSize: 24
+            font.bold: false
         }
 
         MouseArea {
@@ -71,6 +72,16 @@ Item {
             hoverEnabled: true
             anchors.fill: parent
             transformOrigin: Item.Center
+            onEntered: {
+                // 鼠标进入
+                go_t.font.bold = true
+//                go_r.color = Qt.lighter(go_r.color, 1.2);
+            }
+            onExited: {
+                // 鼠标退出
+//                go_r.color = "#ffffff"
+                go_t.font.bold = false
+            }
         }
     }
 
@@ -97,6 +108,16 @@ Item {
             id: mouseArea
             hoverEnabled: true
             anchors.fill: parent
+            onEntered: {
+                // 鼠标进入
+                register_t.font.bold = true
+//                register_r.color = Qt.lighter(go_r.color, 1.2);
+            }
+            onExited: {
+                // 鼠标退出
+//                register_r.color = "#ffffff"
+                register_t.font.bold = false
+            }
         }
     }
 
