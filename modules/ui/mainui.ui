@@ -33,7 +33,7 @@
      <item>
       <widget class="QTabWidget" name="role_widget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="role_page">
         <attribute name="title">
@@ -69,7 +69,7 @@
                <x>0</x>
                <y>20</y>
                <width>194</width>
-               <height>329</height>
+               <height>367</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="bisic_Layout" stretch="3">
@@ -824,7 +824,7 @@
      <x>0</x>
      <y>0</y>
      <width>598</width>
-     <height>26</height>
+     <height>28</height>
     </rect>
    </property>
   </widget>

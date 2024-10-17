@@ -3,7 +3,7 @@
 #include "business/db_manage.h"
 #include "business/progress_manage.h"
 #include "business/role_manage.h"
-#include "business/ui_manage.h"
+#include "business/ue_manage.h"
 #include "modules/public/public_declare.h"
 
 MainCtrl::MainCtrl(QObject* parent) : QObject(parent)

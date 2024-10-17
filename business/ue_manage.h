@@ -4,6 +4,10 @@
 #include "modules/interface_manager.h"
 #include "modules/ui/mainui.h"
 
+/**
+ * @brief 用户界面管理类
+ * 如果命名为 ui_manage.h 会被当作 qt生成的ui中间文件而被忽略
+ */
 class UIManage : public InterfaceManager
 {
     Q_OBJECT

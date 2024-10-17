@@ -15,7 +15,7 @@ MainUI::MainUI(QWidget* parent)
     login_obj_ = new LoginWindow;
     modify_obj_ = new ModifyRoleName;
     process = new QProcess;
-
+    m_qmladapter = new QmlAdapter;
     connect(this, &MainUI::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
     connect(login_obj_, &LoginWindow::SignalLoginSuccessful, this, &MainUI::SlotLoginSuccessful);
     connect(login_obj_, &LoginWindow::SignalActionRequest, this, &MainUI::SignalActionRequest);

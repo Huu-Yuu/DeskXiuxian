@@ -1,4 +1,4 @@
-#include "business/ui_manage.h"
+#include "business/ue_manage.h"
 #include "modules/public/public_declare.h"
 #include <QJsonDocument>
 

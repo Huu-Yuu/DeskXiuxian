@@ -2,10 +2,32 @@
     <qresource prefix="/">
         <file>res/user.png</file>
         <file>res/logo.jpg</file>
-        <file>modules/ui/qml/welcome_page.qml</file>
+        <file>modules/ui/qml/WelcomePage.qml</file>
         <file>modules/ui/qml/adapter/ScreenAdapter.qml</file>
         <file>modules/ui/qml/create_component.js</file>
         <file>res/welcome.png</file>
         <file>res/welcome_background.png</file>
+        <file>modules/ui/qml/main.qml</file>
+        <file>modules/ui/qml/components/ToastManager.qml</file>
+        <file>modules/ui/qml/components/Toast.qml</file>
+        <file>modules/ui/qml/components/TimeSelectBox.qml</file>
+        <file>modules/ui/qml/components/TextButtonNormalSize.qml</file>
+        <file>modules/ui/qml/components/Spinner.qml</file>
+        <file>modules/ui/qml/components/RadioBox.qml</file>
+        <file>modules/ui/qml/components/MessageManager.qml</file>
+        <file>modules/ui/qml/components/ImageRightButton.qml</file>
+        <file>modules/ui/qml/components/ImageButton.qml</file>
+        <file>modules/ui/qml/components/CustomVirtualKeyBoard.qml</file>
+        <file>modules/ui/qml/components/CustomToolSeparator.qml</file>
+        <file>modules/ui/qml/components/CustomTextEdit.qml</file>
+        <file>modules/ui/qml/components/CustomSlider.qml</file>
+        <file>modules/ui/qml/components/CustomProgressBar.qml</file>
+        <file>modules/ui/qml/components/CustomPopup.qml</file>
+        <file>modules/ui/qml/components/CustomMediaPlayer.qml</file>
+        <file>modules/ui/qml/components/CustomDialog.qml</file>
+        <file>modules/ui/qml/components/CustomButton.qml</file>
+        <file>modules/ui/qml/components/ColorButton.qml</file>
+        <file>modules/ui/qml/components/CleanTaskCard.qml</file>
+        <file>modules/ui/qml/components/CircleRingText.qml</file>
     </qresource>
 </RCC>

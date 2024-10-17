@@ -7,11 +7,12 @@
 #define GAME_VISION             "v0.5.1 重构版"
 
 // 游戏UI模式 是否为QML    0 - QWidget   1 - QML
-#define USE_GAMKUI_QML          1
+#define USE_GAMKUI_QML          0
 
-// 数据库类型    0-远程数据库 1-本地数据库 2-服务器传递
-#define DATABASE_TYPE          0
-
+#if USE_GAMKUI_QML == 0
+    // 数据库类型    0-远程数据库 1-本地数据库 2-服务器传递
+    #define DATABASE_TYPE          0
+#endif
 // 远程数据库链接名
 #define REMOTE_DB_LINKNAME      "GAMEDATA_REMOTE"
 // 本地数据库链接名

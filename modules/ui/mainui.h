@@ -114,6 +114,6 @@ private:
     ModifyRoleName* modify_obj_;    // 角色名修改窗口
     QJsonObject prop_map_;    // 道具名和枚举值映射
     QJsonObject show_prop_info_;    // 显示道具的信息  道具名-道具信息
-    QmlAdapter m_qmladapter;    // QML界面
+    QmlAdapter* m_qmladapter;    // QML界面
 };
 #endif // MAINUI_H

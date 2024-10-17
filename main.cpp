@@ -39,10 +39,10 @@ int main(int argc, char* argv[])
             break;
         }
     }
-//    MainCtrl* main_ctrl = new MainCtrl;
+    MainCtrl* main_ctrl = new MainCtrl;
 #if USE_GAMKUI_QML == 0
-    // 使用 QWidget UI
-#if DATABASE_TYPE == 0
+{
+#if DATABASE_TYPE == 0      // 使用 QWidget UI
     main_ctrl->CheckAutoLogIn();
 #elif DATABASE_TYPE == 1
     main_ctrl->ShowMainUi();
@@ -50,17 +50,19 @@ int main(int argc, char* argv[])
 #elif DATABASE_TYPE == 2
     main_ctrl->InitRoleNetworkData();
 #endif
+}
 #else
+{
     // 使用QML UI
-      QQmlApplicationEngine engine;
-      const QUrl url(QStringLiteral("qrc:/modules/ui/qml/welcome_page.qml"));
-          QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                           &a, [url](QObject *obj, const QUrl &objUrl) {
-              if (!obj && url == objUrl)
-                  QCoreApplication::exit(-1);
-          }, Qt::QueuedConnection);
-          engine.load(url);
-
+    QQmlApplicationEngine engine;
+    const QUrl url(QStringLiteral("qrc:/modules/ui/qml/main.qml"));
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+                     &a, [url](QObject *obj, const QUrl &objUrl) {
+        if (!obj && url == objUrl)
+            QCoreApplication::exit(-1);
+    }, Qt::QueuedConnection);
+    engine.load(url);
+}
 #endif
     a.exec();
 //    delete main_ctrl;
