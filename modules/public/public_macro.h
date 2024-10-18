@@ -19,7 +19,7 @@
 #define LOCAL_DB_LINKNAME      "GAMEDATA_LOCCAL"
 
 // 远程数据库地址
-#define REMOTE_DB_ADDRESS       "8.136.191.17"
+#define REMOTE_DB_ADDRESS       "mysql.sqlpub.com"
 
 // 远程数据库端口号
 #define REMOTE_DB_PORT          3306

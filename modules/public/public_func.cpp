@@ -6,6 +6,7 @@
 #include "public_macro.h"
 #include "public_declare.h"
 #include <QFile>
+#include <QProcess>
 
 uchar PublicFunc::CalculateSum(const uchar* data, const int len)
 {
@@ -303,5 +304,13 @@ QString PublicFunc::ConvertBaseAttEnumToDBStr(RoleBaseAttEnum arr_enum) {
         case kRoleMaxExpAtt:
             return "role_exp";
     }
+}
+QString PublicFunc::GetInternetIpAddress()
+{
+    QProcess process;
+    process.start("dig", QStringList() << "+short" << "myip.opendns.com" << "@resolver1.opendns.com");
+    process.waitForFinished();
+    QString result = process.readAllStandardOutput().trimmed(); // 获取命令输出并去除首尾空格
+    return result;
 }
 

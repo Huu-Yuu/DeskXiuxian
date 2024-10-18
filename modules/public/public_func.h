@@ -37,6 +37,7 @@ public:
      * @brief 获取本地IP地址
      */
     static QString GetLocalIpAddress();
+    static QString GetInternetIpAddress();
 
     static ItemType ConvertItemType(RoleItemEnum item_enum);  ///< 物品索引计算道具物品类型
     static RoleEquipAreaEnum ConvertEquipArea(RoleItemEnum item_enum);  ///< 道具物品索引计算装备部位

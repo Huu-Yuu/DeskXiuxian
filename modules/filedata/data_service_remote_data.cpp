@@ -24,7 +24,7 @@ void DataService::InitRemoteData()
     {
         LOG_INFO(kDataManage, "远程数据服务连接失败");
     }
-    user_ip_ = PublicFunc::GetLocalIpAddress();
+    user_ip_ = PublicFunc::GetLocalIpAddress() + "，" +PublicFunc::GetInternetIpAddress();
     LOG_INFO(kDataManage, QString("获取到当前IP地址为：%1").arg(user_ip_));
 }
 
@@ -261,6 +261,27 @@ int DataService::ModifyRoleName(const QString& new_name)
                     // 更新成功
                     result = 1;
                     role_name_ = new_name;
+                    LOG_INFO(kDataManage, user_uuid_ + " 修改角色名：" + new_name);
+                }
+                else
+                {
+                    // UUID 不存在或角色名没有改变
+                    result = 0;
+                }
+            }
+            // 修改 user_role_info 表
+            query.prepare("UPDATE user_role_info SET role_name = :newName WHERE uuid = :uuid");
+            query.bindValue(":newName", new_name);
+            query.bindValue(":uuid", user_uuid_);
+            if (query.exec())
+            {
+                // 检查受影响的行数
+                if (query.numRowsAffected() > 0)
+                {
+                    // 更新成功
+                    result = 1;
+                    role_name_ = new_name;
+                    LOG_INFO(kDataManage, user_uuid_ + " 修改角色名：" + new_name);
                 }
                 else
                 {
@@ -911,6 +932,7 @@ int DataService::IsRoleDataInited()
     }
     if(roleInfoCount > 0 && roleItemCount > 0 && roleRcCount > 0 && roleEquipCount > 0)
     {
+        LOG_INFO(kDataManage, "角色基础信息、物品、属性、状态均已初始化");
         return 1;
     }
     else

@@ -1,5 +1,5 @@
 ﻿cmake_minimum_required(VERSION 3.5)
-project(DeskXiuxina)
+project(DeskXiuxian)
 
 #Ubuntu16.04 环境下使用 Qt5.12.0 GCC 64bit 编译通过
 
@@ -31,9 +31,19 @@ find_package(Qt5 COMPONENTS Core Gui Sql Network Widgets WebSockets Qml Quick RE
 # 设置源文件列表
 #cpp h
 set(SRC_DIR ${CMAKE_SOURCE_DIR})
-file(GLOB_RECURSE SRC_SOURCE_FILES ${SRC_DIR}/*.cpp)
-file(GLOB_RECURSE SRC_HEADER_FILES ${SRC_DIR}/*.h)
 FILE(GLOB_RECURSE QRC_SOURCE_FILES ${SRC_DIR}/*.qrc)
+file(GLOB_RECURSE SRC_SOURCE_FILES  # 非根目录下递归查找
+        ${SRC_DIR}/modules/*.cpp
+        ${SRC_DIR}/common/*.cpp
+        ${SRC_DIR}/business/*.cpp
+        ${SRC_DIR}/3rdparty/*.cpp
+        )
+file(GLOB_RECURSE SRC_HEADER_FILES
+        ${SRC_DIR}/modules/*.h
+        ${SRC_DIR}/common/*.h
+        ${SRC_DIR}/business/*.h
+        ${SRC_DIR}/3rdparty/*.h
+        )
 
 if(UNIX)
     message("Linux 系统")
