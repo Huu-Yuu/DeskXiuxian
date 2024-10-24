@@ -1,4 +1,4 @@
-#include "mainui.h"
+﻿#include "mainui.h"
 #include "ui_mainui.h"
 #include "modules/public/public_declare.h"
 #include <QJsonArray>
@@ -73,6 +73,18 @@ MainUI::MainUI(QWidget* parent)
     // 系统消息选项卡布局
     ui->sys_news_tab->setLayout(ui->sys_news_Layout);
     ui->sys_news_list->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    //世界聊天布局
+    ui->world_news_tab->setLayout(ui->world_news_Layout);
+    ui->world_news_list->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    //宗门聊天布局
+    ui->team_news_tab->setLayout(ui->team_news_Layout);
+    ui->team_news_list->setContextMenuPolicy(Qt::CustomContextMenu);
+
+
+    //道术选项卡布局
+    ui->role_skill->setLayout(ui->role_skill_Layout);
 
 
     QString date_time_str = QString("%1 %2").arg(__DATE__).arg(__TIME__);

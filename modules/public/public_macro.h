@@ -11,7 +11,7 @@
 
 #if USE_GAMKUI_QML == 0
     // 数据库类型    0-远程数据库 1-本地数据库 2-服务器传递
-    #define DATABASE_TYPE          0
+    #define DATABASE_TYPE          1
 #endif
 // 远程数据库链接名
 #define REMOTE_DB_LINKNAME      "GAMEDATA_REMOTE"

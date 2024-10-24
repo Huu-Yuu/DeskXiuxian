@@ -21,9 +21,9 @@ if(UNIX)
     set(CMAKE_PREFIX_PATH "/opt/Qt5.12.0/5.12.0/gcc_64")
 elseif(WIN32)
     # 如果是Windows系统，设置Qt的qmake可执行文件路径
-    set(QT_QMAKE_EXECUTABLE "D:/Qt/Qt5.12.12/5.12.12/msvc2017/bin/qmake.exe")
-    set(Qt5_DIR "D:/Qt/Qt5.12.12/5.12.12/msvc2017/lib/cmake/Qt5")
-    set(CMAKE_PREFIX_PATH "D:/Qt/Qt5.12.12/5.12.12/msvc2017")
+    set(QT_QMAKE_EXECUTABLE "D:/Qt/Qt5.0.12/5.12.0/mingw73_64/bin/qmake.exe")
+    set(Qt5_DIR "D:/Qt/Qt5.12.0/5.12.0/mingw73_64/lib/cmake/Qt5")
+    set(CMAKE_PREFIX_PATH "D:/Qt/Qt5.12.0/5.12.0/mingw73_64")
 endif()
 
 find_package(Qt5 COMPONENTS Core Gui Sql Network Widgets WebSockets Qml Quick REQUIRED)
