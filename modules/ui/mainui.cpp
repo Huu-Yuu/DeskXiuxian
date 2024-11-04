@@ -297,6 +297,7 @@ void MainUI::SlotRenameSuccessful(QString name)
     else
     {
         ui->role_name->setText(name);
+        on_item_preview_Widget_currentChanged(1);   // 更新物品栏
     }
 }
 

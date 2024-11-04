@@ -1,4 +1,4 @@
-#include "data_service.h"
+﻿#include "data_service.h"
 #include "modules/public/public_declare.h"
 #include <QSqlRecord>
 
@@ -69,7 +69,27 @@ void DataService::OpenDatabase(const QString& path)
         if(!CheckTablesExist()) //检查并创建表单
         {
             LOG_INFO(kDataManage, "检查表单时出现错误");
-        };
+        }
+        else {
+            QString queryString = "SELECT role_name FROM RoleInfo";
+            QSqlQuery query(m_database_);
+            if (!query.exec(queryString))
+            {
+                LOG_INFO(kDataManage, QString("执行查询 RoleInfo 时出错:%1").arg(query.lastError().text()));
+                LOG_INFO(kDataManage,  QString("角色名默认为:%1").arg(role_name_));
+            }
+            else {
+                if (query.next()) // 移动到第一行
+                    {
+                        role_name_ = query.value(0).toString(); // 获取 role_name 列的值并赋给 role_name_ 变量
+                        LOG_INFO(kDataManage, QString("获取到角色名：%1").arg(role_name_));
+                    }
+                    else
+                    {
+                        LOG_INFO(kDataManage, QString("未找到 role_name 值，角色名默认为:%1").arg(role_name_));
+                    }
+            }
+        }
     }
 }
 
@@ -470,18 +490,18 @@ int DataService::WriteRoleItemsToLocalDatabase()
 
         // 将更新的键值对连接到查询语句中
         updateQuery += updateValues.join(", ");
-        updateQuery += " WHERE role_name = :role_name";
+//        updateQuery += " WHERE role_name = :role_name";
         LOG_INFO(kDataManage, QString("查询语句：%1").arg(updateQuery));
         // 准备查询
         query.prepare(updateQuery);
 
         // 绑定roleName参数
-        query.bindValue(":roleName", role_name_);
-
+//        query.bindValue(":roleName", role_name_);
         // 绑定role_item_data中的键值对
         for (auto it = role_item_data_.constBegin(); it != role_item_data_.constEnd(); ++it)
         {
-            query.bindValue(":" + it.key(), it.value().toString());
+            qDebug() <<  "key:" <<  it.key() << "  value:" << it.value().toString().toInt();
+            query.bindValue(":" + it.key(), it.value().toString().toInt());
         }
         // 执行查询
         if (!query.exec())

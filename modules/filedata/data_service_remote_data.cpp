@@ -1,4 +1,4 @@
-#include "data_service.h"
+﻿#include "data_service.h"
 #include "modules/public/public_declare.h"
 #include <QSqlRecord>
 
@@ -303,12 +303,23 @@ int DataService::ModifyRoleName(const QString& new_name)
     }
 #elif DATABASE_TYPE == 1
     QSqlQuery query(m_database_);
+    if (!m_database_.isOpen()) {
+        LOG_INFO(kDataManage, "数据库连接未打开");
+        return -1;
+    }
     // 获取所有表单名
     QStringList tableList;
     query.prepare("SELECT name FROM sqlite_master WHERE type='table'");
-    while (query.next()) {
-        tableList << query.value(0).toString();
+    if(query.exec())
+    {
+        while (query.next()) {
+            tableList << query.value(0).toString();
+        }
     }
+    else {
+        LOG_INFO(kDataManage, QString("执行查询时出错：%1").arg(query.lastError().text()));
+    }
+
     auto updateRoleName = [&](const QString &tableName, const QString &roleName) {
         QSqlQuery query_type(m_database_);
         QString updateQuery = "UPDATE " + tableName + " SET role_name = '" + roleName + "' WHERE role_name IS NOT NULL";

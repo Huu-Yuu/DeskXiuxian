@@ -1,4 +1,4 @@
-#include "modifyrolename.h"
+﻿#include "modifyrolename.h"
 #include "ui_modifyrolename.h"
 #include "modules/public/public_declare.h"
 
@@ -20,6 +20,8 @@ ModifyRoleName::ModifyRoleName(QWidget* parent) :
             qApp->desktop()->availableGeometry()
         )
     );
+    this->setMaximumWidth(this->width());
+    this->setMaximumHeight(this->height());
 }
 
 ModifyRoleName::~ModifyRoleName()

@@ -2,6 +2,7 @@
 project(DeskXiuxian)
 
 #Ubuntu16.04 环境下使用 Qt5.12.0 GCC 64bit 编译通过
+#Windows11 环境下使用 Qt5.12.0 MinGW 64bit 编译通过
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_AUTOMOC ON)

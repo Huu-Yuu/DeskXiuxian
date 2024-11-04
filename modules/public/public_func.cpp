@@ -1,4 +1,4 @@
-#include <QJsonObject>
+﻿#include <QJsonObject>
 #include <utility>
 #include "public_func.h"
 #include "QDateTime"
@@ -153,16 +153,12 @@ ItemType PublicFunc::ConvertItemType(RoleItemEnum item_enum) {
     switch (type_num.toInt()) {
         case 1:
             return kItemProp;
-            break;
         case 2:
             return kItemMaterial;
-            break;
         case 3:
             return kItemSpecial;
-            break;
         case 4:
             return kItemEquip;
-            break;
         default:
             LOG_INFO(kMainCtrl, QString("不存在此类型:%1，强制转换为道具类型").arg(type_num));
             return kItemProp;

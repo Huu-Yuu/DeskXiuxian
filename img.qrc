@@ -27,7 +27,6 @@
         <file>modules/ui/qml/components/CustomDialog.qml</file>
         <file>modules/ui/qml/components/CustomButton.qml</file>
         <file>modules/ui/qml/components/ColorButton.qml</file>
-        <file>modules/ui/qml/components/CleanTaskCard.qml</file>
         <file>modules/ui/qml/components/CircleRingText.qml</file>
     </qresource>
 </RCC>
