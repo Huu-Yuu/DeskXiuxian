@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>598</width>
-    <height>728</height>
+    <width>722</width>
+    <height>880</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,7 +33,7 @@
      <item>
       <widget class="QTabWidget" name="role_widget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>5</number>
        </property>
        <widget class="QWidget" name="role_page">
         <attribute name="title">
@@ -386,7 +386,7 @@
               <item row="7" column="1">
                <widget class="QLabel" name="equip_mount">
                 <property name="text">
-                 <string>龟大和龟二</string>
+                 <string>龟大</string>
                 </property>
                </widget>
               </item>
@@ -828,7 +828,7 @@
      <item>
       <widget class="QTabWidget" name="news_widget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="sys_news_tab">
         <attribute name="title">
@@ -904,8 +904,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>598</width>
-     <height>26</height>
+     <width>722</width>
+     <height>17</height>
     </rect>
    </property>
   </widget>

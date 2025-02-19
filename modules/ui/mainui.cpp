@@ -15,7 +15,6 @@ MainUI::MainUI(QWidget* parent)
     login_obj_ = new LoginWindow;
     modify_obj_ = new ModifyRoleName;
     process = new QProcess;
-    m_qmladapter = new QmlAdapter;
     connect(this, &MainUI::SignalLogOut, logger_obj_, &Logger::SlotOutTolog);
     connect(login_obj_, &LoginWindow::SignalLoginSuccessful, this, &MainUI::SlotLoginSuccessful);
     connect(login_obj_, &LoginWindow::SignalActionRequest, this, &MainUI::SignalActionRequest);
@@ -65,6 +64,7 @@ MainUI::MainUI(QWidget* parent)
     ui->item_prop_list->setContextMenuPolicy(Qt::CustomContextMenu);
 
     //商店选项卡布局
+    ui->store->setLayout(ui->store_Layout);
     ui->store_equip->setLayout(ui->store_equip_Layout);
     ui->store_prop->setLayout(ui->store_prop_Layout);
     ui->store_special->setLayout(ui->store_special_Layout);
