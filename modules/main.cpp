@@ -6,9 +6,7 @@
 #include <QLockFile>
 #include <QSharedMemory>
 #include "main_ctrl.h"
-#if USE_GAMKUI_QML == 1
-    #include <QQmlApplicationEngine>
-#endif
+
 
 int main(int argc, char* argv[])
 {
@@ -40,29 +38,13 @@ int main(int argc, char* argv[])
         }
     }
     MainCtrl* main_ctrl = new MainCtrl;
-#if USE_GAMKUI_QML == 0
-{
-#if DATABASE_TYPE == 0      // 使用 QWidget UI
+#if DATABASE_TYPE == 0
     main_ctrl->CheckAutoLogIn();
 #elif DATABASE_TYPE == 1
     main_ctrl->ShowMainUi();
     main_ctrl->InitRoleInfo();
 #elif DATABASE_TYPE == 2
     main_ctrl->InitRoleNetworkData();
-#endif
-}
-#else
-{
-    // 使用QML UI
-    QQmlApplicationEngine engine;
-    const QUrl url(QStringLiteral("qrc:/modules/ui/qml/main.qml"));
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                     &a, [url](QObject *obj, const QUrl &objUrl) {
-        if (!obj && url == objUrl)
-            QCoreApplication::exit(-1);
-    }, Qt::QueuedConnection);
-    engine.load(url);
-}
 #endif
     a.exec();
 //    delete main_ctrl;

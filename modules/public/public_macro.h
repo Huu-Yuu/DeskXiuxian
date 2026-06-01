@@ -4,7 +4,7 @@
 // 调试信息输出开关
 #define DEBUG_MODE_SWITCH       1
 
-#define GAME_VISION             "v0.5.1 重构版"
+#define GAME_VISION             "v0.5.2 重构版"
 
 // 游戏UI模式 是否为QML    0 - QWidget   1 - QML
 #define USE_GAMKUI_QML          0
