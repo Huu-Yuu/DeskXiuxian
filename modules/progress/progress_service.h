@@ -1,4 +1,4 @@
-#ifndef GAMEPROGRESS_H
+﻿#ifndef GAMEPROGRESS_H
 #define GAMEPROGRESS_H
 
 #include <QObject>
@@ -18,7 +18,7 @@ class ProgressService : public QThread
     Q_OBJECT
 
 public:
-    SINGLETON(ProgressService);
+    SINGLETON(ProgressService)
     ProgressService();
     ~ProgressService();
 

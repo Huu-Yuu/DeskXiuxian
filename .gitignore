@@ -87,3 +87,5 @@ Thumbs.db
 /.idea/misc.xml
 /.idea/modules.xml
 /.idea/vcs.xml
+*.user*
+build/*

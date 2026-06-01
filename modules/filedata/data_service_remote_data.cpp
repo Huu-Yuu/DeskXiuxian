@@ -11,6 +11,7 @@ void DataService::InitRemoteData()
     database_.setUserName(REMOTE_DB_USERNAME);
     database_.setPassword(REMOTE_DB_PASSWORD);
     database_.setDatabaseName(REMOTE_DB_NAME);
+    database_.setConnectOptions("MYSQL_OPT_SSL_MODE=0");
     m_database_ = QSqlDatabase::database(REMOTE_DB_LINKNAME);
     // 初始化数据库查询语句
     if (m_database_.open())
@@ -22,7 +23,7 @@ void DataService::InitRemoteData()
     }
     else
     {
-        LOG_INFO(kDataManage, "远程数据服务连接失败");
+        LOG_INFO(kDataManage, QString("远程数据服务连接失败: %1").arg(m_database_.lastError().text()));
     }
     user_ip_ = PublicFunc::GetLocalIpAddress() + "，" +PublicFunc::GetInternetIpAddress();
     LOG_INFO(kDataManage, QString("获取到当前IP地址为：%1").arg(user_ip_));

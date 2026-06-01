@@ -1,6 +1,8 @@
 #include "loginwindow.h"
 #include "ui_loginwindow.h"
 #include "modules/public/public_declare.h"
+#include <QGuiApplication>
+#include <QScreen>
 
 LoginWindow::LoginWindow(QWidget* parent) :
     QDialog(parent),
@@ -17,7 +19,7 @@ LoginWindow::LoginWindow(QWidget* parent) :
             Qt::LeftToRight,
             Qt::AlignCenter,
             size(),
-            qApp->desktop()->availableGeometry()
+            QGuiApplication::primaryScreen()->availableGeometry()
         )
     );
 

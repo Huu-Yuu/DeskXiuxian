@@ -18,7 +18,7 @@ WebsocketClient::WebsocketClient(const QString& address,  ST_SSL_TYPE ssl_type, 
         {
             QSslConfiguration conf = m_webSocket_->sslConfiguration();
             conf.setPeerVerifyMode(QSslSocket::VerifyNone);
-            conf.setProtocol(QSsl::TlsV1SslV3);
+            conf.setProtocol(QSsl::TlsV1_2);
             m_webSocket_->setSslConfiguration(conf);
         }
         break;
@@ -32,7 +32,7 @@ WebsocketClient::WebsocketClient(const QString& address,  ST_SSL_TYPE ssl_type, 
             QList<QSslError> expectedErrors;
             expectedErrors.append(error);
             m_webSocket_->ignoreSslErrors(expectedErrors);
-            conf.setProtocol(QSsl::TlsV1SslV3);
+            conf.setProtocol(QSsl::TlsV1_2);
             m_webSocket_->setSslConfiguration(conf);
         }
         break;
@@ -57,7 +57,7 @@ WebsocketClient::WebsocketClient(const QString& address,  ST_SSL_TYPE ssl_type, 
             t_file.close();
 
             // SSL验证模式；TLS协议版本
-            conf.setProtocol(QSsl::TlsV1SslV3);
+            conf.setProtocol(QSsl::TlsV1_2);
             conf.setPeerVerifyMode(QSslSocket::VerifyNone);
 //            conf.setPeerVerifyDepth(1);
             conf.setLocalCertificate(certificate);

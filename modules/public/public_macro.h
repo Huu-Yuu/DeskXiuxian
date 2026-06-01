@@ -11,7 +11,7 @@
 
 #if USE_GAMKUI_QML == 0
     // 数据库类型    0-远程数据库 1-本地数据库 2-服务器传递
-    #define DATABASE_TYPE          1
+    #define DATABASE_TYPE          0
 #endif
 // 远程数据库链接名
 #define REMOTE_DB_LINKNAME      "GAMEDATA_REMOTE"
@@ -28,7 +28,7 @@
 #define REMOTE_DB_USERNAME      "xiuxian"
 
 // 远程数据库密码
-#define REMOTE_DB_PASSWORD      "ef8ead2a1a2704c4"
+#define REMOTE_DB_PASSWORD      "QjtTYzZwer9UumH8" // NDqBka1iCRpD2GS2
 
 // 远程数据库密码
 #define LOCAL_DB_PASSWORD       "xiuxian666"
@@ -53,7 +53,7 @@
         QFile file(logFileName); \
         if (file.open(QIODevice::WriteOnly | QIODevice::Append)) { \
             QTextStream stream(&file); \
-            stream << logMsg << endl; \
+            stream << logMsg << Qt::endl; \
             file.close(); \
         } \
     } while (0)

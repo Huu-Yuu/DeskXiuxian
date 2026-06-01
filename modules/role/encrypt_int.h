@@ -1,6 +1,6 @@
 #ifndef DESKXIUXINA_ENCRYPT_VALUS_H
 #define DESKXIUXINA_ENCRYPT_VALUS_H
-
+/** @brief 加密类 */
 class EncryptionInt
 {
 private:

@@ -1,6 +1,8 @@
-﻿#include "modifyrolename.h"
+#include "modifyrolename.h"
 #include "ui_modifyrolename.h"
 #include "modules/public/public_declare.h"
+#include <QGuiApplication>
+#include <QScreen>
 
 ModifyRoleName::ModifyRoleName(QWidget* parent) :
     QDialog(parent),
@@ -17,7 +19,7 @@ ModifyRoleName::ModifyRoleName(QWidget* parent) :
             Qt::LeftToRight,
             Qt::AlignCenter,
             size(),
-            qApp->desktop()->availableGeometry()
+            QGuiApplication::primaryScreen()->availableGeometry()
         )
     );
     this->setMaximumWidth(this->width());
@@ -48,8 +50,8 @@ void ModifyRoleName::on_check_btn_clicked()
 {
     QString msg;
     role_name_ = ui->name_text->text();
-    QRegExp regExp("^[a-zA-Z0-9\\u4e00-\\u9fa5]{2,6}$");
-    if (regExp.exactMatch(role_name_))
+    QRegularExpression regExp(QStringLiteral("^[a-zA-Z0-9\\u4e00-\\u9fa5]{2,6}$"));
+    if (regExp.match(role_name_).hasMatch())
     {
         // 字符串完全匹配，符合要求，查询数据库是否名称是否可用
         QJsonObject data_obj;

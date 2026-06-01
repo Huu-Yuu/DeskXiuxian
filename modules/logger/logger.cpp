@@ -141,7 +141,7 @@ void Logger::OutputMessageHandler(QtMsgType type, const QMessageLogContext& cont
     if (result == true)
     {
         QTextStream text_stream(&file);
-        text_stream << message << endl;
+        text_stream << message << Qt::endl;
         file.flush();
         file.close();
     }

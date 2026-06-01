@@ -3,7 +3,6 @@
 
 #include <QDialog>
 #include <QStyle>
-#include <QDesktopWidget>
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
 #include <regex>

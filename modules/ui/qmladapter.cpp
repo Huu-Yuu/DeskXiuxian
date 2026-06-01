@@ -14,7 +14,7 @@ int QmlAdapter::stringSizeCount(QString src)
     {
         check_char = src[i];
         //ASCII界线划分单字符和多字符
-        if (check_char <= 170)
+        if (check_char.unicode() <= 170)
         {
             sum += 1;
         }

@@ -1,7 +1,7 @@
 #ifndef DESKXIUXINA_SECURE_DATA_H
 #define DESKXIUXINA_SECURE_DATA_H
-#include <iostream>
 
+/** @brief 加密器*/
 class SimpleIntEncryptor
 {
 private:

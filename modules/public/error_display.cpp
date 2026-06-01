@@ -356,7 +356,7 @@ void ErrorDisplay::OutputMessageToFile(const QString log_file_path,
     if (result == true)
     {
         QTextStream text_stream(&file);
-        text_stream << output_content << endl;
+        text_stream << output_content << Qt::endl;
         file.flush();
         file.close();
     }
