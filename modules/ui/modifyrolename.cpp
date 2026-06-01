@@ -50,8 +50,45 @@ void ModifyRoleName::on_check_btn_clicked()
 {
     QString msg;
     role_name_ = ui->name_text->text();
-    QRegularExpression regExp(QStringLiteral("^[a-zA-Z0-9\\u4e00-\\u9fa5]{2,6}$"));
-    if (regExp.match(role_name_).hasMatch())
+
+    if (role_name_.isEmpty())
+    {
+        msg = "昵称不能为空，请修改";
+        role_name_ok = false;
+        ui->star_btn->setEnabled(role_name_ok);
+        ui->tip_text->setText(msg);
+        return;
+    }
+
+    // 检查长度（1-6个字符）
+    if (role_name_.length() > 6)
+    {
+        msg = "昵称长度不能超过6个字符，请修改";
+        role_name_ok = false;
+        ui->star_btn->setEnabled(role_name_ok);
+        ui->tip_text->setText(msg);
+        return;
+    }
+
+    // 逐个字符检查：只允许汉字、数字、字母
+    bool isValid = true;
+    for (QChar ch : role_name_)
+    {
+        // 不允许任何标点符号、特殊符号、符号、空格
+        if (ch.isPunct() || ch.isSymbol() || ch.isMark() || ch.isSpace())
+        {
+            isValid = false;
+            break;
+        }
+        // 只允许数字、字母（包括汉字，汉字也是 Letter）
+        if (!(ch.isDigit() || ch.isLetter()))
+        {
+            isValid = false;
+            break;
+        }
+    }
+
+    if (isValid)
     {
         // 字符串完全匹配，符合要求，查询数据库是否名称是否可用
         QJsonObject data_obj;

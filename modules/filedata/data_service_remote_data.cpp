@@ -360,7 +360,7 @@ int DataService::InitRoleData()
         // 查询角色名失败
         return result;
     }
-    query.prepare("INSERT INTO user_role_info (uuid, role_name, role_life, role_prestige, role_aptitude, role_exp,"
+    query.prepare("REPLACE INTO user_role_info (uuid, role_name, role_life, role_prestige, role_aptitude, role_exp,"
                   " role_agg, role_def, role_hp, role_cur_exp, role_lv) "
                   "VALUES (:uuid, :roleName, 20, 0, 0, 0, 20, 10, 100, 0, 1)");
     query.bindValue(":uuid", user_uuid_);
@@ -375,7 +375,7 @@ int DataService::InitRoleData()
         LOG_INFO(kDataManage, QString("新建角色基本信息初始化失败：%1").arg(query.lastError().text()));
         result --;
     }
-    query.prepare("INSERT INTO user_role_equip (uuid, equip_weapon, equip_magic, equip_helmet,"
+    query.prepare("REPLACE INTO user_role_equip (uuid, equip_weapon, equip_magic, equip_helmet,"
                   " equip_clothing, equip_britches, equip_shoe, equip_jewelry, equip_mount) "
                   "VALUES (:uuid, 0, 0, 0, 0, 0, 0, 0, 0)");
     query.bindValue(":uuid", user_uuid_);
@@ -389,7 +389,7 @@ int DataService::InitRoleData()
         LOG_INFO(kDataManage, QString("新建角色装备信息初始化失败：%1").arg(query.lastError().text()));
         result --;
     }
-    query.prepare("INSERT INTO user_role_rc (uuid, rc_life, rc_basic_event, rc_att_event,"
+    query.prepare("REPLACE INTO user_role_rc (uuid, rc_life, rc_basic_event, rc_att_event,"
                   " rc_survive_disaster, rc_prestige_event, rc_special_event) "
                   "VALUES (:uuid, 0, 0, 0, 0, 0, 0)");
     query.bindValue(":uuid", user_uuid_);
@@ -403,7 +403,7 @@ int DataService::InitRoleData()
         LOG_INFO(kDataManage, QString("新建角色成长系数初始化失败：%1").arg(query.lastError().text()));
         result --;
     }
-    query.prepare("INSERT INTO user_role_item (uuid, role_money, rename_card) "
+    query.prepare("REPLACE INTO user_role_item (uuid, role_money, rename_card) "
                   "VALUES (:uuid, 100, 1)");
     query.bindValue(":uuid", user_uuid_);
     if (query.exec())

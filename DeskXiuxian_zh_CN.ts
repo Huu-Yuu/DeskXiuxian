@@ -2,19 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
-    <name>CustomDialog</name>
-    <message>
-        <location filename="modules/ui/qml/components/CustomDialog.qml" line="17"/>
-        <source>OK</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="modules/ui/qml/components/CustomDialog.qml" line="18"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ErrorDisplay</name>
     <message>
         <location filename="modules/public/error_display.cpp" line="49"/>
@@ -818,49 +805,41 @@
     <name>LoginWindow</name>
     <message>
         <location filename="modules/ui/loginwindow.ui" line="26"/>
-        <location filename="ui_loginwindow.h" line="149"/>
         <source>桌面修仙登录</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/loginwindow.ui" line="53"/>
-        <location filename="ui_loginwindow.h" line="150"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/loginwindow.ui" line="93"/>
-        <location filename="ui_loginwindow.h" line="151"/>
         <source>登录</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/loginwindow.ui" line="112"/>
-        <location filename="ui_loginwindow.h" line="152"/>
         <source>注册</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/loginwindow.ui" line="146"/>
-        <location filename="ui_loginwindow.h" line="153"/>
         <source>提示：若未注册，请先注册</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/loginwindow.ui" line="171"/>
-        <location filename="ui_loginwindow.h" line="154"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;账号：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/loginwindow.ui" line="203"/>
-        <location filename="ui_loginwindow.h" line="155"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;密码：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/loginwindow.ui" line="238"/>
-        <location filename="ui_loginwindow.h" line="156"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;邮箱：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -869,127 +848,106 @@
     <name>MainUI</name>
     <message>
         <location filename="modules/ui/mainui.ui" line="14"/>
-        <location filename="ui_mainui.h" line="735"/>
         <source>MainUI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="40"/>
-        <location filename="ui_mainui.h" line="777"/>
         <source>角色</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="61"/>
-        <location filename="ui_mainui.h" line="736"/>
         <source>基本属性</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="120"/>
-        <location filename="ui_mainui.h" line="737"/>
         <source>昵称：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="127"/>
-        <location filename="ui_mainui.h" line="738"/>
         <source>王大锤</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="134"/>
-        <location filename="ui_mainui.h" line="739"/>
         <source>声望：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="141"/>
-        <location filename="ui_mainui.h" line="740"/>
         <source>897</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="148"/>
-        <location filename="ui_mainui.h" line="741"/>
         <source>寿命：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="155"/>
-        <location filename="ui_mainui.h" line="742"/>
         <source>165</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="162"/>
-        <location filename="ui_mainui.h" line="743"/>
         <source>修为：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="169"/>
-        <location filename="ui_mainui.h" line="744"/>
         <source>练气期</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="176"/>
-        <location filename="ui_mainui.h" line="745"/>
         <source>经验：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="183"/>
-        <location filename="ui_mainui.h" line="746"/>
         <source>12314</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="190"/>
-        <location filename="ui_mainui.h" line="747"/>
         <source>攻击力：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="197"/>
-        <location filename="ui_mainui.h" line="748"/>
         <source>7585</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="204"/>
-        <location filename="ui_mainui.h" line="749"/>
         <source>防御力：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="211"/>
-        <location filename="ui_mainui.h" line="750"/>
         <source>52312</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="218"/>
-        <location filename="ui_mainui.h" line="751"/>
         <source>血量：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="225"/>
-        <location filename="ui_mainui.h" line="752"/>
         <source>743834</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="232"/>
-        <location filename="ui_mainui.h" line="753"/>
         <source>称号：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="239"/>
-        <location filename="ui_mainui.h" line="754"/>
         <source>乐善好施</source>
         <translation type="unfinished"></translation>
     </message>
@@ -997,221 +955,181 @@
         <location filename="modules/ui/mainui.ui" line="252"/>
         <location filename="modules/ui/mainui.ui" line="503"/>
         <location filename="modules/ui/mainui.ui" line="712"/>
-        <location filename="ui_mainui.h" line="755"/>
-        <location filename="ui_mainui.h" line="778"/>
-        <location filename="ui_mainui.h" line="789"/>
         <source>装备</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="291"/>
-        <location filename="ui_mainui.h" line="756"/>
         <source>武器：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="298"/>
-        <location filename="ui_mainui.h" line="757"/>
         <source>别云剑</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="305"/>
-        <location filename="ui_mainui.h" line="758"/>
         <source>法宝：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="312"/>
-        <location filename="ui_mainui.h" line="759"/>
         <source>乾坤镜</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="319"/>
-        <location filename="ui_mainui.h" line="760"/>
         <source>头盔：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="326"/>
-        <location filename="ui_mainui.h" line="761"/>
         <source>青铜盔</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="333"/>
-        <location filename="ui_mainui.h" line="762"/>
         <source>上衣：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="340"/>
-        <location filename="ui_mainui.h" line="763"/>
         <source>洪荒甲</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="347"/>
-        <location filename="ui_mainui.h" line="764"/>
         <source>裤子：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="354"/>
-        <location filename="ui_mainui.h" line="765"/>
         <source>洪荒裤</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="361"/>
-        <location filename="ui_mainui.h" line="766"/>
         <source>鞋子：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="368"/>
-        <location filename="ui_mainui.h" line="767"/>
         <source>风影靴</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="375"/>
-        <location filename="ui_mainui.h" line="768"/>
         <source>首饰：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="382"/>
-        <location filename="ui_mainui.h" line="769"/>
         <source>坐骑：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="389"/>
-        <location filename="ui_mainui.h" line="770"/>
-        <source>龟大和龟二</source>
+        <source>龟大</source>
+        <oldsource>龟大和龟二</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="396"/>
-        <location filename="ui_mainui.h" line="771"/>
         <source>须弥戒</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="424"/>
-        <location filename="ui_mainui.h" line="773"/>
         <source>开始修炼</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="437"/>
-        <location filename="ui_mainui.h" line="774"/>
         <source>结束修炼</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="450"/>
-        <location filename="ui_mainui.h" line="775"/>
         <source>修为突破</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="463"/>
-        <location filename="ui_mainui.h" line="776"/>
         <source>转世重修</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="476"/>
-        <location filename="ui_mainui.h" line="783"/>
         <source> 背包</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="523"/>
         <location filename="modules/ui/mainui.ui" line="732"/>
-        <location filename="ui_mainui.h" line="779"/>
-        <location filename="ui_mainui.h" line="790"/>
         <source>道具</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="543"/>
         <location filename="modules/ui/mainui.ui" line="752"/>
-        <location filename="ui_mainui.h" line="780"/>
-        <location filename="ui_mainui.h" line="791"/>
         <source>材料</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="563"/>
         <location filename="modules/ui/mainui.ui" line="772"/>
-        <location filename="ui_mainui.h" line="781"/>
-        <location filename="ui_mainui.h" line="792"/>
         <source>特殊</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="602"/>
         <location filename="modules/ui/mainui.ui" line="811"/>
-        <location filename="ui_mainui.h" line="782"/>
-        <location filename="ui_mainui.h" line="793"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;名称&lt;/p&gt;&lt;p&gt;数量&lt;/p&gt;&lt;p&gt;效果&lt;/p&gt;&lt;p&gt;描述&lt;/p&gt;&lt;p&gt;获取途径&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="619"/>
-        <location filename="ui_mainui.h" line="786"/>
         <source>道术</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="657"/>
-        <location filename="ui_mainui.h" line="784"/>
         <source>强化技能</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="666"/>
-        <location filename="ui_mainui.h" line="785"/>
         <source>  技能描述</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="675"/>
-        <location filename="ui_mainui.h" line="787"/>
         <source> 历练</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="680"/>
-        <location filename="ui_mainui.h" line="788"/>
         <source>排行榜</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="685"/>
-        <location filename="ui_mainui.h" line="794"/>
         <source>商店</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="835"/>
-        <location filename="ui_mainui.h" line="795"/>
         <source>系统</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="859"/>
-        <location filename="ui_mainui.h" line="796"/>
         <source>世界</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="879"/>
-        <location filename="ui_mainui.h" line="797"/>
         <source> 门派</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1220,87 +1138,32 @@
     <name>ModifyRoleName</name>
     <message>
         <location filename="modules/ui/modifyrolename.ui" line="14"/>
-        <location filename="ui_modifyrolename.h" line="116"/>
         <source>重命名</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/modifyrolename.ui" line="58"/>
-        <location filename="ui_modifyrolename.h" line="117"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;请输入角色昵称&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/modifyrolename.ui" line="86"/>
-        <location filename="ui_modifyrolename.h" line="119"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/modifyrolename.ui" line="126"/>
-        <location filename="ui_modifyrolename.h" line="123"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;请输入2~6个非特殊字符&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/modifyrolename.ui" line="160"/>
-        <location filename="ui_modifyrolename.h" line="124"/>
         <source>确定</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="modules/ui/modifyrolename.ui" line="179"/>
-        <location filename="ui_modifyrolename.h" line="125"/>
         <source>检查</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>RadioBox</name>
-    <message>
-        <location filename="modules/ui/qml/components/RadioBox.qml" line="23"/>
-        <source>请选择清洁模式</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="modules/ui/qml/components/RadioBox.qml" line="79"/>
-        <source>取消</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="modules/ui/qml/components/RadioBox.qml" line="96"/>
-        <source>确定</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>TimeSelectBox</name>
-    <message>
-        <location filename="modules/ui/qml/components/TimeSelectBox.qml" line="56"/>
-        <source>时</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="modules/ui/qml/components/TimeSelectBox.qml" line="66"/>
-        <source>分</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>WelcomePage</name>
-    <message>
-        <location filename="modules/ui/qml/WelcomePage.qml" line="55"/>
-        <source>欢迎来到摸鱼修仙世界</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="modules/ui/qml/WelcomePage.qml" line="69"/>
-        <source>登录</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="modules/ui/qml/WelcomePage.qml" line="87"/>
-        <source>注册</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

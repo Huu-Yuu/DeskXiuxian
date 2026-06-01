@@ -33,7 +33,7 @@
      <item>
       <widget class="QTabWidget" name="role_widget">
        <property name="currentIndex">
-        <number>5</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="role_page">
         <attribute name="title">
@@ -61,7 +61,7 @@
              <string>基本属性</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignCenter</set>
+             <set>Qt::AlignmentFlag::AlignCenter</set>
             </property>
             <widget class="QWidget" name="layoutWidget">
              <property name="geometry">
@@ -91,10 +91,10 @@
               <item>
                <layout class="QFormLayout" name="value_Layout">
                 <property name="rowWrapPolicy">
-                 <enum>QFormLayout::DontWrapRows</enum>
+                 <enum>QFormLayout::RowWrapPolicy::DontWrapRows</enum>
                 </property>
                 <property name="formAlignment">
-                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
                 </property>
                 <property name="horizontalSpacing">
                  <number>10</number>
@@ -252,7 +252,7 @@
              <string>装备</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignCenter</set>
+             <set>Qt::AlignmentFlag::AlignCenter</set>
             </property>
             <widget class="QWidget" name="formLayoutWidget">
              <property name="geometry">
@@ -265,7 +265,7 @@
              </property>
              <layout class="QFormLayout" name="equipment_Layout">
               <property name="sizeConstraint">
-               <enum>QLayout::SetDefaultConstraint</enum>
+               <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
               </property>
               <property name="horizontalSpacing">
                <number>15</number>
@@ -418,7 +418,7 @@
               <item row="0" column="0">
                <widget class="QPushButton" name="star_but">
                 <property name="focusPolicy">
-                 <enum>Qt::NoFocus</enum>
+                 <enum>Qt::FocusPolicy::NoFocus</enum>
                 </property>
                 <property name="text">
                  <string>开始修炼</string>
@@ -431,7 +431,7 @@
                  <bool>false</bool>
                 </property>
                 <property name="focusPolicy">
-                 <enum>Qt::NoFocus</enum>
+                 <enum>Qt::FocusPolicy::NoFocus</enum>
                 </property>
                 <property name="text">
                  <string>结束修炼</string>
@@ -444,7 +444,7 @@
                  <bool>false</bool>
                 </property>
                 <property name="focusPolicy">
-                 <enum>Qt::NoFocus</enum>
+                 <enum>Qt::FocusPolicy::NoFocus</enum>
                 </property>
                 <property name="text">
                  <string>修为突破</string>
@@ -457,7 +457,7 @@
                  <bool>false</bool>
                 </property>
                 <property name="focusPolicy">
-                 <enum>Qt::NoFocus</enum>
+                 <enum>Qt::FocusPolicy::NoFocus</enum>
                 </property>
                 <property name="text">
                  <string>转世重修</string>
@@ -602,7 +602,7 @@
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;名称&lt;/p&gt;&lt;p&gt;数量&lt;/p&gt;&lt;p&gt;效果&lt;/p&gt;&lt;p&gt;描述&lt;/p&gt;&lt;p&gt;获取途径&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
@@ -811,7 +811,7 @@
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;名称&lt;/p&gt;&lt;p&gt;数量&lt;/p&gt;&lt;p&gt;效果&lt;/p&gt;&lt;p&gt;描述&lt;/p&gt;&lt;p&gt;获取途径&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
@@ -828,7 +828,7 @@
      <item>
       <widget class="QTabWidget" name="news_widget">
        <property name="currentIndex">
-        <number>2</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="sys_news_tab">
         <attribute name="title">
@@ -905,7 +905,7 @@
      <x>0</x>
      <y>0</y>
      <width>722</width>
-     <height>17</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
