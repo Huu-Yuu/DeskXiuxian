@@ -1439,6 +1439,7 @@ void RolePlayer::InitLocalRoleInfo(const QJsonObject& obj) {
     UpdataMaxRoleLife();     // 更新最大寿命
     UpdateEextGradeEXP();    // 更新升级需要的经验
     CheckExpIsUpgrade();    // 更新是否可以升级
+    UpdateAllUI();
 }
 
 void RolePlayer::ShowMsgToUi(const QString& msg) {

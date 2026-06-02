@@ -30,25 +30,130 @@ endif()
 find_package(Qt6 COMPONENTS Core Gui Sql Network Widgets WebSockets Qml Quick LinguistTools REQUIRED)
 
 # 设置源文件列表
-#cpp h
 set(SRC_DIR ${CMAKE_SOURCE_DIR})
-FILE(GLOB_RECURSE QRC_SOURCE_FILES 
-    ${SRC_DIR}/*.qrc 
-    ${SRC_DIR}/modules/*.qrc
+set(QRC_SOURCE_FILES 
+    ${SRC_DIR}/img.qrc
 )
-list(FILTER QRC_SOURCE_FILES EXCLUDE REGEX "/(debug|release|build-)/")
-file(GLOB_RECURSE SRC_SOURCE_FILES  # 非根目录下递归查找
-        ${SRC_DIR}/modules/*.cpp
-        ${SRC_DIR}/common/*.cpp
-        ${SRC_DIR}/business/*.cpp
-        ${SRC_DIR}/3rdparty/*.cpp
-        )
-file(GLOB_RECURSE SRC_HEADER_FILES
-        ${SRC_DIR}/modules/*.h
-        ${SRC_DIR}/common/*.h
-        ${SRC_DIR}/business/*.h
-        ${SRC_DIR}/3rdparty/*.h
-        )
+
+# 源文件列表
+set(SRC_SOURCE_FILES
+    # main
+    ${SRC_DIR}/modules/main.cpp
+    ${SRC_DIR}/modules/main_ctrl.cpp
+    
+    # modules/public
+    ${SRC_DIR}/modules/public/public_func.cpp
+    ${SRC_DIR}/modules/public/error_display.cpp
+    
+    # modules/logger
+    ${SRC_DIR}/modules/logger/logger.cpp
+    
+    # modules/server
+    ${SRC_DIR}/modules/server/tcp_client.cpp
+    ${SRC_DIR}/modules/server/web_socket_client.cpp
+    
+    # modules/filedata
+    ${SRC_DIR}/modules/filedata/data_service.cpp
+    ${SRC_DIR}/modules/filedata/data_service_settings.cpp
+    ${SRC_DIR}/modules/filedata/data_service_remote_data.cpp
+    ${SRC_DIR}/modules/filedata/role_db.cpp
+    
+    # modules/item
+    ${SRC_DIR}/modules/item/itembase.cpp
+    ${SRC_DIR}/modules/item/item_service.cpp
+    
+    # modules/item/prop
+    ${SRC_DIR}/modules/item/prop/prop_rename_card.cpp
+    ${SRC_DIR}/modules/item/prop/prop_yanshoudan10.cpp
+    
+    # modules/item/equip
+    ${SRC_DIR}/modules/item/equip/title.cpp
+    
+    # modules/role
+    ${SRC_DIR}/modules/role/role_player.cpp
+    
+    # modules/progress
+    ${SRC_DIR}/modules/progress/progress_service.cpp
+    
+    # modules/ui
+    ${SRC_DIR}/modules/ui/mainui.cpp
+    ${SRC_DIR}/modules/ui/loginwindow.cpp
+    ${SRC_DIR}/modules/ui/modifyrolename.cpp
+    
+    # modules/interface_manager
+    ${SRC_DIR}/modules/interface_manager.cpp
+    
+    # business
+    ${SRC_DIR}/business/db_manage.cpp
+    ${SRC_DIR}/business/item_manage.cpp
+    ${SRC_DIR}/business/progress_manage.cpp
+    ${SRC_DIR}/business/role_manage.cpp
+    ${SRC_DIR}/business/ui_manage.cpp
+)
+
+# 头文件列表
+set(SRC_HEADER_FILES
+    # common
+    ${SRC_DIR}/common/singleton.h
+    ${SRC_DIR}/common/sync_mechanism.h
+    
+    # modules/public
+    ${SRC_DIR}/modules/public/public_macro.h
+    ${SRC_DIR}/modules/public/public_type.h
+    ${SRC_DIR}/modules/public/public_declare.h
+    ${SRC_DIR}/modules/public/public_func.h
+    ${SRC_DIR}/modules/public/error_code.h
+    ${SRC_DIR}/modules/public/error_display.h
+    
+    # modules/logger
+    ${SRC_DIR}/modules/logger/logger.h
+    
+    # modules/server
+    ${SRC_DIR}/modules/server/tcp_client.h
+    ${SRC_DIR}/modules/server/web_socket_client.h
+    ${SRC_DIR}/modules/server/web_socket_define.h
+    
+    # modules/filedata
+    ${SRC_DIR}/modules/filedata/data_service.h
+    ${SRC_DIR}/modules/filedata/role_db.h
+    
+    # modules/item
+    ${SRC_DIR}/modules/item/itembase.h
+    ${SRC_DIR}/modules/item/item_service.h
+    
+    # modules/item/prop
+    ${SRC_DIR}/modules/item/prop/prop_rename_card.h
+    ${SRC_DIR}/modules/item/prop/prop_yanshoudan10.h
+    
+    # modules/item/equip
+    ${SRC_DIR}/modules/item/equip/title.h
+    
+    # modules/role
+    ${SRC_DIR}/modules/role/role_player.h
+    ${SRC_DIR}/modules/role/simple_int_encryptor.h
+    ${SRC_DIR}/modules/role/encrypt_int.h
+    
+    # modules/progress
+    ${SRC_DIR}/modules/progress/progress_service.h
+    
+    # modules/ui
+    ${SRC_DIR}/modules/ui/mainui.h
+    ${SRC_DIR}/modules/ui/loginwindow.h
+    ${SRC_DIR}/modules/ui/modifyrolename.h
+    
+    # modules/main_ctrl
+    ${SRC_DIR}/modules/main_ctrl.h
+    
+    # modules/interface_manager
+    ${SRC_DIR}/modules/interface_manager.h
+    
+    # business
+    ${SRC_DIR}/business/db_manage.h
+    ${SRC_DIR}/business/item_manage.h
+    ${SRC_DIR}/business/progress_manage.h
+    ${SRC_DIR}/business/role_manage.h
+    ${SRC_DIR}/business/ue_manage.h
+)
 
 if(UNIX)
     message("Linux 系统")

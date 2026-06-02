@@ -22,6 +22,7 @@ public slots:
     void SlotPubTopic(const QJsonObject& topic_data) override;
 private:
     void Do_Request_InitLocalRoleInfo(const QJsonObject& request_data);
+    void Do_Request_InitRemoteRoleInfo(const QJsonObject& request_data);
     void Do_Request_UpgradeLevel(const QJsonObject& request_data);
     void Do_Request_CyclicLifeUpdate(const QJsonObject& request_data);
     void Do_Request_CyclicCultivation(const QJsonObject& request_data);

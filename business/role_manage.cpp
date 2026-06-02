@@ -14,6 +14,7 @@ RoleManage::RoleManage() {
     connect(m_player_, &RolePlayer::SignalPubTopic, this, &RoleManage::SignalPubTopic);
 
     map_function_request_[mainCmd::InitLocalRoleInfo] = &RoleManage::Do_Request_InitLocalRoleInfo;
+    map_function_request_[mainCmd::InitRemoteRoleInfo] = &RoleManage::Do_Request_InitRemoteRoleInfo;
     map_function_request_[uiCmd::UpgradeLevel] = &RoleManage::Do_Request_UpgradeLevel;
     map_function_request_[ProgressCmd::CyclicLifeUpdate] = &RoleManage::Do_Request_CyclicLifeUpdate;
     map_function_request_[ProgressCmd::CyclicCultivation] = &RoleManage::Do_Request_CyclicCultivation;
@@ -74,6 +75,12 @@ void RoleManage::SlotPubTopic(const QJsonObject& topic_data)
 }
 
 void RoleManage::Do_Request_InitLocalRoleInfo(const QJsonObject& request_data)
+{
+    QJsonObject data = request_data.value("data").toObject();
+    m_player_->InitLocalRoleInfo(data);
+}
+
+void RoleManage::Do_Request_InitRemoteRoleInfo(const QJsonObject &request_data)
 {
     QJsonObject data = request_data.value("data").toObject();
     m_player_->InitLocalRoleInfo(data);

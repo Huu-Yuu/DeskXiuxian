@@ -28,7 +28,7 @@
 #define REMOTE_DB_USERNAME      "xiuxian"
 
 // 远程数据库密码
-#define REMOTE_DB_PASSWORD      "QjtTYzZwer9UumH8" // NDqBka1iCRpD2GS2
+#define REMOTE_DB_PASSWORD      "QjtTYzZwer9UumH8" //NDqBka1iCRpD2GS2
 
 // 远程数据库密码
 #define LOCAL_DB_PASSWORD       "xiuxian666"
@@ -47,7 +47,7 @@
 // 调试打印
 #define LOG_INFO(logger, msg) \
     do { \
-        QString logMsg = QString("[%1] %2:%3 - %4").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")).arg(__FUNCTION__).arg(__LINE__).arg(msg); \
+        QString logMsg = QString("[%1] %2:%3 - %4").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")).arg(__FILE__).arg(__LINE__).arg(msg); \
         qDebug() << logMsg; \
         QString logFileName = "../log/" + QDateTime::currentDateTime().toString("yyyyMMdd") + "_" + logger + ".log"; \
         QFile file(logFileName); \
