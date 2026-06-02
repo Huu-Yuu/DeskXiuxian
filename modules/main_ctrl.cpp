@@ -5,6 +5,8 @@
 #include "business/role_manage.h"
 #include "business/ue_manage.h"
 #include "modules/public/public_declare.h"
+#include "modules/public/public_func.h"
+#include "modules/public/public_macro.h"
 
 MainCtrl::MainCtrl(QObject* parent) : QObject(parent)
 {

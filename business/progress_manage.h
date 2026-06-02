@@ -5,6 +5,7 @@
 #ifndef DESKXIUXINA_PROGRESS_MANAGE_H
 #define DESKXIUXINA_PROGRESS_MANAGE_H
 #include <QObject>
+#include <QMap>
 #include "modules/interface_manager.h"
 #include "modules/progress/progress_service.h"
 

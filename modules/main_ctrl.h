@@ -2,13 +2,7 @@
 #define MAINCTRL_H
 
 #include <QObject>
-#include "modules/ui/mainui.h"
-#include "modules/role/role_player.h"
-#include "modules/logger/logger.h"
-#include "modules/filedata/data_service.h"
-#include "modules/progress/progress_service.h"
-#include "modules/item/item_service.h"
-#include "modules/server/tcp_client.h"
+#include <QJsonObject>
 #include "modules/interface_manager.h"
 
 /**

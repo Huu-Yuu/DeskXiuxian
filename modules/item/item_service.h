@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QMutex>
 #include "common//singleton.h"
-#include "modules/filedata/data_service.h"
 #include "itembase.h"
 
 /**

@@ -14,10 +14,8 @@
 #include <QThread>
 #include <QJsonObject>
 #include <QUuid>
-#include "modules/public/public_macro.h"
-#include "modules/public/public_func.h"
-#include "modules/logger/logger.h"
 #include "common/singleton.h"
+#include "modules/public/public_type.h"
 
 /**
  * @brief 文件管理类

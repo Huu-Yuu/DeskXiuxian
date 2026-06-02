@@ -1,5 +1,4 @@
 ﻿#include "itembase.h"
-#include "modules/public/error_code.h"
 #include "modules/public/public_func.h"
 #include "modules/public/public_declare.h"
 #include <QJsonObject>

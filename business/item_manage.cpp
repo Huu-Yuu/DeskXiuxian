@@ -1,6 +1,10 @@
-﻿#include "business/item_manage.h"
-#include "modules/public/public_declare.h"
+﻿#include <QFile>
 #include <QJsonDocument>
+#include <QJsonObject>
+#include "business/item_manage.h"
+#include "modules/public/public_declare.h"
+#include "modules/public/public_macro.h"
+#include "modules/public/error_code.h"
 
 ItemManage::ItemManage() {
     m_module_name = module_name::item;

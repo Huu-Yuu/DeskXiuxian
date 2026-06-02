@@ -1,5 +1,8 @@
 ﻿#include "data_service.h"
 #include "modules/public/public_declare.h"
+#include "modules/public/public_macro.h"
+#include "modules/public/error_code.h"
+#include "modules/public/public_func.h"
 #include <QSqlRecord>
 
 QMutex DataService::mutex;  // 初始化互斥锁对象

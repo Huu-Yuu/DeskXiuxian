@@ -88,8 +88,8 @@ namespace uiCmd
     const QString ShowMsgToUI = "ShowMsgToUI";  ///< 显示信息到UI
     const QString DisableCultivaUpButton = "DisableCultivaUpButton";  ///< 禁用突破按钮
     const QString ActivateCultivaUpButton = "ActivateCultivaUpButton";  ///< 激活突破按钮
-    const QString StartFishing = "StartFishing";    ///< 开始摸鱼
-    const QString StopFishing = "StopFishing";    ///< 暂停摸鱼
+    const QString StartFishing = "StartFishing";    ///< 开始修仙
+    const QString StopFishing = "StopFishing";    ///< 暂停修仙
     const QString UpgradeLevel = "UpgradeLevel";    ///< 突破等级
     const QString UpdateRoleUI = "UpdateRoleUI";    ///< 更新指定UI部件
     const QString UpdatePropShow = "InitPropShow";    ///< 初始化道具显示

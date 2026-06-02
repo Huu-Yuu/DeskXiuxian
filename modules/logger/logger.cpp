@@ -1,5 +1,5 @@
 #include "logger.h"
-
+#include "modules/public/error_code.h"
 QMutex Logger::mutex_;  // 初始化互斥锁对象
 QMutex Logger::std_log_mutex;
 

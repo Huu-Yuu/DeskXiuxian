@@ -11,7 +11,6 @@
 #include <QRandomGenerator>
 #include <QJsonObject>
 #include <QDebug>
-#include "modules/item/item_service.h"
 #include "common/singleton.h"
 
 /**

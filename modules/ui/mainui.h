@@ -11,13 +11,10 @@
 #include <QProcess>
 #include <QTextStream>
 #include "modules/logger/logger.h"
-#include "modules/role/role_player.h"
-#include "modules/item/item_service.h"
-#include "modules/filedata/data_service.h"
-#include "modules/progress/progress_service.h"
 #include "loginwindow.h"
 #include "modifyrolename.h"
 #include "common/singleton.h"
+#include "modules/public/public_type.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui

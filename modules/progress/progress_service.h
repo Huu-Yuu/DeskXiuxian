@@ -7,7 +7,6 @@
 #include <QMutexLocker>
 #include <QEventLoop>
 #include <QTimer>
-#include "modules/role/role_player.h"
 #include "common/singleton.h"
 
 /**

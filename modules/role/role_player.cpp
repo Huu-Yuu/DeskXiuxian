@@ -1,6 +1,9 @@
+#include <QFile>
 #include "role_player.h"
 #include "modules/public/public_type.h"
 #include "modules/public/public_declare.h"
+#include "modules/public/public_func.h"
+#include "modules/public/public_macro.h"
 
 QMutex RolePlayer::mutex;  // 初始化互斥锁对象
 

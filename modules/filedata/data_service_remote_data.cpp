@@ -1,7 +1,8 @@
-﻿#include "data_service.h"
+﻿#include <QSqlRecord>
+#include "data_service.h"
 #include "modules/public/public_declare.h"
-#include <QSqlRecord>
-
+#include "modules/public/public_macro.h"
+#include "modules/public/public_func.h"
 void DataService::InitRemoteData()
 {
     QSqlDatabase database_;

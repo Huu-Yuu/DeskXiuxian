@@ -1,6 +1,11 @@
-﻿#include "business/progress_manage.h"
-#include "modules/public/public_declare.h"
+﻿#include <QFile>
+#include <QDateTime>
 #include <QJsonDocument>
+#include <QJsonObject>
+#include "business/progress_manage.h"
+#include "modules/public/public_declare.h"
+#include "modules/public/public_macro.h"
+#include "modules/public/error_code.h"
 
 ProgressManage::ProgressManage() {
     m_module_name = module_name::progress;

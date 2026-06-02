@@ -1,6 +1,10 @@
-﻿#include "business/db_manage.h"
+﻿#include <QJsonDocument>
+#include "business/db_manage.h"
 #include "modules/public/public_declare.h"
-#include <QJsonDocument>
+#include "modules/public/public_macro.h"
+#include "modules/public/error_code.h"
+#include "modules/public/public_func.h"
+
 
 DBManage::DBManage() {
     m_module_name = module_name::data;

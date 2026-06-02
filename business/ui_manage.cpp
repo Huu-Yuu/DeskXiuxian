@@ -1,5 +1,7 @@
 #include "business/ue_manage.h"
 #include "modules/public/public_declare.h"
+#include "modules/public/public_macro.h"
+#include "modules/public/public_func.h"
 #include <QJsonDocument>
 
 UIManage::UIManage()

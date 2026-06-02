@@ -1,7 +1,6 @@
 #ifndef DESKXIUXINA_ROLE_DB_H
 #define DESKXIUXINA_ROLE_DB_H
 #include <QSqlDatabase>
-#include "common/singleton.h"
 #include <QJsonObject>
 
 class RoleInfoTable

@@ -1,5 +1,8 @@
+#include <QDebug>
+#include <QJsonObject>
 #include "progress_service.h"
 #include "modules/public/public_declare.h"
+#include "modules/public/public_func.h"
 
 QMutex ProgressService::mutex;  // 初始化互斥锁对象
 

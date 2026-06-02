@@ -1,8 +1,10 @@
 #include "modifyrolename.h"
 #include "ui_modifyrolename.h"
+#include "modules/public/public_func.h"
 #include "modules/public/public_declare.h"
 #include <QGuiApplication>
 #include <QScreen>
+#include <QJsonObject>
 
 ModifyRoleName::ModifyRoleName(QWidget* parent) :
     QDialog(parent),

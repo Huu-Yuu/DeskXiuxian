@@ -5,11 +5,8 @@
 #include <QStyle>
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
-#include <regex>
-#include <iostream>
 #include <QMessageBox>
 #include <QDebug>
-#include "modules/filedata/data_service.h"
 
 namespace Ui
 {

@@ -1,8 +1,9 @@
 #include "loginwindow.h"
 #include "ui_loginwindow.h"
-#include "modules/public/public_declare.h"
 #include <QGuiApplication>
 #include <QScreen>
+#include "modules/public/public_func.h"
+#include "modules/public/public_declare.h"
 
 LoginWindow::LoginWindow(QWidget* parent) :
     QDialog(parent),

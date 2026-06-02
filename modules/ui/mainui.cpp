@@ -1,10 +1,12 @@
-﻿#include "mainui.h"
-#include "ui_mainui.h"
-#include "modules/public/public_declare.h"
-#include <QJsonArray>
+﻿#include <QJsonArray>
 #include <QMenu>
 #include <QListWidgetItem>
-
+#include "mainui.h"
+#include "ui_mainui.h"
+#include "modules/public/public_declare.h"
+#include "modules/public/public_macro.h"
+#include "modules/public/public_func.h"
+#include "modules/role/role_player.h"
 MainUI::MainUI(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainUI)

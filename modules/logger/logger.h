@@ -9,7 +9,6 @@
 #include <QDebug>
 #include <QThread>
 #include <QMutex>
-#include "modules/public/error_code.h"
 #include "common/singleton.h"
 
 /**
