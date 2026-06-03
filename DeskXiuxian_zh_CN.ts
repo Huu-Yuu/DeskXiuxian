@@ -441,362 +441,362 @@
 <context>
     <name>Logger</name>
     <message>
-        <location filename="modules/logger/logger.cpp" line="186"/>
+        <location filename="modules/logger/logger.cpp" line="187"/>
         <source>NO_ERROR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="189"/>
+        <location filename="modules/logger/logger.cpp" line="190"/>
         <source>ERROR_AIUI_MSP_INVALID_PARA</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="191"/>
+        <location filename="modules/logger/logger.cpp" line="192"/>
         <source>ERROR_AIUI_MSP_INVALID_PARA_VALUE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="193"/>
+        <location filename="modules/logger/logger.cpp" line="194"/>
         <source>ERROR_AIUI_MSP_NOT_FOUND</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="195"/>
+        <location filename="modules/logger/logger.cpp" line="196"/>
         <source>ERROR_AIUI_NO_RESPONSE_DATA</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="197"/>
+        <location filename="modules/logger/logger.cpp" line="198"/>
         <source>ERROR_AIUI_MSP_LMOD_RUNTIME_EXCEPTION</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="199"/>
+        <location filename="modules/logger/logger.cpp" line="200"/>
         <source>ERROR_AIUI_NO_NETWORK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="201"/>
+        <location filename="modules/logger/logger.cpp" line="202"/>
         <source>ERROR_AIUI_NETWORK_TIMEOUT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="203"/>
+        <location filename="modules/logger/logger.cpp" line="204"/>
         <source>ERROR_AIUI_NET_EXPECTION</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="205"/>
+        <location filename="modules/logger/logger.cpp" line="206"/>
         <source>ERROR_AIUI_INVALID_RESULT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="207"/>
+        <location filename="modules/logger/logger.cpp" line="208"/>
         <source>ERROR_AIUI_NO_MATCH</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="209"/>
+        <location filename="modules/logger/logger.cpp" line="210"/>
         <source>ERROR_AIUI_AUDIO_RECORD</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="211"/>
+        <location filename="modules/logger/logger.cpp" line="212"/>
         <source>ERROR_AIUI_COMPONENT_NOT_INSTALLED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="213"/>
+        <location filename="modules/logger/logger.cpp" line="214"/>
         <source>ERROR_AIUI_SERVICE_BINDER_DIED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="215"/>
+        <location filename="modules/logger/logger.cpp" line="216"/>
         <source>ERROR_AIUI_LOCAL_NO_INIT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="217"/>
+        <location filename="modules/logger/logger.cpp" line="218"/>
         <source>ERROR_AIUI_UNKNOWN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="220"/>
+        <location filename="modules/logger/logger.cpp" line="221"/>
         <source>ERROR_NETWORK_BASE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="222"/>
+        <location filename="modules/logger/logger.cpp" line="223"/>
         <source>ERROR_NETWORK_DISCONNECTED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="224"/>
+        <location filename="modules/logger/logger.cpp" line="225"/>
         <source>ERROR_NETWORK_HEAD_NOT_MATCH</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="226"/>
+        <location filename="modules/logger/logger.cpp" line="227"/>
         <source>ERROR_NETWORK_UUID_NOT_MATH</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="228"/>
+        <location filename="modules/logger/logger.cpp" line="229"/>
         <source>ERROR_NETWORK_UNKNOW_CMAD</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="230"/>
+        <location filename="modules/logger/logger.cpp" line="231"/>
         <source>ERROR_NETWORK_REQUEST_REJECT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="232"/>
+        <location filename="modules/logger/logger.cpp" line="233"/>
         <source>ERROR_NETWORK_RESEND_OVERTIMES</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="234"/>
+        <location filename="modules/logger/logger.cpp" line="235"/>
         <source>ERROR_NETWORK_COMMU_REFUSE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="236"/>
+        <location filename="modules/logger/logger.cpp" line="237"/>
         <source>ERROR_NETWORK_HEAD_NOT_VAILD</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="240"/>
+        <location filename="modules/logger/logger.cpp" line="241"/>
         <source>ERROR_NETFILE_BASE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="242"/>
+        <location filename="modules/logger/logger.cpp" line="243"/>
         <source>ERROR_NETFILE_DISCONNECTED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="244"/>
+        <location filename="modules/logger/logger.cpp" line="245"/>
         <source>ERROR_NETFILE_DIR_CREATE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="246"/>
+        <location filename="modules/logger/logger.cpp" line="247"/>
         <source>ERROR_NETFILE_SEND_FILE_NOT_EXIST</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="248"/>
+        <location filename="modules/logger/logger.cpp" line="249"/>
         <source>ERROR_NETFILE_SEND_FILE_OPEN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="250"/>
+        <location filename="modules/logger/logger.cpp" line="251"/>
         <source>ERROR_NETFILE_SEND_CONTENT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="252"/>
+        <location filename="modules/logger/logger.cpp" line="253"/>
         <source>ERROR_NETFILE_SEND_NOT_MATCH</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="254"/>
+        <location filename="modules/logger/logger.cpp" line="255"/>
         <source>ERROR_NETFILE_FILE_NOT_READABLE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="256"/>
+        <location filename="modules/logger/logger.cpp" line="257"/>
         <source>ERROR_NETFILE_RECV_FILE_NOT_EXIST</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="258"/>
+        <location filename="modules/logger/logger.cpp" line="259"/>
         <source>ERROR_NETFILE_RECV_FILE_OPEN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="260"/>
+        <location filename="modules/logger/logger.cpp" line="261"/>
         <source>ERROR_NETFILE_RECV_CONTENT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="262"/>
+        <location filename="modules/logger/logger.cpp" line="263"/>
         <source>ERROR_NETFILE_RECV_NOT_MATCH</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="264"/>
+        <location filename="modules/logger/logger.cpp" line="265"/>
         <source>ERROR_NETFILE_FILE_NOT_WRITABLE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="266"/>
+        <location filename="modules/logger/logger.cpp" line="267"/>
         <source>ERROR_NETFILE_RECV_SIZE_NOT_MATCH</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="268"/>
+        <location filename="modules/logger/logger.cpp" line="269"/>
         <source>ERROR_NETFILE_RECV_UUID_NOT_MATCH</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="271"/>
+        <location filename="modules/logger/logger.cpp" line="272"/>
         <source>ERROR_NETFILE_WRITE_SOCKET</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="275"/>
+        <location filename="modules/logger/logger.cpp" line="276"/>
         <source>ERROR_QSOCKET_BASE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="277"/>
+        <location filename="modules/logger/logger.cpp" line="278"/>
         <source>ERROR_QSOCKET_FILE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="279"/>
+        <location filename="modules/logger/logger.cpp" line="280"/>
         <source>ERROR_QSOCKET_REMOTE_HOST_CLOSE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="281"/>
+        <location filename="modules/logger/logger.cpp" line="282"/>
         <source>ERROR_QSOCKET_HOST_NOT_FOUND</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="283"/>
+        <location filename="modules/logger/logger.cpp" line="284"/>
         <source>ERROR_QSOCKET_ACCESS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="285"/>
+        <location filename="modules/logger/logger.cpp" line="286"/>
         <source>ERROR_QSOCKET_SOURCE_RAN_OUT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="287"/>
+        <location filename="modules/logger/logger.cpp" line="288"/>
         <source>ERROR_QSOCKET_TIMEOUT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="289"/>
+        <location filename="modules/logger/logger.cpp" line="290"/>
         <source>ERROR_QSOCKET_DATAGRAM_TOO_LARGE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="291"/>
+        <location filename="modules/logger/logger.cpp" line="292"/>
         <source>ERROR_QSOCKET_NETWORK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="293"/>
+        <location filename="modules/logger/logger.cpp" line="294"/>
         <source>ERROR_QSOCKET_ACCESS_IN_USE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="295"/>
+        <location filename="modules/logger/logger.cpp" line="296"/>
         <source>ERROR_QSOCKET_ADDR_NOT_AVAILABLE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="297"/>
+        <location filename="modules/logger/logger.cpp" line="298"/>
         <source>ERROR_QSOCKET_UNSUPPORT_OPERATION</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="299"/>
+        <location filename="modules/logger/logger.cpp" line="300"/>
         <source>ERROR_QSOCKET_PROXY_AUT_REQ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="301"/>
+        <location filename="modules/logger/logger.cpp" line="302"/>
         <source>ERROR_QSOCKET_SSL_HANDSHAKE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="303"/>
+        <location filename="modules/logger/logger.cpp" line="304"/>
         <source>ERROR_QSOCKET_UNFINISHED_OPERATION</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="305"/>
+        <location filename="modules/logger/logger.cpp" line="306"/>
         <source>ERROR_QSOCKET_PROXY_CONNECT_REFUSE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="307"/>
+        <location filename="modules/logger/logger.cpp" line="308"/>
         <source>ERROR_QSOCKET_PROXY_CONNECT_CLOSE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="309"/>
+        <location filename="modules/logger/logger.cpp" line="310"/>
         <source>ERROR_QSOCKET_PROXY_CONNECT_TIMEOUT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="311"/>
+        <location filename="modules/logger/logger.cpp" line="312"/>
         <source>ERROR_QSOCKET_PROXY_NOT_FOUND</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="313"/>
+        <location filename="modules/logger/logger.cpp" line="314"/>
         <source>ERROR_QSOCKET_PROXY_PROTOCOL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="315"/>
+        <location filename="modules/logger/logger.cpp" line="316"/>
         <source>ERROR_QSOCKET_OPERATION</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="317"/>
+        <location filename="modules/logger/logger.cpp" line="318"/>
         <source>ERROR_QSOCKET_SSL_INTERNAL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="319"/>
+        <location filename="modules/logger/logger.cpp" line="320"/>
         <source>ERROR_QSOCKET_SSL_INVALID_USER_DATA</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="321"/>
+        <location filename="modules/logger/logger.cpp" line="322"/>
         <source>ERROR_QSOCKET_TEMPORARY</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="323"/>
+        <location filename="modules/logger/logger.cpp" line="324"/>
         <source>ERROR_QSOCKET_UNKNOW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="325"/>
+        <location filename="modules/logger/logger.cpp" line="326"/>
         <source>ERROR_QSOCKET_WRITE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="328"/>
+        <location filename="modules/logger/logger.cpp" line="329"/>
         <source>ERROR_UNKNOWN_DESCRIPTION</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="360"/>
+        <location filename="modules/logger/logger.cpp" line="361"/>
         <source>%1: error code: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="366"/>
+        <location filename="modules/logger/logger.cpp" line="367"/>
         <source>%1: error description: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="373"/>
+        <location filename="modules/logger/logger.cpp" line="374"/>
         <source>%1: error code: %2, error description: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="modules/logger/logger.cpp" line="380"/>
+        <location filename="modules/logger/logger.cpp" line="381"/>
         <source>error code: %1, error description: %2</source>
         <translation type="unfinished"></translation>
     </message>
