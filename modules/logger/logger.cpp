@@ -25,6 +25,7 @@ Logger::Logger()
 
         // 启动日志记录线程
         thread_.start();
+        // this->moveToThread(&thread_);
     }
     else
     {
