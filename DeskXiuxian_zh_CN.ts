@@ -883,7 +883,8 @@
     </message>
     <message>
         <location filename="modules/ui/mainui.ui" line="148"/>
-        <source>寿命：</source>
+        <source>年龄：</source>
+        <oldsource>寿命：</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
